@@ -1,5 +1,7 @@
 # Verification
 
+Integration refresh: **43 Node tests and 37 unique browser audio checks passed**. The repaired readiness-gated piece diagnostic passed five consecutive runs. Fresh independent Standards and Spec reviews found no remaining material findings. See [the integration review](docs/INTEGRATION-REVIEW.md), tests/integration-browser-results.json and [PR #14](https://github.com/jaredkirby/hushfield/pull/14).
+
 Latest vintage Tape verification: **43 Node tests, 10 browser Tape audio checks and six Tape layout cases passed**, plus live/default, strong, bypassed, paused and reduced-motion cassette checks. Independent Standards and Spec rechecks found no remaining material findings. See [the vintage Tape review and acceptance limits](docs/VINTAGE-TAPE-REVIEW.md) and tests/vintage-tape-browser-results.json.
 
 The earlier stronger Tape iteration passed 41 Node tests, 10 browser audio checks and six Tape layout cases. See [the prior Tape review](docs/TAPE-REVIEW.md) and tests/tape-browser-results.json.
