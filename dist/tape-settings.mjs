@@ -1,13 +1,13 @@
 const TAPE_DEFAULTS = Object.freeze({
   delayTime: 0.36,
-  feedback: 38,
-  delayMix: 28,
+  feedback: 28,
+  delayMix: 16,
   tapeOn: false,
-  drive: 55,
-  wow: 45,
-  flutter: 25,
-  hiss: 10,
-  tapeTone: 35
+  drive: 16,
+  wow: 10,
+  flutter: 6,
+  hiss: 4,
+  tapeTone: 42
 });
 export {
   TAPE_DEFAULTS

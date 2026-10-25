@@ -1,4 +1,5 @@
 import { TAPE_DEFAULTS } from "./tape-settings.mjs";
+import { tapeWow, tapeFlutter } from "./tape-motion.mjs";
 const smoothKeys = ["delayTime", "feedback", "mix", "drive", "wow", "flutter", "hiss", "tone", "on"];
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 class TapeDelay {
@@ -37,8 +38,8 @@ class TapeDelay {
       const left = input[0]?.[i] || 0, right = input[1]?.[i] ?? left;
       this.envelope = Math.max(Math.abs(left), Math.abs(right), this.envelope * 0.9994);
       const phase = this.clock / rate;
-      const drift = (Math.sin(phase * 2 * Math.PI * 0.47) + 0.28 * Math.sin(phase * 2 * Math.PI * 0.79)) * 5e-3 * p.wow;
-      const flutter = (Math.sin(phase * 2 * Math.PI * 6.7) + 0.35 * Math.sin(phase * 2 * Math.PI * 11.3)) * 35e-5 * p.flutter;
+      const drift = tapeWow(phase, p.wow);
+      const flutter = tapeFlutter(phase, p.flutter);
       const cutoff = 1500 + 6500 * p.tone, lp = 1 - Math.exp(-2 * Math.PI * cutoff / rate), hp = Math.exp(-2 * Math.PI * 90 / rate);
       for (let c = 0; c < 2; c++) {
         const source = c ? right : left, offset = p.on * ((drift + flutter) * rate + (c ? rate * 7e-4 : 0));

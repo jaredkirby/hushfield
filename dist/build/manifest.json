@@ -1,6 +1,6 @@
 {
   "inputs": {
-    "dist/tape-settings.mjs": "95124253032bbbf49ca7e70d2a0602984ffcc3fb6fc001234ae415a0cb8426f3",
+    "dist/tape-settings.mjs": "fb810dacd566832de3c52467227806726f78ffc18f12dfda1f32e45559952956",
     "dist/piece-session.mjs": "44a0fd2f484c8ade6b302ffbb3520dba5a2b831f12fc9456ca13f86db764fb46",
     "dist/ambient-points.mjs": "930c70317bcb7eae0c79a44662828b57229e3001b3b5f087758eb4397a7cddc4",
     "dist/ambient-settings.mjs": "f067b072123fb58c64b7468f1aa6c1bf00ecc554c67e9c4178b2c7cd5c0c2eb7",
@@ -21,7 +21,8 @@
     "dist/microphone-take.mjs": "1b139ec301bda1595b13a1c0ac8cd41d4e2fb879aeae79ae5b5de7564a1abda7",
     "dist/visual-analysis.mjs": "cdb9a7d385067f613ea9cb02d7bb785caf8cb090ebcf8ba504d5d4154a3a5ae2",
     "dist/project-file.mjs": "917fc16b94dded9d14b0c939743ed0977d05d560dd652477a8a5f5bbb49f185b",
-    "dist/oled-visuals.mjs": "03c9a82041faf74fa97302d408469c8056afecc737b0d867b2e965c53b35e21e",
+    "dist/tape-motion.mjs": "44d041514202d2122d1584126d6e75656734bd5d1765f7c8abeb1943a01565b8",
+    "dist/oled-visuals.mjs": "74f880a2a075cc1037731f1094d2eb5dab88a7f19857a73ffdfc691279c495e9",
     "dist/audio-visuals.mjs": "ed6a9be560c3d53f696cf2fae1421d4859951a7c17d9653066b4e924be574d07",
     "dist/ambient-interaction.mjs": "9794ebbd7c1bab0c266b7723a06cd2f0854102de40777cfd83697a7860997e1b",
     "dist/ambient-ui.mjs": "ab0a96cb1fa067bb581419a5055b3ba14f17c64ad46c16467ea59ca240eead71",
@@ -29,11 +30,11 @@
     "dist/orbit-audio.mjs": "119319ce25abc43712e2a95dd9b4f7c57ec2b5eadc3a701213399ebdd66c1eb5",
     "dist/sound-editor.mjs": "3b6e34f135ef91e46f04c67a83c6c75272aa3ecf3d30937c0fc617e4acdf0162",
     "dist/orbit-physics.mjs": "100f753121b627abb52d7aed6f2ed664966480924ac3cfa8376360d37c896dd9",
-    "dist/app.js": "bb3935ecd62c6b0df248ad5b978dc4c77d0d4c31cf100e0918aa0c36e29d7e0f",
+    "dist/app.js": "1c444e4aeda2ddf63007f55da0318de72139963034f90a249edb738e1bc65e07",
     "dist/ambient-dsp.mjs": "dd6cb0c26b61eb414f6fb24cb51d98da76e2c6e0e5cf2fd55aa09cc56b1ec2a0",
     "dist/ambient-worklet.js": "454adb75867dc39e1ecdccc562f953f2b3425180e829b37b1e5650283185e175",
     "dist/grain-worklet.js": "1141398374c44e6800c16097e981296fe015a873a2c873cbc8246dfd709e703e",
-    "dist/tape-dsp.mjs": "eac217e516eb4e7f649296ae68679ca69c68e5a53d4aa64418a2e078b12807ec",
+    "dist/tape-dsp.mjs": "684b6d8ea8e24d76489f6994eb8688e7f6e426ef7c27c3c6548349525a4b2c18",
     "dist/tape-worklet.js": "d69aa334afe1644f1254f1fd90da9362b88634019cc5973108a32777fd5651e7",
     "dist/orbit-dsp.mjs": "0914dca91b80803e80cb03f16917cd461977dfca4752e3378c41bdde291d6c59",
     "dist/orbit-worklet.js": "63538d3b5fa11e9d72766f7ecd28c145d0cc8f10f5f8d64db8372f01a7b27c70"

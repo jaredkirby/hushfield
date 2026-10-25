@@ -6,7 +6,7 @@ const rms=a=>Math.sqrt(a.reduce((sum,value)=>sum+value*value,0)/a.length);
 const check=(condition,label)=>{if(!condition)throw Error(label);out.textContent+='PASS '+label+'\n';};
 async function render(rate,enabled,change=false,reference=false){
  const context=new OfflineAudioContext(2,rate*3,rate);
- await context.audioWorklet.addModule('./build/tape-worklet.js?v=tape-1');
+ await context.audioWorklet.addModule('./build/tape-worklet.js?v=vintage-tape-1');
  const tape=new AudioWorkletNode(context,'tape-delay',{numberOfInputs:1,outputChannelCount:[2],processorOptions:{params:{...TAPE_DEFAULTS,tapeOn:enabled,hiss:0}}});
  const bus=createPieceSpace(context,reference?context.destination:tape);bus.filter.frequency.value=14000;bus.filter.Q.value=.6;bus.setWidth(100);bus.wet.gain.value=0;if(!reference)tape.connect(context.destination);
  const buffer=context.createBuffer(2,rate*3,rate);

@@ -264,13 +264,13 @@ async function initializeAudio() {
   activation.catch(() => {
   });
   if (!ctx.audioWorklet) throw new Error("The sound engine is unavailable. Test sound still checks device output.");
-  await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=tape-1");
+  await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=vintage-tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/tape-worklet.js?v=tape-1");
+  await context.audioWorklet.addModule("./build/tape-worklet.js?v=vintage-tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/ambient-worklet.js?v=tape-1");
+  await context.audioWorklet.addModule("./build/ambient-worklet.js?v=vintage-tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/orbit-worklet.js?v=tape-1");
+  await context.audioWorklet.addModule("./build/orbit-worklet.js?v=vintage-tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
   engine = new AudioWorkletNode(ctx, "grain-engine", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
   const textureNode = engine;
@@ -1076,7 +1076,7 @@ function drawOrbit(verts) {
   c.shadowBlur = 0;
   $("orbitAngle").textContent = `${Math.round((orbitState.phase * 180 / Math.PI + params.orbitRotation + 360) % 360)}\xB0`;
 }
-let frequencyData = new Uint8Array(512), tapeAngle = 0;
+let frequencyData = new Uint8Array(512), tapeAngle = 0, tapeSeconds = 0;
 const renderClock = createRenderClock(30);
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 function updateAmbientDisplay() {
@@ -1097,7 +1097,10 @@ function frame(time) {
   const dt = Math.min(0.1, (time - lastFrame) / 1e3 || 0.033);
   lastFrame = time;
   const verts = boundary(shapePoints($("orbitShape").value), orbitState.phase + params.orbitRotation * Math.PI / 180);
-  if (running && !reducedMotion.matches) tapeAngle += dt * (1.2 + 0.4 / params.delayTime);
+  if (running && params.tapeOn && !reducedMotion.matches) {
+    tapeAngle += dt * (1.2 + 0.4 / params.delayTime);
+    tapeSeconds += dt;
+  }
   if (ambientPointsDirty) {
     ambientPointsDirty = false;
     ambientNode?.port.postMessage({ type: "points", value: ambientState.points });
@@ -1120,7 +1123,7 @@ function frame(time) {
     } else if (activeTab === "tape") {
       const fit = fitCanvas($("tapeCanvas"));
       if (fit) {
-        drawTape(fit, params, tapeAngle, lastMeter);
+        drawTape(fit, params, tapeAngle, lastMeter, tapeSeconds);
         ditherCanvas($("tapeCanvas"));
       }
     } else {
@@ -1469,7 +1472,7 @@ function setupDisplay() {
   stage.append($("waveWrap"), document.querySelector(".orbit-stage"));
   const deck = document.createElement("div");
   deck.id = "tapeDeck";
-  deck.innerHTML = '<canvas id="tapeCanvas" aria-label="Animated tape cassette with rotating reels and tape path"></canvas>';
+  deck.innerHTML = '<canvas id="tapeCanvas" aria-label="Tape effect illustration: slow Wow sway, fine Flutter ripples, Drive head glow and fading echo trails"></canvas>';
   stage.append(deck);
   const ambient = document.createElement("div");
   ambient.id = "ambientStage";

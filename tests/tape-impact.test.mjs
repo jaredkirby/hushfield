@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {TapeDelay} from '../dist/tape-dsp.mjs';
+import {TAPE_DEFAULTS} from '../dist/tape-settings.mjs';
 
 function render(tape,seconds,signal=()=>0){
   const samples=[];
@@ -38,4 +39,16 @@ test('normal quiet input gains clear saturation without relying on a volume jump
   assert.ok(harmonic(warm,3)/harmonic(warm,1)>.02,'at least two percent third harmonic at ordinary Foundation levels');
   const levelDb=20*Math.log10(rms(warm)/rms(clean));
   assert.ok(levelDb>-4&&levelDb<2,`approximately matched listening level (${levelDb.toFixed(2)} dB)`);
+});
+
+test('the vintage default adds mild warmth with restrained pitch drift',()=>{
+  const signal=i=>Math.sin(i*2*Math.PI*300/48000)*.08;
+  const warm=steady({...TAPE_DEFAULTS,tapeOn:true,wow:0,flutter:0,hiss:0,delayMix:0,tapeTone:100},signal).slice(48000,96000);
+  const harmonicRatio=harmonic(warm,3)/harmonic(warm,1);
+  assert.ok(harmonicRatio>.005&&harmonicRatio<.025,`gentle third harmonic between 0.5 and 2.5 percent (${harmonicRatio})`);
+  const pitchSignal=i=>Math.sin(i*2*Math.PI*220/48000)*.08;
+  const vintage=steady({...TAPE_DEFAULTS,tapeOn:true,drive:0,hiss:0,delayMix:0},pitchSignal).slice(12000);
+  const worn=steady({tapeOn:true,wow:45,flutter:25,drive:0,hiss:0,delayMix:0},pitchSignal).slice(12000);
+  const variation=frequencyVariation(vintage);
+  assert.ok(variation>.0002&&variation<frequencyVariation(worn)*.4,'subtle drift remains, below forty percent of the previous default');
 });
