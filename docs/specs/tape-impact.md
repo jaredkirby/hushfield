@@ -1,5 +1,7 @@
 # Audible shared Tape
 
+Historical approved scope. Original baseline and local-only completion instructions are retained as a record; the work was subsequently integrated into main. See [current guides and review history](../README.md) for later behavior and superseding decisions.
+
 ## Problem
 
 The player cannot distinguish Tape On from Off. Off currently retains the same echo; the coloration is too weak at normal Foundation levels, and cold-start processor settings lack a readiness acknowledgement.

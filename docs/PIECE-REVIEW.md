@@ -1,5 +1,7 @@
 # Ambient-first implementation review
 
+Historical review of the implementation stage below. Its local-only scope notes and counts describe that stage; it was later integrated through [PR #14](https://github.com/jaredkirby/hushfield/pull/14). See [current verification](../VERIFICATION.md) for the merged state and acceptance limits.
+
 Approved scope: [one evolving piece](specs/ambient-first.md), [parent #10](https://github.com/jaredkirby/hushfield/issues/10), [implementation #11](https://github.com/jaredkirby/hushfield/issues/11). Baseline: fc8c6abca9e32fe25329a9414d557f68ed60bdee. Local commits only; no push or deployment.
 
 ## Standards

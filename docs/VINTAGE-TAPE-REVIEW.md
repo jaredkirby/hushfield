@@ -1,5 +1,7 @@
 # Warm vintage Tape review
 
+Historical review of the implementation stage below. Its local-only scope notes and counts describe that stage; it was later integrated through [PR #14](https://github.com/jaredkirby/hushfield/pull/14). See [current verification](../VERIFICATION.md) for the merged state and acceptance limits.
+
 Scope: [warm vintage Tape and responsive cassette](specs/vintage-tape.md), [issue #13](https://github.com/jaredkirby/hushfield/issues/13). Baseline: 9b5442c. Implementation: 13d3ee3 and 44253d6. Local commits only; no push or deployment.
 
 ## Result

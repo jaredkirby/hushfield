@@ -1,5 +1,7 @@
 # Warm vintage Tape and responsive cassette
 
+Historical approved scope. Original baseline and local-only completion instructions are retained as a record; the work was subsequently integrated into main. See [current guides and review history](../README.md) for later behavior and superseding decisions.
+
 The player confirms Tape is now audible but finds the default too intense. Make the default a warm vintage character while retaining the stronger control range and true bypass. Update the cassette to represent the sound: slow tape sway for Wow, fine ripples for Flutter, warmth at the head for Drive, and fading echo trails for Mix/Feedback. Preserve the black-and-white visual style, saved settings and full-piece routing.
 
 Use gentle saturation, restrained pitch drift, low hiss and lighter repeats for new pieces. Do not overwrite saved controls or soften the deliberately worn preset. Animation must reflect enabled controls, settle visually in bypass, freeze while stopped, respect reduced motion and retain the existing draw cap. The visual is an illustration of settings and signal level, not measured audio telemetry.

@@ -1,54 +1,89 @@
 # Architecture
 
-Hushfield is a static browser instrument. It has no application server, remote synthesis service or runtime package CDN.
+Hushfield is a static browser instrument with no application server, synthesis service or runtime package CDN. The [glossary](../GLOSSARY.md) defines its Piece, Foundation, Texture, Motion, Blend and Solo model.
 
-## Entry points and build
+## Startup and build
 
-`dist/index.html` loads the styles and embeds three early scripts: `phone-shell.js`, `page-navigation.js` and `boot.js`. Viewport sizing and navigation are available before the main instrument has downloaded. Startup reports LOADING, READY or LOAD ERROR and keeps unavailable editors inert.
+`dist/index.html` loads styles and embeds `phone-shell.js`, `page-navigation.js` and `boot.js`. Viewport sizing and navigation are available before the instrument bundle. Startup shows LOADING, READY or LOAD ERROR; unavailable editors stay inert and slow/failed startup offers Reload app. Audio readiness is separate from application readiness.
 
-`ops/build.mjs` bundles `app.js` and the ambient, grain, tape and Orbit worklet entry points into `dist/build/`. Relative import version queries are normalized while bundling so stateful modules remain singletons. `ops/build-shell.mjs` refreshes the embedded scripts. `dist/build/manifest.json` records source hashes for the startup/build regression check.
+`ops/build.mjs` bundles `app.js` plus four standalone worklet files: ambient, grain, Orbit and Tape. The grain file registers both the grain and output-capture processors. Version queries on relative imports are normalized during bundling so stateful modules remain singletons. `ops/build-shell.mjs` refreshes the three embedded scripts, and `dist/build/manifest.json` records source hashes.
 
-Sources intentionally live alongside the shipped page in `dist/`. Do not replace the bundled main entry with the unbundled module graph; the bundle avoids a previously observed mobile startup failure.
+Sources intentionally live alongside the page in `dist/`. Generated files live in `dist/build/`. Keep the bundled main entry: it avoids a previously observed mobile startup failure in the unbundled module graph. CI verifies that rebuilding committed sources leaves shipped assets unchanged.
 
-## Audio
+## Piece state and presets
 
-`app.js` owns the AudioContext, master routing, transport, sample state and worklet lifecycle. `audio-startup.mjs` primes/resumes output synchronously from a tap, verifies the clock and provides recovery.
+`piece-session.mjs` owns blend levels, Texture source and harmony following. `piecePlayback` derives audible gains from transport and temporary Solo; it does not depend on the active editor. Foundation continues generating while the Piece plays, including when its audible blend is zero.
 
-- `grain-worklet.js` renders granular samples and captures post-effects PCM for WAV export.
-- `ambient-dsp.mjs` and `ambient-worklet.js` render evolving chord voices, melodies and air on the audio thread. `ambient-settings.mjs` defines scenes and harmony.
-- `orbit-worklet.js` and `orbit-dsp.mjs` advance the rotating-boundary simulation and render ball/trigger voices from the sample clock. `orbit-physics.mjs` and `orbit-pads.mjs` retain the fixed-step physics and trigger geometry. `orbit-audio.mjs` routes twelve stereo dry/delay/room sends through independent normal/audition bank effects. Main-thread snapshots update the display; animation frames never schedule notes.
-- `tape-dsp.mjs` and `tape-worklet.js` implement shared stereo Tape before the master limiter/volume. Off bypasses the complete effect at the existing 0.75 dry reference gain. On crossfades over 35 ms into a short, continuously modulated record-head path (nominal 8 ms), quiet-input saturation, tone and darker echo repeats. Separate bounded direct/echo rings avoid feeding direct modulation back into the repeat loop. Feedback remains contractive and hiss is input-envelope gated. `tape-settings.mjs` shares warm vintage new-session defaults with the app while retaining the stronger control range; saved settings are preserved. `tape-motion.mjs` supplies the Wow/Flutter curves shared with the cassette illustration. Constructor settings and a ready acknowledgement prevent lost cold-start parameters.
+`piece-presets.mjs` restores a complete configuration, including finishing, patches and live/linked relationships, and cancels pending source operations. Changing Foundation's Scene is narrower; New piece changes its seed while retaining sounds and blend. `piece-blend.mjs` exposes the persistent levels and transient Solo controls through the common value adjuster.
 
-The piece model owns Foundation/Texture/Motion blend levels, Texture source and harmony following. Play controls the complete piece; transient solo leaves saved levels unchanged and no playback rule depends on the active editor. Foundation feeds a four-second stereo ring in the grain Worklet before its audible fader. Freezing copies that bounded recent phrase into the existing sample representation. Live capture pauses with transport and imports/microphone/frozen phrases obey latest-selection ownership.
+## Normal signal path
 
-Foundation and Motion processors exchange chord pitch classes through a dedicated MessageChannel after both acknowledge readiness. Motion quantizes new notes to current chord tones unless explicitly unlinked; existing sustained voices finish normally. Processor readiness also replays initial grain state and queues Motion commands so cold-start messages are not lost.
+```mermaid
+flowchart LR
+  F[Foundation Worklet] --> FG[Foundation blend]
+  F --> R[Four-second stereo ring]
+  S[Stored sample or frozen phrase] --> G[Grain Worklet]
+  R --> G
+  G --> TG[Texture blend]
+  O[Orbit Worklet and bank effects] --> MG[Motion blend]
+  FG --> P[Shared filter, width and room]
+  TG --> P
+  MG --> P
+  P --> T[Tape]
+  T --> L[Limiter]
+  L --> M[Master volume]
+  M --> D[Audio output]
+  M --> C[WAV capture and visual analysis]
+```
 
-Normal Foundation, Texture and Motion levels enter one shared tone/stereo-width/reverb bus before Tape and the master limiter. Individual Motion banks retain their own sound/effects settings. Explicit individual auditions bypass the part fader but enter shared finishing. Source preview is separate, labelled original audio, and stops the piece. Test sound can use the master without waiting for worklets. Restart retires the old context and reconstructs the output within a fresh gesture while preserving session settings. `audio-lifecycle.mjs` guards processor failures and shares complete graph disposal between startup failure and Restart. Each graph publishes readiness after activation succeeds.
+Foundation feeds the grain processor directly before its audible fader. Live capture pauses with transport. A freeze request copies the available bounded phrase into the existing sample representation; frozen/imported material retains its original harmony/pitch. Switching back to live mode retains the optional stored sample.
 
-## Interaction and rendering
+Foundation and Orbit receive dedicated `MessageChannel` ports after both processors acknowledge readiness. Foundation publishes chord pitches directly; Motion quantizes new notes to current chord tones unless explicitly unlinked. Existing sustained voices finish normally. UI animation does not schedule notes.
 
-`phone-ui.mjs` implements parameter selection, common increments and editor panels on every device. `phone-shell.js` distinguishes device identity from layout width: iPad desktop-mode identity is supported, while narrow Split View uses the compact surface. `adaptive.css` adds the wide display/editor arrangement after the OLED styles.
+`piece-space.mjs` sums normal parts through shared filtering, stereo width and generated convolution room before Tape. Motion's per-bank effects remain upstream. Explicit Motion auditions bypass the part fader but still enter shared finishing. Original-source preview and Test sound connect to master directly; source preview pauses the Piece.
 
-`ambient-interaction.mjs` turns voice-dot gestures into bounded pitch/pan edits. `ambient-points.mjs` aligns motion with audio output timestamps. Ambient, scope, spectrum and vector draw on browser animation frames; trails and peak decay use elapsed time. `oled-visuals.mjs` applies screen-stable Bayer dithering.
+## Audio module ownership
 
-`render-clock.mjs` caps expensive drawing at 30 fps and skips unchanged paused frames. User edits, layout changes, and audio snapshots invalidate the view. Layer levels occupy a reserved display bay so controls do not cover Orbit triggers.
+| Module | Responsibility |
+| --- | --- |
+| `app.js` | AudioContext, graph assembly, transport, settings, routing and controller integration. |
+| `audio-startup.mjs` | Synchronous tap activation/priming, clock checks and context retirement. |
+| `audio-lifecycle.mjs` | Processor-failure guards and graph disposal shared by failure and Restart. |
+| `ambient-dsp.mjs`, `ambient-worklet.js` | Sample-clock chord voices, melody, air, voice retuning and harmony/status messages. |
+| `grain-worklet.js` | Granular synthesis, bounded live Foundation material, phrase copying and output-capture processor. |
+| `orbit-dsp.mjs`, `orbit-worklet.js` | Sample-clock simulation, trigger crossings, oscillator/envelope rendering and snapshots. |
+| `orbit-physics.mjs`, `orbit-pads.mjs` | Fixed-step geometry, moving-boundary physics and trigger/note calculations. |
+| `orbit-audio.mjs`, `sound-patches.mjs` | Twelve stereo normal/audition sends, independent bank effects, patch resolution and editing. |
+| `tape-dsp.mjs`, `tape-worklet.js` | Shared direct tape path, repeats, modulation, saturation and ready acknowledgement. |
 
-`visual-analysis.mjs` captures independent stereo channels from a passive post-master branch. It mixes spectrum energy rather than summing opposite-phase waveforms. `audio-visuals.mjs` owns the three display modes and display-only controls.
+Restart creates a fresh output within a user gesture while preserving session configuration. Initial settings go through processor options and guarded readiness handling so cold-start messages are not lost. Processor failures retire the graph and surface Restart rather than leaving a healthy-looking silent transport.
 
-## Persistence
+## Tape
 
-`project-file.mjs` serializes complete sessions, validates version 1–4 project files, migrates earlier physics namespaces and restores a version 4 piece model. Files embed WAV Texture material, Foundation voices, blend/source/harmony relationships, parameters, patch banks and visual settings. Legacy projects retain their material and blend levels with independent Motion tuning; solo is never saved. `sample-selection.mjs` gives each import, project or microphone take ownership of its result; newer selections invalidate older decodes. Audio decoding can use an OfflineAudioContext without starting playback.
+Off bypasses the complete Tape effect at the existing 0.75 dry reference gain. On crossfades over 35 ms into a short modulated direct path, nominally 8 ms, with saturation/tone plus darker echoes. Separate bounded direct/echo rings keep direct modulation out of the repeat feedback loop. Feedback is contractive and hiss is input-envelope gated.
 
-`session-recovery.mjs` stores a single bounded 30 MiB recovery draft in IndexedDB. Existing drafts are offered explicitly and are not overwritten until the player chooses. The UI distinguishes unsaved changes, saving, a local draft, an initiated export, and storage failure. Browser quota, tab eviction, storage clearing, and multiple tabs can still affect recovery; downloaded project files remain the portable copy.
+`tape-settings.mjs` defines restrained new-session defaults without overwriting loaded settings or Worn memory's explicit stronger values. `tape-motion.mjs` shares Wow/Flutter curves with the cassette illustration. Its movement represents controls and signal level, not measured processor telemetry, and stops with bypass, pause or reduced motion.
 
-## Checks
+## Interface and rendering
 
-Node tests render PCM and exercise state, math, physics and interaction contracts. `qa-*.html` pages run browser-specific audio/render checks. Layout receipts in `tests/*-results.json` record past emulated viewport checks; they are evidence snapshots, not hardware acceptance or tests that run during `npm test`.
+The five main editors are Foundation, Texture, Motion, Space and Tape. Your sound / trim and Visual are secondary tools. Stable internal IDs retain older links: `#ambient`, `#grain`, `#orbit`, `#fx`, `#tape`, `#sample` and `#visual` respectively. Source editing keeps Texture selected in the main navigation.
 
-## Recording
+`phone-ui.mjs` owns selection/increments and editor panels. `phone-shell.js` distinguishes device identity from available layout space, including iPad desktop-mode identity and narrow Split View. `adaptive.css` adds wide layouts after the OLED styles. Resizing changes presentation without rebuilding audio or moving the source editor between parents.
 
-`microphone-take.mjs` owns each take, including late permission results, recorder events, timers and track cleanup. Pending requests can be cancelled. `output-capture.mjs` waits for a session-labelled worklet completion before accepting a replacement take. The capture worklet enforces its own five-minute frame limit, transfers PCM chunks, and the controller encodes them incrementally with `wave-file.mjs`, avoiding multiple full-length floating-point copies.
+`ambient-interaction.mjs` turns dot gestures into bounded pitch/pan edits. `ambient-points.mjs` interpolates audio output timestamps for coherent motion. The animation callback schedules display work, but `render-clock.mjs` caps expensive drawing at 30 fps and skips unchanged paused frames. Relevant edits, layout changes and audio snapshots invalidate a frame. Audio processing proceeds independently.
 
-## Product model
+`oled-visuals.mjs` applies screen-stable Bayer dithering. `visual-analysis.mjs` passively captures independent stereo master channels, combining spectrum energy rather than summing waveforms that could cancel. `audio-visuals.mjs` renders Scope, Spectrum and Vector with display-only gain/trails/peaks and held-frame behavior. Trail/peak decay uses elapsed time rather than frame count. The blend/tools occupy a reserved bay so they do not cover Orbit triggers.
 
-See [the glossary](../GLOSSARY.md) and [approved Ambient-first scope](specs/ambient-first.md). Stable internal page IDs retain older deep links; five main editors expose Foundation, Texture, Motion, Space and Tape. Source editing and Visual are secondary tools.
+## Files, recording and recovery
+
+`project-file.mjs` serializes version-4 sessions, validates versions 1–4 and migrates older namespaces/material/blend into the Piece model. Files embed WAV Texture material, Foundation voices, source/harmony relationships, patches, controls, volume and visual settings. They are configuration/material snapshots, not exact playback-position restoration; Solo is excluded. Loading is decoded and validated before application.
+
+`sample-selection.mjs` gives each import, project, microphone take or frozen phrase ownership of its result. Newer selections invalidate older asynchronous results. Decoding can use an OfflineAudioContext without starting playback.
+
+`microphone-take.mjs` owns pending permission, cancellation, recorder events, its 60-second timer and track cleanup. `output-capture.mjs` associates chunks/completion with a take ID and waits for finalization before accepting another take. The capture processor enforces a five-minute frame limit; `wave-file.mjs` encodes PCM chunks incrementally instead of retaining duplicate full-length float buffers.
+
+`session-recovery.mjs` stores one draft capped at 30 MiB in IndexedDB, shared by paths on the same browser origin. Existing drafts require an explicit recover/discard choice and are not overwritten while offered. Recovery restores paused; revision guards prevent late restore results replacing newer edits. `recovery-ui.mjs` distinguishes pending edits, local storage, initiated export and errors. Quota, eviction, storage clearing and competing tabs remain browser limitations; a downloaded project is the portable copy.
+
+## Checks and decisions
+
+See [testing](TESTING.md) for commands, browser diagnostics and evidence semantics, and [verification](../VERIFICATION.md) for the current acceptance boundary. Specs/reviews are indexed separately under [historical work](README.md#historical-specifications-and-reviews). `docs/adr/` is the optional decision location; no ADR files are currently recorded.

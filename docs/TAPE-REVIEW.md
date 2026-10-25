@@ -1,5 +1,7 @@
 # Tape impact review
 
+Historical review of the implementation stage below. Its local-only scope notes and counts describe that stage; it was later integrated through [PR #14](https://github.com/jaredkirby/hushfield/pull/14). See [current verification](../VERIFICATION.md) for the merged state and acceptance limits.
+
 Scope: [audible shared Tape](specs/tape-impact.md), [issue #12](https://github.com/jaredkirby/hushfield/issues/12). Baseline: 90cf6ff. Implementation: 4012811. Local commits only; no push or deployment.
 
 ## Findings and changes

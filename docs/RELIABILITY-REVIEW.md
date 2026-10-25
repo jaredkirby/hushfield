@@ -1,5 +1,7 @@
 # Reliability iteration review
 
+Historical review of the implementation stage below. Its local-only scope notes and counts describe that stage; it was later integrated through [PR #14](https://github.com/jaredkirby/hushfield/pull/14). See [current verification](../VERIFICATION.md) for the merged state and acceptance limits.
+
 Scope: [approved spec](specs/reliability.md), [GitHub parent #1](https://github.com/jaredkirby/hushfield/issues/1), implementation tickets #2–9. Baseline: 952fa053eb54cd7431a65106406eb2c1b06540f9. Reviewed staged source independently on Standards and Spec axes; no remote push or deployment is included.
 
 ## Standards

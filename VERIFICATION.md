@@ -1,39 +1,33 @@
 # Verification
 
-Integration refresh: **43 Node tests and 37 unique browser audio checks passed**. The repaired readiness-gated piece diagnostic passed five consecutive runs. Fresh independent Standards and Spec reviews found no remaining material findings. See [the integration review](docs/INTEGRATION-REVIEW.md), tests/integration-browser-results.json and [PR #14](https://github.com/jaredkirby/hushfield/pull/14).
+## Current code and fresh checks
 
-Latest vintage Tape verification: **43 Node tests, 10 browser Tape audio checks and six Tape layout cases passed**, plus live/default, strong, bypassed, paused and reduced-motion cassette checks. Independent Standards and Spec rechecks found no remaining material findings. See [the vintage Tape review and acceptance limits](docs/VINTAGE-TAPE-REVIEW.md) and tests/vintage-tape-browser-results.json.
+Documentation was checked against **main at `758f0e0`**, the merged [integration PR #14](https://github.com/jaredkirby/hushfield/pull/14), on 2026-10-25. A fresh local `npm run build` and `npm test` passed **43 Node test results across 27 files**, with no shipped-asset changes after rebuilding. The [main-branch CI run](https://github.com/jaredkirby/hushfield/actions/runs/40230745513) passed on Node 22 and 24 at that revision.
 
-The earlier stronger Tape iteration passed 41 Node tests, 10 browser audio checks and six Tape layout cases. See [the prior Tape review](docs/TAPE-REVIEW.md) and tests/tape-browser-results.json.
+These automated checks cover rendered granular/Foundation PCM, live Foundation-to-Texture capture, Piece levels/Solo/presets, Motion harmony and sample-clock timing, independent banks, warm/strong Tape and true bypass, recording ownership, source selection, project migration/roundtrip, recovery races/errors, viewport profiles, navigation, startup and build consistency. The count includes individual Node tests and older file-level assertion suites; it is not a count of every assertion.
 
-Earlier Ambient-first verification passed 38 Node tests, 27 browser audio checks and 104 browser layout cases. See [the prior review](docs/PIECE-REVIEW.md) and tests/piece-browser-results.json. These are automated/emulated checks; physical-device and subjective listening acceptance remain separate.
+This refresh changes documentation only. Browser receipts below are existing recorded results, not new browser runs performed during this documentation pass.
 
-## Automated checks
+## Recorded browser evidence
 
-Run `npm ci`, `npm run build` and `npm test` with Node.js 22 or newer. The suite covers:
+| Scope | Recorded result | Evidence |
+| --- | --- | --- |
+| Integrated audio graph | 37 unique checks: 10 Tape, 22 Orbit and 5 Piece checks. The readiness-gated Piece diagnostic passed five consecutive runs. | [Integration review](docs/INTEGRATION-REVIEW.md), [receipt](tests/integration-browser-results.json) |
+| Current Piece navigation/layout | 104 cases: 42 main/tool views, 30 secondary sections and 32 Motion bank/section cases across compact/regular phones, landscape, Split View, tablet and desktop. | [Piece review](docs/PIECE-REVIEW.md), [receipt](tests/piece-browser-results.json) |
+| Warm vintage Tape | 10 browser audio checks, 6 Tape viewport cases, plus enabled/default/raised-control, bypassed, paused and reduced-motion cassette checks. | [Vintage Tape review](docs/VINTAGE-TAPE-REVIEW.md), [receipt](tests/vintage-tape-browser-results.json) |
+| Earlier reliability UI/audio | 22 Orbit audio checks and 74 main/editor layout cases, including explicit paused recovery and layer controls. | [Reliability review](docs/RELIABILITY-REVIEW.md), [receipt](tests/reliability-browser-results.json) |
+| Earlier adaptive layout | 112 main views and 96 editor groups before the five-editor Piece redesign. This verifies that earlier viewport implementation, not the current navigation. | [Receipt](tests/adaptive-layout-results.json) |
 
-- Finite audible granular/ambient PCM at 44.1/48 kHz, pitch, reverse, freeze, pause and bounded voice counts.
-- Four-minute seeded harmonic evolution, chord hold/resume, scene changes and independent layers.
-- Tape timing, feedback decay, saturation, treble loss and continuous wow/flutter.
-- Rotating boundaries, trigger timing, shape edits, containment and sustained bouncing across 90 two-minute configurations.
-- Separate trigger/ball patches, validation, project migration and stereo analysis.
-- Phone/iPad/desktop identity, rotation, Split View, safe areas, visible viewport sizing and pinch zoom.
-- Direct-touch/click/keyboard navigation, startup states, current build hashes and audio-context recovery.
+Historical review counts belong to their recorded baselines. The stronger initial Tape defaults in the [Tape review](docs/TAPE-REVIEW.md) were superseded by warm vintage new-session settings; the stronger control range and Worn memory remain available. The [documentation index](docs/README.md) separates current guides from these scope/review records.
 
-The browser diagnostic pages in `dist/qa-*.html` exercise Web Audio nodes, worklets and dithered renderers. Some require a button press and play a short signal.
+## Browser diagnostics and reproduction
 
-## Browser and device evidence
+Run `npm ci`, `npm run build` and `npm test` with Node.js 22 or newer. Serve `dist/` from localhost/HTTPS for browser checks. [Testing](docs/TESTING.md) lists each `qa-*.html` route, whether it starts automatically and which diagnostics use offline rendering or a live signal.
 
-The latest adaptive layout was checked in browser emulation across 112 main-view cases and 96 editor-bank cases. No document overflow, editor overflow or clipped buttons/selects remained in those checks. The sizes include portrait/landscape phones, landscape/portrait iPad, Split View and desktop windows. Musical edits and playback survived orientation and layout changes. See `tests/adaptive-layout-results.json`.
+Offline processor output, renderer timing and browser-emulated layouts are different evidence types. CI runs Node/build checks; it does not run these browser pages or verify listening quality. Recorded JSON receipts are not automatically rerun by `npm test`.
 
-Earlier receipts cover voice-dot interaction, startup status and the scope/spectrum/vector modes. Physical iPhone audio playback and recovery have been confirmed. The latest iPad layout, touch feel, listening quality and frame rate still need physical-device acceptance. Microphone hardware and uninterrupted locked-screen/background playback are not verified.
+## Physical-device acceptance
 
-The committed screenshots illustrate the interface; they are not proof of physical device performance. CI checks Node behavior and build consistency, not browser rendering or subjective sound quality.
+Physical iPhone audio playback/recovery was confirmed earlier. That confirmation does not establish acceptance of later Orbit rendering, Piece routing, warm vintage Tape, or the latest UI on every device.
 
-## Reliability iteration (2026-10-25)
-
-The approved scope and test seams are recorded in [the spec](docs/specs/reliability.md) and [GitHub issue #1](https://github.com/jaredkirby/hushfield/issues/1). Added behavior checks cover microphone permission/cancellation/cleanup, session-labelled output finalization and exact frame limits, stale sample selection, real stereo WAV project roundtrips, scan-mode transitions, Orbit PCM/timing at 44.1/48 kHz, storage failure and late-write behavior, processor-error retirement, layer levels, and paused/capped drawing.
-
-Browser offline audio verification checks the worklet-backed Orbit graph and its independent banks, voice parameters, envelopes, stereo routing, delay/reverb tails and voice limits. An agent-created browser session stored a generated-demo draft with Orbit at 5%; a new tab offered recovery, and explicit recovery restored 5% while keeping playback paused. These are automated/emulated checks, not physical microphone or listening acceptance. The final check passed 33 automated tests, 22 browser offline-audio checks and 74 viewport/editor cases. See tests/reliability-browser-results.json for the final viewport receipt and docs/RELIABILITY-REVIEW.md for the review disposition.
-
-Orbit now renders oscillators and envelopes in its worklet. Its controls and per-bank effects are retained, but listening comparison, latency/touch feel and CPU/battery acceptance on physical iPhone/iPad are still required. No claim of locked-screen/background continuity is added.
+Current iPad/phone touch feel, latency, sustained frame rate, CPU/battery use, microphone hardware and subjective listening still need physical-device checks. Uninterrupted locked-screen/background playback is not guaranteed. Screenshots illustrate layout and settings; they do not prove device performance.

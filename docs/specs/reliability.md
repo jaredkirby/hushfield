@@ -1,5 +1,7 @@
 # Hushfield reliability and session continuity
 
+Historical approved scope. Original baseline and local-only completion instructions are retained as a record; the work was subsequently integrated into main. See [current guides and review history](../README.md) for later behavior and superseding decisions.
+
 ## Problem Statement
 
 Recording can leave a microphone active or discard captured audio during overlapping actions. Sample loading can replace a newer selection, Forward can scan backward, and Orbit timing depends on animation frames. Unsaved sessions are vulnerable to tab loss, silent layers are hard to diagnose, and compressed source plus continuous pixel processing make maintenance and performance harder.
