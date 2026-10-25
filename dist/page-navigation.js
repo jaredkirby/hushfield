@@ -3,14 +3,15 @@
 (()=>{
  const nav=document.querySelector('.tabs');
  const links=Array.from(nav.querySelectorAll('[data-tab]'));
- const names=links.map(link=>link.dataset.tab);
- const labels={ambient:'AMBIENT / GENERATIVE LANDSCAPES',sample:'SAMPLE WORKSHOP',grain:'GRAIN ENGINE',fx:'EFFECTS BUS',tape:'TAPE EMULATION',orbit:'ORBIT / PHYSICS INTO MUSIC',visual:'AUDIO VISUALIZATION'};
+ const names=['ambient','sample','grain','fx','tape','orbit','visual'];
+ const linkNames=links.map(link=>link.dataset.tab);
+ const labels={ambient:'FOUNDATION / THE HEART OF THE PIECE',sample:'SAMPLE / TEXTURE MATERIAL',grain:'TEXTURE / RESHAPE THE FOUNDATION',fx:'SPACE / THE WHOLE PIECE',tape:'TAPE / THE WHOLE PIECE',orbit:'MOTION / ORBIT IN HARMONY',visual:'AUDIO VISUALIZATION'};
  let current;
  function select(name,{notify=true}={}){
   if(!names.includes(name))return;
   const changed=current!==name;current=name;
   document.body.dataset.page=name;
-  links.forEach(link=>{const active=link.dataset.tab===name;link.classList.toggle('active',active);link.setAttribute('aria-selected',String(active));link.tabIndex=active?0:-1;});
+  links.forEach(link=>{const active=link.dataset.tab===(name==='sample'?'grain':name);link.classList.toggle('active',active);link.setAttribute('aria-selected',String(active));link.tabIndex=active?0:-1;});
   document.querySelectorAll('.page').forEach(page=>page.classList.toggle('active',page.id===name+'Page'));
   document.querySelector('.main-panel').classList.toggle('orbit-active',name==='orbit');
   document.getElementById('viewLabel').textContent=labels[name];

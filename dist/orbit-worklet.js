@@ -9,7 +9,11 @@ class OrbitProcessor extends AudioWorkletProcessor {
     if (settings?.patches) this.engine.setPatches(settings.patches);
     if (settings?.balls) this.engine.scatter(settings.balls);
     this.port.onmessage = ({ data }) => {
-      if (data.type === "options") this.engine.configure(data.value);
+      if (data.type === "harmonyPort") {
+        this.harmonyPort = data.port;
+        this.harmonyPort.onmessage = ({ data: data2 }) => this.engine.setHarmony(data2.notes);
+      } else if (data.type === "followHarmony") this.engine.followHarmony = Boolean(data.value);
+      else if (data.type === "options") this.engine.configure(data.value);
       else if (data.type === "patches") this.engine.setPatches(data.value);
       else if (data.type === "transport") this.engine.play(data.value);
       else if (data.type === "audition") this.engine.audition(data.bank, data.index, data.midi, data.patch);
@@ -17,6 +21,7 @@ class OrbitProcessor extends AudioWorkletProcessor {
       else if (data.type === "scatter") this.engine.scatter(data.balls);
       else if (data.type === "nudge") this.engine.nudge();
     };
+    this.port.postMessage({ type: "ready" });
   }
   process(inputs, outputs) {
     this.engine.process(outputs);

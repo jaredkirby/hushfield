@@ -1,8 +1,14 @@
 function createOrbitAudio(ctx, destination, state, auditionDestination, { options, balls, onSnapshot = () => {
+}, onReady = () => {
 } } = {}) {
   const node = new AudioWorkletNode(ctx, "orbit-engine", { numberOfInputs: 0, numberOfOutputs: 12, outputChannelCount: Array(12).fill(2), processorOptions: { options, balls, patches: state } });
   const voices = { size: 0 }, buses = {};
-  let disposed = false;
+  let disposed = false, ready = false;
+  const pending = [];
+  const send = (message) => {
+    if (ready) node.port.postMessage(message);
+    else pending.push(message);
+  };
   function makeBus(target, offset) {
     const output = ctx.createGain(), dry = ctx.createGain(), delay = ctx.createDelay(2), feedback = ctx.createGain(), delayReturn = ctx.createGain(), reverb = ctx.createConvolver(), reverbReturn = ctx.createGain();
     dry.gain.value = 0.75;
@@ -24,7 +30,7 @@ function createOrbitAudio(ctx, destination, state, auditionDestination, { option
   for (const [index, bank] of ["triggers", "balls"].entries()) buses[bank] = [makeBus(destination, index * 3), makeBus(auditionDestination || destination, 6 + index * 3)];
   function sync(next) {
     state = next;
-    node.port.postMessage({ type: "patches", value: state });
+    send({ type: "patches", value: state });
     for (const bank of ["triggers", "balls"]) {
       const settings = state[bank], fx = settings.effects, [normal, audition] = buses[bank];
       if (normal.room !== fx.reverbTime) {
@@ -50,28 +56,35 @@ function createOrbitAudio(ctx, destination, state, auditionDestination, { option
   }
   node.port.onmessage = ({ data }) => {
     if (disposed) return;
+    if (data.type === "ready") {
+      ready = true;
+      for (const message of pending.splice(0)) node.port.postMessage(message);
+      onReady();
+      return;
+    }
     voices.size = data.voices;
     onSnapshot(data);
   };
   sync(state);
-  const stop = (bank, index) => node.port.postMessage({ type: "stop", bank, index });
+  const stop = (bank, index) => send({ type: "stop", bank, index });
   return {
     node,
     voices,
     sync,
     stop,
     stopAll: () => stop(),
-    setOptions: (value) => node.port.postMessage({ type: "options", value }),
-    setTransport: (value) => node.port.postMessage({ type: "transport", value }),
-    scatter: (balls2) => node.port.postMessage({ type: "scatter", balls: balls2 }),
-    nudge: () => node.port.postMessage({ type: "nudge" }),
+    setOptions: (value) => send({ type: "options", value }),
+    setTransport: (value) => send({ type: "transport", value }),
+    scatter: (balls2) => send({ type: "scatter", balls: balls2 }),
+    nudge: () => send({ type: "nudge" }),
     play(bank, index, midi, patch, audition = false) {
       if (!audition || !patch.enabled || patch.level <= 0 || ctx.state !== "running" && typeof ctx.startRendering !== "function") return false;
-      node.port.postMessage({ type: "audition", bank, index, midi, patch });
+      send({ type: "audition", bank, index, midi, patch });
       return true;
     },
     dispose() {
       disposed = true;
+      pending.length = 0;
       node.port.onmessage = null;
       node.disconnect();
     }

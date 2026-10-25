@@ -1,3 +1,4 @@
+import { followChord } from "./piece-harmony.mjs";
 import { makeOrbitState, stepOrbit, containBalls } from "./orbit-physics.mjs";
 import { crossedPads } from "./orbit-pads.mjs";
 import { createSoundState, restoreSoundState, patchFor, soundMidi } from "./sound-patches.mjs";
@@ -52,6 +53,8 @@ class OrbitEngine {
     this.options = { rpm: 12, points: 0, balls: 5, triggers: 8, gravity: 35, bounce: 84, orientation: 0 };
     this.patches = createSoundState();
     this.voices = [];
+    this.harmony = [];
+    this.followHarmony = false;
     this.simulate = false;
     this.audible = false;
     this.triggerCount = 0;
@@ -84,6 +87,9 @@ class OrbitEngine {
       ball.vy -= 1;
     }
   }
+  setHarmony(notes) {
+    this.harmony = Array.isArray(notes) ? notes.filter(Number.isFinite) : [];
+  }
   setPatches(patches) {
     this.patches = restoreSoundState(patches);
   }
@@ -108,6 +114,7 @@ class OrbitEngine {
       oldest.releaseAt = oldest.age;
     }
     if (this.voices.length >= 96) this.voices.shift();
+    if (this.followHarmony) midi = followChord(midi, this.harmony);
     const frequency = 440 * 2 ** ((midi - 69) / 12);
     this.voices.push({
       bank,

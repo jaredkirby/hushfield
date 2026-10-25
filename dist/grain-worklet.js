@@ -1,11 +1,16 @@
 class GrainEngine extends AudioWorkletProcessor {
-  constructor() {
+  constructor(options) {
     super();
     this.channels = [];
+    this.sourceMode = options?.processorOptions?.source || "sample";
+    this.recent = [new Float32Array(sampleRate * 4), new Float32Array(sampleRate * 4)];
+    this.captureFoundation = true;
+    this.writeIndex = 0;
+    this.recentFrames = 0;
     this.sourceRate = 48e3;
     this.grains = [];
-    this.p = {};
-    this.playing = false;
+    this.p = options?.processorOptions?.params || {};
+    this.playing = Boolean(options?.processorOptions?.playing);
     this.scan = 0.5;
     this.clock = 0;
     this.untilGrain = 0;
@@ -14,6 +19,17 @@ class GrainEngine extends AudioWorkletProcessor {
     this.smoothedPosition = 0.5;
     this.frameCounter = 0;
     this.port.onmessage = ({ data: m }) => {
+      if (m.type === "captureFoundation") this.captureFoundation = Boolean(m.value);
+      if (m.type === "source") {
+        this.sourceMode = m.mode === "foundation" ? "foundation" : "sample";
+        this.grains = [];
+        this.untilGrain = 0;
+      }
+      if (m.type === "freeze") {
+        const length = this.recentFrames, start = length === this.recent[0].length ? this.writeIndex : 0;
+        const channels = this.recent.map((channel) => Float32Array.from({ length }, (_, i) => channel[(start + i) % channel.length]));
+        this.port.postMessage({ type: "phrase", id: m.id, channels, sampleRate }, channels.map((channel) => channel.buffer));
+      }
       if (m.type === "sample") {
         this.channels = m.channels;
         this.sourceRate = m.sampleRate;
@@ -28,16 +44,17 @@ class GrainEngine extends AudioWorkletProcessor {
         this.p = { ...old, ...m.params };
         if (m.params.position !== void 0 && m.params.position !== old.position) this.scan = m.params.position;
       }
-      if (m.type === "play") {
+      if (m.type === "play" && Boolean(m.value) !== this.playing) {
         this.playing = m.value;
         if (!m.value) this.grains = [];
         this.untilGrain = 0;
       }
     };
+    this.port.postMessage({ type: "ready" });
   }
   spawn() {
-    const p = this.p, len = this.channels[0]?.length;
-    if (!len || this.grains.length >= 160) return;
+    const live = this.sourceMode === "foundation", p = this.p, len = live ? this.recentFrames : this.channels[0]?.length;
+    if (!len || live && len < sampleRate * 0.1 || this.grains.length >= 160) return;
     if (Math.random() * 100 < (p.hold || 0)) return;
     let pos = this.scan;
     if (Math.random() * 100 < (p.static || 0)) pos = this.lastPosition;
@@ -52,16 +69,26 @@ class GrainEngine extends AudioWorkletProcessor {
     const duration = Math.max(0.012, (p.size || 200) / 1e3 * (1 + (Math.random() - 0.5) * chaos));
     const rev = Math.random() * 100 < (p.reverse || 0) ? -1 : 1;
     const pitch = (p.pitch || 0) + (Math.random() - 0.5) * (p.elastic || 0) / 12;
-    const rate = 2 ** (pitch / 12) * this.sourceRate / sampleRate * rev;
+    const rate = 2 ** (pitch / 12) * (live ? 1 : this.sourceRate / sampleRate) * rev;
     const width = (p.width ?? 65) / 100;
-    this.grains.push({ position: pos * len, age: 0, duration: Math.floor(duration * sampleRate), rate, pan: (Math.random() * 2 - 1) * width, amplitude: Math.min(0.8, 1.1 / Math.sqrt(Math.max(1, (p.density || 12) * duration))) });
+    const oldest = live && len === this.recent[0].length ? this.writeIndex : 0;
+    this.grains.push({ position: (oldest + pos * len) % len, age: 0, duration: Math.floor(duration * sampleRate), rate, pan: (Math.random() * 2 - 1) * width, amplitude: Math.min(0.8, 1.1 / Math.sqrt(Math.max(1, (p.density || 12) * duration))) });
   }
   process(inputs, outputs) {
     const out = outputs[0];
     if (!out?.length) return true;
-    const p = this.p, len = this.channels[0]?.length || 0;
+    const live = this.sourceMode === "foundation", p = this.p;
+    const input = inputs[0];
+    let len = live ? this.recentFrames : this.channels[0]?.length || 0;
     let peak = 0;
     for (let i = 0; i < out[0].length; i++) {
+      if (input?.[0] && this.captureFoundation) {
+        this.recent[0][this.writeIndex] = input[0][i];
+        this.recent[1][this.writeIndex] = (input[1] || input[0])[i];
+        this.writeIndex = (this.writeIndex + 1) % this.recent[0].length;
+        this.recentFrames = Math.min(this.recent[0].length, this.recentFrames + 1);
+        if (live) len = this.recentFrames;
+      }
       let l = 0, r = 0;
       if (this.playing && len) {
         if (this.untilGrain <= 0) {
@@ -74,7 +101,7 @@ class GrainEngine extends AudioWorkletProcessor {
           let speed = Math.abs(p.speed ?? 1) * (p.scanMode === "pingpong" ? this.direction : 1);
           if (p.scanMode === "reverse") speed = -Math.abs(speed);
           const range = (p.range ?? 100) / 100, center = p.position ?? 0.5, lo = Math.max(0, center - range / 2), hi = Math.min(1, center + range / 2);
-          this.scan += speed / (len / this.sourceRate) / sampleRate;
+          this.scan += speed / (len / (live ? sampleRate : this.sourceRate)) / sampleRate;
           if (this.scan > hi) {
             this.scan = hi;
             if (p.scanMode === "pingpong") this.direction = -1;
@@ -93,7 +120,7 @@ class GrainEngine extends AudioWorkletProcessor {
             continue;
           }
           const pos = (grain.position % len + len) % len, idx = Math.floor(pos), f = pos - idx;
-          const a = this.channels[0], b = this.channels[1] || a;
+          const a = live ? this.recent[0] : this.channels[0], b = live ? this.recent[1] : this.channels[1] || a;
           const env = Math.sin(Math.PI * grain.age / grain.duration) ** 2;
           const left = a[idx] * (1 - f) + a[(idx + 1) % len] * f;
           const right = b[idx] * (1 - f) + b[(idx + 1) % len] * f;
@@ -110,7 +137,8 @@ class GrainEngine extends AudioWorkletProcessor {
     }
     this.frameCounter += out[0].length;
     if (this.frameCounter >= sampleRate / 15) {
-      this.port.postMessage({ scan: this.scan, count: this.grains.length, peak, grains: this.grains.slice(-45).map((g) => ({ position: (g.position % Math.max(1, len) + len) % Math.max(1, len) / Math.max(1, len), life: g.age / g.duration })) });
+      const wave = live ? Array.from({ length: 160 }, (_, i) => this.recent[0][((this.recentFrames === this.recent[0].length ? this.writeIndex : 0) + Math.floor(i * this.recentFrames / 160)) % this.recent[0].length]) : null;
+      this.port.postMessage({ sourceMode: this.sourceMode, playing: this.playing, liveSeconds: this.recentFrames / sampleRate, wave, scan: this.scan, count: this.grains.length, peak, grains: this.grains.slice(-45).map((g) => ({ position: (g.position % Math.max(1, len) + len) % Math.max(1, len) / Math.max(1, len), life: g.age / g.duration })) });
       this.frameCounter = 0;
     }
     return true;

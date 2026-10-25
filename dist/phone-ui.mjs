@@ -31,7 +31,7 @@ export function setupPhoneUI({showPage,currentPage}){
   const settings=document.querySelector('.orbit-settings');settings.id='orbitSettings';
   for(const name of ['orbit-shape-tools','orbit-spin-tools'])document.querySelector('.'+name).dataset.panel='motion';
   for(const control of document.querySelectorAll('#orbitControls .control'))control.dataset.panel='motion';
-  const panels=panelNav(settings,[['motion','Motion'],['triggers','Triggers'],['balls','Balls']],key=>{document.querySelector('.orbit-layout').dataset.controlPanel=key;},{className:'orbit-panel-tabs',ariaLabel:'ORBIT control pages'});
+  const panels=panelNav(settings,[['motion','Orbit'],['triggers','Triggers'],['balls','Balls']],key=>{document.querySelector('.orbit-layout').dataset.controlPanel=key;},{className:'orbit-panel-tabs',ariaLabel:'ORBIT control pages'});
   const scatter=document.createElement('button');scatter.type='button';scatter.className='phone-scatter';scatter.textContent='↻ Scatter';scatter.addEventListener('click',()=>document.getElementById('resetBalls').click());document.querySelector('.orbit-spin-tools').append(scatter);
   for(const pageId of ['grainPage','fxPage']){const page=document.getElementById(pageId),groups=[...page.querySelectorAll('.control-group')];panelNav(page,groups.map((group,i)=>[String(i),group.querySelector('h3').textContent]),key=>groups.forEach((group,i)=>group.classList.toggle('phone-selected',String(i)===key)));}
   const about=document.createElement('button');about.type='button';about.className='phone-about';about.textContent='ⓘ';about.setAttribute('aria-label','About Hushfield');about.addEventListener('click',()=>document.getElementById('aboutBtn').click());document.querySelector('.head-actions').append(about);

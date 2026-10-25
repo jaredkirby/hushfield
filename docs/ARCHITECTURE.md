@@ -19,7 +19,11 @@ Sources intentionally live alongside the shipped page in `dist/`. Do not replace
 - `orbit-worklet.js` and `orbit-dsp.mjs` advance the rotating-boundary simulation and render ball/trigger voices from the sample clock. `orbit-physics.mjs` and `orbit-pads.mjs` retain the fixed-step physics and trigger geometry. `orbit-audio.mjs` routes twelve stereo dry/delay/room sends through independent normal/audition bank effects. Main-thread snapshots update the display; animation frames never schedule notes.
 - `tape-dsp.mjs` and `tape-worklet.js` implement the shared stereo tape echo. The master limiter/volume follow it.
 
-Sample and Orbit layers feed the shared output; each bank retains its own sound/effects settings. Test sound can use the master without waiting for worklets. Restart retires the old context and reconstructs the output within a fresh gesture while preserving session settings. `audio-lifecycle.mjs` guards processor failures and shares complete graph disposal between startup failure and Restart. Each graph publishes readiness after activation succeeds.
+The piece model owns Foundation/Texture/Motion blend levels, Texture source and harmony following. Play controls the complete piece; transient solo leaves saved levels unchanged and no playback rule depends on the active editor. Foundation feeds a four-second stereo ring in the grain Worklet before its audible fader. Freezing copies that bounded recent phrase into the existing sample representation. Live capture pauses with transport and imports/microphone/frozen phrases obey latest-selection ownership.
+
+Foundation and Motion processors exchange chord pitch classes through a dedicated MessageChannel after both acknowledge readiness. Motion quantizes new notes to current chord tones unless explicitly unlinked; existing sustained voices finish normally. Processor readiness also replays initial grain state and queues Motion commands so cold-start messages are not lost.
+
+Normal Foundation, Texture and Motion levels enter one shared tone/stereo-width/reverb bus before Tape and the master limiter. Individual Motion banks retain their own sound/effects settings. Explicit individual auditions bypass the part fader but enter shared finishing. Source preview is separate, labelled original audio, and stops the piece. Test sound can use the master without waiting for worklets. Restart retires the old context and reconstructs the output within a fresh gesture while preserving session settings. `audio-lifecycle.mjs` guards processor failures and shares complete graph disposal between startup failure and Restart. Each graph publishes readiness after activation succeeds.
 
 ## Interaction and rendering
 
@@ -33,7 +37,7 @@ Sample and Orbit layers feed the shared output; each bank retains its own sound/
 
 ## Persistence
 
-`project-file.mjs` serializes complete sessions, validates version 1–3 project files, and migrates earlier physics namespaces. Files embed WAV sample data, ambient voices, parameters, patch banks and visual settings. `sample-selection.mjs` gives each import, project or microphone take ownership of its result; newer selections invalidate older decodes. Audio decoding can use an OfflineAudioContext without starting playback.
+`project-file.mjs` serializes complete sessions, validates version 1–4 project files, migrates earlier physics namespaces and restores a version 4 piece model. Files embed WAV Texture material, Foundation voices, blend/source/harmony relationships, parameters, patch banks and visual settings. Legacy projects retain their material and blend levels with independent Motion tuning; solo is never saved. `sample-selection.mjs` gives each import, project or microphone take ownership of its result; newer selections invalidate older decodes. Audio decoding can use an OfflineAudioContext without starting playback.
 
 `session-recovery.mjs` stores a single bounded 30 MiB recovery draft in IndexedDB. Existing drafts are offered explicitly and are not overwritten until the player chooses. The UI distinguishes unsaved changes, saving, a local draft, an initiated export, and storage failure. Browser quota, tab eviction, storage clearing, and multiple tabs can still affect recovery; downloaded project files remain the portable copy.
 
@@ -44,3 +48,7 @@ Node tests render PCM and exercise state, math, physics and interaction contract
 ## Recording
 
 `microphone-take.mjs` owns each take, including late permission results, recorder events, timers and track cleanup. Pending requests can be cancelled. `output-capture.mjs` waits for a session-labelled worklet completion before accepting a replacement take. The capture worklet enforces its own five-minute frame limit, transfers PCM chunks, and the controller encodes them incrementally with `wave-file.mjs`, avoiding multiple full-length floating-point copies.
+
+## Product model
+
+See [the glossary](../GLOSSARY.md) and [approved Ambient-first scope](specs/ambient-first.md). Stable internal page IDs retain older deep links; five main editors expose Foundation, Texture, Motion, Space and Tape. Source editing and Visual are secondary tools.

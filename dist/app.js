@@ -1,6 +1,9 @@
+import { restorePiece, piecePlayback } from "./piece-session.mjs";
+import { followChord } from "./piece-harmony.mjs";
+import { createPieceSpace } from "./piece-space.mjs";
 import { createRenderClock } from "./render-clock.mjs";
 import { createProcessorGuard, releaseAudioGraph } from "./audio-lifecycle.mjs";
-import { setupLayerUI } from "./layer-ui.mjs";
+import { setupPieceBlend } from "./piece-blend.mjs";
 import { setupRecoveryUI } from "./recovery-ui.mjs";
 import { createSampleSelection } from "./sample-selection.mjs";
 import { createOutputCapture } from "./output-capture.mjs";
@@ -23,6 +26,8 @@ const $ = (id) => document.getElementById(id);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, delayTime: 0.36, feedback: 32, delayMix: 18, reverb: 30, width: 75, tapeOn: false, drive: 20, wow: 20, flutter: 10, hiss: 8, tapeTone: 50, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
 let recovery, restoringSession = false, sampleDecoder;
+let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel;
+let phraseRequest, nextPhraseId = 0, foundationReady = false, motionReady = false;
 function markEdited() {
   renderClock.invalidate();
   if (!restoringSession) recovery?.edited();
@@ -36,7 +41,7 @@ function decodeContext() {
 let params = { ...initial }, ctx, engine, master, filter, convolver, reverbWet, analyser, recordDestination, buffer, originalBuffer, sourceName = "Glass garden", demoKey = "glass", running = false, activeTab = "ambient", stats = { scan: 0.5, count: 0, peak: 0, grains: [] }, outputRecording = false, micRecording = false, previewNode, toastTimer, balls = [], lastFrame = 0, lastMeter = 0, orbitVoices = /* @__PURE__ */ new Set(), audioReady = false, playPending = false;
 const ranges = {};
 let reportedOrbitVoices = 0;
-let layerUI, visuals, volumeStepper, shapeStepper, soundEditors, showOrbitPanel, orbitAudio, limiter, tapeNode;
+let blendUI, visuals, volumeStepper, shapeStepper, soundEditors, showOrbitPanel, orbitAudio, limiter, tapeNode;
 let ambientState = { ...AMBIENT_DEFAULTS }, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientWet, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
 let audioGeneration = 0, restartPending = false, clockSnapshot;
 let soundState = createSoundState();
@@ -73,6 +78,10 @@ function makeControl(parent, id, label, min, max, step, unit = "", display) {
   $(parent).append(row);
   const format = (v) => display ? display(v) : `${Number(v).toFixed(step < 1 ? step < 0.1 ? 2 : 1 : 0)}${unit}`;
   let stepper;
+  const descriptions = { position: "Choose where Texture reads within the phrase.", size: "Long grains make a smooth cloud; short grains make fragments.", density: "More grains overlap into a thicker texture.", spray: "Spread grains across more of the source phrase.", pitch: "Shift Texture higher or lower in semitones.", cutoff: "Darken or brighten the whole piece.", width: "Move the whole piece from mono to stereo." };
+  if (descriptions[id]) row.addEventListener("click", () => {
+    $("pieceHint").textContent = descriptions[id];
+  });
   const render = () => {
     out.value = format(+input.value);
     input.style.background = `linear-gradient(to right, #a17956 0%, #a17956 ${(input.value - min) / (max - min) * 100}%, #384548 ${(input.value - min) / (max - min) * 100}%, #384548 100%)`;
@@ -106,7 +115,7 @@ makeControl("grainControls", "spray", "Spray", 0, 100, 1, "%");
 makeControl("grainControls", "pitch", "Pitch", -24, 24, 1, " st", (v) => (v >= 0 ? "+" : "") + v + " st");
 makeControl("scanControls", "range", "Range", 1, 100, 1, "%");
 makeControl("scanControls", "wander", "Wander", 0, 100, 1, "%");
-makeControl("scanControls", "speed", "Speed", 0, 2, 0.01, "×");
+makeControl("scanControls", "speed", "Speed", 0, 2, 0.01, "\xD7");
 makeControl("scanControls", "smooth", "Smoothing", 0, 100, 1, "%");
 for (const [id, label] of [["static", "Static"], ["jump", "Jump"], ["hold", "Hold"], ["reverse", "Reverse"], ["elastic", "Elastic"], ["chaos", "Chaos"]]) makeControl("motionControls", id, label, 0, 100, 1, "%");
 makeControl("trimControls", "trimStart", "Start", 0, 99.9, 0.1, "%");
@@ -124,8 +133,8 @@ makeControl("orbitControls", "orbitTriggers", "Triggers", 1, 24, 1);
 makeControl("orbitControls", "orbitBalls", "Balls", 1, 12, 1);
 makeControl("orbitControls", "orbitGravity", "Gravity", 0, 100, 1, "%");
 makeControl("orbitControls", "orbitBounce", "Bounce", 30, 100, 1, "%");
-makeControl("orbitControls", "orbitSpin", "Spin rate", -60, 60, 1, "", (v) => v === 0 ? "Stopped" : `${Math.abs(v)} RPM ${v > 0 ? "↻" : "↺"}`);
-makeControl("orbitControls", "orbitRotation", "Orientation", -180, 180, 1, "°");
+makeControl("orbitControls", "orbitSpin", "Spin rate", -60, 60, 1, "", (v) => v === 0 ? "Stopped" : `${Math.abs(v)} RPM ${v > 0 ? "\u21BB" : "\u21BA"}`);
+makeControl("orbitControls", "orbitRotation", "Orientation", -180, 180, 1, "\xB0");
 function refreshControls() {
   document.body.classList.toggle("tape-enabled", params.tapeOn);
   for (const [id, { input, render }] of Object.entries(ranges)) {
@@ -155,12 +164,13 @@ function refreshControls() {
 function syncEngine() {
   renderClock.invalidate();
   if (!audioReady || !engine) return;
-  const send = { ...params, position: params.position / 100 };
+  const send = { ...params, width: 100, position: params.position / 100 };
   engine.port.postMessage({ type: "params", params: send });
   filter.type = $("filterType").value;
   filter.frequency.setTargetAtTime(params.cutoff, ctx.currentTime, 0.03);
   filter.Q.setTargetAtTime(params.resonance, ctx.currentTime, 0.03);
   tapeNode?.port.postMessage(params);
+  spaceBus?.setWidth(params.width);
   reverbWet.gain.setTargetAtTime(params.reverb / 100, ctx.currentTime, 0.05);
   orbitAudio?.sync(soundState);
   orbitAudio?.setOptions({ ...orbitOptions(), balls: params.orbitBalls, triggers: params.orbitTriggers });
@@ -183,10 +193,19 @@ function resetAudioGraph() {
     } catch {
     }
     previewNode = void 0;
-    $("previewSource").textContent = "▷ Listen to source";
+    $("previewSource").textContent = "\u25B7 Listen to source";
   }
+  if (phraseRequest) {
+    phraseRequest.reject(new Error("Audio restarted. Try freezing again."));
+    phraseRequest = null;
+  }
+  harmonyChannel?.port1.close();
+  harmonyChannel?.port2.close();
+  harmonyChannel = null;
   processorGuard.clear();
   releaseAudioGraph({ context: ctx, processors: [engine, tapeNode, ambientNode, recordDestination], orbit: orbitAudio });
+  foundationReady = motionReady = false;
+  foundationLayer = spaceBus = null;
   ctx = master = engine = orbitAudio = analyser = limiter = tapeNode = ambientNode = ambientWet = grainLayer = orbitLayer = recordDestination = void 0;
   lastMeter = 0;
   renderClock.invalidate();
@@ -243,40 +262,55 @@ async function initializeAudio() {
   activation.catch(() => {
   });
   if (!ctx.audioWorklet) throw new Error("The sound engine is unavailable. Test sound still checks device output.");
-  await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=reliability-2");
+  await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=piece-4");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/tape-worklet.js?v=reliability-2");
+  await context.audioWorklet.addModule("./build/tape-worklet.js?v=piece-4");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/ambient-worklet.js?v=reliability-2");
+  await context.audioWorklet.addModule("./build/ambient-worklet.js?v=piece-4");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/orbit-worklet.js?v=reliability-2");
+  await context.audioWorklet.addModule("./build/orbit-worklet.js?v=piece-4");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  engine = new AudioWorkletNode(ctx, "grain-engine", { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [2] });
-  engine.port.onmessage = ({ data }) => stats = data;
+  engine = new AudioWorkletNode(ctx, "grain-engine", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
+  const textureNode = engine;
+  textureNode.port.onmessage = ({ data }) => {
+    if (textureNode !== engine) return;
+    if (data.type === "ready") {
+      syncEngine();
+      sendBuffer();
+      syncTextureSource();
+      syncPlayback();
+      return;
+    }
+    if (data.type === "phrase") {
+      if (phraseRequest?.id === data.id) {
+        phraseRequest.resolve(data);
+        phraseRequest = null;
+      }
+    } else {
+      stats = data;
+      if (piece.source === "foundation" && activeTab !== "sample") $("duration").textContent = formatTime(data.liveSeconds || 0);
+      renderClock.invalidate();
+    }
+  };
   filter = ctx.createBiquadFilter();
   tapeNode = new AudioWorkletNode(ctx, "tape-delay", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
-  convolver = ctx.createConvolver();
-  reverbWet = ctx.createGain();
-  const compressor = limiter;
-  const ir = ctx.createBuffer(2, ctx.sampleRate * 3, ctx.sampleRate);
-  for (let c = 0; c < 2; c++) {
-    const d = ir.getChannelData(c);
-    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3) * (i < 300 ? i / 300 : 1);
-  }
-  convolver.buffer = ir;
+  tapeNode.connect(limiter);
+  spaceBus = createPieceSpace(ctx, tapeNode);
+  filter = spaceBus.filter;
+  reverbWet = spaceBus.wet;
   grainLayer = ctx.createGain();
   engine.connect(grainLayer);
-  grainLayer.connect(filter);
-  filter.connect(tapeNode);
-  filter.connect(convolver);
-  convolver.connect(reverbWet);
-  reverbWet.connect(tapeNode);
-  tapeNode.connect(compressor);
+  grainLayer.connect(spaceBus.input);
   orbitLayer = ctx.createGain();
-  orbitLayer.connect(tapeNode);
-  orbitAudio = createOrbitAudio(ctx, orbitLayer, soundState, tapeNode, {
+  orbitLayer.connect(spaceBus.input);
+  orbitAudio = createOrbitAudio(ctx, orbitLayer, soundState, spaceBus.input, {
     options: { ...orbitOptions(), balls: params.orbitBalls, triggers: params.orbitTriggers },
     balls,
+    onReady() {
+      motionReady = true;
+      connectPieceHarmony();
+      syncPlayback();
+    },
     onSnapshot(snapshot) {
       if (ctx !== context) return;
       if (snapshot.voices !== reportedOrbitVoices || snapshot.phase !== orbitState.phase || snapshot.balls.some((ball, i) => ball.x !== balls[i]?.x || ball.y !== balls[i]?.y)) renderClock.invalidate();
@@ -311,52 +345,126 @@ async function initializeAudio() {
   syncAmbient();
   if (buffer) sendBuffer();
   else loadDemo(demoKey);
+  syncTextureSource();
   updateAudioState();
 }
 function createAmbientAudio() {
-  ambientNode = new AudioWorkletNode(ctx, "ambient-engine", { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [2], processorOptions: { settings: ambientState } });
+  ambientNode = new AudioWorkletNode(ctx, "ambient-engine", { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [2], processorOptions: { settings: { ...ambientState, enabled: true } } });
   const node = ambientNode;
   node.port.onmessage = ({ data }) => {
     if (node !== ambientNode) return;
     if (data.type === "ready") {
-      node.port.postMessage({ type: "settings", value: ambientState });
-      node.port.postMessage({ type: "play", value: running && ambientState.enabled });
-    } else ambientStats = data;
-  };
-  const room = ctx.createConvolver(), ir = ctx.createBuffer(2, ctx.sampleRate * 6, ctx.sampleRate);
-  let seed = 814;
-  for (let ch = 0; ch < 2; ch++) {
-    const data = ir.getChannelData(ch);
-    for (let i = 0; i < data.length; i++) {
-      seed = Math.imul(seed, 1664525) + 1013904223 >>> 0;
-      data[i] = (seed / 2147483648 - 1) * Math.exp(-i / ctx.sampleRate * 0.95) * Math.min(1, i / (ctx.sampleRate * 0.04));
+      foundationReady = true;
+      connectPieceHarmony();
+      node.port.postMessage({ type: "settings", value: { ...ambientState, enabled: true } });
+      node.port.postMessage({ type: "play", value: running });
+    } else {
+      ambientStats = data;
+      updatePadLabels();
     }
-  }
-  room.buffer = ir;
-  ambientWet = ctx.createGain();
-  ambientNode.connect(tapeNode);
-  ambientNode.connect(room);
-  room.connect(ambientWet);
-  ambientWet.connect(tapeNode);
+  };
+  foundationLayer = ctx.createGain();
+  ambientNode.connect(foundationLayer);
+  foundationLayer.connect(spaceBus.input);
+  ambientNode.connect(engine);
+  connectPieceHarmony();
+}
+function connectPieceHarmony() {
+  if (!foundationReady || !motionReady || harmonyChannel || !ambientNode || !orbitAudio) return;
+  harmonyChannel = new MessageChannel();
+  orbitAudio.node.port.postMessage({ type: "harmonyPort", port: harmonyChannel.port2 }, [harmonyChannel.port2]);
+  ambientNode.port.postMessage({ type: "harmonyPort", port: harmonyChannel.port1 }, [harmonyChannel.port1]);
 }
 function syncPlayback() {
-  const generated = ambientState.enabled;
-  engine?.port.postMessage({ type: "play", value: running && (generated ? ambientState.grains > 0 : !["orbit", "ambient"].includes(activeTab)) });
-  ambientNode?.port.postMessage({ type: "play", value: running && generated });
-  if (grainLayer) grainLayer.gain.setTargetAtTime(generated ? ambientState.grains / 100 * 0.6 : params.sampleLevel / 100, ctx.currentTime, 0.6);
-  if (orbitLayer) orbitLayer.gain.setTargetAtTime(generated ? ambientState.orbit / 100 * 0.45 : params.orbitLevel / 100, ctx.currentTime, 0.6);
-  orbitAudio?.setTransport({ simulate: running && (activeTab === "orbit" || orbitIsActive()), audible: running && orbitIsActive() });
+  const mix = piecePlayback(piece, running, solo);
+  engine?.port.postMessage({ type: "captureFoundation", value: running });
+  engine?.port.postMessage({ type: "play", value: running && mix.texture > 0 });
+  ambientNode?.port.postMessage({ type: "play", value: mix.generate });
+  if (ctx) for (const [node, value] of [[foundationLayer, mix.foundation], [grainLayer, mix.texture], [orbitLayer, mix.motion]]) {
+    node?.gain.setTargetAtTime(value, ctx.currentTime, 0.08);
+  }
+  orbitAudio?.setTransport({ simulate: running, audible: running && mix.motion > 0 });
+  orbitAudio?.node.port.postMessage({ type: "followHarmony", value: piece.followHarmony });
+}
+function syncTextureSource() {
+  engine?.port.postMessage({ type: "source", mode: piece.source === "foundation" ? "foundation" : "sample" });
+  document.body.dataset.textureSource = piece.source;
+  refreshPieceUI();
+}
+function refreshPieceUI() {
+  blendUI?.refresh();
+  const live = piece.source === "foundation";
+  if ($("textureSourceStatus")) $("textureSourceStatus").textContent = live ? "LIVE \xB7 RECENT FOUNDATION" : piece.source === "frozen" ? "FROZEN PHRASE \xB7 ORIGINAL HARMONY" : "YOUR SOUND \xB7 ORIGINAL PITCH";
+  if ($("freezePhrase")) {
+    $("freezePhrase").textContent = live ? "Freeze phrase" : "Use live foundation";
+    $("freezePhrase").disabled = live && !running;
+  }
+  if ($("followHarmony")) {
+    $("followHarmony").textContent = piece.followHarmony ? "HARMONY LINKED" : "INDEPENDENT NOTES";
+    $("followHarmony").setAttribute("aria-pressed", String(piece.followHarmony));
+  }
+  if ($("partAction")) {
+    const kind = activeTab === "orbit" ? "motion" : ["sample", "grain"].includes(activeTab) ? "texture" : null;
+    $("partAction").hidden = !kind || piece[kind] > 0;
+    $("partAction").textContent = kind === "motion" ? "Add motion" : "Add texture";
+  }
+  if ($("pieceHint")) $("pieceHint").textContent = solo ? "SOLO \xB7 " + solo.toUpperCase() : activeTab === "grain" ? "LONG GRAINS: SMOOTH \xB7 SHORT: FRAGMENTS" : activeTab === "orbit" ? piece.followHarmony ? "FOLLOWS FOUNDATION HARMONY" : "INDEPENDENT NOTES" : "ONE PIECE \xB7 THREE PARTS";
+  const textureOff = piece.texture === 0 && solo !== "texture";
+  $("grainPage").querySelector(".control-grid").toggleAttribute("inert", textureOff);
+  $("grainPage").querySelectorAll(".control-grid button,.control-grid input,.control-grid select").forEach((control) => control.disabled = textureOff);
+  $("openVisual")?.setAttribute("aria-pressed", String(activeTab === "visual"));
+  if ($("openVisual")) $("openVisual").textContent = activeTab === "visual" ? "Back to sound" : "Visual";
+  if (buffer) $("duration").textContent = formatTime(live && activeTab !== "sample" ? stats.liveSeconds || 0 : buffer.duration);
+  document.body.dataset.textureEnabled = String(piece.texture > 0 || solo === "texture");
+  document.body.dataset.motionEnabled = String(piece.motion > 0 || solo === "motion");
+  if ($("waveHint")) $("waveHint").textContent = live && activeTab !== "sample" ? "RECENT FOUNDATION \u2192 TEXTURE" : "DRAG TO EXPLORE THE SOURCE";
+}
+async function freezePhrase() {
+  if (piece.source !== "foundation") {
+    sampleSelection.cancel();
+    piece.source = "foundation";
+    markEdited();
+    syncTextureSource();
+    return;
+  }
+  if (!running || phraseRequest) return toast("Play the piece briefly before freezing a phrase.");
+  const operation = sampleSelection.reserve(), id = ++nextPhraseId;
+  try {
+    await operation.run(() => new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        if (phraseRequest?.id === id) {
+          phraseRequest = null;
+          reject(new Error("Phrase capture timed out."));
+        }
+      }, 3e3);
+      phraseRequest = { id, resolve: (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      }, reject: (error) => {
+        clearTimeout(timer);
+        reject(error);
+      } };
+      engine.port.postMessage({ type: "freeze", id });
+    }), (phrase) => {
+      if (phrase.channels[0].length < phrase.sampleRate * 0.25) throw new Error("Let the Foundation play a little longer first.");
+      piece.source = "frozen";
+      setSample(createBuffer(phrase.channels, phrase.sampleRate), "Frozen foundation", "FROZEN PHRASE");
+      syncTextureSource();
+      toast("Phrase frozen. Its captured harmony stays fixed.");
+    });
+  } catch (error) {
+    toast(error.message);
+  }
 }
 function syncAmbient() {
   renderClock.invalidate();
   if (!ambientNode) ambientStats = { elapsed: 0, chord: ambientChordName(ambientState, 0), chordNotes: ambientChord(ambientState, 0), next: ambientState.change, notes: 0, section: 1 };
   ambientUI?.refresh();
   ambientNode?.port.postMessage({ type: "settings", value: ambientState });
-  if (ambientWet) ambientWet.gain.setTargetAtTime(ambientState.space / 100 * 0.85, ctx.currentTime, 1);
   syncPlayback();
-  $("freezeBtn").disabled = !ambientState.enabled && activeTab === "orbit";
+  $("freezeBtn").disabled = false;
   updateTransport();
-  layerUI?.refresh();
+  refreshPieceUI();
 }
 function newAmbientPiece() {
   markEdited();
@@ -366,7 +474,7 @@ function newAmbientPiece() {
   toast("A new piece. Your sounds and mix are kept.");
 }
 function orbitIsActive() {
-  return ambientState.enabled ? ambientState.orbit > 0 : activeTab === "orbit" && params.orbitLevel > 0;
+  return piecePlayback(piece, running, solo).motion > 0;
 }
 function createBuffer(channels, rate) {
   const b = new AudioBuffer({ numberOfChannels: channels.length, length: channels[0].length, sampleRate: rate });
@@ -431,12 +539,12 @@ function setSample(b, name, type = "IMPORTED AUDIO", keepOriginal = false) {
     }
     previewNode = null;
   }
-  $("previewSource").textContent = "▷ Listen to source";
+  $("previewSource").textContent = "\u25B7 Listen to source";
   buffer = b;
   if (!keepOriginal) originalBuffer = b;
   sourceName = name;
   $("sampleName").textContent = name;
-  $("sampleMeta").textContent = `${type} · ${b.duration.toFixed(2)} SEC`;
+  $("sampleMeta").textContent = `${type} \xB7 ${b.duration.toFixed(2)} SEC`;
   $("duration").textContent = formatTime(b.duration);
   $("sourceType").textContent = type === "GENERATED DEMO" ? "LOCAL SYNTHESIS" : "LOCAL AUDIO FILE";
   params.trimStart = 0;
@@ -453,7 +561,7 @@ function formatTime(sec) {
 const sampleSelection = createSampleSelection({ onState(state) {
   document.body.dataset.sampleLoading = String(state === "loading");
   $("sampleMeta").setAttribute("aria-busy", String(state === "loading"));
-  if (state === "loading") toast("Loading sound… Your latest selection will be used.");
+  if (state === "loading") toast("Loading sound\u2026 Your latest selection will be used.");
 } });
 async function importAudio(file) {
   try {
@@ -464,10 +572,12 @@ async function importAudio(file) {
       if (decoded.duration <= 60) return decoded;
       return createBuffer(Array.from({ length: Math.min(2, decoded.numberOfChannels) }, (_, c) => decoded.getChannelData(c).slice(0, Math.floor(60 * decoded.sampleRate))), decoded.sampleRate);
     }, (decoded) => {
+      piece.source = "sample";
       setSample(decoded, file.name.replace(/\.[^.]+$/, ""));
       $("demo").selectedIndex = -1;
       showTab("sample");
-      toast("Sound loaded. Explore it in the Grain page.");
+      syncTextureSource();
+      toast("Your sound is ready as Texture. Use Add texture to bring it into the piece.");
     });
   } catch (error) {
     toast("Could not load audio: " + error.message);
@@ -476,7 +586,7 @@ async function importAudio(file) {
 function trimInfo() {
   if (!buffer) return;
   const a = params.trimStart / 100 * buffer.duration, b = params.trimEnd / 100 * buffer.duration;
-  $("trimInfo").textContent = b > a ? `${a.toFixed(2)} s → ${b.toFixed(2)} s · ${(b - a).toFixed(2)} s` : "End must come after start";
+  $("trimInfo").textContent = b > a ? `${a.toFixed(2)} s \u2192 ${b.toFixed(2)} s \xB7 ${(b - a).toFixed(2)} s` : "End must come after start";
 }
 function denoiseBuffer(b, strength) {
   if (!strength) return b;
@@ -500,7 +610,9 @@ function applyTrim() {
   if (!buffer) return;
   if (params.trimEnd <= params.trimStart + 0.1) return toast("Move End after Start before trimming.");
   const rate = buffer.sampleRate, start = Math.floor(buffer.length * params.trimStart / 100), end = Math.floor(buffer.length * params.trimEnd / 100), b = createBuffer(Array.from({ length: buffer.numberOfChannels }, (_, c) => buffer.getChannelData(c).slice(start, end)), rate);
+  if (piece.source === "foundation") piece.source = "sample";
   setSample(denoiseBuffer(b, params.denoise), sourceName, "TRIMMED AUDIO", true);
+  syncTextureSource();
   toast("Trim applied. Restore full sample to undo.");
 }
 const pageNames = ["ambient", "sample", "grain", "fx", "tape", "orbit", "visual"];
@@ -518,25 +630,25 @@ function showTab(name) {
   });
   document.querySelectorAll(".page").forEach((el) => el.classList.toggle("active", el.id === name + "Page"));
   document.querySelector(".main-panel").classList.toggle("orbit-active", name === "orbit");
-  $("viewLabel").textContent = { ambient: "AMBIENT / GENERATIVE LANDSCAPES", grain: "GRAIN ENGINE", sample: "SAMPLE WORKSHOP", fx: "EFFECTS BUS", tape: "TAPE EMULATION", orbit: "ORBIT / PHYSICS INTO MUSIC", visual: "AUDIO VISUALIZATION" }[name];
+  $("viewLabel").textContent = { ambient: "FOUNDATION / THE HEART OF THE PIECE", grain: "TEXTURE / RESHAPE THE FOUNDATION", sample: "SAMPLE / TEXTURE MATERIAL", fx: "SPACE / THE WHOLE PIECE", tape: "TAPE / THE WHOLE PIECE", orbit: "MOTION / ORBIT IN HARMONY", visual: "AUDIO VISUALIZATION" }[name];
   syncPlayback();
-  if (!ambientState.enabled && name !== "orbit") silenceOrbit();
   if (name === "orbit" && !balls.length) resetBalls();
   $("freezeBtn").disabled = !ambientState.enabled && name === "orbit";
   syncEngine();
   updateTransport();
-  layerUI?.refresh();
+  refreshPieceUI();
   ensureVisibleSelection();
 }
 function updateTransport() {
   $("playBtn").innerHTML = running ? "<span>STOP</span>" : `<span>${ctx && audioReady && ctx.state !== "running" ? "RESUME" : "START"}</span>`;
   $("playBtn").setAttribute("aria-label", running ? "Stop instrument" : "Start instrument");
-  const held = ambientState.enabled ? ambientState.hold : params.freeze;
-  $("freezeBtn").textContent = ambientState.enabled ? "Hold chord" : "Freeze";
-  $("freezeBtn").setAttribute("aria-label", ambientState.enabled ? "Hold current chord" : "Freeze grain position");
+  const held = ambientState.hold;
+  $("freezeBtn").textContent = "Hold chord";
+  $("freezeBtn").setAttribute("aria-label", "Hold current chord");
   $("freezeBtn").classList.toggle("active", held);
   $("freezeBtn").setAttribute("aria-pressed", String(held));
-  $("transportStatus").textContent = running ? activeTab === "orbit" ? "ORBIT IN MOTION" : params.freeze ? "POSITION FROZEN" : "EXPLORING THE SAMPLE" : "READY TO EXPLORE";
+  $("transportStatus").textContent = solo ? "SOLO \xB7 " + solo.toUpperCase() : running ? "PLAYING THE PIECE" : "READY TO PLAY THE PIECE";
+  refreshPieceUI();
   document.body.classList.toggle("playing", running);
 }
 function updateAudioState(message) {
@@ -554,6 +666,11 @@ function updateAudioState(message) {
 }
 async function togglePlay() {
   if (playPending || restartPending) return;
+  if (previewNode) {
+    previewNode.stop();
+    previewNode = null;
+    $("previewSource").textContent = "\u25B7 Listen to source";
+  }
   const generation = audioGeneration;
   playPending = true;
   $("playBtn").disabled = true;
@@ -591,10 +708,10 @@ async function testSound() {
       return;
     }
     playTestNotes(context, master);
-    $("audioDetail").textContent = "Playing two test notes…";
+    $("audioDetail").textContent = "Playing two test notes\u2026";
     await activation;
     await verifyAudioClock(context);
-    if (ctx === context) $("audioDetail").textContent = "Test notes sent · VOL " + Math.round(+$("volume").value * 100) + "% · audio clock OK.";
+    if (ctx === context) $("audioDetail").textContent = "Test notes sent \xB7 VOL " + Math.round(+$("volume").value * 100) + "% \xB7 audio clock OK.";
   } catch (e) {
     if (context && context !== ctx) return;
     updateAudioState(e.message);
@@ -621,7 +738,7 @@ async function restartAudio() {
       } catch {
       }
       previewNode = null;
-      $("previewSource").textContent = "▷ Listen to source";
+      $("previewSource").textContent = "\u25B7 Listen to source";
     }
     resetAudioGraph();
     const activation = ensureOutput(), context = ctx;
@@ -629,14 +746,14 @@ async function restartAudio() {
     });
     playTestNotes(context, master);
     updateTransport();
-    $("audioDetail").textContent = "Restarting audio · playing two test notes…";
+    $("audioDetail").textContent = "Restarting audio \xB7 playing two test notes\u2026";
     await ensureAudio();
     await verifyAudioClock(context);
     if (generation !== audioGeneration) return;
     running = true;
     syncPlayback();
     updateTransport();
-    $("audioDetail").textContent = +$("volume").value === 0 ? "VOL is 0%. Select VOL and use +." : "Audio restarted · instrument running · VOL " + Math.round(+$("volume").value * 100) + "%.";
+    $("audioDetail").textContent = +$("volume").value === 0 ? "VOL is 0%. Select VOL and use +." : "Audio restarted \xB7 instrument running \xB7 VOL " + Math.round(+$("volume").value * 100) + "%.";
   } catch (e) {
     running = false;
     updateTransport();
@@ -708,7 +825,7 @@ function updateOrbitReadout() {
   $("orbitPointCount").textContent = points ? `${points} points` : "Circle";
   $("removePoint").disabled = !points;
   $("addPoint").disabled = points >= 12;
-  $("orbitSpinStatus").textContent = params.orbitSpin === 0 ? "SPIN STOPPED" : `${Math.abs(params.orbitSpin)} RPM ${params.orbitSpin > 0 ? "↻" : "↺"}`;
+  $("orbitSpinStatus").textContent = params.orbitSpin === 0 ? "SPIN STOPPED" : `${Math.abs(params.orbitSpin)} RPM ${params.orbitSpin > 0 ? "\u21BB" : "\u21BA"}`;
 }
 function changePoints(delta) {
   const current = shapePoints($("orbitShape").value);
@@ -720,7 +837,7 @@ function changePoints(delta) {
 }
 function currentPadSound(index) {
   const p = patchFor(soundState, "triggers", index), sound = padSound(index);
-  sound.midi = soundMidi(p, index);
+  sound.midi = piece.followHarmony ? followChord(soundMidi(p, index), ambientStats.chordNotes) : soundMidi(p, index);
   sound.note = noteName(sound.midi);
   sound.tone = p.wave;
   sound.enabled = p.enabled;
@@ -733,7 +850,7 @@ function updatePadLabels() {
     button.style.setProperty("--pad-color", sound.color);
     button.classList.toggle("muted-pad", !sound.enabled);
     button.setAttribute("aria-label", `Trigger ${i + 1}, ${sound.note}, ${sound.tone}`);
-    button.title = `Trigger ${i + 1}: ${sound.note} · tap to play and edit`;
+    button.title = `Trigger ${i + 1}: ${sound.note} \xB7 tap to play and edit`;
   });
 }
 function resizePads() {
@@ -759,7 +876,7 @@ function resizePads() {
     padButtons.push(button);
     layer.append(button);
   }
-  if (changed) $("orbitPadStatus").textContent = params.orbitTriggers + " TRIGGERS · TAP TO PLAY / EDIT";
+  if (changed) $("orbitPadStatus").textContent = params.orbitTriggers + " TRIGGERS \xB7 TAP TO PLAY / EDIT";
   updatePadLabels();
 }
 function setupOrbitPads() {
@@ -775,7 +892,7 @@ function triggerPad(index, audition = false) {
   if (!audition && !orbitIsActive() || !orbitAudio?.play("triggers", index, sound.midi, p, audition)) return;
   padFlashes[index] = performance.now() / 1e3;
   paddleFlash = padFlashes[index];
-  $("orbitPadStatus").textContent = `TRIGGER ${index + 1} · ${sound.note} · ${sound.tone.toUpperCase()}`;
+  $("orbitPadStatus").textContent = `TRIGGER ${index + 1} \xB7 ${sound.note} \xB7 ${sound.tone.toUpperCase()}`;
 }
 function changeSound(bank, index, field, value) {
   markEdited();
@@ -787,9 +904,9 @@ function changeSound(bank, index, field, value) {
 async function previewSound(bank, index) {
   try {
     await ensureAudio();
-    const target = index === "all" ? 0 : index, p = patchFor(soundState, bank, index), midi = soundMidi(p, target);
+    const target = index === "all" ? 0 : index, p = patchFor(soundState, bank, index), midi = piece.followHarmony ? followChord(soundMidi(p, target), ambientStats.chordNotes) : soundMidi(p, target);
     orbitAudio.play(bank, target, midi, p, true);
-    $("orbitPadStatus").textContent = `${bank === "triggers" ? "TRIGGER" : "BALL"} ${index === "all" ? "BANK" : index + 1} · ${noteName(midi)} · ${p.wave.toUpperCase()}`;
+    $("orbitPadStatus").textContent = `${bank === "triggers" ? "TRIGGER" : "BALL"} ${index === "all" ? "BANK" : index + 1} \xB7 ${noteName(midi)} \xB7 ${p.wave.toUpperCase()}`;
   } catch (e) {
     toast(e.message);
   }
@@ -829,11 +946,12 @@ function drawWave() {
   if (!fit || !buffer) return;
   const { c, w, h } = fit;
   c.clearRect(0, 0, w, h);
-  const data = buffer.getChannelData(0);
+  const live = piece.source === "foundation" && activeTab !== "sample";
+  const data = live ? stats.wave || new Float32Array(160) : buffer.getChannelData(0);
   const pos = running ? stats.scan : params.position / 100;
   let peakGlobal = 0.1;
   for (let i = 0; i < data.length; i += 233) peakGlobal = Math.max(peakGlobal, Math.abs(data[i]));
-  const spread = params.size / 1e3 / buffer.duration * w;
+  const spread = params.size / 1e3 / (live ? 4 : buffer.duration) * w;
   const gradient = c.createLinearGradient(0, 0, 0, h);
   gradient.addColorStop(0, "#bbb");
   gradient.addColorStop(1, "#555");
@@ -957,7 +1075,7 @@ function drawOrbit(verts) {
     }
   }
   c.shadowBlur = 0;
-  $("orbitAngle").textContent = `${Math.round((orbitState.phase * 180 / Math.PI + params.orbitRotation + 360) % 360)}°`;
+  $("orbitAngle").textContent = `${Math.round((orbitState.phase * 180 / Math.PI + params.orbitRotation + 360) % 360)}\xB0`;
 }
 let frequencyData = new Uint8Array(512), tapeAngle = 0;
 const renderClock = createRenderClock(30);
@@ -1011,7 +1129,7 @@ function frame(time) {
       ditherCanvas($("waveform"));
     }
   }
-  $("grainCount").textContent = activeTab === "orbit" ? `${balls.length} BALLS · ${orbitVoices.size} VOICES` : ambientState.enabled ? `${ambientStats.notes} NOTES · SECTION ${ambientStats.section}` : `${running ? stats.count : 0} ACTIVE GRAINS`;
+  $("grainCount").textContent = activeTab === "orbit" ? `${balls.length} BALLS \xB7 ${orbitVoices.size} VOICES` : ambientState.enabled ? `${ambientStats.notes} NOTES \xB7 SECTION ${ambientStats.section}` : `${running ? stats.count : 0} ACTIVE GRAINS`;
   if (analyser) {
     analyser.getByteFrequencyData(frequencyData);
     lastMeter += (Math.max(...frequencyData) / 255 - lastMeter) * (1 - Math.exp(-dt / 0.1));
@@ -1029,7 +1147,7 @@ function download(blob, name) {
 const projectControls = ["filterType", "orbitKey", "orbitScale", "orbitInstrument", "orbitShape"];
 function sessionSnapshot() {
   const controls = Object.fromEntries(projectControls.map((id) => [id, $(id).value]));
-  return { name: sourceName, buffer, params, ambient: ambientState, visual: visuals.settings(), controls, orbitSound: soundState, volume: +$("volume").value };
+  return { piece, name: sourceName, buffer, params, ambient: ambientState, visual: visuals.settings(), controls, orbitSound: soundState, volume: +$("volume").value };
 }
 function saveProject() {
   try {
@@ -1049,12 +1167,14 @@ function projectDecodeOptions(context) {
   };
 }
 function applyProject(project) {
+  solo = null;
+  piece = project.piece;
   setSample(project.buffer, project.name, "PROJECT AUDIO");
   params = project.params;
   for (const [id, value] of Object.entries(project.controls)) $(id).value = value;
   $("volume").value = project.volume;
   if (master) master.gain.value = project.volume;
-  ambientState = project.ambient;
+  ambientState = { ...project.ambient, enabled: true };
   visuals.restore(project.visual);
   soundState = project.orbitSound;
   orbitAudio?.sync(soundState);
@@ -1062,6 +1182,7 @@ function applyProject(project) {
   resetBalls();
   syncAmbient();
   $("demo").selectedIndex = -1;
+  syncTextureSource();
 }
 async function loadProject(file) {
   try {
@@ -1082,7 +1203,7 @@ const outputCapture = createOutputCapture({
     outputRecording = state !== "idle";
     $("recordOut").disabled = state === "finishing";
     $("recordOut").classList.toggle("recording", state === "recording");
-    $("recordOut").textContent = { idle: "● Capture", recording: "■ Finish capture", finishing: "Finishing capture…" }[state];
+    $("recordOut").textContent = { idle: "\u25CF Capture", recording: "\u25A0 Finish capture", finishing: "Finishing capture\u2026" }[state];
     $("recordOut").setAttribute("aria-label", { idle: "Capture audio", recording: "Finish audio capture", finishing: "Finishing audio capture" }[state]);
   },
   onComplete(blob) {
@@ -1126,7 +1247,7 @@ const microphone = createMicrophoneTake({
     if (state === "requesting") microphoneSelection = sampleSelection.reserve();
     micRecording = state !== "idle";
     $("micBtn").disabled = state === "finishing";
-    $("micBtn").textContent = { idle: "Record microphone", requesting: "Cancel microphone request", recording: "Stop recording", finishing: "Finishing take…" }[state];
+    $("micBtn").textContent = { idle: "Record microphone", requesting: "Cancel microphone request", recording: "Stop recording", finishing: "Finishing take\u2026" }[state];
     if (state === "recording" && running) {
       running = false;
       syncPlayback();
@@ -1136,7 +1257,9 @@ const microphone = createMicrophoneTake({
   },
   async onComplete(blob) {
     await microphoneSelection.run(async () => decodeContext().decodeAudioData(await blob.arrayBuffer()), (decoded) => {
+      piece.source = "sample";
       setSample(decoded, "Microphone take", "MICROPHONE");
+      syncTextureSource();
       $("demo").selectedIndex = -1;
       showTab("sample");
       toast("Recording loaded. Trim it or apply the denoise gate.");
@@ -1152,13 +1275,33 @@ function toggleMic() {
 }
 function applyPreset(key) {
   markEdited();
+  if (key === "still") {
+    piece = restorePiece();
+    ambientState = restoreAmbient();
+    params = { ...initial };
+    solo = null;
+    syncTextureSource();
+    refreshControls();
+    syncAmbient();
+    showTab("ambient");
+    $("choosePiece").textContent = "Stillwater \u25BE";
+    return;
+  }
   const presets = { cloud: { size: 900, density: 26, spray: 35, speed: 0.08, pitch: -12, reverse: 25, static: 10, jump: 0, hold: 0, elastic: 0, chaos: 0, reverb: 60, delayMix: 12, tapeOn: false, cutoff: 6500 }, shards: { size: 70, density: 28, spray: 75, speed: 0.65, pitch: 12, reverse: 35, static: 0, jump: 35, hold: 8, elastic: 12, chaos: 35, reverb: 24, delayMix: 30, tapeOn: false, cutoff: 16e3 }, worn: { size: 480, density: 15, spray: 18, speed: 0.15, pitch: -5, reverse: 8, static: 25, jump: 0, hold: 0, elastic: 2, chaos: 10, reverb: 38, delayMix: 23, tapeOn: true, drive: 55, wow: 65, flutter: 35, hiss: 22, cutoff: 4e3 } };
-  Object.assign(params, presets[key]);
+  if (!presets[key]) return;
+  sampleSelection.cancel();
+  solo = null;
+  piece = restorePiece({ foundation: 80, texture: key === "shards" ? 35 : 30, motion: key === "shards" ? 25 : 10 });
+  ambientState = restoreAmbient({ scene: key === "cloud" ? 2 : key === "worn" ? 1 : 3 });
+  params = { ...initial, ...presets[key] };
+  $("choosePiece").textContent = { cloud: "Slow cloud \u25BE", shards: "Glass shards \u25BE", worn: "Worn memory \u25BE" }[key];
+  syncTextureSource();
+  syncAmbient();
   params.freeze = false;
   params.scanOn = true;
   refreshControls();
   showTab("grain");
-  toast({ cloud: "Slow cloud · long grains and a wide space.", shards: "Glass shards · short grains, scattered and bright.", worn: "Worn memory · warm tape with gentle instability." }[key]);
+  toast({ cloud: "Slow cloud \xB7 long grains and a wide space.", shards: "Glass shards \xB7 short grains, scattered and bright.", worn: "Worn memory \xB7 warm tape with gentle instability." }[key]);
 }
 $("playBtn").onclick = togglePlay;
 $("testSound").onclick = testSound;
@@ -1181,7 +1324,9 @@ $("volume").oninput = () => {
   if (master) master.gain.setTargetAtTime(+$("volume").value, ctx.currentTime, 0.03);
 };
 $("demo").onchange = () => {
+  piece.source = "sample";
   loadDemo($("demo").value);
+  syncTextureSource();
 };
 $("importBtn").onclick = () => $("audioFile").click();
 $("audioFile").onchange = (e) => {
@@ -1193,7 +1338,9 @@ $("applyTrim").onclick = applyTrim;
 $("resetSample").onclick = () => {
   if (originalBuffer) {
     sampleSelection.cancel();
+    if (piece.source === "foundation") piece.source = "sample";
     setSample(originalBuffer, sourceName, "RESTORED AUDIO", true);
+    syncTextureSource();
     toast("Full original sample restored.");
   }
 };
@@ -1203,18 +1350,25 @@ $("previewSource").onclick = async () => {
     if (previewNode) {
       previewNode.stop();
       previewNode = null;
-      $("previewSource").textContent = "▷ Listen to source";
+      $("previewSource").textContent = "\u25B7 Listen to source";
       return;
     }
+    running = false;
+    syncPlayback();
+    updateTransport();
+    updateAudioState("Listening to original material; the piece is paused.");
     previewNode = ctx.createBufferSource();
     previewNode.buffer = buffer;
     previewNode.connect(master);
+    const source = previewNode;
     previewNode.onended = () => {
+      if (previewNode !== source) return;
       previewNode = null;
-      $("previewSource").textContent = "▷ Listen to source";
+      $("previewSource").textContent = "\u25B7 Listen to source";
+      updateAudioState();
     };
     previewNode.start();
-    $("previewSource").textContent = "■ Stop source";
+    $("previewSource").textContent = "\u25A0 Stop source";
   } catch (e) {
     toast(e.message);
   }
@@ -1337,6 +1491,10 @@ function setupDisplay() {
   visual.id = "visualStage";
   visual.append($("visualCanvas"), document.querySelector(".visual-caption"));
   stage.append(visual);
+  const tools = document.createElement("div");
+  tools.className = "piece-tools";
+  tools.innerHTML = '<button id="partAction" hidden>Add texture</button><span id="pieceHint">ONE PIECE \xB7 THREE PARTS</span><button id="openVisual">Visual</button>';
+  stage.append(tools);
   const utility = document.createElement("div");
   utility.className = "utility-strip";
   document.querySelector(".main-panel").after(utility);
@@ -1346,7 +1504,52 @@ function setupDisplay() {
   $("openTape").onclick = () => showTab("tape");
 }
 setupDisplay();
-layerUI = setupLayerUI({ getPage: () => activeTab, getAmbient: () => ambientState, getParams: () => params, onChange() {
+let editorBeforeVisual = "ambient";
+$("openVisual").onclick = () => {
+  if (activeTab === "visual") showTab(editorBeforeVisual);
+  else {
+    editorBeforeVisual = activeTab;
+    showTab("visual");
+  }
+  $("openVisual").textContent = activeTab === "visual" ? "Back to sound" : "Visual";
+};
+$("partAction").onclick = () => {
+  const kind = activeTab === "orbit" ? "motion" : "texture";
+  piece[kind] = kind === "motion" ? 25 : 35;
+  markEdited();
+  syncPlayback();
+  refreshPieceUI();
+};
+$("freezePhrase").onclick = freezePhrase;
+$("editTextureSource").onclick = () => showTab("sample");
+$("useTextureSample").onclick = () => {
+  sampleSelection.cancel();
+  piece.source = "sample";
+  markEdited();
+  syncTextureSource();
+  showTab("grain");
+  toast("Selected material is ready as Texture.");
+};
+$("followHarmony").onclick = () => {
+  piece.followHarmony = !piece.followHarmony;
+  soundEditors?.refresh();
+  markEdited();
+  syncPlayback();
+  updatePadLabels();
+  refreshPieceUI();
+};
+$("choosePiece").onclick = () => {
+  $("piecePreset").focus();
+  $("piecePreset").showPicker?.();
+};
+$("piecePreset").onchange = () => {
+  applyPreset($("piecePreset").value);
+};
+blendUI = setupPieceBlend({ getPiece: () => piece, getSolo: () => solo, onSolo(kind) {
+  solo = solo === kind ? null : kind;
+  syncPlayback();
+  updateTransport();
+}, onChange() {
   markEdited();
   syncAmbient();
 } });
@@ -1368,7 +1571,7 @@ shapeTop.className = "control-top";
 shapeTop.textContent = "Shape";
 shape.prepend(shapeTop);
 shapeStepper = attachStepper(shape, $("orbitShape"), { label: "Shape", format: (v) => v ? v + " points" : "Circle" });
-soundEditors = setupSoundEditors({ getState: () => soundState, getCount: (bank) => bank === "triggers" ? params.orbitTriggers : params.orbitBalls, onChange: changeSound, onReset: (bank, index) => {
+soundEditors = setupSoundEditors({ getState: () => soundState, getHarmonyLinked: () => piece.followHarmony, getCount: (bank) => bank === "triggers" ? params.orbitTriggers : params.orbitBalls, onChange: changeSound, onReset: (bank, index) => {
   markEdited();
   resetSound(soundState, bank, index);
   orbitAudio?.stop(bank, index === "all" ? void 0 : index);
