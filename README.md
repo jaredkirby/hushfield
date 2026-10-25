@@ -30,8 +30,10 @@ Python 3 is needed for that preview command. The app itself is static HTML, CSS 
 - **Grain:** shape grain position, size, density, pitch and spread; explore scanning, reverse, hold, elastic motion and chaos.
 - **FX:** filter the sample layer and add space. Trigger and ball sound banks have their own envelopes, filters, FM, drive, pan, delay and reverb.
 - **Tape:** a shared stereo echo with soft saturation, darkening repeats, continuous wow/flutter and a signal-gated noise floor.
-- **Orbit:** spinning shapes and bouncing balls make rhythms. Set spin rate, shape, ball count and 1–24 trigger marks. Edit trigger and ball sounds separately, by bank or individual item.
+- **Orbit:** Spinning shapes and bouncing balls make rhythms on the audio thread. Set spin rate, shape, ball count and 1–24 trigger marks. Edit trigger and ball sounds separately, by bank or individual item.
 - **Visual:** live scope, logarithmic spectrum and stereo vectorscope, with gain, trails, peak decay and a Hold view control. These controls change the display only.
+
+Sample, Grain and Orbit show their layer level above the display. A zero level is labelled silent; select the level and use the shared adjuster to add it to the current mix. Navigation keeps your mix unchanged.
 
 Select a parameter card, then use the shared **− / +** buttons. Hold either button to repeat. On a keyboard, **Space** starts/stops and **F** holds the current chord or freezes the grain position. Focus a voice dot and use arrow keys to adjust it; **Home** resets that voice.
 
@@ -54,13 +56,13 @@ Playback and value adjustment stay in a fixed bottom rail. All seven views retai
 
 **Save project** downloads a `.hushfield.json` file containing the sample, sound patches, ambient settings and visual settings. **Load project** restores it; earlier version 1–3 files migrate automatically. **Capture** downloads up to five minutes of the post-effects stereo output as a 16-bit WAV.
 
-Sessions live in browser memory until saved. Imported audio is processed locally and is not uploaded. Microphone access is requested only when you choose Record; capture stops at 60 seconds and releases the microphone tracks. There is no analytics or runtime CDN dependency.
+Session edits are kept in a bounded local recovery draft when browser storage is available. Use the session status button to recover or discard a previous draft; recovery is explicit and starts paused. LOCAL DRAFT means device-local recovery, while EXPORTED means a project download was started. Export a project file for a separate copy. Storage errors remain visible and do not block playing. Imported audio is processed locally and is not uploaded. Microphone access is requested only when you choose Record; capture stops at 60 seconds and releases the microphone tracks. There is no analytics or runtime CDN dependency.
 
 ## Audio troubleshooting
 
 Audio needs a direct tap or click. If the instrument is silent, try **Test sound**, then **Restart audio**. Restart creates a fresh audio context while preserving the session. Also check media volume and Bluetooth/AirPlay output. Keep the page available while playing: uninterrupted background or locked-screen playback is not guaranteed.
 
-Browser compatibility, audible output and frame rate vary by device. iPhone audio recovery has been confirmed on a physical device; the latest iPad layout has been checked through browser emulation, with physical iPad testing still welcome. See [verification notes](VERIFICATION.md) for the distinction between automated, emulated and device checks.
+Browser compatibility, audible output and frame rate vary by device. iPhone audio recovery has been confirmed on a physical device; the latest iPad layout has been checked through browser emulation, with physical iPad testing still welcome. The new Orbit renderer still needs physical-device listening comparison. See [verification notes](VERIFICATION.md) for the distinction between automated, emulated and device checks.
 
 ## Develop
 
@@ -73,7 +75,7 @@ npm test
 npm start
 ```
 
-Edit sources in `dist/`, then rebuild. `ops/build.mjs` bundles the app and three AudioWorklet entry points with the pinned esbuild version; it also embeds the early viewport/navigation/startup scripts. Built files are committed so a clone can be served without a build step. Tests check input hashes and embedded scripts to catch stale builds.
+Edit sources in `dist/`, then rebuild. `ops/build.mjs` bundles the app and four AudioWorklet entry points with the pinned esbuild version; it also embeds the early viewport/navigation/startup scripts. Built files are committed so a clone can be served without a build step. Tests check input hashes and embedded scripts to catch stale builds.
 
 `npm run test:interaction` runs a shorter interaction/startup suite. The `qa-*.html` pages in `dist/` provide browser audio and rendering diagnostics; some play a short test signal after an explicit button press. CI builds and runs all Node tests on Node 22 and 24 and verifies that generated files are current.
 

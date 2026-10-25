@@ -1,28 +1,243 @@
-import {attachStepper,ensureVisibleSelection} from './phone-ui.mjs?v=hushfield-1';
-import {ditherCanvas} from './oled-visuals.mjs?v=hushfield-1';
-import {VISUAL_DEFAULTS,restoreVisual,createVisualCapture,stereoMetrics,vectorPoint,scopeWindow,spectrumBands,decayPeak} from './visual-analysis.mjs?v=hushfield-1';
-const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-export function drawVisualGrid(c,w,h,mode,maxHz=20000){c.strokeStyle='#333';c.lineWidth=1;c.font='8px monospace';c.fillStyle='#999';const top=12,bottom=h-34;
- if(mode==='vector'){const x=w/2,y=(top+bottom)/2,r=Math.max(12,Math.min(w*.43,(bottom-top)*.48));c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.moveTo(x-r,y);c.lineTo(x+r,y);c.moveTo(x,y-r);c.lineTo(x,y+r);c.moveTo(x-r*.707,y-r*.707);c.lineTo(x+r*.707,y+r*.707);c.moveTo(x+r*.707,y-r*.707);c.lineTo(x-r*.707,y+r*.707);c.stroke();c.fillText('L',x-r*.78,y-r*.74);c.fillText('R',x+r*.78,y-r*.74);return {x,y,r};}
- for(let i=0;i<=4;i++){const y=top+(bottom-top)*i/4;c.beginPath();c.moveTo(24,y);c.lineTo(w-10,y);c.stroke();}for(const tick of mode==='spectrum'?[20,50,100,200,500,1000,2000,5000,10000,maxHz]:[0,1,2,3,4,5,6,7,8]){if(mode==='spectrum'&&tick>maxHz)continue;const fraction=mode==='spectrum'?Math.log(tick/20)/Math.log(maxHz/20):tick/8,x=24+(w-34)*fraction;c.beginPath();c.moveTo(x,top);c.lineTo(x,bottom);c.stroke();}return {left:24,right:w-10,top,bottom};}
-export function createVisualRenderer(makeCanvas=()=>document.createElement('canvas')){const trail=makeCanvas(),tc=trail.getContext('2d',{willReadFrequently:true});let mode,peaks=new Float32Array(64),autoGain=1;
- function clear(){tc.clearRect(0,0,trail.width,trail.height);peaks.fill(-120);autoGain=1;}
- function draw({c,w,h},data,state,dt){if(trail.width!==Math.round(w)||trail.height!==Math.round(h)||mode!==state.mode){trail.width=Math.round(w);trail.height=Math.round(h);mode=state.mode;clear();}dt=clamp(dt,.001,.1);const metrics=stereoMetrics(data.left,data.right);const target=metrics.peak>.0005?Math.min(24,.72/Math.max(.02,metrics.peak)):1;autoGain+=(target-autoGain)*(1-Math.exp(-dt/(target<autoGain?.035:.35)));const gain=state.gain*(state.auto?autoGain:1);
-  c.fillStyle='#000';c.fillRect(0,0,w,h);const grid=drawVisualGrid(c,w,h,state.mode,Math.min(20000,data.rate/2));
-  if(state.mode==='spectrum'){const bands=spectrumBands(data.db,data.rate,data.fftSize),{left,right,top,bottom}=grid,bw=(right-left)/64;const gradient=c.createLinearGradient(0,bottom,0,top);gradient.addColorStop(0,'#333');gradient.addColorStop(1,'#eee');c.fillStyle=gradient;for(let i=0;i<64;i++){const value=Number.isFinite(bands[i])?bands[i]:-state.range;peaks[i]=decayPeak(peaks[i],value,dt,state.peak);const height=clamp((value+state.range)/state.range,0,1)*(bottom-top);c.fillRect(left+i*bw,bottom-height,Math.max(1,bw-1),height);const py=bottom-clamp((peaks[i]+state.range)/state.range,0,1)*(bottom-top);if(peaks[i]>-state.range){c.fillStyle='#fff';c.fillRect(left+i*bw,py,Math.max(1,bw-1),1);c.fillStyle=gradient;}}c.fillStyle='#aaa';c.fillText('0',2,top+6);c.fillText('-'+Math.round(state.range/2),2,(top+bottom)/2+3);c.fillText('-'+state.range,1,bottom);for(const [label,hz]of [['20',20],['100',100],['1k',1000],['10k',10000]]){const x=left+Math.log(hz/20)/Math.log(Math.min(20000,data.rate/2)/20)*(right-left);c.fillText(label,x,bottom+12);}}
-  else{tc.globalCompositeOperation='destination-out';tc.fillStyle='rgba(0,0,0,'+(state.trail?1-Math.exp(-dt/(.035+state.trail*.006)):1)+')';tc.fillRect(0,0,w,h);tc.globalCompositeOperation='source-over';tc.lineWidth=1;tc.strokeStyle='#eee';
-   if(state.mode==='scope'){const {left,right,top,bottom}=grid,win=scopeWindow(data.left,data.rate*state.time/1000),span=(bottom-top)/2;for(let channel=0;channel<2;channel++){const samples=channel?data.right:data.left,cy=top+span*(channel+.5);tc.strokeStyle=channel?'#aaa':'#fff';tc.beginPath();for(let px=0;px<=Math.round(right-left);px++){const at=win.start+Math.min(win.count-1,Math.floor(px/(right-left)*(win.count-1))),x=left+px,y=cy-clamp(samples[at]*gain,-1,1)*span*.45;px?tc.lineTo(x,y):tc.moveTo(x,y);}tc.stroke();c.fillStyle='#aaa';c.fillText(channel?'R':'L',5,cy+3);}}
-   else{const {x,y,r}=grid;tc.beginPath();const hop=Math.max(1,Math.floor(data.left.length/1600));for(let i=0;i<data.left.length;i+=hop){const p=vectorPoint(data.left[i],data.right[i]),px=x+clamp(p.x*gain,-1,1)*r,py=y-clamp(p.y*gain,-1,1)*r;i?tc.lineTo(px,py):tc.moveTo(px,py);}tc.stroke();}
-   c.drawImage(trail,0,0);}
-  ditherCanvas(c.canvas);return metrics;
- }
- return {draw,clear};}
-export function setupAudioVisuals(){let state={...VISUAL_DEFAULTS},held=false,capture,lastData,lastWidth=0,lastHeight=0,lastMetrics={peak:0,rms:0,correlation:null};const renderer=createVisualRenderer(),page=document.getElementById('visualPage'),canvas=document.getElementById('visualCanvas');page.innerHTML='<nav class="visual-modes" aria-label="Visual mode"></nav><div class="visual-actions"><button type="button" id="visualAuto">Auto gain</button><button type="button" id="visualHold">Hold view</button><span id="visualSignal">POST FX · STEREO</span></div><div class="visual-fields"></div><p id="visualHelp" class="visual-help"></p>';const nav=page.querySelector('.visual-modes'),fields=page.querySelector('.visual-fields'),records=[];
- const caption=document.querySelector('.visual-caption');caption.innerHTML='<span id="visualCaption">SPECTRUM</span><span id="visualReadout">START SOUND TO VIEW</span>';
- const descriptions={scope:'Stereo waveforms. Time sets the window; gain and trails shape the display.',spectrum:'Logarithmic frequency bands with falling peaks. Levels show the post-effects mix.',vector:'Stereo phase portrait. Mono is vertical; opposite-phase audio spreads horizontally.'};
- for(const [mode,label]of [['scope','Scope'],['spectrum','Spectrum'],['vector','Vector']]){const button=document.createElement('button');button.type='button';button.textContent=label;button.dataset.visualMode=mode;button.addEventListener('click',()=>{state.mode=mode;held=false;renderer.clear();refresh();ensureVisibleSelection();});nav.append(button);}
- for(const field of [{id:'gain',label:'Gain',min:.5,max:8,step:.5,modes:['scope','vector'],format:v=>v.toFixed(1)+'×'},{id:'time',label:'Time',min:10,max:100,step:5,modes:['scope'],format:v=>v+' ms'},{id:'trail',label:'Trails',min:0,max:100,step:5,modes:['scope','vector']},{id:'range',label:'Range',min:48,max:120,step:12,modes:['spectrum'],format:v=>v+' dB'},{id:'smoothing',label:'Smoothing',min:0,max:95,step:5,modes:['spectrum']},{id:'peak',label:'Peak decay',min:0,max:100,step:5,modes:['spectrum']}]){const row=document.createElement('div');row.className='control';const top=document.createElement('div');top.className='control-top';const label=document.createElement('label');label.textContent=field.label;label.htmlFor='visual-'+field.id;top.append(label);const input=document.createElement('input');input.type='range';input.id=label.htmlFor;input.min=field.min;input.max=field.max;input.step=field.step;input.value=state[field.id];row.append(top,input);fields.append(row);const stepper=attachStepper(row,input,{label:'Visual '+field.label,step:field.step,format:field.format||(v=>v+'%')});input.addEventListener('input',()=>{state[field.id]=+input.value;});records.push({row,input,field,stepper});}
- const auto=document.getElementById('visualAuto'),hold=document.getElementById('visualHold');auto.onclick=()=>{state.auto=!state.auto;refresh();};hold.onclick=()=>{held=!held;refresh();};function refresh(){page.dataset.visualMode=state.mode;nav.querySelectorAll('button').forEach(button=>{const active=button.dataset.visualMode===state.mode;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});auto.disabled=state.mode==='spectrum';auto.textContent=state.mode==='spectrum'?'LOG FREQUENCY':state.auto?'AUTO GAIN ON':'AUTO GAIN OFF';auto.setAttribute('aria-pressed',String(state.mode!=='spectrum'&&state.auto));hold.textContent=held?'Resume view':'Hold view';hold.setAttribute('aria-pressed',String(held));document.getElementById('visualHelp').textContent=descriptions[state.mode];document.getElementById('visualCaption').textContent=state.mode.toUpperCase();canvas.setAttribute('aria-label',{scope:'Live stereo oscilloscope',spectrum:'Live logarithmic audio spectrum',vector:'Live stereo vectorscope'}[state.mode]);for(const {row,input,field,stepper}of records){row.hidden=!field.modes.includes(state.mode);input.value=state[field.id];stepper.render();}}
- const empty={left:new Float32Array(8192),right:new Float32Array(8192),db:new Float32Array(4096).fill(-Infinity),rate:48000,fftSize:8192};refresh();
- return {connect(context,source){capture?.dispose();capture=createVisualCapture(context,source);renderer.clear();},frame(fit,dt){if(held&&fit.w===lastWidth&&fit.h===lastHeight)return;const data=held?(lastData||empty):(capture?.read(state.smoothing,state.mode==='spectrum')||empty);lastData=data;lastWidth=fit.w;lastHeight=fit.h;lastMetrics=renderer.draw(fit,data,state,held?.001:dt);const signal=lastMetrics.rms>.0001;const readout=state.mode==='scope'?'L / R · '+state.time+' ms':state.mode==='spectrum'?'20 Hz — '+Math.round(Math.min(20000,data.rate/2)/1000)+' kHz':lastMetrics.correlation===null?'CORR —':'CORR '+(lastMetrics.correlation>=0?'+':'')+lastMetrics.correlation.toFixed(2);const el=document.getElementById('visualReadout'),value=signal?readout:'NO SIGNAL · '+readout;if(el.textContent!==value)el.textContent=value;canvas.dataset.signal=String(signal);canvas.dataset.correlation=String(lastMetrics.correlation);},settings:()=>({...state}),restore(saved){state=restoreVisual(saved);held=false;renderer.clear();refresh();ensureVisibleSelection();}};
+import { attachStepper, ensureVisibleSelection } from "./phone-ui.mjs?v=hushfield-1";
+import { ditherCanvas } from "./oled-visuals.mjs?v=hushfield-1";
+import { VISUAL_DEFAULTS, restoreVisual, createVisualCapture, stereoMetrics, vectorPoint, scopeWindow, spectrumBands, decayPeak } from "./visual-analysis.mjs?v=hushfield-1";
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+function drawVisualGrid(c, w, h, mode, maxHz = 2e4) {
+  c.strokeStyle = "#333";
+  c.lineWidth = 1;
+  c.font = "8px monospace";
+  c.fillStyle = "#999";
+  const top = 12, bottom = h - 34;
+  if (mode === "vector") {
+    const x = w / 2, y = (top + bottom) / 2, r = Math.max(12, Math.min(w * 0.43, (bottom - top) * 0.48));
+    c.beginPath();
+    c.arc(x, y, r, 0, Math.PI * 2);
+    c.moveTo(x - r, y);
+    c.lineTo(x + r, y);
+    c.moveTo(x, y - r);
+    c.lineTo(x, y + r);
+    c.moveTo(x - r * 0.707, y - r * 0.707);
+    c.lineTo(x + r * 0.707, y + r * 0.707);
+    c.moveTo(x + r * 0.707, y - r * 0.707);
+    c.lineTo(x - r * 0.707, y + r * 0.707);
+    c.stroke();
+    c.fillText("L", x - r * 0.78, y - r * 0.74);
+    c.fillText("R", x + r * 0.78, y - r * 0.74);
+    return { x, y, r };
+  }
+  for (let i = 0; i <= 4; i++) {
+    const y = top + (bottom - top) * i / 4;
+    c.beginPath();
+    c.moveTo(24, y);
+    c.lineTo(w - 10, y);
+    c.stroke();
+  }
+  for (const tick of mode === "spectrum" ? [20, 50, 100, 200, 500, 1e3, 2e3, 5e3, 1e4, maxHz] : [0, 1, 2, 3, 4, 5, 6, 7, 8]) {
+    if (mode === "spectrum" && tick > maxHz) continue;
+    const fraction = mode === "spectrum" ? Math.log(tick / 20) / Math.log(maxHz / 20) : tick / 8, x = 24 + (w - 34) * fraction;
+    c.beginPath();
+    c.moveTo(x, top);
+    c.lineTo(x, bottom);
+    c.stroke();
+  }
+  return { left: 24, right: w - 10, top, bottom };
 }
+function createVisualRenderer(makeCanvas = () => document.createElement("canvas")) {
+  const trail = makeCanvas(), tc = trail.getContext("2d", { willReadFrequently: true });
+  let mode, peaks = new Float32Array(64), autoGain = 1;
+  function clear() {
+    tc.clearRect(0, 0, trail.width, trail.height);
+    peaks.fill(-120);
+    autoGain = 1;
+  }
+  function draw({ c, w, h }, data, state, dt) {
+    if (trail.width !== Math.round(w) || trail.height !== Math.round(h) || mode !== state.mode) {
+      trail.width = Math.round(w);
+      trail.height = Math.round(h);
+      mode = state.mode;
+      clear();
+    }
+    dt = clamp(dt, 1e-3, 0.1);
+    const metrics = stereoMetrics(data.left, data.right);
+    const target = metrics.peak > 5e-4 ? Math.min(24, 0.72 / Math.max(0.02, metrics.peak)) : 1;
+    autoGain += (target - autoGain) * (1 - Math.exp(-dt / (target < autoGain ? 0.035 : 0.35)));
+    const gain = state.gain * (state.auto ? autoGain : 1);
+    c.fillStyle = "#000";
+    c.fillRect(0, 0, w, h);
+    const grid = drawVisualGrid(c, w, h, state.mode, Math.min(2e4, data.rate / 2));
+    if (state.mode === "spectrum") {
+      const bands = spectrumBands(data.db, data.rate, data.fftSize), { left, right, top, bottom } = grid, bw = (right - left) / 64;
+      const gradient = c.createLinearGradient(0, bottom, 0, top);
+      gradient.addColorStop(0, "#333");
+      gradient.addColorStop(1, "#eee");
+      c.fillStyle = gradient;
+      for (let i = 0; i < 64; i++) {
+        const value = Number.isFinite(bands[i]) ? bands[i] : -state.range;
+        peaks[i] = decayPeak(peaks[i], value, dt, state.peak);
+        const height = clamp((value + state.range) / state.range, 0, 1) * (bottom - top);
+        c.fillRect(left + i * bw, bottom - height, Math.max(1, bw - 1), height);
+        const py = bottom - clamp((peaks[i] + state.range) / state.range, 0, 1) * (bottom - top);
+        if (peaks[i] > -state.range) {
+          c.fillStyle = "#fff";
+          c.fillRect(left + i * bw, py, Math.max(1, bw - 1), 1);
+          c.fillStyle = gradient;
+        }
+      }
+      c.fillStyle = "#aaa";
+      c.fillText("0", 2, top + 6);
+      c.fillText("-" + Math.round(state.range / 2), 2, (top + bottom) / 2 + 3);
+      c.fillText("-" + state.range, 1, bottom);
+      for (const [label, hz] of [["20", 20], ["100", 100], ["1k", 1e3], ["10k", 1e4]]) {
+        const x = left + Math.log(hz / 20) / Math.log(Math.min(2e4, data.rate / 2) / 20) * (right - left);
+        c.fillText(label, x, bottom + 12);
+      }
+    } else {
+      tc.globalCompositeOperation = "destination-out";
+      tc.fillStyle = "rgba(0,0,0," + (state.trail ? 1 - Math.exp(-dt / (0.035 + state.trail * 6e-3)) : 1) + ")";
+      tc.fillRect(0, 0, w, h);
+      tc.globalCompositeOperation = "source-over";
+      tc.lineWidth = 1;
+      tc.strokeStyle = "#eee";
+      if (state.mode === "scope") {
+        const { left, right, top, bottom } = grid, win = scopeWindow(data.left, data.rate * state.time / 1e3), span = (bottom - top) / 2;
+        for (let channel = 0; channel < 2; channel++) {
+          const samples = channel ? data.right : data.left, cy = top + span * (channel + 0.5);
+          tc.strokeStyle = channel ? "#aaa" : "#fff";
+          tc.beginPath();
+          for (let px = 0; px <= Math.round(right - left); px++) {
+            const at = win.start + Math.min(win.count - 1, Math.floor(px / (right - left) * (win.count - 1))), x = left + px, y = cy - clamp(samples[at] * gain, -1, 1) * span * 0.45;
+            px ? tc.lineTo(x, y) : tc.moveTo(x, y);
+          }
+          tc.stroke();
+          c.fillStyle = "#aaa";
+          c.fillText(channel ? "R" : "L", 5, cy + 3);
+        }
+      } else {
+        const { x, y, r } = grid;
+        tc.beginPath();
+        const hop = Math.max(1, Math.floor(data.left.length / 1600));
+        for (let i = 0; i < data.left.length; i += hop) {
+          const p = vectorPoint(data.left[i], data.right[i]), px = x + clamp(p.x * gain, -1, 1) * r, py = y - clamp(p.y * gain, -1, 1) * r;
+          i ? tc.lineTo(px, py) : tc.moveTo(px, py);
+        }
+        tc.stroke();
+      }
+      c.drawImage(trail, 0, 0);
+    }
+    ditherCanvas(c.canvas);
+    return metrics;
+  }
+  return { draw, clear };
+}
+function setupAudioVisuals({ onChange = () => {
+} } = {}) {
+  let state = { ...VISUAL_DEFAULTS }, held = false, capture, lastData, lastWidth = 0, lastHeight = 0, lastMetrics = { peak: 0, rms: 0, correlation: null };
+  const renderer = createVisualRenderer(), page = document.getElementById("visualPage"), canvas = document.getElementById("visualCanvas");
+  page.innerHTML = '<nav class="visual-modes" aria-label="Visual mode"></nav><div class="visual-actions"><button type="button" id="visualAuto">Auto gain</button><button type="button" id="visualHold">Hold view</button><span id="visualSignal">POST FX · STEREO</span></div><div class="visual-fields"></div><p id="visualHelp" class="visual-help"></p>';
+  const nav = page.querySelector(".visual-modes"), fields = page.querySelector(".visual-fields"), records = [];
+  const caption = document.querySelector(".visual-caption");
+  caption.innerHTML = '<span id="visualCaption">SPECTRUM</span><span id="visualReadout">START SOUND TO VIEW</span>';
+  const descriptions = { scope: "Stereo waveforms. Time sets the window; gain and trails shape the display.", spectrum: "Logarithmic frequency bands with falling peaks. Levels show the post-effects mix.", vector: "Stereo phase portrait. Mono is vertical; opposite-phase audio spreads horizontally." };
+  for (const [mode, label] of [["scope", "Scope"], ["spectrum", "Spectrum"], ["vector", "Vector"]]) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = label;
+    button.dataset.visualMode = mode;
+    button.addEventListener("click", () => {
+      state.mode = mode;
+      onChange();
+      held = false;
+      renderer.clear();
+      refresh();
+      ensureVisibleSelection();
+    });
+    nav.append(button);
+  }
+  for (const field of [{ id: "gain", label: "Gain", min: 0.5, max: 8, step: 0.5, modes: ["scope", "vector"], format: (v) => v.toFixed(1) + "×" }, { id: "time", label: "Time", min: 10, max: 100, step: 5, modes: ["scope"], format: (v) => v + " ms" }, { id: "trail", label: "Trails", min: 0, max: 100, step: 5, modes: ["scope", "vector"] }, { id: "range", label: "Range", min: 48, max: 120, step: 12, modes: ["spectrum"], format: (v) => v + " dB" }, { id: "smoothing", label: "Smoothing", min: 0, max: 95, step: 5, modes: ["spectrum"] }, { id: "peak", label: "Peak decay", min: 0, max: 100, step: 5, modes: ["spectrum"] }]) {
+    const row = document.createElement("div");
+    row.className = "control";
+    const top = document.createElement("div");
+    top.className = "control-top";
+    const label = document.createElement("label");
+    label.textContent = field.label;
+    label.htmlFor = "visual-" + field.id;
+    top.append(label);
+    const input = document.createElement("input");
+    input.type = "range";
+    input.id = label.htmlFor;
+    input.min = field.min;
+    input.max = field.max;
+    input.step = field.step;
+    input.value = state[field.id];
+    row.append(top, input);
+    fields.append(row);
+    const stepper = attachStepper(row, input, { label: "Visual " + field.label, step: field.step, format: field.format || ((v) => v + "%") });
+    input.addEventListener("input", () => {
+      state[field.id] = +input.value;
+      onChange();
+    });
+    records.push({ row, input, field, stepper });
+  }
+  const auto = document.getElementById("visualAuto"), hold = document.getElementById("visualHold");
+  auto.onclick = () => {
+    state.auto = !state.auto;
+    onChange();
+    refresh();
+  };
+  hold.onclick = () => {
+    held = !held;
+    refresh();
+  };
+  function refresh() {
+    page.dataset.visualMode = state.mode;
+    nav.querySelectorAll("button").forEach((button) => {
+      const active = button.dataset.visualMode === state.mode;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    auto.disabled = state.mode === "spectrum";
+    auto.textContent = state.mode === "spectrum" ? "LOG FREQUENCY" : state.auto ? "AUTO GAIN ON" : "AUTO GAIN OFF";
+    auto.setAttribute("aria-pressed", String(state.mode !== "spectrum" && state.auto));
+    hold.textContent = held ? "Resume view" : "Hold view";
+    hold.setAttribute("aria-pressed", String(held));
+    document.getElementById("visualHelp").textContent = descriptions[state.mode];
+    document.getElementById("visualCaption").textContent = state.mode.toUpperCase();
+    canvas.setAttribute("aria-label", { scope: "Live stereo oscilloscope", spectrum: "Live logarithmic audio spectrum", vector: "Live stereo vectorscope" }[state.mode]);
+    for (const { row, input, field, stepper } of records) {
+      row.hidden = !field.modes.includes(state.mode);
+      input.value = state[field.id];
+      stepper.render();
+    }
+  }
+  const empty = { left: new Float32Array(8192), right: new Float32Array(8192), db: new Float32Array(4096).fill(-Infinity), rate: 48e3, fftSize: 8192 };
+  refresh();
+  return { connect(context, source) {
+    capture?.dispose();
+    capture = createVisualCapture(context, source);
+    renderer.clear();
+  }, frame(fit, dt) {
+    if (held && fit.w === lastWidth && fit.h === lastHeight) return;
+    const data = held ? lastData || empty : capture?.read(state.smoothing, state.mode === "spectrum") || empty;
+    lastData = data;
+    lastWidth = fit.w;
+    lastHeight = fit.h;
+    lastMetrics = renderer.draw(fit, data, state, held ? 1e-3 : dt);
+    const signal = lastMetrics.rms > 1e-4;
+    const readout = state.mode === "scope" ? "L / R · " + state.time + " ms" : state.mode === "spectrum" ? "20 Hz — " + Math.round(Math.min(2e4, data.rate / 2) / 1e3) + " kHz" : lastMetrics.correlation === null ? "CORR —" : "CORR " + (lastMetrics.correlation >= 0 ? "+" : "") + lastMetrics.correlation.toFixed(2);
+    const el = document.getElementById("visualReadout"), value = signal ? readout : "NO SIGNAL · " + readout;
+    if (el.textContent !== value) el.textContent = value;
+    canvas.dataset.signal = String(signal);
+    canvas.dataset.correlation = String(lastMetrics.correlation);
+  }, settings: () => ({ ...state }), restore(saved) {
+    state = restoreVisual(saved);
+    held = false;
+    renderer.clear();
+    refresh();
+    ensureVisibleSelection();
+  } };
+}
+export {
+  createVisualRenderer,
+  drawVisualGrid,
+  setupAudioVisuals
+};

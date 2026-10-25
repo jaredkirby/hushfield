@@ -157,3 +157,24 @@ body.wide-ui{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(saf
 .wide-ui[data-height-tier=tight] .sample-actions .large-action{height:28px;min-height:28px;font-size:8px;padding:3px}
 .wide-ui[data-height-tier=tight] #trimInfo{font-size:7px}
 @media(max-width:800px){.wide-ui .instrument-head .subtle{display:none}.wide-ui .tabs [data-tab]{font-size:0;gap:0}.wide-ui .tabs [data-tab] span{font-size:10px;letter-spacing:0}}
+/* Session status adds no extra viewport row. Its dialog owns recovery actions. */
+.session-status{font:8px monospace;background:#000;color:#aaa;border:1px solid #555;padding:4px 5px;margin-left:8px;white-space:nowrap;cursor:pointer}
+.session-status[data-dirty=true]{color:#fff}
+#sessionDialog{background:#000;color:#fff;border:1px solid #888;max-width:min(440px,90vw);max-height:85dvh;overflow:auto;padding:24px;font:12px/1.6 monospace}
+#sessionDialog::backdrop{background:#000b}
+#sessionDialog .session-actions{display:grid;gap:8px;margin-top:16px}
+#sessionDialog button{min-height:44px;background:#000;color:#fff;border:1px solid #777;font:12px monospace;padding:8px}
+#sessionDialog [hidden]{display:none!important}
+.phone-ui .instrument-head>div:first-child{flex-shrink:1;min-width:0}
+.phone-ui .session-status{font-size:6px;letter-spacing:0;margin-left:4px;padding:4px 3px}
+.phone-ui .instrument-head{gap:3px}
+/* The layer bay reserves its own space so sound triggers remain unobstructed. */
+#displayStage{--layer-bay:44px}
+.phone-ui #displayStage{--layer-bay:36px}
+.phone-ui[data-height-tier=tight] #displayStage{--layer-bay:30px}
+#displayStage>.layer-level:not([hidden]){position:absolute;z-index:7;display:flex;align-items:center;gap:12px;inset:0 0 auto;width:100%;height:var(--layer-bay)!important;min-height:0!important;margin:0!important;padding:3px 10px!important;background:#000;border:0;border-bottom:1px solid #666}
+#displayStage>.layer-level[hidden]{display:none!important}
+.layer-explanation{font:9px/1.4 monospace;color:#aaa;flex:1;min-width:0}
+.common-controls .layer-level .parameter-value{width:70px;min-width:70px;min-height:26px;height:100%;font-size:13px}
+.phone-ui .layer-explanation{font-size:7px}
+body[data-page=orbit] #displayStage>.orbit-stage,body[data-page=sample] #waveWrap,body[data-page=grain] #waveWrap,body[data-page=fx] #waveWrap{top:var(--layer-bay);height:calc(100% - var(--layer-bay));bottom:0}

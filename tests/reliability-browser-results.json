@@ -1,0 +1,1239 @@
+{
+  "release": "reliability-2",
+  "date": "2026-10-25",
+  "testing": "In-app browser viewport emulation and OfflineAudioContext; no physical hardware audio acceptance",
+  "views": [
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        486,
+        374,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        142,
+        374,
+        337
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        486,
+        374,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        142,
+        374,
+        337
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        486,
+        374,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        142,
+        374,
+        337
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        486,
+        374,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        142,
+        374,
+        337
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        486,
+        374,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        142,
+        374,
+        337
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        486,
+        374,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        142,
+        374,
+        337
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        486,
+        374,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        142,
+        374,
+        337
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        729.171875,
+        207,
+        429.828125,
+        464
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        35,
+        207,
+        680.171875,
+        464
+      ],
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        729.171875,
+        207,
+        429.828125,
+        464
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        35,
+        207,
+        680.171875,
+        464
+      ],
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        729.171875,
+        207,
+        429.828125,
+        464
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        35,
+        207,
+        680.171875,
+        464
+      ],
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        729.171875,
+        207,
+        429.828125,
+        464
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        35,
+        207,
+        680.171875,
+        464
+      ],
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        729.171875,
+        207,
+        429.828125,
+        464
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        35,
+        207,
+        680.171875,
+        464
+      ],
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        729.171875,
+        207,
+        429.828125,
+        464
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        35,
+        207,
+        680.171875,
+        464
+      ],
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        729.171875,
+        207,
+        429.828125,
+        464
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        35,
+        207,
+        680.171875,
+        464
+      ],
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        410,
+        484,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        142,
+        484,
+        261
+      ],
+      "viewport": [
+        500,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        410,
+        484,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        142,
+        484,
+        261
+      ],
+      "viewport": [
+        500,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        410,
+        484,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        142,
+        484,
+        261
+      ],
+      "viewport": [
+        500,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        410,
+        484,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        142,
+        484,
+        261
+      ],
+      "viewport": [
+        500,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        410,
+        484,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        142,
+        484,
+        261
+      ],
+      "viewport": [
+        500,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        410,
+        484,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        142,
+        484,
+        261
+      ],
+      "viewport": [
+        500,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        8,
+        410,
+        484,
+        236
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        142,
+        484,
+        261
+      ],
+      "viewport": [
+        500,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layerOverlapsOrbit": false,
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  ],
+  "editors": [
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "voice",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "envelope",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "tone",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "space",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "voice",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "envelope",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "tone",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "space",
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "voice",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "envelope",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "tone",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "space",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "voice",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "envelope",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "tone",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "space",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "voice",
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "envelope",
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "tone",
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "space",
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "voice",
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "envelope",
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "tone",
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "space",
+      "viewport": [
+        1194,
+        834
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "voice",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "envelope",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "tone",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "bank": "triggers",
+      "clipped": [],
+      "group": "space",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "voice",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "envelope",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "tone",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "bank": "balls",
+      "clipped": [],
+      "group": "space",
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  ],
+  "offlineAudio": {
+    "result": "passed",
+    "checks": 22
+  },
+  "sessionActions": {
+    "explicitRecoveryRestoredOrbitLevel": 5,
+    "recoveryPlayback": "paused",
+    "projectExport": "generated test project downloaded",
+    "visualModeDirtyTracking": true,
+    "autoGainDirtyTracking": true,
+    "waveformDirtyTracking": true,
+    "evolveDirtyTracking": true
+  },
+  "limitations": [
+    "Physical microphone, listening comparison, touch feel, latency, frame rate and battery acceptance are unverified.",
+    "Viewport sizes do not simulate physical iPad identity or hardware."
+  ],
+  "buildManifestSha256": "82ba2d3ac3c075af31c798cb88f7533a6d92555bd43b570aaed148829bc2e470"
+}

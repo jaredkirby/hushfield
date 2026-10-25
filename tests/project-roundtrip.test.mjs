@@ -1,0 +1,31 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {serializeProject, decodeProject} from '../dist/project-file.mjs';
+import {createSoundState, editSound} from '../dist/sound-patches.mjs';
+import {restoreAmbient} from '../dist/ambient-settings.mjs';
+
+function buffer(channels, rate = 48000) {
+  return {numberOfChannels:channels.length, length:channels[0].length, sampleRate:rate, duration:channels[0].length/rate, getChannelData:i=>Float32Array.from(channels[i])};
+}
+async function decode(bytes) {
+  const v = new DataView(bytes), count=v.getUint16(22,true), rate=v.getUint32(24,true), length=v.getUint32(40,true)/(count*2);
+  const channels=Array.from({length:count},()=>[]);
+  for(let i=0;i<length;i++)for(let c=0;c<count;c++)channels[c].push(v.getInt16(44+(i*count+c)*2,true)/32768);
+  return buffer(channels,rate);
+}
+
+test('a project roundtrip retains stereo sample, overrides, voices, visuals, controls and volume', async () => {
+  const sounds=createSoundState();editSound(sounds,'triggers',2,'wave','square');
+  const ambient=restoreAmbient({key:2,orbit:30,points:[{x:.3,y:.4},{x:.4,y:.5},{x:.6,y:.6},{x:.8,y:.5}]});
+  const session={name:'My take',buffer:buffer([[.5,-.5,0],[-.25,.25,1]]),params:{position:23,orbitBalls:7,scanMode:'reverse',freeze:true},ambient,visual:{mode:'vector',gain:2,trail:40},orbitSound:sounds,controls:{filterType:'highpass',orbitShape:'6'},volume:.35};
+  const serialized=serializeProject(session);
+  const restored=await decodeProject(serialized,{decodeAudio:decode,defaults:{position:50,orbitBalls:5,scanMode:'forward',freeze:false},ranges:{position:{min:0,max:100,step:.1},orbitBalls:{min:1,max:12,step:1}},controls:{filterType:['lowpass','highpass'],orbitShape:['0','6']}});
+  assert.equal(restored.name,'My take');
+  assert.deepEqual(restored.params,session.params);
+  assert.deepEqual(restored.ambient,ambient);
+  assert.deepEqual(restored.orbitSound,sounds);
+  assert.equal(restored.visual.mode,'vector');assert.equal(restored.visual.gain,2);
+  assert.deepEqual(restored.controls,session.controls);assert.equal(restored.volume,.35);
+  assert.deepEqual([...restored.buffer.getChannelData(0)],[16383/32768,-.5,0]);
+  assert.deepEqual([...restored.buffer.getChannelData(1)],[-.25,8191/32768,32767/32768]);
+});
