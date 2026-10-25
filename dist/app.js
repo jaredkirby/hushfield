@@ -1,3 +1,4 @@
+import { selectPiecePreset } from "./piece-presets.mjs";
 import { restorePiece, piecePlayback } from "./piece-session.mjs";
 import { followChord } from "./piece-harmony.mjs";
 import { createPieceSpace } from "./piece-space.mjs";
@@ -38,11 +39,11 @@ function decodeContext() {
   if (!Offline) throw new Error("Tap Start once before loading audio on this browser.");
   return sampleDecoder ||= new Offline(2, 1, 48e3);
 }
-let params = { ...initial }, ctx, engine, master, filter, convolver, reverbWet, analyser, recordDestination, buffer, originalBuffer, sourceName = "Glass garden", demoKey = "glass", running = false, activeTab = "ambient", stats = { scan: 0.5, count: 0, peak: 0, grains: [] }, outputRecording = false, micRecording = false, previewNode, toastTimer, balls = [], lastFrame = 0, lastMeter = 0, orbitVoices = /* @__PURE__ */ new Set(), audioReady = false, playPending = false;
+let params = { ...initial }, ctx, engine, master, filter, reverbWet, analyser, recordDestination, buffer, originalBuffer, sourceName = "Glass garden", demoKey = "glass", running = false, activeTab = "ambient", stats = { scan: 0.5, count: 0, peak: 0, grains: [] }, outputRecording = false, micRecording = false, previewNode, toastTimer, balls = [], lastFrame = 0, lastMeter = 0, orbitVoices = /* @__PURE__ */ new Set(), audioReady = false, playPending = false;
 const ranges = {};
 let reportedOrbitVoices = 0;
 let blendUI, visuals, volumeStepper, shapeStepper, soundEditors, showOrbitPanel, orbitAudio, limiter, tapeNode;
-let ambientState = { ...AMBIENT_DEFAULTS }, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientWet, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
+let ambientState = { ...AMBIENT_DEFAULTS }, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
 let audioGeneration = 0, restartPending = false, clockSnapshot;
 let soundState = createSoundState();
 const orbitState = makeOrbitState();
@@ -206,7 +207,7 @@ function resetAudioGraph() {
   releaseAudioGraph({ context: ctx, processors: [engine, tapeNode, ambientNode, recordDestination], orbit: orbitAudio });
   foundationReady = motionReady = false;
   foundationLayer = spaceBus = null;
-  ctx = master = engine = orbitAudio = analyser = limiter = tapeNode = ambientNode = ambientWet = grainLayer = orbitLayer = recordDestination = void 0;
+  ctx = master = engine = orbitAudio = analyser = limiter = tapeNode = ambientNode = grainLayer = orbitLayer = recordDestination = void 0;
   lastMeter = 0;
   renderClock.invalidate();
   orbitVoices = { size: 0 };
@@ -289,10 +290,9 @@ async function initializeAudio() {
     } else {
       stats = data;
       if (piece.source === "foundation" && activeTab !== "sample") $("duration").textContent = formatTime(data.liveSeconds || 0);
-      renderClock.invalidate();
+      if (running || data.peak > 1e-5) renderClock.invalidate();
     }
   };
-  filter = ctx.createBiquadFilter();
   tapeNode = new AudioWorkletNode(ctx, "tape-delay", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
   tapeNode.connect(limiter);
   spaceBus = createPieceSpace(ctx, tapeNode);
@@ -622,12 +622,6 @@ function showTab(name) {
   window.HushfieldNavigation?.select(name, { notify: false });
   document.body.dataset.page = name;
   history.replaceState(null, "", "#" + name);
-  document.querySelectorAll("[data-tab]").forEach((el) => {
-    const active = el.dataset.tab === name;
-    el.classList.toggle("active", active);
-    el.setAttribute("aria-selected", String(active));
-    el.tabIndex = active ? 0 : -1;
-  });
   document.querySelectorAll(".page").forEach((el) => el.classList.toggle("active", el.id === name + "Page"));
   document.querySelector(".main-panel").classList.toggle("orbit-active", name === "orbit");
   $("viewLabel").textContent = { ambient: "FOUNDATION / THE HEART OF THE PIECE", grain: "TEXTURE / RESHAPE THE FOUNDATION", sample: "SAMPLE / TEXTURE MATERIAL", fx: "SPACE / THE WHOLE PIECE", tape: "TAPE / THE WHOLE PIECE", orbit: "MOTION / ORBIT IN HARMONY", visual: "AUDIO VISUALIZATION" }[name];
@@ -1274,34 +1268,23 @@ function toggleMic() {
   else microphone.start();
 }
 function applyPreset(key) {
+  const selected = selectPiecePreset(key, { defaults: initial, cancelPending: sampleSelection.cancel });
+  if (!selected) return;
   markEdited();
-  if (key === "still") {
-    piece = restorePiece();
-    ambientState = restoreAmbient();
-    params = { ...initial };
-    solo = null;
-    syncTextureSource();
-    refreshControls();
-    syncAmbient();
-    showTab("ambient");
-    $("choosePiece").textContent = "Stillwater \u25BE";
-    return;
-  }
-  const presets = { cloud: { size: 900, density: 26, spray: 35, speed: 0.08, pitch: -12, reverse: 25, static: 10, jump: 0, hold: 0, elastic: 0, chaos: 0, reverb: 60, delayMix: 12, tapeOn: false, cutoff: 6500 }, shards: { size: 70, density: 28, spray: 75, speed: 0.65, pitch: 12, reverse: 35, static: 0, jump: 35, hold: 8, elastic: 12, chaos: 35, reverb: 24, delayMix: 30, tapeOn: false, cutoff: 16e3 }, worn: { size: 480, density: 15, spray: 18, speed: 0.15, pitch: -5, reverse: 8, static: 25, jump: 0, hold: 0, elastic: 2, chaos: 10, reverb: 38, delayMix: 23, tapeOn: true, drive: 55, wow: 65, flutter: 35, hiss: 22, cutoff: 4e3 } };
-  if (!presets[key]) return;
-  sampleSelection.cancel();
   solo = null;
-  piece = restorePiece({ foundation: 80, texture: key === "shards" ? 35 : 30, motion: key === "shards" ? 25 : 10 });
-  ambientState = restoreAmbient({ scene: key === "cloud" ? 2 : key === "worn" ? 1 : 3 });
-  params = { ...initial, ...presets[key] };
-  $("choosePiece").textContent = { cloud: "Slow cloud \u25BE", shards: "Glass shards \u25BE", worn: "Worn memory \u25BE" }[key];
+  piece = selected.piece;
+  ambientState = selected.ambient;
+  params = selected.params;
+  soundState = selected.soundState;
+  for (const [id, value] of Object.entries(selected.controls)) $(id).value = value;
+  $("piecePreset").value = key;
+  orbitAudio?.sync(soundState);
+  resetBalls();
+  refreshControls();
   syncTextureSource();
   syncAmbient();
-  params.freeze = false;
-  params.scanOn = true;
-  refreshControls();
-  showTab("grain");
-  toast({ cloud: "Slow cloud \xB7 long grains and a wide space.", shards: "Glass shards \xB7 short grains, scattered and bright.", worn: "Worn memory \xB7 warm tape with gentle instability." }[key]);
+  showTab(key === "still" ? "ambient" : "grain");
+  toast(selected.label + " \xB7 Foundation, Texture, Motion and finishing restored.");
 }
 $("playBtn").onclick = togglePlay;
 $("testSound").onclick = testSound;
