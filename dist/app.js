@@ -1,3 +1,4 @@
+import { TAPE_DEFAULTS } from "./tape-settings.mjs";
 import { selectPiecePreset } from "./piece-presets.mjs";
 import { restorePiece, piecePlayback } from "./piece-session.mjs";
 import { followChord } from "./piece-harmony.mjs";
@@ -25,7 +26,7 @@ import { requestPlaybackSession, resumeFromTap, verifyAudioClock, playTestNotes 
 import { boundary, containBalls, makeOrbitState, shapePoints } from "./orbit-physics.mjs?v=hushfield-1";
 const $ = (id) => document.getElementById(id);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
-const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, delayTime: 0.36, feedback: 32, delayMix: 18, reverb: 30, width: 75, tapeOn: false, drive: 20, wow: 20, flutter: 10, hiss: 8, tapeTone: 50, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
+const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
 let recovery, restoringSession = false, sampleDecoder;
 let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel;
 let phraseRequest, nextPhraseId = 0, foundationReady = false, motionReady = false;
@@ -263,13 +264,13 @@ async function initializeAudio() {
   activation.catch(() => {
   });
   if (!ctx.audioWorklet) throw new Error("The sound engine is unavailable. Test sound still checks device output.");
-  await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=piece-4");
+  await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/tape-worklet.js?v=piece-4");
+  await context.audioWorklet.addModule("./build/tape-worklet.js?v=tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/ambient-worklet.js?v=piece-4");
+  await context.audioWorklet.addModule("./build/ambient-worklet.js?v=tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/orbit-worklet.js?v=piece-4");
+  await context.audioWorklet.addModule("./build/orbit-worklet.js?v=tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
   engine = new AudioWorkletNode(ctx, "grain-engine", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
   const textureNode = engine;
@@ -293,7 +294,11 @@ async function initializeAudio() {
       if (running || data.peak > 1e-5) renderClock.invalidate();
     }
   };
-  tapeNode = new AudioWorkletNode(ctx, "tape-delay", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2] });
+  tapeNode = new AudioWorkletNode(ctx, "tape-delay", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2], processorOptions: { params } });
+  const activeTape = tapeNode;
+  activeTape.port.onmessage = ({ data }) => {
+    if (activeTape === tapeNode && data.type === "ready") syncEngine();
+  };
   tapeNode.connect(limiter);
   spaceBus = createPieceSpace(ctx, tapeNode);
   filter = spaceBus.filter;
