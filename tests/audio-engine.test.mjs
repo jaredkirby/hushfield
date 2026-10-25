@@ -21,3 +21,11 @@ let Recorder;
 class CaptureBase{constructor(){this.messages=[];this.port={postMessage:m=>this.messages.push(m)};}}
 vm.runInNewContext(code,{AudioWorkletProcessor:CaptureBase,sampleRate:48000,Math,registerProcessor:(name,C)=>{if(name==='capture-engine')Recorder=C;}});
 const recorder=new Recorder();recorder.port.onmessage({data:{type:'start'}});recorder.process([[new Float32Array([.1,.2,.3]),new Float32Array([-.1,-.2,-.3])]]);recorder.port.onmessage({data:{type:'stop'}});assert.equal(recorder.messages[0].type,'chunk');assert.equal(recorder.messages[0].left.length,3);assert(Math.abs(recorder.messages[0].right[1]+.2)<.00001);assert.equal(recorder.messages[1].type,'done');console.log('PASS: post-effects PCM capture preserves stereo samples and flushes before completion.');
+
+const changing=setup({scanOn:true,scanMode:'pingpong',position:.98,speed:1});
+render(changing,.04);
+assert(changing.direction<0,'Ping-pong must have returned from the upper edge');
+message(changing,{type:'params',params:{scanMode:'forward',position:.5}});
+const startForward=changing.scan;
+render(changing,.03);
+assert(changing.scan>startForward,'Forward must move forward after a returning ping-pong scan');

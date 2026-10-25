@@ -1,5 +1,13 @@
 # Verification
 
+Integration refresh: **43 Node tests and 37 unique browser audio checks passed**. The repaired readiness-gated piece diagnostic passed five consecutive runs. Fresh independent Standards and Spec reviews found no remaining material findings. See [the integration review](docs/INTEGRATION-REVIEW.md), tests/integration-browser-results.json and [PR #14](https://github.com/jaredkirby/hushfield/pull/14).
+
+Latest vintage Tape verification: **43 Node tests, 10 browser Tape audio checks and six Tape layout cases passed**, plus live/default, strong, bypassed, paused and reduced-motion cassette checks. Independent Standards and Spec rechecks found no remaining material findings. See [the vintage Tape review and acceptance limits](docs/VINTAGE-TAPE-REVIEW.md) and tests/vintage-tape-browser-results.json.
+
+The earlier stronger Tape iteration passed 41 Node tests, 10 browser audio checks and six Tape layout cases. See [the prior Tape review](docs/TAPE-REVIEW.md) and tests/tape-browser-results.json.
+
+Earlier Ambient-first verification passed 38 Node tests, 27 browser audio checks and 104 browser layout cases. See [the prior review](docs/PIECE-REVIEW.md) and tests/piece-browser-results.json. These are automated/emulated checks; physical-device and subjective listening acceptance remain separate.
+
 ## Automated checks
 
 Run `npm ci`, `npm run build` and `npm test` with Node.js 22 or newer. The suite covers:
@@ -21,3 +29,11 @@ The latest adaptive layout was checked in browser emulation across 112 main-view
 Earlier receipts cover voice-dot interaction, startup status and the scope/spectrum/vector modes. Physical iPhone audio playback and recovery have been confirmed. The latest iPad layout, touch feel, listening quality and frame rate still need physical-device acceptance. Microphone hardware and uninterrupted locked-screen/background playback are not verified.
 
 The committed screenshots illustrate the interface; they are not proof of physical device performance. CI checks Node behavior and build consistency, not browser rendering or subjective sound quality.
+
+## Reliability iteration (2026-10-25)
+
+The approved scope and test seams are recorded in [the spec](docs/specs/reliability.md) and [GitHub issue #1](https://github.com/jaredkirby/hushfield/issues/1). Added behavior checks cover microphone permission/cancellation/cleanup, session-labelled output finalization and exact frame limits, stale sample selection, real stereo WAV project roundtrips, scan-mode transitions, Orbit PCM/timing at 44.1/48 kHz, storage failure and late-write behavior, processor-error retirement, layer levels, and paused/capped drawing.
+
+Browser offline audio verification checks the worklet-backed Orbit graph and its independent banks, voice parameters, envelopes, stereo routing, delay/reverb tails and voice limits. An agent-created browser session stored a generated-demo draft with Orbit at 5%; a new tab offered recovery, and explicit recovery restored 5% while keeping playback paused. These are automated/emulated checks, not physical microphone or listening acceptance. The final check passed 33 automated tests, 22 browser offline-audio checks and 74 viewport/editor cases. See tests/reliability-browser-results.json for the final viewport receipt and docs/RELIABILITY-REVIEW.md for the review disposition.
+
+Orbit now renders oscillators and envelopes in its worklet. Its controls and per-bank effects are retained, but listening comparison, latency/touch feel and CPU/battery acceptance on physical iPhone/iPad are still required. No claim of locked-screen/background continuity is added.

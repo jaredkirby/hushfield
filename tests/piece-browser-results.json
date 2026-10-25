@@ -1,0 +1,850 @@
+{
+  "checkedAt": "2026-10-25T19:29:30.221Z",
+  "mainViews": [
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "tape",
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "sample",
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "visual",
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "tape",
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "sample",
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "visual",
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "tape",
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "sample",
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "visual",
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "tape",
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "sample",
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "visual",
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "tape",
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "sample",
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "visual",
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 1440
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 1440
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 1440
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "tape",
+      "problems": [],
+      "width": 1440
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "sample",
+      "problems": [],
+      "width": 1440
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "visual",
+      "problems": [],
+      "width": 1440
+    }
+  ],
+  "editorSections": [
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 320,
+      "section": "Voices"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 320,
+      "section": "Scan"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 320,
+      "section": "Scatter"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 320,
+      "section": "Echo"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 320,
+      "section": "Space"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 390,
+      "section": "Voices"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 390,
+      "section": "Scan"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 390,
+      "section": "Scatter"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 390,
+      "section": "Echo"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 390,
+      "section": "Space"
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 844,
+      "section": "Voices"
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 844,
+      "section": "Scan"
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 844,
+      "section": "Scatter"
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 844,
+      "section": "Echo"
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 844,
+      "section": "Space"
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 500,
+      "section": "Voices"
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 500,
+      "section": "Scan"
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 500,
+      "section": "Scatter"
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 500,
+      "section": "Echo"
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 500,
+      "section": "Space"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 1194,
+      "section": "Voices"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 1194,
+      "section": "Scan"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 1194,
+      "section": "Scatter"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 1194,
+      "section": "Echo"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 1194,
+      "section": "Space"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "ambient",
+      "problems": [],
+      "width": 1440,
+      "section": "Voices"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 1440,
+      "section": "Scan"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "grain",
+      "problems": [],
+      "width": 1440,
+      "section": "Scatter"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 1440,
+      "section": "Echo"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "fx",
+      "problems": [],
+      "width": 1440,
+      "section": "Space"
+    }
+  ],
+  "motionBanks": [
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320,
+      "bank": "Triggers",
+      "section": "Voice"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320,
+      "bank": "Triggers",
+      "section": "Envelope"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320,
+      "bank": "Triggers",
+      "section": "Tone"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320,
+      "bank": "Triggers",
+      "section": "Space"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320,
+      "bank": "Balls",
+      "section": "Voice"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320,
+      "bank": "Balls",
+      "section": "Envelope"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320,
+      "bank": "Balls",
+      "section": "Tone"
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 320,
+      "bank": "Balls",
+      "section": "Space"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390,
+      "bank": "Triggers",
+      "section": "Voice"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390,
+      "bank": "Triggers",
+      "section": "Envelope"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390,
+      "bank": "Triggers",
+      "section": "Tone"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390,
+      "bank": "Triggers",
+      "section": "Space"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390,
+      "bank": "Balls",
+      "section": "Voice"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390,
+      "bank": "Balls",
+      "section": "Envelope"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390,
+      "bank": "Balls",
+      "section": "Tone"
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 390,
+      "bank": "Balls",
+      "section": "Space"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194,
+      "bank": "Triggers",
+      "section": "Voice"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194,
+      "bank": "Triggers",
+      "section": "Envelope"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194,
+      "bank": "Triggers",
+      "section": "Tone"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194,
+      "bank": "Triggers",
+      "section": "Space"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194,
+      "bank": "Balls",
+      "section": "Voice"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194,
+      "bank": "Balls",
+      "section": "Envelope"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194,
+      "bank": "Balls",
+      "section": "Tone"
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1194,
+      "bank": "Balls",
+      "section": "Space"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440,
+      "bank": "Triggers",
+      "section": "Voice"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440,
+      "bank": "Triggers",
+      "section": "Envelope"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440,
+      "bank": "Triggers",
+      "section": "Tone"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440,
+      "bank": "Triggers",
+      "section": "Space"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440,
+      "bank": "Balls",
+      "section": "Voice"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440,
+      "bank": "Balls",
+      "section": "Envelope"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440,
+      "bank": "Balls",
+      "section": "Tone"
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "page": "orbit",
+      "problems": [],
+      "width": 1440,
+      "bank": "Balls",
+      "section": "Space"
+    }
+  ],
+  "audio": {
+    "piece": "PASS Foundation supplies audible live Texture with no audible dry Foundation or loaded sample\nPASS shared tone attenuates every part entering the piece bus\nPASS shared width collapses opposite-phase stereo to mono\nPASS Motion receives D-minor harmony directly from Foundation processors without a main-thread harmony callback\nPASS all rendered stereo buffers are finite\n\n5 CHECKS PASSED",
+    "orbit": "PASS Trigger PCM is audible and finite\nPASS Ball sound edits leave trigger PCM unchanged\nPASS Trigger sound and effect edits leave ball PCM unchanged\nPASS Waveform changes the rendered sound\nPASS Low-pass cutoff changes the rendered spectrum\nPASS FM depth changes the rendered sound\nPASS Level independently controls output gain\nPASS Muted triggers render silence\nPASS Ball pan independently routes stereo output\nPASS Release changes the audible envelope tail\nPASS Editing Trigger 2 leaves Trigger 1 unchanged\nPASS Individual trigger overrides affect the selected voice\nPASS Independent reverb send produces a wet tail\nPASS Zero effect sends keep the dry tail silent\nPASS Independent delay send and feedback produce an echo tail\nPASS Ball drive changes its rendered waveform\nPASS Muted individual voices remain silent\nPASS Worklet bank preview renders its resolved patch despite item zero mute\nPASS Bank preview retains its resolved patch despite item zero override\nPASS Voice limits reserve independent capacity for both banks\nPASS Stopping triggers preserves active ball voices\nPASS Stop all releases active voices\n\nALL AUDIO CHECKS PASSED"
+  },
+  "actions": {
+    "continuousTransport": "All five tabs retained Stop instrument; Foundation elapsed remained at 00:54 across navigation.",
+    "freezeAndSolo": "Captured a four-second phrase, retained Texture 35% during Solo, then restored Full mix.",
+    "recovery": "Saved generated draft on isolated loopback origin 4881; recovered frozen phrase and Texture 35%, paused and without solo.",
+    "sourceParent": "Opening the secondary source editor retains Texture aria-selected=true.",
+    "completePresets": "After highpass and muting both Motion banks, Glass shards restored lowpass, enabled banks, linked harmony, and 80/35/25 blend.",
+    "linkedControls": "Independent Motion key/scale controls hidden while harmony is linked."
+  },
+  "limitations": [
+    "No physical microphone/device acceptance",
+    "No subjective listening comparison",
+    "Frozen/imported material retains its captured/original pitch"
+  ],
+  "buildManifestSha256": "7932ce6f9bffdf9a0609b0f16b510be455577fdcbca6f45910fd3e3dbb37fce5",
+  "baseline": "fc8c6abca9e32fe25329a9414d557f68ed60bdee"
+}

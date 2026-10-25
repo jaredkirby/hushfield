@@ -1,11 +1,12 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><title>ORBIT audio verification</title><body style="background:#182328;color:#d7e5e9;font:14px monospace;padding:24px"><h1>ORBIT audio verification</h1><pre id="results">Rendering independent synth banks…</pre><script type="module">
-import {createOrbitAudio} from './orbit-audio.mjs?v=hushfield-1';
-import {createSoundState,patchFor} from './sound-patches.mjs?v=hushfield-1';
+import {OrbitEngine} from './orbit-dsp.mjs?v=piece-4';
+import {createOrbitAudio} from './orbit-audio.mjs?v=piece-4';
+import {createSoundState,patchFor} from './sound-patches.mjs?v=piece-4';
 const out=document.getElementById('results'),results=[];
 const check=(condition,label)=>{if(!condition)throw Error(label);results.push('PASS '+label);out.textContent=results.join('\n');};
 const rms=(a,start=0,end=a.length)=>Math.sqrt(a.slice(start,end).reduce((s,v)=>s+v*v,0)/(end-start));
 const diff=(a,b)=>rms(a.map((v,i)=>v-b[i]));
-async function render(bank,mutate=()=>{},index=0){const state=createSoundState();for(const b of Object.values(state)){Object.assign(b.base,{delaySend:0,reverbSend:0,attack:.01,decay:.08,sustain:30,gate:.1,release:.2});}mutate(state);const ctx=new OfflineAudioContext(2,48000,24000),synth=createOrbitAudio(ctx,ctx.destination,state),played=synth.play(bank,index,60,patchFor(state,bank,index)),b=await ctx.startRendering();return {left:b.getChannelData(0),right:b.getChannelData(1),played};}
+async function render(bank,mutate=()=>{},index=0,asBank=false){const state=createSoundState();for(const b of Object.values(state)){Object.assign(b.base,{delaySend:0,reverbSend:0,attack:.01,decay:.08,sustain:30,gate:.1,release:.2});}mutate(state);const ctx=new OfflineAudioContext(2,48000,24000);await ctx.audioWorklet.addModule('./build/orbit-worklet.js?v=piece-4');let ready;const initialized=new Promise(resolve=>ready=resolve),synth=createOrbitAudio(ctx,ctx.destination,state,undefined,{onReady:ready}),pause=ctx.suspend(.01),rendering=ctx.startRendering();await pause;await initialized;const played=synth.play(bank,index,60,patchFor(state,bank,asBank?'all':index),true);/* Let suspended OfflineAudioContext deliver queued port commands before resuming. */await new Promise(resolve=>setTimeout(resolve,20));await ctx.resume();const b=await rendering;synth.dispose();return {left:b.getChannelData(0),right:b.getChannelData(1),played};}
 try{
  const base=await render('triggers');check(base.played&&rms(base.left)>.001&&base.left.every(Number.isFinite),'Trigger PCM is audible and finite');
  const ballsChanged=await render('triggers',s=>Object.assign(s.balls.base,{wave:'noise',cutoff:90,release:4,level:100}));check(diff(base.left,ballsChanged.left)<1e-7,'Ball sound edits leave trigger PCM unchanged');
@@ -23,7 +24,10 @@ try{
  check(rms(base.left,24000,40000)===0,'Zero effect sends keep the dry tail silent');
  const echo=await render('triggers',s=>{s.triggers.base.delaySend=100;s.triggers.effects.feedback=65;s.triggers.effects.delayTime=.25;});check(rms(echo.left,24000,40000)>.00001,'Independent delay send and feedback produce an echo tail');
  const saturation=await render('balls',s=>s.balls.base.drive=100);check(diff(ball.left,saturation.left)>.001,'Ball drive changes its rendered waveform');
- const budgetState=createSoundState(),budgetCtx=new OfflineAudioContext(2,24000,24000),budget=createOrbitAudio(budgetCtx,budgetCtx.destination,budgetState);for(const bank of ['triggers','balls'])for(let i=0;i<30;i++)budget.play(bank,i%24,60,patchFor(budgetState,bank,i%24));check([...budget.voices].filter(v=>v.bank==='triggers').length===24&&[...budget.voices].filter(v=>v.bank==='balls').length===24,'Voice limits reserve independent capacity for both banks');budget.stop('triggers');check(budget.voices.size===24&&[...budget.voices].every(v=>v.bank==='balls'),'Stopping triggers preserves active ball voices');budget.stopAll();await budgetCtx.startRendering();check(budget.voices.size===0,'Stop all releases active voices');
+ const bankPreview=await render('triggers',s=>s.triggers.items[0]={enabled:false});check(!bankPreview.played,'Muted individual voices remain silent');
+ const resolvedPreview=await render('triggers',s=>s.triggers.items[0]={enabled:false},0,true);check(resolvedPreview.played&&rms(resolvedPreview.left)>.001,'Worklet bank preview renders its resolved patch despite item zero mute');
+ const bankState=createSoundState();bankState.triggers.items[0]={enabled:false};const bankEngine=new OrbitEngine(48000);bankEngine.setPatches(bankState);check(bankEngine.audition('triggers',0,60,patchFor(bankState,'triggers','all')),'Bank preview retains its resolved patch despite item zero override');
+ const budget=new OrbitEngine(24000);for(const bank of ['triggers','balls'])for(let i=0;i<30;i++)budget.audition(bank,i%24,60);check(budget.status().voices===48,'Voice limits reserve independent capacity for both banks');budget.stop('triggers');check(budget.status().voices===24,'Stopping triggers preserves active ball voices');budget.stop();check(budget.status().voices===0,'Stop all releases active voices');
  out.textContent+='\n\nALL AUDIO CHECKS PASSED';document.body.dataset.result='passed';
 }catch(error){out.textContent+='\nFAIL '+error.message;document.body.dataset.result='failed';}
 </script></body></html>

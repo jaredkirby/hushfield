@@ -1,0 +1,59 @@
+{
+  "implementation": "4012811",
+  "qaURL": "http://127.0.0.1:4878/qa-tape.html",
+  "qaResults": "PASS 44100 Hz: constructor settings enable audible finite stereo Tape on cold start\nPASS 44100 Hz: Off is a true shared-path bypass at the dry reference level\nPASS 44100 Hz: default coloration and movement produce a clear PCM change (124.7% relative difference)\nPASS 44100 Hz: On produces repeats while Off has no echo tail\nPASS 44100 Hz: a real processor toggle returns to bypass after its smooth transition\nPASS 48000 Hz: constructor settings enable audible finite stereo Tape on cold start\nPASS 48000 Hz: Off is a true shared-path bypass at the dry reference level\nPASS 48000 Hz: default coloration and movement produce a clear PCM change (124.7% relative difference)\nPASS 48000 Hz: On produces repeats while Off has no echo tail\nPASS 48000 Hz: a real processor toggle returns to bypass after its smooth transition\n\n10 TAPE CHECKS PASSED",
+  "viewportChecks": [
+    {
+      "height": 568,
+      "overflow": false,
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "problems": [],
+      "width": 1440
+    }
+  ],
+  "uiChecks": {
+    "tapeEnabledBeforeStart": true,
+    "startedSuccessfully": true,
+    "toggledOffWhileRunning": true,
+    "toggledOnAgain": true,
+    "stoppedAfterCheck": true,
+    "consoleWarningsOrErrors": []
+  },
+  "finalState": "Browser tab: 20, Title: \"Hushfield · Ambient Instrument\", URL: \"http://127.0.0.1:4878/#tape\".\n0 AXWebArea Hushfield · Ambient Instrument, URL: 127.0.0.1:4878/#tape\n\t1 container\n\t\t2 container Hushfield instrument\n\t\t\t3 container\n\t\t\t\t4 text ●  HUSHFIELD \n\t\t\t\t5 text READY\n\t\t\t\t6 button Description: Recover previous session; changes since last project export, Help: Your latest changes have not been saved to a local recovery draft yet., ID: sessionStatus\n\t\t\t\t111 text DESKTOP / LANDSCAPE\n\t\t\t8 button Save project, ID: saveProject\n\t\t\t9 button Load project, ID: loadProject\n\t\t\t10 button About Hushfield\n\t\t\t11 tab group Piece editors\n\t\t\t\t12 tab (selectable, settable, boolean) FOUNDATION, Value: 0, ID: tab-ambient\n\t\t\t\t13 tab (selectable, settable, boolean) TEXTURE, Value: 0, ID: tab-grain\n\t\t\t\t14 tab (selectable, settable, boolean) MOTION, Value: 0, ID: tab-orbit\n\t\t\t\t15 tab (selectable, settable, boolean) SPACE, Value: 0, ID: tab-fx\n\t\t\t\t16 tab (selected, settable, boolean) TAPE, Value: 1, ID: tab-tape\n\t\t\t17 button ♪ Test sound, ID: testSound\n\t\t\t18 button ↻ Restart audio, ID: restartAudio\n\t\t\t96 text Audio ready. Tap Start to play.\n\t\t\t20 container\n\t\t\t\t110 text TAPE / THE WHOLE PIECE\n\t\t\t\t112 text 1 NOTES · SECTION 1\n\t\t\t\t23 container displayStage\n\t\t\t\t\t24 image Description: Animated tape cassette with rotating reels and tape path, ID: tapeCanvas\n\t\t\t\t\t25 container\n\t\t\t\t\t\t98 text ONE PIECE · THREE PARTS\n\t\t\t\t\t\t27 checkbox Visual, Value: 0, ID: openVisual\n\t\t\t\t\t28 container Piece blend\n\t\t\t\t\t\t29 container\n\t\t\t\t\t\t\t30 text Foundation\n\t\t\t\t\t\t\t31 checkbox Description: Select foundation blend, Value: 0\n\t\t\t\t\t\t\t\t99 text 100%\n\t\t\t\t\t\t\t33 checkbox Description: Hear only foundation, Value: 0, ID: solo-foundation\n\t\t\t\t\t\t34 container\n\t\t\t\t\t\t\t35 text Texture\n\t\t\t\t\t\t\t36 checkbox Description: Select texture blend, Value: 0\n\t\t\t\t\t\t\t\t100 text 0%\n\t\t\t\t\t\t\t38 checkbox Description: Hear only texture, Value: 0, ID: solo-texture\n\t\t\t\t\t\t39 container\n\t\t\t\t\t\t\t40 text Motion\n\t\t\t\t\t\t\t41 checkbox Description: Select motion blend, Value: 0\n\t\t\t\t\t\t\t\t101 text 0%\n\t\t\t\t\t\t\t43 checkbox Description: Hear only motion, Value: 0, ID: solo-motion\n\t\t\t\t44 container Description: TAPE, ID: tapePage\n\t\t\t\t\t45 text TAPE ECHO / MASTER BUS\n\t\t\t\t\t46 checkbox TAPE ON, Value: 1, ID: tapeToggle\n\t\t\t\t\t47 container tapeControls\n\t\t\t\t\t\t48 container\n\t\t\t\t\t\t\t49 text Time\n\t\t\t\t\t\t\t50 checkbox Description: Select Time, Value: 1\n\t\t\t\t\t\t\t\t102 text 0.36 s\n\t\t\t\t\t\t52 container\n\t\t\t\t\t\t\t53 text Feedback\n\t\t\t\t\t\t\t54 checkbox Description: Select Feedback, Value: 0\n\t\t\t\t\t\t\t\t103 text 38%\n\t\t\t\t\t\t56 container\n\t\t\t\t\t\t\t57 text Mix\n\t\t\t\t\t\t\t58 checkbox Description: Select Mix, Value: 0\n\t\t\t\t\t\t\t\t104 text 28%\n\t\t\t\t\t\t60 container\n\t\t\t\t\t\t\t61 text Drive\n\t\t\t\t\t\t\t62 checkbox Description: Select Drive, Value: 0\n\t\t\t\t\t\t\t\t105 text 55%\n\t\t\t\t\t\t64 container\n\t\t\t\t\t\t\t65 text Wow\n\t\t\t\t\t\t\t66 checkbox Description: Select Wow, Value: 0\n\t\t\t\t\t\t\t\t106 text 45%\n\t\t\t\t\t\t68 container\n\t\t\t\t\t\t\t69 text Flutter\n\t\t\t\t\t\t\t70 checkbox Description: Select Flutter, Value: 0\n\t\t\t\t\t\t\t\t107 text 25%\n\t\t\t\t\t\t72 container\n\t\t\t\t\t\t\t73 text Hiss\n\t\t\t\t\t\t\t74 checkbox Description: Select Hiss, Value: 0\n\t\t\t\t\t\t\t\t108 text 10%\n\t\t\t\t\t\t76 container\n\t\t\t\t\t\t\t77 text Tone\n\t\t\t\t\t\t\t78 checkbox Description: Select Tone, Value: 0\n\t\t\t\t\t\t\t\t109 text 35%\n\t\t\t\t\t80 text Off bypasses Tape. On adds warmth, pitch drift and darker echoes to the whole piece. Drive, Wow and Flutter affect the direct sound; Mix controls the repeats.\n\t\t\t\t81 checkbox Description: Hold current chord, Value: 0, ID: freezeBtn\n\t\t\t\t82 button Description: Capture audio, Help: Record the instrument’s output, ID: recordOut\n\t\t\t\t\t83 text ● \n\t\t\t\t\t84 text Capture\n\t\t\t\t85 container Master volume\n\t\t\t\t\t86 button Select Master volume\n\t\t\t\t\t\t87 container volumeReadout\n\t\t\t\t\t\t\t113 text VOL  55%\n\t\t\t89 container\n\t\t\t\t90 button Description: Start instrument, ID: playBtn\n\t\t\t\t91 container Description: Selected value adjustment, ID: adjustBar\n\t\t\t\t\t92 button Decrease selected value\n\t\t\t\t\t114 text Time\n\t\t\t\t\t115 text 0.36 s\n\t\t\t\t\t95 button Increase selected value\n\nThe focused UI element is 90 button Description: Start instrument, ID: playBtn",
+  "checkedAt": "2026-10-25T19:51:01.274Z",
+  "baseline": "90cf6ff",
+  "buildManifestSha256": "1a03911c01a7ab211a13102daaea90c794fe59d9da6d55e05ddece5cfdb737d5",
+  "limitations": [
+    "No subjective listening acceptance on the player device",
+    "Viewport checks are browser emulation"
+  ]
+}

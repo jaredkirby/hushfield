@@ -1,0 +1,78 @@
+{
+  "implementation": "44253d6",
+  "audioImplementation": "13d3ee3",
+  "qaResults": "PASS 44100 Hz: constructor settings enable audible finite stereo Tape on cold start\nPASS 44100 Hz: Off is a true shared-path bypass at the dry reference level\nPASS 44100 Hz: default coloration and movement produce a clear PCM change (87.1% relative difference)\nPASS 44100 Hz: On produces repeats while Off has no echo tail\nPASS 44100 Hz: a real processor toggle returns to bypass after its smooth transition\nPASS 48000 Hz: constructor settings enable audible finite stereo Tape on cold start\nPASS 48000 Hz: Off is a true shared-path bypass at the dry reference level\nPASS 48000 Hz: default coloration and movement produce a clear PCM change (87.0% relative difference)\nPASS 48000 Hz: On produces repeats while Off has no echo tail\nPASS 48000 Hz: a real processor toggle returns to bypass after its smooth transition\n\n10 TAPE CHECKS PASSED",
+  "viewportChecks": [
+    {
+      "height": 568,
+      "overflow": false,
+      "problems": [],
+      "width": 320
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "problems": [],
+      "width": 390
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "problems": [],
+      "width": 844
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "problems": [],
+      "width": 500
+    },
+    {
+      "height": 834,
+      "overflow": false,
+      "problems": [],
+      "width": 1194
+    },
+    {
+      "height": 900,
+      "overflow": false,
+      "problems": [],
+      "width": 1440
+    }
+  ],
+  "visualChecks": {
+    "default": {
+      "distinctReelFrames": 8,
+      "distinctTapePathFrames": 2
+    },
+    "raisedWowAndFlutter": {
+      "distinctReelFrames": 8,
+      "distinctTapePathFrames": 2
+    },
+    "bypass": {
+      "distinctReelFrames": 1,
+      "distinctTapePathFrames": 1
+    },
+    "paused": {
+      "distinctReelFrames": 1,
+      "distinctTapePathFrames": 1
+    },
+    "reducedMotion": {
+      "distinctReelFrames": 1,
+      "distinctTapePathFrames": 1
+    },
+    "emulationRestored": true
+  },
+  "method": "SHA-256 of screenshot regions for reel and tape path; initial settling captures excluded for static cases. Animation checked at default and maximum Wow/Flutter, with Mix zero in isolated static cases.",
+  "consoleWarningsOrErrors": [],
+  "finalState": "Browser tab: 21, Title: \"Hushfield · Ambient Instrument\", URL: \"http://127.0.0.1:4882/#tape\".\n1 AXWebArea Hushfield · Ambient Instrument, URL: 127.0.0.1:4882/#tape\n\t2 container\n\t\t3 container Hushfield instrument\n\t\t\t4 container\n\t\t\t\t5 text ●  HUSHFIELD \n\t\t\t\t6 text READY\n\t\t\t\t7 button Description: Recover previous session; changes since last project export, Help: Your latest changes have not been saved to a local recovery draft yet., ID: sessionStatus\n\t\t\t\t188 text DESKTOP / LANDSCAPE\n\t\t\t9 button Save project, ID: saveProject\n\t\t\t10 button Load project, ID: loadProject\n\t\t\t11 button About Hushfield\n\t\t\t12 tab group Piece editors\n\t\t\t\t13 tab (selectable, settable, boolean) FOUNDATION, Value: 0, ID: tab-ambient\n\t\t\t\t14 tab (selectable, settable, boolean) TEXTURE, Value: 0, ID: tab-grain\n\t\t\t\t15 tab (selectable, settable, boolean) MOTION, Value: 0, ID: tab-orbit\n\t\t\t\t16 tab (selectable, settable, boolean) SPACE, Value: 0, ID: tab-fx\n\t\t\t\t17 tab (selected, settable, boolean) TAPE, Value: 1, ID: tab-tape\n\t\t\t122 button ♪ Test sound, ID: testSound\n\t\t\t123 button ↻ Restart audio, ID: restartAudio\n\t\t\t191 text Audio ready. Tap Start to play.\n\t\t\t21 container\n\t\t\t\t192 text TAPE / THE WHOLE PIECE\n\t\t\t\t256 text 0 NOTES · SECTION 3\n\t\t\t\t24 container displayStage\n\t\t\t\t\t194 image ID: tapeCanvas, Description: Tape effect illustration: slow Wow sway, fine Flutter ripples, Drive head glow and fading echo trails\n\t\t\t\t\t26 container\n\t\t\t\t\t\t241 text ONE PIECE · THREE PARTS\n\t\t\t\t\t\t28 checkbox Visual, Value: 0, ID: openVisual\n\t\t\t\t\t29 container Piece blend\n\t\t\t\t\t\t30 container\n\t\t\t\t\t\t\t31 text Foundation\n\t\t\t\t\t\t\t32 checkbox Description: Select foundation blend, Value: 1\n\t\t\t\t\t\t\t\t242 text 100%\n\t\t\t\t\t\t\t34 checkbox Description: Hear only foundation, Value: 0, ID: solo-foundation\n\t\t\t\t\t\t35 container\n\t\t\t\t\t\t\t36 text Texture\n\t\t\t\t\t\t\t37 checkbox Description: Select texture blend, Value: 0\n\t\t\t\t\t\t\t\t243 text 0%\n\t\t\t\t\t\t\t39 checkbox Description: Hear only texture, Value: 0, ID: solo-texture\n\t\t\t\t\t\t40 container\n\t\t\t\t\t\t\t41 text Motion\n\t\t\t\t\t\t\t42 checkbox Description: Select motion blend, Value: 0\n\t\t\t\t\t\t\t\t244 text 0%\n\t\t\t\t\t\t\t44 checkbox Description: Hear only motion, Value: 0, ID: solo-motion\n\t\t\t\t199 container Description: TAPE, ID: tapePage\n\t\t\t\t\t200 text TAPE ECHO / MASTER BUS\n\t\t\t\t\t201 checkbox TAPE ON, Value: 1, ID: tapeToggle\n\t\t\t\t\t202 container tapeControls\n\t\t\t\t\t\t203 container\n\t\t\t\t\t\t\t204 text Time\n\t\t\t\t\t\t\t205 checkbox Description: Select Time, Value: 0\n\t\t\t\t\t\t\t\t245 text 0.36 s\n\t\t\t\t\t\t207 container\n\t\t\t\t\t\t\t208 text Feedback\n\t\t\t\t\t\t\t209 checkbox Description: Select Feedback, Value: 0\n\t\t\t\t\t\t\t\t246 text 28%\n\t\t\t\t\t\t211 container\n\t\t\t\t\t\t\t212 text Mix\n\t\t\t\t\t\t\t213 checkbox Description: Select Mix, Value: 0\n\t\t\t\t\t\t\t\t247 text 16%\n\t\t\t\t\t\t215 container\n\t\t\t\t\t\t\t216 text Drive\n\t\t\t\t\t\t\t217 checkbox Description: Select Drive, Value: 0\n\t\t\t\t\t\t\t\t248 text 16%\n\t\t\t\t\t\t219 container\n\t\t\t\t\t\t\t220 text Wow\n\t\t\t\t\t\t\t221 checkbox Description: Select Wow, Value: 0\n\t\t\t\t\t\t\t\t249 text 10%\n\t\t\t\t\t\t223 container\n\t\t\t\t\t\t\t224 text Flutter\n\t\t\t\t\t\t\t225 checkbox Description: Select Flutter, Value: 0\n\t\t\t\t\t\t\t\t250 text 6%\n\t\t\t\t\t\t227 container\n\t\t\t\t\t\t\t228 text Hiss\n\t\t\t\t\t\t\t229 checkbox Description: Select Hiss, Value: 0\n\t\t\t\t\t\t\t\t251 text 4%\n\t\t\t\t\t\t231 container\n\t\t\t\t\t\t\t232 text Tone\n\t\t\t\t\t\t\t233 checkbox Description: Select Tone, Value: 0\n\t\t\t\t\t\t\t\t252 text 42%\n\t\t\t\t\t235 text Warm vintage color for the whole piece. Wow sways the tape; Flutter adds fine ripples. Head glow follows Drive and the sound; fading trails follow Mix and Feedback. Off bypasses Tape.\n\t\t\t\t82 checkbox Description: Hold current chord, Value: 0, ID: freezeBtn\n\t\t\t\t83 button Description: Capture audio, Help: Record the instrument’s output, ID: recordOut\n\t\t\t\t\t84 text ● \n\t\t\t\t\t85 text Capture\n\t\t\t\t86 container Master volume\n\t\t\t\t\t87 checkbox Description: Select Master volume, Value: 0\n\t\t\t\t\t\t88 container volumeReadout\n\t\t\t\t\t\t\t253 text VOL  55%\n\t\t\t90 container\n\t\t\t\t91 button Description: Start instrument, ID: playBtn\n\t\t\t\t92 container Description: Selected value adjustment, ID: adjustBar\n\t\t\t\t\t93 button Decrease selected value\n\t\t\t\t\t254 text foundation blend\n\t\t\t\t\t255 text 100%\n\t\t\t\t\t96 button (disabled) Increase selected value\n\t\t239 text Stillwater · Foundation, Texture, Motion and finishing restored.\n\nThe focused UI element is 201 checkbox TAPE ON, Value: 1, ID: tapeToggle",
+  "limitations": [
+    "Illustration follows control amounts and rates, not measured tape telemetry",
+    "Browser emulation does not establish physical-device acceptance",
+    "Warm vintage listening acceptance remains with the player"
+  ],
+  "checkedAt": "2026-10-25T20:08:31.511Z",
+  "baseline": "9b5442c",
+  "buildManifestSha256": "2d13fa19f245107ab445f48a7e17348946b0cf46f491bf07660c619dee007ba9",
+  "tapeWorkletSha256": "0084833606925d7e0f57d153ac41f59273b8f6ca708ae508219646d0caa0a1de"
+}
