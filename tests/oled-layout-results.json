@@ -1,0 +1,804 @@
+{
+  "phone": [
+    {
+      "adjust": [
+        160,
+        499,
+        160,
+        69
+      ],
+      "clipped": [],
+      "document": [
+        320,
+        568
+      ],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "editorScroll": false,
+      "page": "sample",
+      "play": [
+        0,
+        499,
+        160,
+        69
+      ],
+      "stage": [
+        8,
+        121,
+        304,
+        112
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "adjust": [
+        160,
+        499,
+        160,
+        69
+      ],
+      "clipped": [],
+      "document": [
+        320,
+        568
+      ],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "editorScroll": false,
+      "page": "grain",
+      "play": [
+        0,
+        499,
+        160,
+        69
+      ],
+      "stage": [
+        8,
+        121,
+        304,
+        112
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "adjust": [
+        160,
+        499,
+        160,
+        69
+      ],
+      "clipped": [],
+      "document": [
+        320,
+        568
+      ],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "editorScroll": false,
+      "page": "fx",
+      "play": [
+        0,
+        499,
+        160,
+        69
+      ],
+      "stage": [
+        8,
+        121,
+        304,
+        112
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "adjust": [
+        160,
+        499,
+        160,
+        69
+      ],
+      "clipped": [],
+      "document": [
+        320,
+        568
+      ],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "editorScroll": false,
+      "page": "tape",
+      "play": [
+        0,
+        499,
+        160,
+        69
+      ],
+      "stage": [
+        8,
+        121,
+        304,
+        112
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "adjust": [
+        160,
+        499,
+        160,
+        69
+      ],
+      "clipped": [],
+      "document": [
+        320,
+        568
+      ],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "editorScroll": false,
+      "page": "orbit",
+      "play": [
+        0,
+        499,
+        160,
+        69
+      ],
+      "stage": [
+        8,
+        121,
+        304,
+        112
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "adjust": [
+        160,
+        499,
+        160,
+        69
+      ],
+      "clipped": [],
+      "document": [
+        320,
+        568
+      ],
+      "editor": [
+        8,
+        238,
+        304,
+        222
+      ],
+      "editorScroll": false,
+      "page": "visual",
+      "play": [
+        0,
+        499,
+        160,
+        69
+      ],
+      "stage": [
+        8,
+        121,
+        304,
+        112
+      ],
+      "viewport": [
+        320,
+        568
+      ]
+    },
+    {
+      "adjust": [
+        195,
+        585,
+        195,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "editorScroll": false,
+      "page": "sample",
+      "play": [
+        0,
+        585,
+        195,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        374,
+        165
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "adjust": [
+        195,
+        585,
+        195,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "editorScroll": false,
+      "page": "grain",
+      "play": [
+        0,
+        585,
+        195,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        374,
+        165
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "adjust": [
+        195,
+        585,
+        195,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "editorScroll": false,
+      "page": "fx",
+      "play": [
+        0,
+        585,
+        195,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        374,
+        165
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "adjust": [
+        195,
+        585,
+        195,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "editorScroll": false,
+      "page": "tape",
+      "play": [
+        0,
+        585,
+        195,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        374,
+        165
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "adjust": [
+        195,
+        585,
+        195,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "editorScroll": false,
+      "page": "orbit",
+      "play": [
+        0,
+        585,
+        195,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        374,
+        165
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "adjust": [
+        195,
+        585,
+        195,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "editorScroll": false,
+      "page": "visual",
+      "play": [
+        0,
+        585,
+        195,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        374,
+        165
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "adjust": [
+        197,
+        773,
+        197,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "editorScroll": false,
+      "page": "sample",
+      "play": [
+        0,
+        773,
+        197,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        377,
+        353
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "adjust": [
+        197,
+        773,
+        197,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "editorScroll": false,
+      "page": "grain",
+      "play": [
+        0,
+        773,
+        197,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        377,
+        353
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "adjust": [
+        197,
+        773,
+        197,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "editorScroll": false,
+      "page": "fx",
+      "play": [
+        0,
+        773,
+        197,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        377,
+        353
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "adjust": [
+        197,
+        773,
+        197,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "editorScroll": false,
+      "page": "tape",
+      "play": [
+        0,
+        773,
+        197,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        377,
+        353
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "adjust": [
+        197,
+        773,
+        197,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "editorScroll": false,
+      "page": "orbit",
+      "play": [
+        0,
+        773,
+        197,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        377,
+        353
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "adjust": [
+        197,
+        773,
+        197,
+        79
+      ],
+      "clipped": [],
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "editorScroll": false,
+      "page": "visual",
+      "play": [
+        0,
+        773,
+        197,
+        79
+      ],
+      "stage": [
+        8,
+        134,
+        377,
+        353
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    }
+  ],
+  "desktop": [
+    {
+      "editor": [
+        282,
+        494,
+        921,
+        262
+      ],
+      "page": "sample",
+      "sliders": 0,
+      "stage": [
+        282,
+        198,
+        921,
+        286
+      ],
+      "transport": [
+        65,
+        810,
+        1150,
+        80
+      ]
+    },
+    {
+      "editor": [
+        282,
+        494,
+        921,
+        262
+      ],
+      "page": "grain",
+      "sliders": 0,
+      "stage": [
+        282,
+        198,
+        921,
+        286
+      ],
+      "transport": [
+        65,
+        810,
+        1150,
+        80
+      ]
+    },
+    {
+      "editor": [
+        282,
+        494,
+        921,
+        262
+      ],
+      "page": "fx",
+      "sliders": 0,
+      "stage": [
+        282,
+        198,
+        921,
+        286
+      ],
+      "transport": [
+        65,
+        810,
+        1150,
+        80
+      ]
+    },
+    {
+      "editor": [
+        282,
+        494,
+        921,
+        262
+      ],
+      "page": "tape",
+      "sliders": 0,
+      "stage": [
+        282,
+        198,
+        921,
+        286
+      ],
+      "transport": [
+        65,
+        810,
+        1150,
+        80
+      ]
+    },
+    {
+      "editor": [
+        282,
+        494,
+        921,
+        262
+      ],
+      "page": "orbit",
+      "sliders": 0,
+      "stage": [
+        282,
+        198,
+        921,
+        286
+      ],
+      "transport": [
+        65,
+        810,
+        1150,
+        80
+      ]
+    },
+    {
+      "editor": [
+        282,
+        494,
+        921,
+        262
+      ],
+      "page": "visual",
+      "sliders": 0,
+      "stage": [
+        282,
+        198,
+        921,
+        286
+      ],
+      "transport": [
+        65,
+        810,
+        1150,
+        80
+      ]
+    }
+  ]
+}

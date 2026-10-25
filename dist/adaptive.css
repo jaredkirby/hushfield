@@ -1,0 +1,159 @@
+/* The instrument fills the visible screen on every device. Device identity and
+   available space are separate: iPad Split View can use the compact surface. */
+html.adaptive-layout{width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+html.adaptive-layout body{position:fixed;top:var(--app-top,0px);left:0;right:0;width:100%;height:var(--app-height,100dvh);min-height:0;overflow:hidden;overscroll-behavior:none}
+body.wide-ui{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);--wide-gap:14px;--card-height:72px;--editor-width:clamp(320px,36vw,460px)}
+.wide-ui main{width:100%;max-width:none;height:100%;min-height:0;padding:16px;display:flex}
+.wide-ui .instrument{display:flex;flex-direction:column;width:100%;height:100%;min-height:0;border:1px solid #777;border-radius:2px}
+.wide-ui .instrument-head{height:44px;min-height:44px;padding:0 16px;font-size:12px;letter-spacing:1px}
+.wide-ui .instrument-head .subtle{display:inline;margin-left:16px;font-size:9px;color:#888}
+.wide-ui .head-actions{gap:12px;align-items:center}
+.wide-ui .head-actions button{min-height:44px;font-size:11px;padding:8px;white-space:nowrap}
+.wide-ui .head-actions .phone-about{font-size:20px;min-width:44px}
+.wide-ui .tabs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));height:48px;min-height:48px;padding:0 12px;overflow:hidden;align-items:stretch}
+.wide-ui .tabs [data-tab]{justify-content:center;min-width:0;height:48px;padding:0;gap:8px;font-size:9px}
+.wide-ui .tabs [data-tab] span{font-size:12px;letter-spacing:1px}
+.wide-ui .tabs [data-tab].active:after{left:14%;width:72%}
+.wide-ui .audio-check{height:48px;min-height:48px;padding:0 16px;align-items:center;overflow:hidden}
+.wide-ui .audio-check button{height:44px;min-height:44px;padding:4px 9px;font-size:10px}
+.wide-ui .audio-check span{font-size:10px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;min-width:0}
+.wide-ui .workspace{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.wide-ui .main-panel{display:grid;grid-template-columns:minmax(0,1fr) var(--editor-width);grid-template-rows:22px minmax(0,1fr);gap:10px var(--wide-gap);padding:14px;flex:1;height:auto;min-height:0;overflow:hidden}
+.wide-ui .wave-header{grid-column:1/-1;grid-row:1;min-height:0;height:22px;font-size:10px;align-items:center;margin:0}
+.wide-ui .wave-header .mono{font-size:9px}
+.wide-ui #displayStage{grid-column:1;grid-row:2;width:100%;height:100%;min-width:0;min-height:0;align-self:stretch}
+.wide-ui .page,.wide-ui .orbit-active .page{grid-column:2;grid-row:2;width:100%;height:100%;min-width:0;min-height:0;overflow:hidden;padding:0;margin:0;align-self:stretch}
+.wide-ui .page.active,.wide-ui #orbitPage.active,.wide-ui #visualPage.active{display:block}
+.wide-ui .page:not(.active){display:none}
+.wide-ui .utility-strip{height:48px;min-height:48px;padding:2px 14px;gap:10px;flex:none}
+.wide-ui .utility-strip button{min-height:44px;height:44px;padding:6px 12px;font-size:11px}
+.wide-ui .utility-strip .volume-label{width:112px;flex:0 0 112px}
+.wide-ui .utility-strip .volume-label .parameter-value{height:44px;min-height:44px;font-size:12px}
+.wide-ui.common-controls .transport{height:80px;min-height:80px}
+.wide-ui.common-controls .shared-adjuster{grid-template-columns:72px minmax(0,1fr) 72px;padding:4px 12px}
+.wide-ui.common-controls .shared-adjuster>button{font-size:32px;min-height:44px}
+.wide-ui.common-controls #adjustLabel{font-size:10px}
+.wide-ui.common-controls #adjustValue{font-size:18px}
+.wide-ui.common-controls .play-button{font-size:18px;letter-spacing:4px}
+.wide-ui .phone-panel-tabs,.wide-ui .orbit-panel-tabs,.wide-ui .ambient-panel-tabs,.wide-ui .sound-group-tabs{display:flex;height:44px;min-height:44px;gap:6px;margin:0 0 10px;align-items:stretch}
+.wide-ui .phone-panel-tabs button,.wide-ui .orbit-panel-tabs button,.wide-ui .ambient-panel-tabs button,.wide-ui .sound-group-tabs button{min-height:44px;font-size:11px!important;padding:6px;flex:1}
+.wide-ui .control-grid{display:block}
+.wide-ui .control-group{display:none!important;padding:0!important;border:0!important}
+.wide-ui .control-group.phone-selected{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wide-ui .control-group>div[id$=Controls]{display:contents!important}
+.wide-ui .group-title{grid-column:1/-1;height:32px;min-height:32px;margin:0}
+.wide-ui .group-title h3{font-size:11px}
+.wide-ui .group-title button{min-height:32px;padding:5px 8px;font-size:10px}
+.wide-ui .inline-select{grid-column:1/-1;display:flex;flex-direction:row;align-items:center;height:44px;margin:0;font-size:11px}
+.wide-ui select,.wide-ui .inline-select select{font-size:16px;min-height:44px;padding:6px}
+.wide-ui.common-controls .control,.wide-ui.common-controls .orbit-shape-tools{height:var(--card-height);padding:6px 8px;margin:0!important;min-width:0}
+.wide-ui.common-controls .control-top{height:13px;margin:0 0 3px;font-size:10px}
+.wide-ui.common-controls .control-top label{font-size:10px}
+.wide-ui.common-controls .parameter-value,.wide-ui.common-controls .orbit-shape-tools .parameter-value{height:44px;min-height:44px;font-size:14px;gap:6px}
+.wide-ui .ambient-fields,.wide-ui .sound-fields,.wide-ui .visual-fields,.wide-ui #tapeControls{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wide-ui .ambient-mode-row{height:44px;margin-bottom:10px;gap:6px}
+.wide-ui .ambient-mode-row button{min-height:44px;height:44px;font-size:10px;padding:6px 8px}
+.wide-ui .ambient-mode-row #ambientSeed{font-size:7px}
+.wide-ui .ambient-help,.wide-ui .visual-help,.wide-ui .tape-note{font-size:10px;line-height:1.6;margin-top:12px}
+.wide-ui .ambient-readout{top:16px;left:16px;right:16px;font-size:11px}
+.wide-ui .ambient-readout strong{font-size:15px}
+.wide-ui .ambient-time{bottom:14px;left:16px;right:16px;font-size:10px}
+.wide-ui .orbit-settings,.wide-ui .orbit-layout{height:100%;padding:0}
+.wide-ui.common-controls .orbit-settings[data-control-panel=motion]{gap:8px;align-content:start}
+.wide-ui.common-controls .orbit-settings[data-control-panel=motion] .orbit-panel-tabs{margin:0 0 2px}
+.wide-ui.common-controls .orbit-settings[data-control-panel=motion] .orbit-spin-tools{margin:2px 0 0;height:44px}
+.wide-ui .orbit-spin-tools button{height:44px;min-height:44px;font-size:10px}
+.wide-ui .sound-editor{height:auto;max-height:calc(100% - 54px);gap:8px;overflow:hidden}
+.wide-ui .sound-target-row{height:44px;min-height:44px}
+.wide-ui .sound-target-row button{min-height:44px;padding:6px;font-size:10px}
+.wide-ui .sound-group-tabs{margin:0}
+.wide-ui .sound-editor-note{font-size:9px;line-height:1.5}
+.wide-ui .orbit-pad{width:44px;height:44px;font-size:12px}
+.wide-ui #orbitPadStatus{left:14px;bottom:10px;font-size:9px;pointer-events:none}
+.wide-ui .tape-controls-head{height:44px;margin-bottom:10px;font-size:10px;gap:6px}
+.wide-ui #tapeToggle{min-height:44px;padding:8px 12px!important;font-size:10px!important;white-space:nowrap}
+.wide-ui .visual-modes{margin-bottom:10px}
+.wide-ui .visual-actions{height:44px;margin-bottom:10px}
+.wide-ui .visual-actions button{height:44px;min-height:44px;font-size:10px}
+.wide-ui .visual-actions #visualSignal{font-size:7px}
+.wide-ui #samplePage .source-panel{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;padding:0 0 10px;border:0;margin:0;background:#000}
+.wide-ui #samplePage .source-panel h2{grid-column:1;grid-row:1;font-size:16px;align-self:center;margin:0}
+.wide-ui #samplePage .source-panel>.mono{grid-column:1;grid-row:2;font-size:7px;margin:0}
+.wide-ui #samplePage .source-panel>.eyebrow,.wide-ui #samplePage .source-art,.wide-ui #samplePage .select-label,.wide-ui #samplePage .privacy,.wide-ui #samplePage .source-bottom{display:none}
+.wide-ui #samplePage .source-panel select{grid-column:2;grid-row:1/3;min-height:44px;height:44px;padding:5px;width:100%;margin:0;font-size:16px}
+.wide-ui #samplePage .source-button{grid-row:3;margin:0;min-height:44px;padding:7px;font-size:10px}
+.wide-ui #samplePage .two-col{display:flex;flex-direction:column;gap:10px}
+.wide-ui #trimControls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wide-ui .sample-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.wide-ui .sample-actions .large-action{font-size:10px;min-height:44px;padding:6px}
+.wide-ui #trimInfo{grid-column:1/-1;font-size:9px;line-height:1.5}
+.wide-ui dialog{max-height:85dvh;overflow:auto}
+.wide-ui #toast{bottom:92px}
+.tablet-ui main{padding:10px}
+.tablet-ui .instrument{border-color:#555}
+.desktop-ui main{padding:20px}
+/* Short windows and landscape phones retain both bays with denser controls. */
+.wide-ui[data-height-tier=compact]{--card-height:56px}
+.wide-ui[data-height-tier=compact] main{padding:8px}
+.wide-ui[data-height-tier=compact] .instrument-head{height:36px;min-height:36px}
+.wide-ui[data-height-tier=compact] .head-actions button{height:36px;min-height:36px}
+.wide-ui[data-height-tier=compact] .tabs,.wide-ui[data-height-tier=compact] .tabs [data-tab]{height:44px;min-height:44px}
+.wide-ui[data-height-tier=compact] .audio-check{height:36px;min-height:36px}
+.wide-ui[data-height-tier=compact] .audio-check button{height:32px;min-height:32px}
+.wide-ui[data-height-tier=compact] .utility-strip{height:40px;min-height:40px}
+.wide-ui[data-height-tier=compact] .utility-strip button,.wide-ui[data-height-tier=compact] .utility-strip .volume-label .parameter-value{height:36px;min-height:36px}
+.wide-ui[data-height-tier=compact].common-controls .transport{height:64px;min-height:64px}
+.wide-ui[data-height-tier=compact] .main-panel{padding:10px;gap:7px var(--wide-gap)}
+.wide-ui[data-height-tier=compact].common-controls .control,.wide-ui[data-height-tier=compact].common-controls .orbit-shape-tools{padding:3px 7px}
+.wide-ui[data-height-tier=compact].common-controls .parameter-value,.wide-ui[data-height-tier=compact].common-controls .orbit-shape-tools .parameter-value{height:32px;min-height:32px;font-size:12px}
+.wide-ui[data-height-tier=tight]{--card-height:32px;--wide-gap:8px;--editor-width:clamp(300px,40vw,400px)}
+.wide-ui[data-height-tier=tight] main{padding:0}
+.wide-ui[data-height-tier=tight] .instrument{border:0}
+.wide-ui[data-height-tier=tight] .instrument-head{height:30px;min-height:30px;font-size:10px;padding:0 10px}
+.wide-ui[data-height-tier=tight] .head-actions button{min-height:28px;height:28px;padding:2px 6px;font-size:9px}
+.wide-ui[data-height-tier=tight] .instrument-head .subtle{font-size:7px;margin-left:8px}
+.wide-ui[data-height-tier=tight] .tabs,.wide-ui[data-height-tier=tight] .tabs [data-tab]{height:44px;min-height:44px}
+.wide-ui[data-height-tier=tight] .tabs [data-tab]{font-size:0;gap:0}
+.wide-ui[data-height-tier=tight] .tabs [data-tab] span{font-size:10px}
+.wide-ui[data-height-tier=tight] .audio-check{height:28px;min-height:28px;padding:0 8px}
+.wide-ui[data-height-tier=tight] .audio-check button{height:24px;min-height:24px;font-size:8px;padding:3px 5px}
+.wide-ui[data-height-tier=tight] .audio-check span{font-size:8px}
+.wide-ui[data-height-tier=tight] .main-panel{grid-template-rows:minmax(0,1fr);gap:var(--wide-gap);padding:5px 8px}
+.wide-ui[data-height-tier=tight] .wave-header{display:none}
+.wide-ui[data-height-tier=tight] #displayStage,.wide-ui[data-height-tier=tight] .page{grid-row:1}
+.wide-ui[data-height-tier=tight] .utility-strip{height:34px;min-height:34px;padding:0 8px}
+.wide-ui[data-height-tier=tight] .utility-strip button,.wide-ui[data-height-tier=tight] .utility-strip .volume-label .parameter-value{height:30px;min-height:30px;font-size:9px}
+.wide-ui[data-height-tier=tight].common-controls .transport{height:56px;min-height:56px}
+.wide-ui[data-height-tier=tight].common-controls .shared-adjuster{grid-template-columns:54px minmax(0,1fr) 54px}
+.wide-ui[data-height-tier=tight].common-controls #adjustValue{font-size:14px}
+.wide-ui[data-height-tier=tight].common-controls .control,.wide-ui[data-height-tier=tight].common-controls .orbit-shape-tools{padding:2px 5px}
+.wide-ui[data-height-tier=tight].common-controls .control-top{height:9px;margin:0;font-size:8px}
+.wide-ui[data-height-tier=tight].common-controls .control-top label{font-size:8px}
+.wide-ui[data-height-tier=tight].common-controls .parameter-value,.wide-ui[data-height-tier=tight].common-controls .orbit-shape-tools .parameter-value{height:17px;min-height:17px;font-size:10px;gap:2px}
+.wide-ui[data-height-tier=tight] .phone-panel-tabs,.wide-ui[data-height-tier=tight] .orbit-panel-tabs,.wide-ui[data-height-tier=tight] .ambient-panel-tabs,.wide-ui[data-height-tier=tight] .sound-group-tabs{height:26px;min-height:26px;margin-bottom:4px;gap:4px}
+.wide-ui[data-height-tier=tight] .phone-panel-tabs button,.wide-ui[data-height-tier=tight] .orbit-panel-tabs button,.wide-ui[data-height-tier=tight] .ambient-panel-tabs button,.wide-ui[data-height-tier=tight] .sound-group-tabs button{min-height:26px;font-size:9px!important;padding:3px}
+.wide-ui[data-height-tier=tight] .group-title{height:22px;min-height:22px}
+.wide-ui[data-height-tier=tight] .group-title button{min-height:22px;padding:3px}
+.wide-ui[data-height-tier=tight] .inline-select,.wide-ui[data-height-tier=tight] select{min-height:26px;height:26px;font-size:16px}
+.wide-ui[data-height-tier=tight] .control-group.phone-selected,.wide-ui[data-height-tier=tight] .ambient-fields,.wide-ui[data-height-tier=tight] .sound-fields,.wide-ui[data-height-tier=tight] .visual-fields,.wide-ui[data-height-tier=tight] #tapeControls,.wide-ui[data-height-tier=tight] #trimControls{gap:4px}
+.wide-ui[data-height-tier=tight] .ambient-mode-row,.wide-ui[data-height-tier=tight] .ambient-mode-row button{height:26px;min-height:26px;font-size:8px;margin-bottom:4px;padding:3px 5px}
+.wide-ui[data-height-tier=tight] .ambient-mode-row #ambientSeed{font-size:6px}
+.wide-ui[data-height-tier=tight] .ambient-help,.wide-ui[data-height-tier=tight] .visual-help,.wide-ui[data-height-tier=tight] .tape-note{font-size:8px;line-height:1.3;margin-top:5px}
+.wide-ui[data-height-tier=tight].common-controls .orbit-settings[data-control-panel=motion]{gap:4px}
+.wide-ui[data-height-tier=tight] .orbit-spin-tools,.wide-ui[data-height-tier=tight] .orbit-spin-tools button{height:26px!important;min-height:26px;font-size:8px}
+.wide-ui[data-height-tier=tight] .sound-editor{max-height:calc(100% - 30px);gap:4px}
+.wide-ui[data-height-tier=tight] .sound-target-row,.wide-ui[data-height-tier=tight] .sound-target-row button{height:28px;min-height:28px;font-size:8px;padding:3px}
+.wide-ui[data-height-tier=tight] .sound-group-tabs{margin:0}
+.wide-ui[data-height-tier=tight] .sound-editor-note{font-size:7px;line-height:1.2;min-height:9px}
+.wide-ui[data-height-tier=tight] .tape-controls-head{height:26px;margin-bottom:4px;font-size:8px}
+.wide-ui[data-height-tier=tight] #tapeToggle{min-height:26px;height:26px;font-size:8px!important;padding:3px 5px!important}
+.wide-ui[data-height-tier=tight] .visual-modes{margin-bottom:4px}
+.wide-ui[data-height-tier=tight] .visual-actions,.wide-ui[data-height-tier=tight] .visual-actions button{height:26px;min-height:26px;margin-bottom:4px;font-size:8px}
+.wide-ui[data-height-tier=tight] #samplePage .source-panel{gap:3px 6px;padding-bottom:4px}
+.wide-ui[data-height-tier=tight] #samplePage .source-panel h2{font-size:11px}
+.wide-ui[data-height-tier=tight] #samplePage .source-panel select{height:28px;min-height:28px}
+.wide-ui[data-height-tier=tight] #samplePage .source-button{height:26px;min-height:26px;padding:3px;font-size:8px}
+.wide-ui[data-height-tier=tight] #samplePage .two-col{gap:4px}
+.wide-ui[data-height-tier=tight] .sample-actions .large-action{height:28px;min-height:28px;font-size:8px;padding:3px}
+.wide-ui[data-height-tier=tight] #trimInfo{font-size:7px}
+@media(max-width:800px){.wide-ui .instrument-head .subtle{display:none}.wide-ui .tabs [data-tab]{font-size:0;gap:0}.wide-ui .tabs [data-tab] span{font-size:10px;letter-spacing:0}}

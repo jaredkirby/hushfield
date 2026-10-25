@@ -1,0 +1,28 @@
+// Establish the adaptive viewport before the instrument module or controls load.
+(()=>{
+ const root=document.documentElement,coarse=matchMedia('(any-pointer: coarse)'),narrow=matchMedia('(max-width: 600px)');let pending=false,previous='';
+ function profile(width,height){
+  const ua=navigator.userAgent||'',platform=navigator.platform||'',touch=navigator.maxTouchPoints||0;
+  const ipad=/iPad/.test(ua)||(platform==='MacIntel'&&touch>1),phone=/iPhone|iPod|Android.*Mobile/i.test(ua)||navigator.userAgentData?.mobile===true;
+  const tablet=ipad||/Tablet|Android(?!.*Mobile)/i.test(ua)||(coarse.matches&&Math.min(screen.width||width,screen.height||height)>=600);
+  const device=phone?'phone':tablet?'tablet':'desktop';
+  // A tablet in Split View can use the compact surface. The old phone=1 link
+  // remains portable: it no longer forces a phone surface on a wide iPad/Mac.
+  const layout=width<=600?'phone':device==='phone'?'phone-landscape':device==='tablet'?'tablet':'desktop';
+  return {device,layout,orientation:width>height?'landscape':'portrait',ipad};
+ }
+ function update(){pending=false;const view=window.visualViewport;if(view&&Math.abs(view.scale-1)>.01)return;
+  const width=Math.round(view?.width||innerWidth),height=Math.round(view?.height||innerHeight),top=Math.max(0,Math.round(view?.offsetTop||0)),state=profile(width,height),phone=state.layout==='phone';
+  root.classList.toggle('phone-layout',phone);root.classList.toggle('adaptive-layout',true);
+  for(const [name,on]of [['phone-ui',phone],['wide-ui',!phone],['tablet-ui',state.layout==='tablet'],['desktop-ui',state.layout==='desktop'],['landscape-phone-ui',state.layout==='phone-landscape']])document.body.classList.toggle(name,on);
+  for(const [key,value]of Object.entries(state)){root.dataset[key]=String(value);document.body.dataset[key]=String(value);}
+  root.style.setProperty('--app-height',height+'px');root.style.setProperty('--app-top',top+'px');
+  const style=getComputedStyle(document.body),usable=height-(parseFloat(style.paddingTop)||0)-(parseFloat(style.paddingBottom)||0);document.body.dataset.heightTier=usable<(phone?550:600)?'tight':usable<(phone?651:740)?'compact':'regular';
+  const label=document.getElementById('layoutStatus');if(label)label.textContent=(state.ipad?'IPAD':state.device.toUpperCase())+' / '+state.orientation.toUpperCase();
+  const signature=state.device+':'+state.layout+':'+state.orientation+':'+document.body.dataset.heightTier;
+  if(signature!==previous){previous=signature;window.dispatchEvent(new CustomEvent('hushfield:layoutchange',{detail:state}));}
+ }
+ const schedule=()=>{if(!pending){pending=true;requestAnimationFrame(update);}};
+ coarse.addEventListener('change',schedule);narrow.addEventListener('change',schedule);window.addEventListener('resize',schedule);window.addEventListener('orientationchange',schedule);window.addEventListener('pageshow',schedule);window.visualViewport?.addEventListener('resize',schedule);window.visualViewport?.addEventListener('scroll',schedule);
+ window.HushfieldViewport={refresh:update,profile};update();
+})();

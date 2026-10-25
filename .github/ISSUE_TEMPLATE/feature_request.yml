@@ -1,0 +1,15 @@
+name: Feature idea
+description: Suggest a musical or interaction improvement.
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to do?
+      description: Describe the musical use or interaction and why it helps.
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Suggested approach
+      description: Optional sketches or examples are welcome.

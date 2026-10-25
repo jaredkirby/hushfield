@@ -1,0 +1,294 @@
+{
+  "release": "hushfield-1",
+  "views": [
+    {
+      "header": "● HUSHFIELD READY\nSave\nLoad\nⓘ",
+      "label": "AMBIENT / GENERATIVE LANDSCAPES",
+      "page": "ambient",
+      "playing": "Stop instrument",
+      "scroll": [
+        1280,
+        1280,
+        720,
+        720
+      ],
+      "title": "Hushfield · Ambient Instrument"
+    },
+    {
+      "header": "● HUSHFIELD READY\nSave\nLoad\nⓘ",
+      "label": "SAMPLE WORKSHOP",
+      "page": "sample",
+      "playing": "Stop instrument",
+      "scroll": [
+        1280,
+        1280,
+        720,
+        720
+      ],
+      "title": "Hushfield · Ambient Instrument"
+    },
+    {
+      "header": "● HUSHFIELD READY\nSave\nLoad\nⓘ",
+      "label": "GRAIN ENGINE",
+      "page": "grain",
+      "playing": "Stop instrument",
+      "scroll": [
+        1280,
+        1280,
+        720,
+        720
+      ],
+      "title": "Hushfield · Ambient Instrument"
+    },
+    {
+      "header": "● HUSHFIELD READY\nSave\nLoad\nⓘ",
+      "label": "EFFECTS BUS",
+      "page": "fx",
+      "playing": "Stop instrument",
+      "scroll": [
+        1280,
+        1280,
+        720,
+        720
+      ],
+      "title": "Hushfield · Ambient Instrument"
+    },
+    {
+      "header": "● HUSHFIELD READY\nSave\nLoad\nⓘ",
+      "label": "TAPE EMULATION",
+      "page": "tape",
+      "playing": "Stop instrument",
+      "scroll": [
+        1280,
+        1280,
+        720,
+        720
+      ],
+      "title": "Hushfield · Ambient Instrument"
+    },
+    {
+      "header": "● HUSHFIELD READY\nSave\nLoad\nⓘ",
+      "label": "ORBIT / PHYSICS INTO MUSIC",
+      "page": "orbit",
+      "playing": "Stop instrument",
+      "scroll": [
+        1280,
+        1280,
+        720,
+        720
+      ],
+      "title": "Hushfield · Ambient Instrument"
+    },
+    {
+      "header": "● HUSHFIELD READY\nSave\nLoad\nⓘ",
+      "label": "AUDIO VISUALIZATION",
+      "page": "visual",
+      "playing": "Stop instrument",
+      "scroll": [
+        1280,
+        1280,
+        720,
+        720
+      ],
+      "title": "Hushfield · Ambient Instrument"
+    }
+  ],
+  "phoneLayouts": [
+    {
+      "document": [
+        320,
+        480
+      ],
+      "header": 320,
+      "page": "ambient",
+      "playing": "Stop instrument",
+      "stage": 102,
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "document": [
+        320,
+        480
+      ],
+      "header": 320,
+      "page": "sample",
+      "playing": "Stop instrument",
+      "stage": 102,
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "document": [
+        320,
+        480
+      ],
+      "header": 320,
+      "page": "grain",
+      "playing": "Stop instrument",
+      "stage": 102,
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "document": [
+        320,
+        480
+      ],
+      "header": 320,
+      "page": "fx",
+      "playing": "Stop instrument",
+      "stage": 102,
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "document": [
+        320,
+        480
+      ],
+      "header": 320,
+      "page": "tape",
+      "playing": "Stop instrument",
+      "stage": 102,
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "document": [
+        320,
+        480
+      ],
+      "header": 320,
+      "page": "orbit",
+      "playing": "Stop instrument",
+      "stage": 102,
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "document": [
+        320,
+        480
+      ],
+      "header": 320,
+      "page": "visual",
+      "playing": "Stop instrument",
+      "stage": 102,
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "document": [
+        390,
+        664
+      ],
+      "header": 390,
+      "page": "ambient",
+      "playing": "Stop instrument",
+      "stage": 157,
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "document": [
+        390,
+        664
+      ],
+      "header": 390,
+      "page": "sample",
+      "playing": "Stop instrument",
+      "stage": 157,
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "document": [
+        390,
+        664
+      ],
+      "header": 390,
+      "page": "grain",
+      "playing": "Stop instrument",
+      "stage": 157,
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "document": [
+        390,
+        664
+      ],
+      "header": 390,
+      "page": "fx",
+      "playing": "Stop instrument",
+      "stage": 157,
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "document": [
+        390,
+        664
+      ],
+      "header": 390,
+      "page": "tape",
+      "playing": "Stop instrument",
+      "stage": 157,
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "document": [
+        390,
+        664
+      ],
+      "header": 390,
+      "page": "orbit",
+      "playing": "Stop instrument",
+      "stage": 157,
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "document": [
+        390,
+        664
+      ],
+      "header": 390,
+      "page": "visual",
+      "playing": "Stop instrument",
+      "stage": 157,
+      "viewport": [
+        390,
+        664
+      ]
+    }
+  ]
+}

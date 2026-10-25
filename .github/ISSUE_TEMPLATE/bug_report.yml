@@ -1,0 +1,28 @@
+name: Bug report
+description: Report an audio, interaction or layout problem.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: iPad, Safari, landscape; or desktop Chrome and window size
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional details
+      description: Screenshots, revision, or whether Test sound / Restart audio helps. Avoid private recordings or personal project files.

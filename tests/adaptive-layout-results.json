@@ -1,0 +1,5758 @@
+{
+  "release": "adaptive-1",
+  "testing": "Browser viewport and device emulation; no physical iPad test",
+  "views": [
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        189,
+        368.625,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        25,
+        189,
+        591.375,
+        426
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        189,
+        368.625,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        25,
+        189,
+        591.375,
+        426
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        189,
+        368.625,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        25,
+        189,
+        591.375,
+        426
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        189,
+        368.625,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        25,
+        189,
+        591.375,
+        426
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        189,
+        368.625,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        25,
+        189,
+        591.375,
+        426
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        189,
+        368.625,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        189,
+        591.375,
+        426
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        189,
+        368.625,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        25,
+        189,
+        591.375,
+        426
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1194,
+        760
+      ],
+      "editor": [
+        739.171875,
+        189,
+        429.828125,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        25,
+        189,
+        700.171875,
+        418
+      ],
+      "viewport": [
+        1194,
+        760
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1194,
+        760
+      ],
+      "editor": [
+        739.171875,
+        189,
+        429.828125,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        25,
+        189,
+        700.171875,
+        418
+      ],
+      "viewport": [
+        1194,
+        760
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1194,
+        760
+      ],
+      "editor": [
+        739.171875,
+        189,
+        429.828125,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        25,
+        189,
+        700.171875,
+        418
+      ],
+      "viewport": [
+        1194,
+        760
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1194,
+        760
+      ],
+      "editor": [
+        739.171875,
+        189,
+        429.828125,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        25,
+        189,
+        700.171875,
+        418
+      ],
+      "viewport": [
+        1194,
+        760
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1194,
+        760
+      ],
+      "editor": [
+        739.171875,
+        189,
+        429.828125,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        25,
+        189,
+        700.171875,
+        418
+      ],
+      "viewport": [
+        1194,
+        760
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1194,
+        760
+      ],
+      "editor": [
+        739.171875,
+        189,
+        429.828125,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        189,
+        700.171875,
+        418
+      ],
+      "viewport": [
+        1194,
+        760
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1194,
+        760
+      ],
+      "editor": [
+        739.171875,
+        189,
+        429.828125,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        25,
+        189,
+        700.171875,
+        418
+      ],
+      "viewport": [
+        1194,
+        760
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1366,
+        970
+      ],
+      "editor": [
+        881,
+        189,
+        460,
+        628
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        25,
+        189,
+        842,
+        628
+      ],
+      "viewport": [
+        1366,
+        970
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1366,
+        970
+      ],
+      "editor": [
+        881,
+        189,
+        460,
+        628
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        25,
+        189,
+        842,
+        628
+      ],
+      "viewport": [
+        1366,
+        970
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1366,
+        970
+      ],
+      "editor": [
+        881,
+        189,
+        460,
+        628
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        25,
+        189,
+        842,
+        628
+      ],
+      "viewport": [
+        1366,
+        970
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1366,
+        970
+      ],
+      "editor": [
+        881,
+        189,
+        460,
+        628
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        25,
+        189,
+        842,
+        628
+      ],
+      "viewport": [
+        1366,
+        970
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1366,
+        970
+      ],
+      "editor": [
+        881,
+        189,
+        460,
+        628
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        25,
+        189,
+        842,
+        628
+      ],
+      "viewport": [
+        1366,
+        970
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1366,
+        970
+      ],
+      "editor": [
+        881,
+        189,
+        460,
+        628
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        189,
+        842,
+        628
+      ],
+      "viewport": [
+        1366,
+        970
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1366,
+        970
+      ],
+      "editor": [
+        881,
+        189,
+        460,
+        628
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        25,
+        189,
+        842,
+        628
+      ],
+      "viewport": [
+        1366,
+        970
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        768,
+        1024
+      ],
+      "editor": [
+        423,
+        189,
+        320,
+        682
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        25,
+        189,
+        384,
+        682
+      ],
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        768,
+        1024
+      ],
+      "editor": [
+        423,
+        189,
+        320,
+        682
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        25,
+        189,
+        384,
+        682
+      ],
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        768,
+        1024
+      ],
+      "editor": [
+        423,
+        189,
+        320,
+        682
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        25,
+        189,
+        384,
+        682
+      ],
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        768,
+        1024
+      ],
+      "editor": [
+        423,
+        189,
+        320,
+        682
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        25,
+        189,
+        384,
+        682
+      ],
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        768,
+        1024
+      ],
+      "editor": [
+        423,
+        189,
+        320,
+        682
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        25,
+        189,
+        384,
+        682
+      ],
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        768,
+        1024
+      ],
+      "editor": [
+        423,
+        189,
+        320,
+        682
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        189,
+        384,
+        682
+      ],
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        768,
+        1024
+      ],
+      "editor": [
+        423,
+        189,
+        320,
+        682
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        25,
+        189,
+        384,
+        682
+      ],
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        744,
+        768
+      ],
+      "editor": [
+        399,
+        189,
+        320,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        25,
+        189,
+        360,
+        426
+      ],
+      "viewport": [
+        744,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        744,
+        768
+      ],
+      "editor": [
+        399,
+        189,
+        320,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        25,
+        189,
+        360,
+        426
+      ],
+      "viewport": [
+        744,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        744,
+        768
+      ],
+      "editor": [
+        399,
+        189,
+        320,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        25,
+        189,
+        360,
+        426
+      ],
+      "viewport": [
+        744,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        744,
+        768
+      ],
+      "editor": [
+        399,
+        189,
+        320,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        25,
+        189,
+        360,
+        426
+      ],
+      "viewport": [
+        744,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        744,
+        768
+      ],
+      "editor": [
+        399,
+        189,
+        320,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        25,
+        189,
+        360,
+        426
+      ],
+      "viewport": [
+        744,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        744,
+        768
+      ],
+      "editor": [
+        399,
+        189,
+        320,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        189,
+        360,
+        426
+      ],
+      "viewport": [
+        744,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        744,
+        768
+      ],
+      "editor": [
+        399,
+        189,
+        320,
+        426
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        25,
+        189,
+        360,
+        426
+      ],
+      "viewport": [
+        744,
+        768
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        507,
+        700
+      ],
+      "editor": [
+        8,
+        342,
+        491,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        142,
+        491,
+        193
+      ],
+      "viewport": [
+        507,
+        700
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        507,
+        700
+      ],
+      "editor": [
+        8,
+        342,
+        491,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        142,
+        491,
+        193
+      ],
+      "viewport": [
+        507,
+        700
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        507,
+        700
+      ],
+      "editor": [
+        8,
+        342,
+        491,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        142,
+        491,
+        193
+      ],
+      "viewport": [
+        507,
+        700
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        507,
+        700
+      ],
+      "editor": [
+        8,
+        342,
+        491,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        142,
+        491,
+        193
+      ],
+      "viewport": [
+        507,
+        700
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        507,
+        700
+      ],
+      "editor": [
+        8,
+        342,
+        491,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        142,
+        491,
+        193
+      ],
+      "viewport": [
+        507,
+        700
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        507,
+        700
+      ],
+      "editor": [
+        8,
+        342,
+        491,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        142,
+        491,
+        193
+      ],
+      "viewport": [
+        507,
+        700
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        507,
+        700
+      ],
+      "editor": [
+        8,
+        342,
+        491,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        142,
+        491,
+        193
+      ],
+      "viewport": [
+        507,
+        700
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        390,
+        664
+      ],
+      "editor": [
+        8,
+        306,
+        374,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "viewport": [
+        390,
+        664
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        393,
+        852
+      ],
+      "editor": [
+        8,
+        494,
+        377,
+        236
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "viewport": [
+        393,
+        852
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        920,
+        430
+      ],
+      "editor": [
+        544,
+        107,
+        368,
+        228
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        107,
+        528,
+        228
+      ],
+      "viewport": [
+        920,
+        430
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        920,
+        430
+      ],
+      "editor": [
+        544,
+        107,
+        368,
+        228
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        107,
+        528,
+        228
+      ],
+      "viewport": [
+        920,
+        430
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        920,
+        430
+      ],
+      "editor": [
+        544,
+        107,
+        368,
+        228
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        528,
+        228
+      ],
+      "viewport": [
+        920,
+        430
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        920,
+        430
+      ],
+      "editor": [
+        544,
+        107,
+        368,
+        228
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        528,
+        228
+      ],
+      "viewport": [
+        920,
+        430
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        920,
+        430
+      ],
+      "editor": [
+        544,
+        107,
+        368,
+        228
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        107,
+        528,
+        228
+      ],
+      "viewport": [
+        920,
+        430
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        920,
+        430
+      ],
+      "editor": [
+        544,
+        107,
+        368,
+        228
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        528,
+        228
+      ],
+      "viewport": [
+        920,
+        430
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        920,
+        430
+      ],
+      "editor": [
+        544,
+        107,
+        368,
+        228
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        107,
+        528,
+        228
+      ],
+      "viewport": [
+        920,
+        430
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1440,
+        900
+      ],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1440,
+        900
+      ],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1440,
+        900
+      ],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1440,
+        900
+      ],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1440,
+        900
+      ],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1440,
+        900
+      ],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1440,
+        900
+      ],
+      "editor": [
+        945,
+        207,
+        460,
+        530
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        35,
+        207,
+        896,
+        530
+      ],
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        650
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        363
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        19,
+        164,
+        603.375,
+        363
+      ],
+      "viewport": [
+        1024,
+        650
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        650
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        363
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "sample",
+      "stage": [
+        19,
+        164,
+        603.375,
+        363
+      ],
+      "viewport": [
+        1024,
+        650
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        650
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        363
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        603.375,
+        363
+      ],
+      "viewport": [
+        1024,
+        650
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        650
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        363
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        603.375,
+        363
+      ],
+      "viewport": [
+        1024,
+        650
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        650
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        363
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "tape",
+      "stage": [
+        19,
+        164,
+        603.375,
+        363
+      ],
+      "viewport": [
+        1024,
+        650
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        650
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        363
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        363
+      ],
+      "viewport": [
+        1024,
+        650
+      ]
+    },
+    {
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        650
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        363
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "visual",
+      "stage": [
+        19,
+        164,
+        603.375,
+        363
+      ],
+      "viewport": [
+        1024,
+        650
+      ]
+    }
+  ],
+  "editors": [
+    {
+      "group": "Compose",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Layers",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Grain",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Scan",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Motion",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Filter",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Echo",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Space",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Triggers Voice",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Triggers Envelope",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Triggers Tone",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Triggers Space",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Balls Voice",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Balls Envelope",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Balls Tone",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Balls Space",
+      "clipped": [],
+      "device": "tablet",
+      "document": [
+        1024,
+        768
+      ],
+      "editor": [
+        630.375,
+        197,
+        368.625,
+        418
+      ],
+      "layout": "tablet",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        25,
+        197,
+        591.375,
+        418
+      ],
+      "viewport": [
+        1024,
+        768
+      ]
+    },
+    {
+      "group": "Compose",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Layers",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Grain",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Scan",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Motion",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Filter",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Echo",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Space",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Triggers Voice",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Triggers Envelope",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Triggers Tone",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Triggers Space",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Balls Voice",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Balls Envelope",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Balls Tone",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Balls Space",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        844,
+        390
+      ],
+      "editor": [
+        498.40625,
+        107,
+        337.59375,
+        188
+      ],
+      "layout": "phone-landscape",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        482.40625,
+        188
+      ],
+      "viewport": [
+        844,
+        390
+      ]
+    },
+    {
+      "group": "Compose",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Layers",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Grain",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Scan",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Motion",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Filter",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Echo",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Space",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        216,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Triggers Voice",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        215,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        109,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Triggers Envelope",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        215,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        109,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Triggers Tone",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        215,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        109,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Triggers Space",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        215,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        109,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Balls Voice",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        215,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        109,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Balls Envelope",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        215,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        109,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Balls Tone",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        215,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        109,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Balls Space",
+      "clipped": [],
+      "device": "phone",
+      "document": [
+        320,
+        480
+      ],
+      "editor": [
+        8,
+        215,
+        304,
+        174
+      ],
+      "layout": "phone",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        109,
+        304,
+        102
+      ],
+      "viewport": [
+        320,
+        480
+      ]
+    },
+    {
+      "group": "Compose",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Layers",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Grain",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Scan",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Motion",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Filter",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Echo",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Triggers Voice",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Triggers Envelope",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Triggers Tone",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Triggers Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Balls Voice",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Balls Envelope",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Balls Tone",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Balls Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        600
+      ],
+      "editor": [
+        636.375,
+        164,
+        368.625,
+        313
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        603.375,
+        313
+      ],
+      "viewport": [
+        1024,
+        600
+      ]
+    },
+    {
+      "group": "Compose",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Layers",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Grain",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Scan",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Motion",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Filter",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Echo",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Triggers Voice",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Triggers Envelope",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Triggers Tone",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Triggers Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Balls Voice",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Balls Envelope",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Balls Tone",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Balls Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1024,
+        580
+      ],
+      "editor": [
+        616,
+        107,
+        400,
+        378
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        8,
+        107,
+        600,
+        378
+      ],
+      "viewport": [
+        1024,
+        580
+      ]
+    },
+    {
+      "group": "Compose",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Layers",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "ambient",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Grain",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Scan",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Motion",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "grain",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Filter",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Echo",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "fx",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Triggers Voice",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Triggers Envelope",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Triggers Tone",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Triggers Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Balls Voice",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Balls Envelope",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Balls Tone",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    },
+    {
+      "group": "Balls Space",
+      "clipped": [],
+      "device": "desktop",
+      "document": [
+        1280,
+        720
+      ],
+      "editor": [
+        801,
+        164,
+        460,
+        433
+      ],
+      "layout": "desktop",
+      "overflow": false,
+      "page": "orbit",
+      "stage": [
+        19,
+        164,
+        768,
+        433
+      ],
+      "viewport": [
+        1280,
+        720
+      ]
+    }
+  ],
+  "rotation": [
+    {
+      "device": "tablet",
+      "elapsed": "00:08",
+      "key": "C#",
+      "layout": "tablet",
+      "size": [
+        768,
+        1024
+      ],
+      "transport": "Stop instrument",
+      "voice": "0.2950"
+    },
+    {
+      "device": "tablet",
+      "elapsed": "00:08",
+      "key": "C#",
+      "layout": "phone",
+      "size": [
+        507,
+        700
+      ],
+      "transport": "Stop instrument",
+      "voice": "0.2950"
+    },
+    {
+      "device": "tablet",
+      "elapsed": "00:08",
+      "key": "C#",
+      "layout": "tablet",
+      "size": [
+        1194,
+        760
+      ],
+      "transport": "Stop instrument",
+      "voice": "0.2950"
+    }
+  ]
+}

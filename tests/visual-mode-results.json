@@ -1,0 +1,374 @@
+{
+  "phoneLayouts": [
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "scope",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        320,
+        480
+      ],
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "transport": [
+        0,
+        424,
+        320,
+        56
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "spectrum",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        320,
+        480
+      ],
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "transport": [
+        0,
+        424,
+        320,
+        56
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "vector",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        320,
+        480
+      ],
+      "stage": [
+        8,
+        110,
+        304,
+        102
+      ],
+      "transport": [
+        0,
+        424,
+        320,
+        56
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "scope",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        320,
+        568
+      ],
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "transport": [
+        0,
+        498,
+        320,
+        70
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "spectrum",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        320,
+        568
+      ],
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "transport": [
+        0,
+        498,
+        320,
+        70
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "vector",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        320,
+        568
+      ],
+      "stage": [
+        8,
+        132,
+        304,
+        101
+      ],
+      "transport": [
+        0,
+        498,
+        320,
+        70
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "scope",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        390,
+        664
+      ],
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "transport": [
+        0,
+        584,
+        390,
+        80
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "spectrum",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        390,
+        664
+      ],
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "transport": [
+        0,
+        584,
+        390,
+        80
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "vector",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        390,
+        664
+      ],
+      "stage": [
+        8,
+        142,
+        374,
+        157
+      ],
+      "transport": [
+        0,
+        584,
+        390,
+        80
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "scope",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        393,
+        852
+      ],
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "transport": [
+        0,
+        772,
+        393,
+        80
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "spectrum",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        393,
+        852
+      ],
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "transport": [
+        0,
+        772,
+        393,
+        80
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "mode": "vector",
+      "modeHeights": [
+        44,
+        44,
+        44
+      ],
+      "scroll": 0,
+      "size": [
+        393,
+        852
+      ],
+      "stage": [
+        8,
+        142,
+        377,
+        345
+      ],
+      "transport": [
+        0,
+        772,
+        393,
+        80
+      ]
+    }
+  ],
+  "mainTabs": [
+    {
+      "page": "ambient",
+      "playing": "STOP",
+      "scroll": 0,
+      "selected": "ambient"
+    },
+    {
+      "page": "sample",
+      "playing": "STOP",
+      "scroll": 0,
+      "selected": "sample"
+    },
+    {
+      "page": "grain",
+      "playing": "STOP",
+      "scroll": 0,
+      "selected": "grain"
+    },
+    {
+      "page": "fx",
+      "playing": "STOP",
+      "scroll": 0,
+      "selected": "fx"
+    },
+    {
+      "page": "tape",
+      "playing": "STOP",
+      "scroll": 0,
+      "selected": "tape"
+    },
+    {
+      "page": "orbit",
+      "playing": "STOP",
+      "scroll": 0,
+      "selected": "orbit"
+    },
+    {
+      "page": "visual",
+      "playing": "STOP",
+      "scroll": 0,
+      "selected": "visual"
+    }
+  ],
+  "heldCanvasIdentical": true,
+  "browserAudioChecks": "PASS Distinct left/right PCM is preserved by the real analysers\nPASS Channel splitter retains the different left and right levels\nPASS Captured stereo samples retain their expected amplitude\nPASS Stereo spectrum contains the input tones\nPASS scope uses only opaque black/white pixels\nPASS scope draws visible signal and graticule\nPASS spectrum uses only opaque black/white pixels\nPASS spectrum draws visible signal and graticule\nPASS vector uses only opaque black/white pixels\nPASS vector draws visible signal and graticule\n\n[\n  {\n    \"mode\": \"scope\",\n    \"meanMs\": 1.6666666666666667,\n    \"p95Ms\": 1.300000011920929\n  },\n  {\n    \"mode\": \"spectrum\",\n    \"meanMs\": 0.8600000003973644,\n    \"p95Ms\": 1\n  },\n  {\n    \"mode\": \"vector\",\n    \"meanMs\": 0.946666665871938,\n    \"p95Ms\": 1.300000011920929\n  }\n]\nALL VISUAL CHECKS PASSED"
+}

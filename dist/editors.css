@@ -1,0 +1,89 @@
+.common-controls input[type=range],.common-controls .control-top>output{display:none!important}
+.common-controls .control{height:48px;padding:5px 7px 3px;margin:0 0 6px;border:1px solid #34474d;border-radius:5px;background:#202a2e;min-width:0;cursor:pointer;overflow:hidden}
+.common-controls .control-top{height:12px;margin:0 0 3px;color:#a3bac2;font:9px monospace}
+.common-controls .control-top label{font-size:9px;cursor:pointer}
+.parameter-value{display:flex;flex-direction:column;justify-content:center;gap:4px;width:100%;min-height:23px;padding:0;border:0;background:transparent;color:#e9d6bf;font:12px monospace;cursor:pointer;touch-action:manipulation}
+.parameter-readout{display:block;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.common-controls .value-track{display:block;width:100%;height:2px;margin:0;background:#394c53}
+.common-controls .value-track>i{display:block;width:100%;height:100%;background:#d89b62;transform-origin:left}
+.common-controls .adjust-selected{border-color:#e5ad75!important;box-shadow:inset 0 0 0 1px #e5ad7522;background:#3b322b!important}
+.parameter-value:focus-visible{outline:2px solid #94d9e6;outline-offset:2px}
+.shared-adjuster{display:grid;grid-template-columns:58px minmax(0,1fr) 58px;gap:12px;align-items:center;height:64px;padding:7px 18px;border-top:1px solid #425359;background:#172024;position:sticky;bottom:0;z-index:6;flex:none}
+.shared-adjuster>button{height:48px;border:1px solid #6e8a95;border-radius:5px;background:#30454d;color:#e8f5f7;font:27px monospace;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.shared-adjuster>button:active{background:#9a6741}.shared-adjuster>button:disabled{opacity:.3}
+.shared-adjuster>div{display:flex;flex-direction:column;gap:5px;min-width:0;text-align:center}
+#adjustLabel{font:10px monospace;color:#9eb9c3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#adjustValue{font:16px monospace;color:#f2c28e}
+.orbit-panel-tabs,.sound-group-tabs{display:flex;gap:5px;min-width:0;flex:none}
+.orbit-panel-tabs{margin:0 0 10px;height:32px}
+.orbit-panel-tabs button,.sound-group-tabs button{flex:1;border:1px solid #41565e;border-radius:4px;background:#263236;color:#9ab3bd;padding:4px;font:11px monospace;min-width:0;touch-action:manipulation}
+.orbit-panel-tabs button.active,.sound-group-tabs button.active{background:#3e3329;border-color:#9e7450;color:#f2bf8a}
+.orbit-settings>h3,.orbit-settings>.orbit-help,.orbit-settings>#resetBalls,.common-controls .orbit-selects{display:none!important}
+.orbit-settings>[data-panel]{display:none!important}
+.orbit-settings[data-control-panel=motion]>.orbit-shape-tools{display:block!important}
+.orbit-settings[data-control-panel=motion]>.orbit-spin-tools{display:flex!important}
+.orbit-settings[data-control-panel=triggers]>[data-panel=triggers],.orbit-settings[data-control-panel=balls]>[data-panel=balls]{display:flex!important}
+.common-controls .orbit-settings #orbitControls{display:none}
+.common-controls .orbit-settings[data-control-panel=motion] #orbitControls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.common-controls .orbit-shape-tools{display:block;padding:5px 7px 3px;height:48px}
+.common-controls .orbit-shape-tools:before{content:none}
+.common-controls .orbit-shape-tools>button:not(.parameter-value),.common-controls .orbit-shape-tools>output{display:none!important}
+.common-controls .orbit-shape-tools .parameter-value{height:23px;min-width:0;font-size:12px}
+.common-controls .orbit-spin-tools{margin:6px 0 0}.common-controls .phone-scatter{display:block}
+.sound-editor{flex-direction:column;gap:8px;padding:0;min-width:0}
+.sound-target-row{display:flex;gap:5px;height:34px;flex:none;min-width:0}
+.sound-target-row select{flex:1;min-width:0;background:#25343a;color:#c5dce4;border:1px solid #4b626b;border-radius:4px;font:14px monospace;padding:4px}
+.sound-target-row button{border:1px solid #49616a;background:#25363d;color:#c5d7de;border-radius:4px;font:10px monospace;padding:4px 6px;touch-action:manipulation}
+.sound-target-row button[aria-pressed=true]{color:#f4b39e;border-color:#a66a54}
+.sound-group-tabs{height:28px}.sound-group-tabs button{font-size:10px}
+.sound-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-width:0}
+.sound-fields .control{margin:0!important}
+.sound-editor [hidden]{display:none!important}
+.sound-editor-note{font:9px/1.4 monospace;color:#9aafb7;margin:0;min-height:13px}
+.orbit-pad.muted-pad{opacity:.35}
+.common-controls .volume-label{width:90px}.common-controls .volume-label .parameter-value{font-size:11px;min-height:30px}
+.phone-ui.common-controls{--control-height:42px;--control-gap:6px}
+.phone-ui.common-controls .control{height:42px;padding:3px 6px 2px;margin:0}
+.phone-ui.common-controls .control-top{height:11px;margin-bottom:1px;font-size:9px}
+.phone-ui.common-controls .control-top label{font-size:9px}
+.phone-ui.common-controls .parameter-value{min-height:22px;font-size:12px;gap:3px}
+.phone-ui.common-controls .orbit-layout{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(90px,1fr) 28px repeat(3,42px) 32px;gap:6px}
+.phone-ui.common-controls .orbit-layout:not([data-control-panel=motion]){grid-template-rows:minmax(90px,1fr) 28px 192px}
+.phone-ui.common-controls .orbit-stage{grid-column:1/-1}
+.phone-ui.common-controls .orbit-panel-tabs{grid-column:1/-1;order:1;height:28px;margin:0}
+.phone-ui.common-controls .orbit-settings[data-control-panel=motion] #orbitControls{display:contents}
+.phone-ui.common-controls .orbit-shape-tools{height:42px;padding:3px 6px 2px;order:2}
+.phone-ui.common-controls .orbit-shape-tools .parameter-value{height:22px;min-height:22px;font-size:12px}
+.phone-ui.common-controls .orbit-spin-tools{order:3;grid-column:1/-1;margin:0;height:32px}
+.phone-ui.common-controls .sound-editor{grid-column:1/-1;order:2;height:192px;gap:6px;overflow:hidden}
+.phone-ui.common-controls .sound-fields{gap:6px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.phone-ui.common-controls .sound-target-row{height:34px}
+.phone-ui.common-controls .sound-target-row select{font-size:16px;padding:2px 4px}
+.phone-ui.common-controls .sound-group-tabs{height:26px}
+.phone-ui.common-controls .sound-editor-note{font-size:8px;min-height:12px}
+.phone-ui.common-controls .shared-adjuster{position:static;height:56px;min-height:56px;padding:5px 9px;grid-template-columns:58px minmax(0,1fr) 58px;gap:9px}
+.phone-ui.common-controls .shared-adjuster>button{height:44px;font-size:25px}
+.phone-ui.common-controls #adjustLabel{font-size:10px}.phone-ui.common-controls #adjustValue{font-size:15px}
+.phone-ui.common-controls .transport{grid-template-columns:minmax(90px,1fr) 38px 78px 34px}
+.phone-ui.common-controls .volume-label{width:78px}
+.phone-ui.common-controls .volume-label .parameter-value{min-height:40px;padding:3px 6px;font-size:11px;justify-content:center}
+.phone-ui.common-controls .volume-label .parameter-readout:before{content:'VOL ';font-size:8px;color:#9eb9c3}
+.phone-ui.common-controls #toast{bottom:calc(120px + env(safe-area-inset-bottom))}
+@media(max-height:650px){
+  .phone-ui.common-controls{--control-height:36px;--control-gap:4px}
+  .phone-ui.common-controls .control,.phone-ui.common-controls .orbit-shape-tools{height:36px;padding:2px 5px 1px}
+  .phone-ui.common-controls .control-top{height:10px;margin:0;font-size:8px}.phone-ui.common-controls .control-top label{font-size:8px}
+  .phone-ui.common-controls .parameter-value{font-size:11px;min-height:20px;gap:2px}
+  .phone-ui.common-controls .orbit-layout{grid-template-rows:minmax(85px,1fr) 26px repeat(3,36px) 30px;gap:4px}
+  .phone-ui.common-controls .orbit-layout:not([data-control-panel=motion]){grid-template-rows:minmax(85px,1fr) 26px 164px}
+  .phone-ui.common-controls .orbit-panel-tabs{height:26px}
+  .phone-ui.common-controls .sound-editor{height:164px;gap:4px}
+  .phone-ui.common-controls .sound-fields{gap:4px}
+  .phone-ui.common-controls .sound-target-row{height:32px}
+  .phone-ui.common-controls .sound-group-tabs{height:25px}
+  .phone-ui.common-controls .shared-adjuster{height:50px;min-height:50px;padding:3px 9px}
+}
+
+.common-controls .orbit-shape-tools .parameter-value{border:0;background:transparent;color:#e9d6bf;align-items:stretch;min-width:0;padding:0;line-height:normal}
+
+.audio-check button{flex-shrink:0}.audio-check #restartAudio{border-color:#9e7450;color:#eebd89}.phone-ui .audio-check{gap:6px}.phone-ui .audio-check #restartAudio{font-size:9px}.phone-ui .audio-check #audioDetail{font-size:8px}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>org.hushfield.web</string>
+  <key>ProgramArguments</key><array>
+    <string>/usr/bin/python3</string><string>-u</string><string>-m</string><string>http.server</string><string>4878</string>
+    <string>--bind</string><string>127.0.0.1</string><string>--directory</string><string>__PROJECT_DIR__/dist</string>
+  </array>
+  <key>WorkingDirectory</key><string>__PROJECT_DIR__</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ProcessType</key><string>Background</string>
+  <key>StandardOutPath</key><string>/tmp/hushfield-web.out.log</string>
+  <key>StandardErrorPath</key><string>/tmp/hushfield-web.err.log</string>
+</dict></plist>

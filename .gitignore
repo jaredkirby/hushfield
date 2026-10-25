@@ -1,0 +1,10 @@
+node_modules/
+.local/
+.openai/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+*.hushfield.json
+*-capture.wav

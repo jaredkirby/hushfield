@@ -1,0 +1,194 @@
+{
+  "layouts": [
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "pageScroll": 0,
+      "points": [
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        }
+      ],
+      "size": [
+        320,
+        480
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "pageScroll": 0,
+      "points": [
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        }
+      ],
+      "size": [
+        320,
+        568
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "pageScroll": 0,
+      "points": [
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        }
+      ],
+      "size": [
+        390,
+        664
+      ]
+    },
+    {
+      "clipped": [],
+      "editorScroll": 0,
+      "pageScroll": 0,
+      "points": [
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        },
+        {
+          "height": 44,
+          "inside": true,
+          "width": 44
+        }
+      ],
+      "size": [
+        393,
+        852
+      ]
+    }
+  ],
+  "navigation": [
+    {
+      "page": "sample",
+      "scroll": 0,
+      "selected": "sample"
+    },
+    {
+      "page": "grain",
+      "scroll": 0,
+      "selected": "grain"
+    },
+    {
+      "page": "fx",
+      "scroll": 0,
+      "selected": "fx"
+    },
+    {
+      "page": "tape",
+      "scroll": 0,
+      "selected": "tape"
+    },
+    {
+      "page": "orbit",
+      "scroll": 0,
+      "selected": "orbit"
+    },
+    {
+      "page": "visual",
+      "scroll": 0,
+      "selected": "visual"
+    },
+    {
+      "page": "ambient",
+      "scroll": 0,
+      "selected": "ambient"
+    }
+  ],
+  "renderTiming": [
+    {
+      "size": [
+        374,
+        157
+      ],
+      "frames": 75,
+      "meanMs": 1.391,
+      "p95Ms": 2.1
+    },
+    {
+      "size": [
+        377,
+        345
+      ],
+      "frames": 75,
+      "meanMs": 3.596,
+      "p95Ms": 3.9
+    },
+    {
+      "size": [
+        880,
+        320
+      ],
+      "frames": 75,
+      "meanMs": 5.451,
+      "p95Ms": 5.8
+    }
+  ]
+}

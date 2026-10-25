@@ -1,0 +1,27 @@
+{
+  "name": "hushfield-web",
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  },
+  "private": true,
+  "scripts": {
+    "build": "node ops/build.mjs",
+    "test:interaction": "node --test tests/project-file.test.mjs tests/visual-analysis.test.mjs tests/ambient-points.test.mjs tests/startup-state.test.mjs tests/page-navigation.test.mjs tests/phone-shell.test.mjs tests/phone-controls.test.mjs tests/audio-startup.test.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "start": "python3 -m http.server 4878 --bind 127.0.0.1 --directory dist"
+  },
+  "version": "0.1.0",
+  "description": "An interactive ambient music instrument with granular synthesis, Orbit rhythms, tape echo and dithered visuals.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaredkirby/hushfield.git"
+  },
+  "homepage": "https://github.com/jaredkirby/hushfield#readme",
+  "bugs": {
+    "url": "https://github.com/jaredkirby/hushfield/issues"
+  }
+}

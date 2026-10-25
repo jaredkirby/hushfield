@@ -1,0 +1,25 @@
+{
+  "inputs": {
+    "dist/project-file.mjs": "e8c0ac846c9aad4bff9e916b01686428f1021b2e95b5b45abb44367c25944dea",
+    "dist/phone-ui.mjs": "381d426ecb094ea0665c7a3b16566614f74bf9702b0c03dd6c0187f293d33ba9",
+    "dist/oled-visuals.mjs": "03c9a82041faf74fa97302d408469c8056afecc737b0d867b2e965c53b35e21e",
+    "dist/visual-analysis.mjs": "cdb9a7d385067f613ea9cb02d7bb785caf8cb090ebcf8ba504d5d4154a3a5ae2",
+    "dist/audio-visuals.mjs": "702fa37881fd9865b71160cdbbc9895ff00033d224db595f3cba2de4c79e5c6c",
+    "dist/ambient-points.mjs": "930c70317bcb7eae0c79a44662828b57229e3001b3b5f087758eb4397a7cddc4",
+    "dist/ambient-settings.mjs": "f067b072123fb58c64b7468f1aa6c1bf00ecc554c67e9c4178b2c7cd5c0c2eb7",
+    "dist/ambient-interaction.mjs": "9794ebbd7c1bab0c266b7723a06cd2f0854102de40777cfd83697a7860997e1b",
+    "dist/ambient-ui.mjs": "8f68c352ea130e6cb6fbeb1c0491173287eaf0af5cf87409e49667959fed7ba8",
+    "dist/orbit-pads.mjs": "4cd9b1705aaa480d3608e2d8952dcfb684a5aa9d6f07d4de76fbd901754f3047",
+    "dist/sound-patches.mjs": "7d6f018b0f1e1000d452df4dcca94bf505cfdd1855a41ad1bb293c842a21954d",
+    "dist/orbit-audio.mjs": "94758cd928ac46d0218787c45625b4212920051769ee4c8bdd10b5e8358a4f6d",
+    "dist/sound-editor.mjs": "d8b0fdae76549cd8e79181bdf3537c2fb62537177ada75f1f7833664f0d6a762",
+    "dist/audio-startup.mjs": "9d5e35c3998c0bcc6b80ad24327459bbd8a3b764be301044f22e7287a4a99042",
+    "dist/orbit-physics.mjs": "100f753121b627abb52d7aed6f2ed664966480924ac3cfa8376360d37c896dd9",
+    "dist/app.js": "68c30f85c2848ce4e2f081c99bac25ef7c0d161c368d075b81417982ba47f65c",
+    "dist/ambient-dsp.mjs": "dd6cb0c26b61eb414f6fb24cb51d98da76e2c6e0e5cf2fd55aa09cc56b1ec2a0",
+    "dist/ambient-worklet.js": "55381dadbec5de51058d8b4bb9125559577d99bd9ca8b736fb50445e24122e50",
+    "dist/grain-worklet.js": "a9e338528e81c266f67e0b5bc5e4edf524c8a390917459d2d8199a73b8c8ce2c",
+    "dist/tape-dsp.mjs": "b84e43e146da652c27fa1ea0fa7b8a8c0ddb44ea2eeab614d109da4148d96adb",
+    "dist/tape-worklet.js": "968137a074c655a922bd094d020ec8d5fc84c9ed40492ff3acbecffce65bc7a4"
+  }
+}
