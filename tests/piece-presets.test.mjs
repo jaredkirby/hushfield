@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { selectPiecePreset } from '../dist/piece-presets.mjs';
 import { createSampleSelection } from '../dist/sample-selection.mjs';
+import { TAPE_DEFAULTS } from '../dist/tape-settings.mjs';
 
 test('selecting Stillwater supersedes a pending source or project decode',async()=>{
   const selection=createSampleSelection();let finish,applied=false;
@@ -20,4 +21,11 @@ test('complete-piece presets restore finishing and fresh audible Motion patches'
     const selectedAgain=selectPiecePreset(key,{defaults:{cutoff:14000,tapeOn:false},cancelPending:()=>{}});
     assert.equal(selectedAgain.soundState.triggers.base.enabled,true);
   }
+});
+
+test('Worn memory keeps its established tape character when new-piece defaults change',()=>{
+  const {params}=selectPiecePreset('worn',{defaults:TAPE_DEFAULTS,cancelPending:()=>{}});
+  assert.equal(params.tapeOn,true);
+  assert.deepEqual({drive:params.drive,wow:params.wow,flutter:params.flutter,hiss:params.hiss,mix:params.delayMix,feedback:params.feedback,tone:params.tapeTone},
+    {drive:55,wow:65,flutter:35,hiss:22,mix:23,feedback:38,tone:35});
 });

@@ -5,7 +5,7 @@
     "dist/ambient-points.mjs": "930c70317bcb7eae0c79a44662828b57229e3001b3b5f087758eb4397a7cddc4",
     "dist/ambient-settings.mjs": "f067b072123fb58c64b7468f1aa6c1bf00ecc554c67e9c4178b2c7cd5c0c2eb7",
     "dist/sound-patches.mjs": "7d6f018b0f1e1000d452df4dcca94bf505cfdd1855a41ad1bb293c842a21954d",
-    "dist/piece-presets.mjs": "322a2817e6eb78ce49297d826b657886c9b65b0e618a00dcde5ac8b1c9e838c5",
+    "dist/piece-presets.mjs": "176f53aca9958462818c1f20accc3f727434bf94725135fd4f6b7928683ce212",
     "dist/piece-harmony.mjs": "6dbfe3ae90e96429d3a7328a64006f67caba98d51b534172443cc06b7991cd8b",
     "dist/piece-space.mjs": "25f4689bc5f0825c280ae9f994717ecf51db09fc5e243e97f59a731831734c50",
     "dist/render-clock.mjs": "7152ad7b91cc67243a1818ade831da792c95b48cca09c801bb60a98103b4a667",
