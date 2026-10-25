@@ -1,6 +1,8 @@
 # Verification
 
-Latest Ambient-first verification: **38 Node tests, 27 browser audio checks and 104 browser layout cases passed**. Independent Standards and Spec rechecks found no remaining material findings. See [the review and acceptance limits](docs/PIECE-REVIEW.md) and tests/piece-browser-results.json. These are automated/emulated checks; physical-device and subjective listening acceptance remain separate.
+Latest Tape verification: **41 Node tests, 10 browser Tape audio checks and six Tape layout cases passed**. Independent Standards and Spec reviews found no material findings. See [the Tape review and acceptance limits](docs/TAPE-REVIEW.md) and tests/tape-browser-results.json.
+
+Earlier Ambient-first verification passed 38 Node tests, 27 browser audio checks and 104 browser layout cases. See [the prior review](docs/PIECE-REVIEW.md) and tests/piece-browser-results.json. These are automated/emulated checks; physical-device and subjective listening acceptance remain separate.
 
 ## Automated checks
 
