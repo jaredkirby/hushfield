@@ -1,5 +1,7 @@
 # Verification
 
+Latest Ambient-first verification: **38 Node tests, 27 browser audio checks and 104 browser layout cases passed**. Independent Standards and Spec rechecks found no remaining material findings. See [the review and acceptance limits](docs/PIECE-REVIEW.md) and tests/piece-browser-results.json. These are automated/emulated checks; physical-device and subjective listening acceptance remain separate.
+
 ## Automated checks
 
 Run `npm ci`, `npm run build` and `npm test` with Node.js 22 or newer. The suite covers:

@@ -128,7 +128,7 @@ makeControl("delayControls", "delayTime", "Time", 0.05, 1.5, 0.01, " s");
 makeControl("delayControls", "feedback", "Feedback", 0, 80, 1, "%");
 makeControl("delayControls", "delayMix", "Mix", 0, 70, 1, "%");
 makeControl("spaceControls", "reverb", "Reverb", 0, 85, 1, "%");
-makeControl("spaceControls", "width", "Grain spread", 0, 100, 1, "%");
+makeControl("spaceControls", "width", "Stereo width", 0, 100, 1, "%");
 for (const [id, label] of [["drive", "Drive"], ["wow", "Wow"], ["flutter", "Flutter"], ["hiss", "Hiss"], ["tapeTone", "Tone"]]) makeControl("tapeControls", id, label, 0, 100, 1, "%");
 makeControl("orbitControls", "orbitTriggers", "Triggers", 1, 24, 1);
 makeControl("orbitControls", "orbitBalls", "Balls", 1, 12, 1);

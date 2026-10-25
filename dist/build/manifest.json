@@ -28,7 +28,7 @@
     "dist/orbit-audio.mjs": "119319ce25abc43712e2a95dd9b4f7c57ec2b5eadc3a701213399ebdd66c1eb5",
     "dist/sound-editor.mjs": "3b6e34f135ef91e46f04c67a83c6c75272aa3ecf3d30937c0fc617e4acdf0162",
     "dist/orbit-physics.mjs": "100f753121b627abb52d7aed6f2ed664966480924ac3cfa8376360d37c896dd9",
-    "dist/app.js": "8b91de1f8619b4b1692a849b4484078bd4a57da39db333917388a26e8cf5313a",
+    "dist/app.js": "0f010d03e5bd8ce1b6ecf65d2e1d17bdcab33fade451ad468a8b42cb1b8b3beb",
     "dist/ambient-dsp.mjs": "dd6cb0c26b61eb414f6fb24cb51d98da76e2c6e0e5cf2fd55aa09cc56b1ec2a0",
     "dist/ambient-worklet.js": "454adb75867dc39e1ecdccc562f953f2b3425180e829b37b1e5650283185e175",
     "dist/grain-worklet.js": "1141398374c44e6800c16097e981296fe015a873a2c873cbc8246dfd709e703e",

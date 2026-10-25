@@ -230,3 +230,14 @@ body[data-texture-enabled=false] #grainPage .control-grid{opacity:.35}
 .phone-ui[data-height-tier=compact][data-page=ambient] .main-panel{grid-template-rows:17px minmax(0,1fr) 200px}
 .phone-ui[data-height-tier=compact] .orbit-settings .control{height:36px;padding:2px 5px}
 .phone-ui[data-height-tier=compact] .orbit-settings .parameter-value{height:22px;min-height:22px}
+.phone-ui #grainPage .group-title,.phone-ui #grainPage .inline-select{grid-column:1/-1}
+.phone-ui #grainPage .inline-select{height:28px;margin:0}
+.phone-ui[data-height-tier=compact] #grainPage .control{height:36px;padding:2px 5px}
+.phone-ui[data-height-tier=compact] #grainPage .control .parameter-value{height:22px;min-height:22px}
+.phone-ui[data-height-tier=compact] #grainPage .group-title{height:18px;min-height:18px}
+.phone-ui[data-height-tier=compact] #grainPage .inline-select{height:26px;min-height:26px}
+.phone-ui[data-height-tier=compact] #grainPage .texture-tools{min-height:26px;gap:3px;margin-bottom:3px}
+.phone-ui[data-height-tier=compact] #grainPage .texture-tools button{height:22px;min-height:22px;font-size:8px;padding:2px 5px}
+.phone-ui[data-height-tier=compact] #textureSourceStatus{font-size:7px}
+.wide-ui[data-height-tier=tight] #textureSourceStatus{width:auto;max-width:100px;min-width:0;flex:1;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;font-size:7px}
+.phone-ui #grainPage .control-group>div[id$=Controls]{display:contents!important}

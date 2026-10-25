@@ -5,9 +5,9 @@
 
 **Small gestures. Evolving sound.**
 
-Hushfield is an interactive ambient music instrument that runs in your browser. Move chord voices through a soundscape, turn a sample into a cloud of grains, build rhythms with bouncing balls, and soften everything with tape echo. The interface uses a black-and-white OLED look with ordered dithering.
+Hushfield is one evolving ambient piece that you shape in your browser. Start with Foundation, reshape its sound into Texture, add harmony-linked Orbit movement, and finish the complete blend with Space and Tape. The interface uses a black-and-white OLED look with ordered dithering.
 
-![Hushfield on a landscape iPad](docs/images/ipad.jpg)
+![Hushfield: Foundation, Texture, Motion, Space and Tape](docs/images/ambient-first.jpg)
 
 ## Play locally
 
@@ -48,7 +48,7 @@ The app adapts to device identity and available screen space. Portrait phones us
 Playback and value adjustment stay in a fixed bottom rail. All seven views retain consistent bounds and fit the visible viewport without page scrolling. Browser toolbars, safe areas and pinch zoom are accounted for.
 
 <details>
-<summary>Phone and desktop previews</summary>
+<summary>Earlier phone and desktop layout previews</summary>
 
 ![Hushfield phone interface](docs/images/phone.jpg)
 
