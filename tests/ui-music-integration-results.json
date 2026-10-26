@@ -28,7 +28,8 @@
     "passed": 99,
     "failed": 0,
     "files": 39,
-    "command": "npm test"
+    "command": "npm test",
+    "durationMs": 9080.064292
   },
   "browser": {
     "origin": "http://127.0.0.1:4890",
@@ -109,7 +110,17 @@
     "noPausedOverlay": true,
     "noTransportWaveform": true,
     "depthChecksPassed": 7,
-    "pieceChecksPassed": 5
+    "pieceChecksPassed": 5,
+    "recovery": {
+      "explicitChoice": true,
+      "restoredPaused": true,
+      "color": 39,
+      "foundationRoom": 23,
+      "waveformSmoothing": 66,
+      "master": 0.55,
+      "source": "Surge evolving pad \u00b7 C4",
+      "historyCleared": true
+    }
   },
   "peerUiReview": {
     "thread": "01a175cc-5033-7451-b4f6-c7c0d97bace3",
@@ -126,5 +137,11 @@
     "dist/build/grain-worklet.js": "48e43a1b8818d3fc18337d08d59f42dfc185eba62b29d6e05ca1b8e7d53b6428",
     "dist/phone-ui.mjs": "efbc12786c4f5982e680856731e1aa04f78d57bcf67e984b2388ad7bec65d362",
     "dist/sound-editor.mjs": "7cdeeb515bb3bd11aad4c345b74aa9db569367c38a528f41a598d1adc5a3620f"
+  },
+  "finalIndependentReview": {
+    "commit": "e3c4308ab0bd1fa8185703c7f45eadf6b9189544",
+    "standardsHardViolations": 0,
+    "standardsActionableSmells": 0,
+    "specActionableFindings": 0
   }
 }
