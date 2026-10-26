@@ -7,6 +7,7 @@ The player/developer guides below describe the current implementation. Specifica
 - [README and quick start](../README.md)
 - [Playing: parts, Texture sources, harmony, Tape, saving and recording](PLAYING.md)
 - [Native Surge sources and listening comparisons](SURGE-TEXTURE.md)
+- [Private Tailscale preview](PRIVATE-PREVIEW.md)
 - [Musical-expression implementation and independent review](SURGE-MUSICALITY-REVIEW.md)
 - [Surge research and rationale](SURGE-XT-RESEARCH.md)
 - [Approved musicality specification](specs/surge-musicality.md)

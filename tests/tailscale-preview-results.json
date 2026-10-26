@@ -1,0 +1,85 @@
+{
+  "recordedAt": "2026-10-26T03:22:50.750695+00:00",
+  "privateOrigin": "https://kirbys-mac-mini.tailac5a2a.ts.net:8449",
+  "existingServeHandlersPreserved": true,
+  "funnelEnabledForPreview": false,
+  "launchAgentRunning": true,
+  "rangeStatus": 206,
+  "privateOriginArtifactWriteStatus": 201,
+  "foreignOriginStatus": 403,
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 21568,
+      "localBytesMatch": true
+    },
+    {
+      "path": "/qa-musicality.html?saved",
+      "status": 200,
+      "bytes": 2162,
+      "localBytesMatch": true
+    },
+    {
+      "path": "/qa-musicality.mjs",
+      "status": 200,
+      "bytes": 12827,
+      "localBytesMatch": true
+    },
+    {
+      "path": "/build/app.js",
+      "status": 200,
+      "bytes": 106925,
+      "localBytesMatch": true
+    },
+    {
+      "path": "/build/ambient-worklet.js",
+      "status": 200,
+      "bytes": 12782,
+      "localBytesMatch": true
+    },
+    {
+      "file": "shards-baseline-75s.wav",
+      "status": 200,
+      "bytes": 14400044,
+      "sha256Matches": true
+    },
+    {
+      "file": "shards-motion-75s.wav",
+      "status": 200,
+      "bytes": 14400044,
+      "sha256Matches": true
+    },
+    {
+      "file": "shards-foundation-75s.wav",
+      "status": 200,
+      "bytes": 14400044,
+      "sha256Matches": true
+    },
+    {
+      "file": "shards-full-75s.wav",
+      "status": 200,
+      "bytes": 14400044,
+      "sha256Matches": true
+    },
+    {
+      "file": "shards-arc-180s.wav",
+      "status": 200,
+      "bytes": 34560044,
+      "sha256Matches": true
+    }
+  ],
+  "physicalDeviceAccess": "not confirmed by user",
+  "browser": {
+    "instrumentHttpsLoaded": true,
+    "savedComparisonAutoLoaded": true,
+    "savedPlayerCount": 5,
+    "instrumentPlayedSeconds": 4,
+    "finalState": "paused"
+  },
+  "sourceHashes": {
+    "ops/listening-server.mjs": "988a8d51a042187ecaddd780b0835ab6c11ec328d36cb06eadc4e3c4dcdc4a79",
+    "dist/qa-musicality.mjs": "3a14572d5320b556ea8981a26f3eebf983119885786000de4bf2039aeba3aa2e",
+    "ops/hushfield-music-preview.plist": "a288e76eac5cff351d2e919bc2b9887fa2d1d438ed16275f1dd89c20b005b36f"
+  }
+}

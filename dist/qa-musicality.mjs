@@ -66,4 +66,4 @@ async function run({seconds=75,arc=180,repeat=true}={}){
 }
 $('saved').onclick=loadSaved;
 $('render').onclick=()=>run().catch(console.error);$('quick').onclick=()=>run({seconds:3,arc:6}).catch(console.error);
-const query=new URLSearchParams(location.search);if(query.has('auto'))run({seconds:Number(query.get('seconds')||3),arc:Number(query.get('arc')||6)}).catch(console.error);
+const query=new URLSearchParams(location.search);if(query.has('saved'))loadSaved();else if(query.has('auto'))run({seconds:Number(query.get('seconds')||3),arc:Number(query.get('arc')||6)}).catch(console.error);
