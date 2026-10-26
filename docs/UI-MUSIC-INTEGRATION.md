@@ -38,3 +38,5 @@ Both reviews were read-only source reviews at merge `e3c4308`. Additional browse
 ## Preview promotion
 
 After validation, the combined result is fast-forwarded into the existing music worktree on `codex/surge-inspired-music`. The persistent service keeps the same working directory and private Tailscale URL on 8449. The original music commit and UI commit remain available in history; the UI-only worktree and its excluded local files remain untouched. The saved long audio recordings remain the same files.
+
+The private promotion was verified at the existing HTTPS endpoint: the HTML, application/worklet bundles and new styles match the combined files; all five long WAV hashes match their original render receipt. The browser displays the square UI and Sound controls, advances audio for four seconds, pauses normally and opens the saved 75-second/180-second comparison set. The existing Serve proxy is unchanged and Funnel remains disabled.

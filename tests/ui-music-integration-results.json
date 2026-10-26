@@ -143,5 +143,77 @@
     "standardsHardViolations": 0,
     "standardsActionableSmells": 0,
     "specActionableFindings": 0
+  },
+  "privatePromotion": {
+    "recordedAt": "2026-10-26T04:13:45.532615+00:00",
+    "commit": "f1eb200cf5a6c47e67285ad7338f2c9d430710f1",
+    "privateOrigin": "https://kirbys-mac-mini.tailac5a2a.ts.net:8449",
+    "handlerUnchanged": true,
+    "funnelEnabled": false,
+    "checks": [
+      {
+        "path": "/",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/build/app.js",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/build/grain-worklet.js",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/square-viewport.css",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/direct-controls.css",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/qa-musicality.html?saved",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "file": "shards-baseline-75s.wav",
+        "sha256Matches": true
+      },
+      {
+        "file": "shards-motion-75s.wav",
+        "sha256Matches": true
+      },
+      {
+        "file": "shards-foundation-75s.wav",
+        "sha256Matches": true
+      },
+      {
+        "file": "shards-full-75s.wav",
+        "sha256Matches": true
+      },
+      {
+        "file": "shards-arc-180s.wav",
+        "sha256Matches": true
+      }
+    ],
+    "browser": {
+      "combinedUiLoaded": true,
+      "soundControlsVisible": true,
+      "audioStartedAndAdvancedSeconds": 4,
+      "endedPaused": true,
+      "savedComparisonDurations": [
+        75,
+        75,
+        75,
+        75,
+        180
+      ]
+    }
   }
 }
