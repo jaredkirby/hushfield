@@ -19,3 +19,14 @@ test('legacy blend migration bounds untrusted saved levels',()=>{
   const piece=restorePiece(null,{ambient:{enabled:false},params:{sampleLevel:999,orbitLevel:-20}});
   assert.equal(piece.texture,100);assert.equal(piece.motion,0);
 });
+
+test('the musical phrase shapes normal part levels while Solo and the saved Blend stay intact', () => {
+  const piece = restorePiece({ foundation: 80, texture: 30, motion: 20 });
+  const before = structuredClone(piece), phrase = { foundation: .9, texture: .55, motion: .8 };
+  const mix = piecePlayback(piece, true, null, phrase);
+  assert.ok(Math.abs(mix.foundation - .72) < 1e-10);
+  assert.ok(Math.abs(mix.texture - .099) < 1e-10);
+  assert.ok(Math.abs(mix.motion - .072) < 1e-10);
+  assert.deepEqual(piecePlayback(piece, true, 'texture', phrase), { foundation: 0, texture: .6, motion: 0, generate: true });
+  assert.deepEqual(piece, before);
+});

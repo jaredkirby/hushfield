@@ -1,10 +1,16 @@
-import { AMBIENT_FIELDS, AMBIENT_SCENES, applyAmbientScene } from "./ambient-settings.mjs?v=hushfield-1";
+import { AMBIENT_FIELDS, AMBIENT_SCENES, AMBIENT_KEYS, AMBIENT_SCALES, applyAmbientScene } from "./ambient-settings.mjs?v=hushfield-1";
 import { attachStepper, panelNav } from "./phone-ui.mjs?v=hushfield-1";
 function setupAmbientUI({ getState, onChange, onNew }) {
   const page = document.getElementById("ambientPage"), fields = page.querySelector(".ambient-fields"), records = [];
-  const nav = panelNav(page, [["compose", "Compose"], ["layers", "Voices"]], (key) => {
+  const nav = panelNav(page, [["compose", "Compose"], ["sound", "Sound"], ["layers", "Voices"]], (key) => {
     fields.querySelectorAll(".control").forEach((row) => row.hidden = row.dataset.group !== key);
+    refreshHelp();
   }, { className: "ambient-panel-tabs", ariaLabel: "Ambient control pages" });
+  function refreshHelp() {
+    page.querySelector('.ambient-help').textContent = page.dataset.controlPanel === 'sound'
+      ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + 'Color shapes harmonics. Drift moves each voice gently. Bloom changes color over time.'
+      : 'Voice dots: pitch ↑↓ · stereo ←→. Scene shapes Foundation; Whole piece replaces all parts and effects.';
+  }
   for (const field of AMBIENT_FIELDS.filter((f) => !["grains", "orbit", "space"].includes(f.id))) {
     const row = document.createElement("div");
     row.className = "control";
@@ -25,12 +31,14 @@ function setupAmbientUI({ getState, onChange, onNew }) {
     input.value = getState()[field.id];
     row.append(top, input);
     fields.append(row);
-    const stepper = attachStepper(row, input, { label: "Ambient " + field.label, step: field.step, format: field.format || ((v) => v + "%") });
+    const choices = field.id === "scene" ? AMBIENT_SCENES.map(s => s.name) : field.id === "key" ? AMBIENT_KEYS : field.id === "scale" ? AMBIENT_SCALES : undefined;
+    const stepper = attachStepper(row, input, { choices, label: "Foundation " + field.label, step: field.step, format: field.format || ((v) => v + "%") });
     records.push({ field, input, stepper });
     input.addEventListener("input", () => {
       const state = getState();
       if (field.id === "scene") applyAmbientScene(state, +input.value);
       else state[field.id] = +input.value;
+      if (field.group === 'sound') state.compositionVersion = 2;
       refresh();
       onChange(field.id);
     });
@@ -44,7 +52,11 @@ function setupAmbientUI({ getState, onChange, onNew }) {
     document.body.classList.add("ambient-mode");
     document.getElementById("ambientSceneName").textContent = AMBIENT_SCENES[state.scene].name;
     document.getElementById("ambientSeed").textContent = "PIECE " + state.seed.toString(16).toUpperCase().padStart(8, "0");
+    refreshHelp();
   }
+  const preset = document.getElementById("piecePreset"), presetLabel = document.createElement('label');
+  presetLabel.className = 'piece-preset-label'; presetLabel.htmlFor = preset.id; presetLabel.textContent = 'Whole piece';
+  preset.before(presetLabel);
   document.getElementById("newAmbient").onclick = onNew;
   refresh();
   return { refresh, nav };

@@ -18,7 +18,17 @@ class GrainEngine extends AudioWorkletProcessor {
     this.lastPosition = 0.5;
     this.smoothedPosition = 0.5;
     this.frameCounter = 0;
+    this.phraseDensity = 1;
+    this.phraseDensityTarget = 1;
+    this.densitySlew = 1 - Math.exp(-1 / (sampleRate * .25));
     this.port.onmessage = ({ data: m }) => {
+      if (m.type === "phrasePort") {
+        this.phrasePort = m.port;
+        this.phrasePort.onmessage = ({ data }) => {
+          const value = data?.phrase?.textureDensity;
+          this.phraseDensityTarget = Number.isFinite(value) ? Math.max(.4, Math.min(1.25, value)) : 1;
+        };
+      }
       if (m.type === "captureFoundation") this.captureFoundation = Boolean(m.value);
       if (m.type === "source") {
         this.sourceMode = m.mode === "foundation" ? "foundation" : "sample";
@@ -91,10 +101,11 @@ class GrainEngine extends AudioWorkletProcessor {
       }
       let l = 0, r = 0;
       if (this.playing && len) {
+        this.phraseDensity += (this.phraseDensityTarget - this.phraseDensity) * this.densitySlew;
         if (this.untilGrain <= 0) {
           this.spawn();
           const jitter = 1 + (Math.random() - 0.5) * (p.chaos || 0) / 100;
-          this.untilGrain = sampleRate / Math.max(1, p.density || 12) * jitter;
+          this.untilGrain = sampleRate / (Math.max(1, p.density || 12) * this.phraseDensity) * jitter;
         }
         this.untilGrain--;
         if (p.scanOn && !p.freeze) {
@@ -137,8 +148,9 @@ class GrainEngine extends AudioWorkletProcessor {
     }
     this.frameCounter += out[0].length;
     if (this.frameCounter >= sampleRate / 15) {
-      const wave = live ? Array.from({ length: 160 }, (_, i) => this.recent[0][((this.recentFrames === this.recent[0].length ? this.writeIndex : 0) + Math.floor(i * this.recentFrames / 160)) % this.recent[0].length]) : null;
-      this.port.postMessage({ sourceMode: this.sourceMode, playing: this.playing, liveSeconds: this.recentFrames / sampleRate, wave, scan: this.scan, count: this.grains.length, peak, grains: this.grains.slice(-45).map((g) => ({ position: (g.position % Math.max(1, len) + len) % Math.max(1, len) / Math.max(1, len), life: g.age / g.duration })) });
+      const sourceWave = channel => live ? Array.from({ length: 160 }, (_, i) => this.recent[channel][((this.recentFrames === this.recent[0].length ? this.writeIndex : 0) + Math.floor(i * this.recentFrames / 160)) % this.recent[0].length]) : null;
+      const wave = sourceWave(0), waveRight = sourceWave(1);
+      this.port.postMessage({ sourceMode: this.sourceMode, playing: this.playing, phraseDensity: this.phraseDensity, liveSeconds: this.recentFrames / sampleRate, wave, waveRight, scan: this.scan, count: this.grains.length, peak, grains: this.grains.slice(-45).map((g) => ({ position: (g.position % Math.max(1, len) + len) % Math.max(1, len) / Math.max(1, len), life: g.age / g.duration })) });
       this.frameCounter = 0;
     }
     return true;

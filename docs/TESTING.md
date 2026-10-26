@@ -10,7 +10,7 @@ npm run build
 npm test
 ```
 
-`npm test` runs every `tests/*.test.mjs` file. The current suite reports 43 passing test results across 27 files: some files use individual Node tests, while earlier files run assertions as one file-level result. This is not a count of all individual assertions.
+`npm test` runs every `tests/*.test.mjs` file. Some files use individual Node tests, while earlier files run assertions as one file-level result; the reported count is not a count of every assertion. See [verification](../VERIFICATION.md) for the latest run.
 
 `npm run test:interaction` is the fixed fast subset for project validation, stereo math, voice dots, startup, navigation, viewport profiles, selected-value controls and audio activation. Run the full suite for recording, recovery, source ownership, Piece routing/presets, Orbit or Tape changes.
 
@@ -37,6 +37,8 @@ Serve `dist/` from localhost or HTTPS, then open the route below on that server.
 
 | Route | Start | What it checks |
 | --- | --- | --- |
+| `/qa-depth.html` | Run depth checks | Independent part room sends, filtered ambience, shared tone and modern return width using real offline WebAudio. |
+| `/qa-musicality.html` | Render comparison / short check | Reproducible full-graph listening examples; requires `npm run listening:prepare` and the dedicated `npm run listening:serve` server. |
 | `/qa-piece.html` | Run offline checks | Foundation-fed live Texture, shared tone/width, direct processor harmony and finite stereo output. |
 | `/qa-synth.html` | Automatic | Orbit Worklet PCM, separate bank/item patches, effects, auditions, voice limits and stop behavior. |
 | `/qa-tape.html` | Run offline Tape checks | 44.1/48 kHz Worklet startup, bypass, coloration, repeats and delivered toggles. |
@@ -63,3 +65,18 @@ For audio changes, listen on the affected devices as well as checking PCM. Brows
 `tests/*-results.json` files are recorded receipts, not live tests automatically executed by `npm test`. Preserve their implementation/hash/date context when citing them. Do not present a historical receipt as a new run.
 
 [VERIFICATION.md](../VERIFICATION.md) identifies current automated results, the most recent integration audio receipt, later-product layout evidence and earlier adaptive-layout checks. The historical reviews retain their original baseline-specific counts.
+
+## Musical expression and listening workflow
+
+Focused behavior checks use the public Foundation/Orbit audio engines, preset selector, project export/decode and linked worklet interfaces:
+
+```sh
+node --test tests/foundation-expression.test.mjs tests/motion-expression.test.mjs tests/phrase-worklets.test.mjs tests/project-expression.test.mjs
+npm run surge:verify
+npm run listening:prepare
+npm run listening:serve
+```
+
+The dedicated server is loopback-only and stores WAVs/receipts under ignored `.scratch/listening/artifacts/`. Its fixture pins the original commit, generated module hashes and Grain randomness, and instruments deterministic control delivery. The main production worklets keep asynchronous direct ports and are checked separately. The full comparison includes four 75-second examples and a 180-second full arc; repeat rendering must retain exact control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Both WAV hashes are recorded; native WebAudio convolution can differ in its last floating-point bits. Playback attenuation equalizes stereo RMS without boosting/clipping, which is not a perceptual LUFS comparison. See [native authoring and listening details](SURGE-TEXTURE.md).
+
+New save files use schema 5. Compatibility tests load versions 1–4 through decode, retain classic sound/depth modes, and preserve those modes after re-export. The current browser receipt records explicit paused recovery of Color/Drift/Bloom, depth, brightness and native material. Existing golden Foundation PCM and neutral Motion energy checks protect classic behavior. Physical-device performance and human listening preference remain separate acceptance checks.

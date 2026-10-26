@@ -1,0 +1,45 @@
+/* The square gets the screen first; all controls live beside or below it. */
+body.square-viewport main{padding:8px!important;max-width:none}
+body.square-viewport .instrument{display:grid!important;position:relative;grid-template-columns:var(--visual-size,200px) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:8px;min-width:0;min-height:0;overflow:hidden}
+body.square-viewport[data-orientation=portrait] .instrument{grid-template-columns:minmax(0,1fr);grid-template-rows:var(--visual-size,200px) minmax(0,1fr)}
+body.square-viewport #displayStage{--layer-bay:0px;grid-column:1!important;grid-row:1!important;width:var(--visual-size,200px)!important;height:var(--visual-size,200px)!important;min-height:0;align-self:start;justify-self:center;aspect-ratio:1;flex:none}
+body.square-viewport #displayStage>*{top:0!important;height:100%!important;bottom:0!important}
+#controlsShell{grid-column:2;grid-row:1;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
+body.square-viewport[data-orientation=portrait] #controlsShell{grid-column:1;grid-row:2}
+#controlsScroll{flex:1;min-width:0;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-gutter:stable}
+#controlsScroll:focus-visible{outline:1px solid #aaa;outline-offset:-2px}
+#controlsScroll .instrument-head{height:auto;min-height:36px;flex-wrap:wrap;padding:3px 6px;gap:4px}
+#controlsScroll .instrument-head .subtle{display:none}
+#controlsScroll .head-actions{margin-left:auto}
+#controlsScroll .head-actions button{min-height:30px;height:30px;padding:3px 5px;font-size:10px}
+#controlsScroll .tabs{position:sticky;top:0;z-index:20;background:#000;padding:0;min-width:0}
+#controlsScroll .audio-check{padding:3px 4px;gap:4px;min-width:0}
+#controlsScroll .audio-check button{font-size:9px;padding:3px 5px}
+#controlsScroll .workspace{display:block;flex:none;overflow:visible;height:auto;min-height:0}
+body.square-viewport #controlsScroll .main-panel{display:block!important;flex:none;height:auto;min-height:0;overflow:visible!important;padding:8px 4px!important}
+#controlsScroll .wave-header{display:flex!important;min-height:17px;height:auto!important;margin:0 0 8px;font-size:8px}
+#controlsScroll .wave-header .mono{font-size:7px}
+body.square-viewport #adjustmentDock{min-width:0;min-height:0;height:auto;overflow:visible;padding:0;border:0}
+#adjustmentDock>.piece-blend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:0 0 6px;background:#000}
+#adjustmentDock>.piece-tools{display:flex;align-items:center;gap:5px;min-height:32px;height:auto;margin:0 0 8px;padding:2px 0 6px;border-bottom:1px solid #555;background:#000}
+body.square-viewport #adjustmentDock>.page{width:100%;height:auto!important;min-height:0;max-height:none;overflow:visible!important;padding:0!important;margin:0;border:0;align-self:auto}
+#adjustmentDock>.page:not(.active){display:none!important}
+body.square-viewport #adjustmentDock .orbit-layout,body.square-viewport #adjustmentDock .orbit-settings,body.square-viewport #adjustmentDock .sound-editor{height:auto!important;max-height:none;overflow:visible!important}
+#adjustmentDock .sound-fields{overflow:visible;max-height:none}
+#controlsScroll .utility-strip{height:auto;min-height:40px;flex-wrap:wrap;padding:4px;gap:4px}
+#controlsScroll .utility-strip button{font-size:9px;padding:4px 6px}
+#controlsShell .transport{min-width:0;flex:none}
+#controlsShell .shared-adjuster{grid-template-columns:40px minmax(0,1fr) 40px;padding:4px}
+#controlsShell #adjustLabel{font-size:8px}
+#controlsShell #adjustValue{font-size:13px}
+#controlsShell .play-button{font-size:15px}
+#controlsShell.medium-controls .ambient-fields,#controlsShell.medium-controls .visual-fields,#controlsShell.medium-controls .sound-fields,#controlsShell.medium-controls #tapeControls,#controlsShell.medium-controls .control-group.phone-selected{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#controlsShell.compact-controls .piece-blend{grid-template-columns:minmax(0,1fr)}
+#controlsShell.compact-controls .tabs [data-tab] span{font-size:8px!important;letter-spacing:0}
+#controlsShell.compact-controls .phone-panel-tabs{gap:3px}
+#controlsShell.compact-controls .phone-panel-tabs button{min-width:0;font-size:9px!important;padding:4px 3px}
+#controlsShell.compact-controls .piece-tools{flex-wrap:wrap}
+#controlsShell.compact-controls #pieceHint{flex-basis:100%;order:1}
+#controlsShell.compact-controls .shared-adjuster{grid-template-columns:28px minmax(0,1fr) 28px;padding:2px}
+#controlsShell.compact-controls .audio-check span{display:none}
+#controlsShell.compact-controls #saveProject,#controlsShell.compact-controls #loadProject{font-size:10px}

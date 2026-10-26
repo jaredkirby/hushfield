@@ -15,8 +15,9 @@ function restorePiece(saved, legacy) {
     followHarmony: typeof saved?.followHarmony === "boolean" ? saved.followHarmony : fallback.followHarmony
   };
 }
-function piecePlayback(piece, running, solo = null) {
-  const audible = (kind) => !running || solo && solo !== kind ? 0 : solo === kind ? 1 : piece[kind] / 100;
+function piecePlayback(piece, running, solo = null, phrase) {
+  const factor = kind => Number.isFinite(phrase?.[kind]) ? Math.max(0, Math.min(1, phrase[kind])) : 1;
+  const audible = (kind) => !running || solo && solo !== kind ? 0 : solo === kind ? 1 : piece[kind] / 100 * factor(kind);
   return { foundation: audible("foundation"), texture: audible("texture") * 0.6, motion: audible("motion") * 0.45, generate: running };
 }
 export {

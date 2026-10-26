@@ -3,10 +3,11 @@ import { encodeWav } from "./wave-file.mjs";
 import { restoreAmbient } from "./ambient-settings.mjs";
 import { restoreVisual } from "./visual-analysis.mjs";
 import { restoreSoundState } from "./sound-patches.mjs";
+import { restoreSpace } from "./space-settings.mjs";
 const PROJECT_FORMAT = "hushfield-project";
 const record = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 function restoreProjectFile(saved) {
-  if (!record(saved) || ![1, 2, 3, 4].includes(saved.version) || typeof saved.sample !== "string" || !record(saved.params) || !record(saved.controls) || !(saved.format === PROJECT_FORMAT || typeof saved.format === "string" && saved.format.endsWith("-browser-lab"))) throw new Error("This is not a Hushfield project.");
+  if (!record(saved) || ![1, 2, 3, 4, 5].includes(saved.version) || typeof saved.sample !== "string" || !record(saved.params) || !record(saved.controls) || !(saved.format === PROJECT_FORMAT || typeof saved.format === "string" && saved.format.endsWith("-browser-lab"))) throw new Error("This is not a Hushfield project.");
   const project = { ...saved, format: PROJECT_FORMAT, params: { ...saved.params }, controls: { ...saved.controls } };
   const key = Object.keys(saved.params).find((key2) => key2.endsWith("Balls") && key2.length === 10), prefix = key?.slice(0, -5);
   if (prefix && prefix !== "orbit") {
@@ -30,7 +31,7 @@ function serializeProject(session) {
   const bytes = new Uint8Array(encodeWav(buffer));
   let binary = "";
   for (let i = 0; i < bytes.length; i += 16e3) binary += String.fromCharCode(...bytes.subarray(i, i + 16e3));
-  return JSON.stringify({ ...settings, format: PROJECT_FORMAT, version: 4, sample: btoa(binary) });
+  return JSON.stringify({ ...settings, format: PROJECT_FORMAT, version: 5, sample: btoa(binary) });
 }
 async function decodeProject(text, { decodeAudio, defaults, ranges, controls }) {
   if (text.length > 30 * 1024 * 1024) throw new Error("Project exceeds the 30 MB limit.");
@@ -49,6 +50,7 @@ async function decodeProject(text, { decodeAudio, defaults, ranges, controls }) 
     } else if (typeof fallback === "boolean" && typeof value === "boolean") params[id] = value;
   }
   if (["forward", "reverse", "pingpong"].includes(saved.params.scanMode)) params.scanMode = saved.params.scanMode;
+  Object.assign(params, restoreSpace(saved.params, saved.version < 5));
   const selected = {};
   for (const [id, options] of Object.entries(controls)) selected[id] = options.includes(saved.controls[id]) ? saved.controls[id] : options[0];
   return {
@@ -58,7 +60,7 @@ async function decodeProject(text, { decodeAudio, defaults, ranges, controls }) 
     params,
     controls: selected,
     volume: Number.isFinite(saved.volume) ? Math.max(0, Math.min(1, saved.volume)) : 0.55,
-    ambient: restoreAmbient(saved.ambient, saved.version < 3),
+    ambient: restoreAmbient(saved.version < 5 ? { ...saved.ambient, compositionVersion: 1 } : saved.ambient, saved.version < 3),
     visual: restoreVisual(saved.visual),
     orbitSound: restoreSoundState(saved.orbitSound, saved)
   };

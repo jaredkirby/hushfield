@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Hushfield depth verification</title>
+<style>body{background:#000;color:#fff;font:14px/1.6 monospace;padding:24px}button{font:inherit;padding:12px}pre{white-space:pre-wrap}</style>
+<h1>Part depth: offline audio checks</h1>
+<button id="run">Run depth checks</button>
+<pre id="results">Ready. No live audio output.</pre>
+<script type="module">
+import { createPieceSpace } from './piece-space.mjs?v=depth-4';
+const button = document.getElementById('run'), results = document.getElementById('results');
+const rms = values => Math.sqrt(values.reduce((sum, value) => sum + value * value, 0) / values.length);
+async function render(part, send, { frequency = 700, roomLow = 20, roomHigh = 11000, cutoff = 10000, width = 100 } = {}) {
+  const rate = 24000, context = new OfflineAudioContext(2, rate * 2, rate);
+  const space = createPieceSpace(context, context.destination);
+  space.wet.gain.value = 1;
+  space.setWidth(width);
+  space.setTone('lowpass', cutoff, .6);
+  space.setDepth({ spaceVersion: 2, foundationRoom: 0, textureRoom: 0, motionRoom: 0, [part + 'Room']: send, roomLow, roomHigh });
+  const source = context.createOscillator(), gain = context.createGain();
+  source.frequency.value = frequency;
+  gain.gain.value = .15;
+  source.connect(gain);
+  gain.connect(space.parts[part]);
+  source.start(.1);
+  source.stop(.2);
+  return context.startRendering();
+}
+button.onclick = async () => {
+  button.disabled = true; results.textContent = ''; document.body.dataset.result = 'running';
+  try {
+    for (const part of ['foundation', 'texture', 'motion']) {
+      const dry = await render(part, 0), distant = await render(part, 100);
+      const dryTail = rms(dry.getChannelData(0).slice(12000)), wetTail = rms(distant.getChannelData(0).slice(12000));
+      if (!(dryTail < 1e-6 && wetTail > .0001)) throw new Error(part + ' room send must add a tail while a zero send stays dry: ' + JSON.stringify({ dryTail, wetTail }));
+      results.textContent += 'PASS ' + part + ' has an independent room send (' + wetTail.toFixed(6) + ' tail RMS)\n';
+    }
+    for (const [frequency, filtered] of [[100, { roomLow: 2000 }], [7000, { roomHigh: 1000 }]]) {
+      const open = await render('texture', 100, { frequency }), shaped = await render('texture', 100, { frequency, ...filtered });
+      const openTail = rms(open.getChannelData(0).slice(12000)), shapedTail = rms(shaped.getChannelData(0).slice(12000));
+      if (!(shapedTail < openTail * .3)) throw new Error('Room return must filter ' + frequency + ' Hz without changing the dry source: ' + JSON.stringify({ openTail, shapedTail }));
+      results.textContent += 'PASS room return filters ' + frequency + ' Hz (' + (shapedTail / openTail).toFixed(4) + ' tail ratio)\n';
+    }
+    const bright = await render('texture', 100, { frequency: 1200, cutoff: 10000 }), dark = await render('texture', 100, { frequency: 1200, cutoff: 100 });
+    const brightTail = rms(bright.getChannelData(0).slice(12000)), darkTail = rms(dark.getChannelData(0).slice(12000));
+    if (!(darkTail < brightTail * .1)) throw new Error('Shared tone must shape the independent room sends too: ' + JSON.stringify({ brightTail, darkTail }));
+    results.textContent += 'PASS shared tone shapes dry parts and independent ambience\n';
+    const mono = await render('texture', 100, { width: 0 });
+    const difference = mono.getChannelData(0).map((value, i) => value - mono.getChannelData(1)[i]);
+    if (!(rms(difference) < 1e-6)) throw new Error('Zero shared width must keep modern dry and room output mono: ' + rms(difference));
+    results.textContent += 'PASS shared width includes the modern room return\n';
+    results.textContent += '\n7 CHECKS PASSED'; document.body.dataset.result = 'passed';
+  } catch (error) { results.textContent += 'FAIL ' + error.message; document.body.dataset.result = 'failed'; }
+  finally { button.disabled = false; }
+};
+</script>
+</html>

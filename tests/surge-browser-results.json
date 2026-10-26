@@ -1,0 +1,103 @@
+{
+  "recordedAt": "2026-10-26T02:42:21.038400+00:00",
+  "scope": "Fresh browser integration and viewport-only layout; not physical-device/listening acceptance",
+  "origin": "http://127.0.0.1:4880",
+  "sourceHashes": {
+    "dist/ambient-ui.mjs": "b89100fe5a8365ef9346263c92a1eb59ec34369fe3b009353c79affb16827bf9",
+    "dist/app.js": "3af8c6a13794657b91275e35369db71599b015053d09307365f759de1ff3b3ad",
+    "dist/ambient-worklet.js": "94f1d9a6378be09ac900fc0c34d69abb73ee843d14da80a56acaa3574adbb4a8",
+    "dist/grain-worklet.js": "0ec04ff7ea401997291cd3a5fe61743edb8328fc328cae0cc275439496671ddc",
+    "dist/orbit-worklet.js": "5d4cc13644b38248fe642c564ef171238c407cd9b9e57397137fd1623c519c9b",
+    "dist/piece-space.mjs": "d7aa499be8eb286731285c38a27ab86ee36d44b837a967830cd0b5b2c74edc4f",
+    "dist/project-file.mjs": "a88b4a734abd501d2af6aa4adeba4469760ebf9ee1d7cdc3f51e33c34112f7a2",
+    "dist/build/app.js": "f5f38007472000bf9439ce2df0a865081322ee23a346bc72c284ee9926facfb3"
+  },
+  "layout": {
+    "caseCount": 20,
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 820,
+        "height": 1180
+      },
+      {
+        "width": 520,
+        "height": 768
+      },
+      {
+        "width": 1280,
+        "height": 800
+      }
+    ],
+    "sections": [
+      "Foundation/Sound",
+      "Space/Depth",
+      "Motion/Triggers/Brightness",
+      "Motion/Balls/Brightness"
+    ],
+    "documentOverflowCases": 0,
+    "horizontalNavigationOverflowCases": 0,
+    "outsideControlCardCases": 0,
+    "retainedColorAfterNavigationAndResize": 39,
+    "note": "The20 layout cases used the build immediately before Sound help-copy refinement; final build was freshly loaded and recovery tested afterward. No layout code changed between them."
+  },
+  "nativeLibrary": {
+    "pad": "SURGE XT \u00b7 ORIGINAL C4 \u00b7 24.00 SEC",
+    "pluck": "SURGE XT \u00b7 ORIGINAL C4 \u00b7 24.00 SEC",
+    "bell": "SURGE XT \u00b7 ORIGINAL C4 \u00b7 24.00 SEC",
+    "selectionStatus": "YOUR SOUND \u00b7 ORIGINAL PITCH",
+    "delivery": "on-demand local asset requests through existing source selector"
+  },
+  "livePlayback": {
+    "secondsObserved": 44,
+    "masterMutedDuringTest": true,
+    "blend": {
+      "foundation": 100,
+      "texture": 35,
+      "motion": 25
+    },
+    "continuedAcrossNavigation": true,
+    "consoleErrorsAndWarnings": [],
+    "finalState": "paused at volume55"
+  },
+  "recovery": {
+    "offeredExplicitlyAfterReload": true,
+    "restoredPaused": true,
+    "color": 39,
+    "drift": 22,
+    "bloom": 45,
+    "foundationRoom": 22,
+    "textureRoom": 65,
+    "motionRoom": 30,
+    "triggerToneDepth": 14,
+    "retainedSource": "Surge soft FM bell \u00b7 C4",
+    "retainedSourceRelationship": "YOUR SOUND \u00b7 ORIGINAL PITCH"
+  },
+  "depthOffline": {
+    "route": "http://127.0.0.1:4879/qa-depth.html",
+    "checksPassed": 7,
+    "partTailRms": 0.01264,
+    "roomLowCut100HzTailRatio": 0.0034,
+    "roomHighCut7000HzTailRatio": 0.0115,
+    "sharedTonePassed": true,
+    "modernRoomMonoWidthPassed": true
+  },
+  "physicalDeviceAcceptance": "not performed",
+  "humanListeningPreference": "pending",
+  "pieceOffline": {
+    "route": "http://127.0.0.1:4880/qa-piece.html",
+    "checksPassed": 5,
+    "liveTextureWithoutDryFoundation": true,
+    "sharedToneAndWidth": true,
+    "directProcessorHarmonyHz": 348.8,
+    "expectedHarmonyHz": 349.2,
+    "finiteStereo": true
+  }
+}

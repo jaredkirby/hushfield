@@ -16,6 +16,9 @@ export const SOUND_FIELDS = [
   {id:'fmAmount',label:'FM depth',group:'tone',min:0,max:200,step:5,unit:'%',default:10},
   {id:'drive',label:'Drive',group:'tone',min:0,max:100,step:5,unit:'%',default:0},
   {id:'pan',label:'Pan',group:'tone',min:-100,max:100,step:5,default:0},
+  {id:'toneAttack',label:'Brightness attack',group:'brightness',min:.002,max:2,step:.01,unit:' s',default:.01},
+  {id:'toneDecay',label:'Brightness decay',group:'brightness',min:.01,max:3,step:.05,unit:' s',default:.18},
+  {id:'toneAmount',label:'Brightness depth',group:'brightness',min:-48,max:48,step:1,unit:' st',default:0},
   {id:'delaySend',label:'Delay send',group:'space',min:0,max:100,step:5,unit:'%',default:12},
   {id:'reverbSend',label:'Reverb send',group:'space',min:0,max:100,step:5,unit:'%',default:45},
   {id:'delayTime',label:'Bank delay',group:'space',bankOnly:true,min:.05,max:1.5,step:.05,unit:' s',default:.3},
@@ -23,7 +26,7 @@ export const SOUND_FIELDS = [
   {id:'reverbTime',label:'Bank room',group:'space',bankOnly:true,min:.2,max:4,step:.2,unit:' s',default:2.2}
 ];
 export const FIELD_MAP = Object.fromEntries(SOUND_FIELDS.map(f=>[f.id,f]));
-export const SOUND_GROUPS = [['voice','Voice'],['envelope','Envelope'],['tone','Tone'],['space','Space']];
+export const SOUND_GROUPS = [['voice','Voice'],['envelope','Envelope'],['tone','Tone'],['brightness','Brightness'],['space','Space']];
 const voiceDefaults = Object.fromEntries(SOUND_FIELDS.filter(f=>!f.bankOnly).map(f=>[f.id,f.default]));
 const effectDefaults = Object.fromEntries(SOUND_FIELDS.filter(f=>f.bankOnly).map(f=>[f.id,f.default]));
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));

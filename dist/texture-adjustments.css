@@ -1,0 +1,11 @@
+/* Texture's adjustment dock never sits over the drawing surface. */
+#textureAdjustmentsToggle{margin-left:2px;flex:none}
+body:not([data-page=grain]) #textureAdjustmentsToggle{display:none}
+body[data-page=grain][data-texture-adjustments=closed] #grainPage{display:none!important}
+#grainPage[data-control-panel="0"] .texture-tools{display:none}
+.texture-display-fields{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr)}
+body.common-controls .texture-display-fields>.control{width:100%;height:64px!important;max-width:350px}
+.texture-display-help{font:10px/1.6 monospace;color:#aaa;margin:9px 0;max-width:32em}
+body.phone-ui .texture-display-fields>.control{height:48px!important;max-width:none}
+body.phone-ui .texture-display-help{font-size:9px;line-height:1.4;margin:5px 0}
+@media(max-height:600px){body.common-controls .texture-display-fields>.control{height:42px!important}.texture-display-help{font-size:9px}}

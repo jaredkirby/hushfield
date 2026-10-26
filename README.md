@@ -31,19 +31,19 @@ Use localhost or HTTPS for AudioWorklet and microphone support. Opening `index.h
 4. Open **Motion** and choose **Add motion**. Rotating shapes and bouncing balls add notes linked to Foundation's current harmony.
 5. Open **Space** to shape the whole blend, then switch **Tape** on for gentle vintage coloration and darker repeats.
 
-Select a parameter card, then use the shared **− / +** buttons; hold either button to repeat. The persistent **Foundation / Texture / Motion** blend controls what is audible. **Solo** temporarily isolates one part; **Full mix** restores the saved blend. Changing editors does not change the mix or restart the piece.
+Drag a parameter slider, tap its underlined readout to enter an exact value, or choose a category directly from its menu. The shared **− / +** buttons still adjust the selected control; hold either button to repeat. **Undo / Redo** restores settings edits, with one drag treated as one change. The persistent **Foundation / Texture / Motion** blend controls what is audible. **Solo** temporarily isolates one part; **Full mix** restores the saved blend. Changing editors does not change the mix or restart the piece.
 
 The five main editors are:
 
 | Editor | What it shapes |
 | --- | --- |
-| Foundation | Ambient scene, key, scale, chord changes, voices and interactive dots. It also supplies live Texture material and Motion harmony. |
-| Texture | Grain size, density, position, pitch, scatter, scanning and motion. Freeze a Foundation phrase or use optional imported material. |
-| Motion | Orbit shape, spin rate, balls and 1–24 trigger marks. Triggers and balls have separate banks and individual sound editing. |
-| Space | Shared filter, stereo width and room for the complete normal blend. |
-| Tape | Shared saturation, Wow, Flutter, Hiss, Tone and echo. Off bypasses the complete effect. |
+| Foundation | Scene, key, scale, Color/Drift/Bloom, returning motifs, nearby voicings and voices. Labeled dots set pitch and pan; Foundation supplies live Texture material and Motion harmony. |
+| Texture | Drag the grain position/length handles, then shape density, pitch, scatter and scanning. Controls remain editable at zero blend. Freeze a phrase or use your own material. |
+| Motion | Turn the orientation handle or move signed spin speed through zero. Select triggers to edit; shape individual or bank-wide sounds with the amplitude envelope handles and independent brightness controls. |
+| Space | Drag horizontally for filter cutoff and vertically for resonance. Separate width, per-part room sends and filtered ambience finish the whole blend. |
+| Tape | Echo and Character sections separate repeats from coloration. Drag the echo grid for time/feedback; Off bypasses the complete effect. |
 
-**Your sound / trim** is a secondary tool within Texture. **Visual**, available from every editor, opens the scope, spectrum or vectorscope; **Back to sound** returns to the previous editor. Visual settings affect the picture only.
+**Your sound / trim** is a secondary tool within Texture, with draggable In/Out boundaries and seconds readouts. **Visual**, available from every editor, opens the scope, spectrum or vectorscope; **Back to sound** returns to the previous editor. Visual settings affect the picture only.
 
 Choose **Stillwater**, **Slow cloud**, **Glass shards** or **Worn memory** for a complete preset. Presets replace the blend, Foundation scene, sound patches and finishing settings; **New piece** instead changes the seed while keeping the current sounds and mix. See the [playing guide](docs/PLAYING.md) for Texture sources, harmony, Tape controls and recording.
 
@@ -51,11 +51,13 @@ Choose **Stillwater**, **Slow cloud**, **Glass shards** or **Worn memory** for a
 
 Portrait phones use stacked display/editor bays. iPad and desktop place the display beside the controls; narrow Split View uses the compact arrangement. Landscape phones and short windows use denser controls. Rotation and resizing preserve playback and musical edits.
 
-The five editors and two secondary tools share fixed display/editor bounds, with playback and value adjustment in the bottom rail. The interface fits the visible viewport without page scrolling and accounts for browser toolbars, safe areas and pinch zoom. Current screenshots show the five-editor interface; older layout screenshots remain in `docs/images/` as historical assets.
+The five editors and two secondary tools share a fixed square visual viewport, with playback and value adjustment in the bottom rail. Texture's adjustments open by default, with Display, Texture, Scan and Variation tabs; its display-only Wave smoothing control starts at 65%. Hide adjust hides the fields while preserving the visual square. Longer inspectors scroll inside their own bay; the surrounding page stays within the visible viewport and accounts for browser toolbars, safe areas and pinch zoom. Screenshots in `docs/images/` include earlier versions of the interface; they do not show every direct control.
 
 ## Save and recover
 
-**Save project** downloads a `.hushfield.json` file with Texture material, blend/source/harmony relationships, sound patches, Foundation settings and visual settings. Current files use project schema **version 4**; versions 1–3 migrate automatically. Solo is temporary and is not saved.
+**Save project** downloads a `.hushfield.json` file with Texture material, blend/source/harmony relationships, sound patches, Foundation settings and visual settings. Current files use project schema **version 5**; versions 1–4 migrate automatically while retaining their classic sound modes. Solo is temporary and is not saved.
+
+Settings Undo/Redo keeps up to 40 edits in the current session. Loading a project, choosing a complete preset, changing the material or starting a New piece clears that history. It does not restore audio buffers, recordings or playback position.
 
 A single bounded recovery draft is stored locally in IndexedDB when available. Open the session status button to recover or discard it; **recovery is explicit and starts paused**. `LOCAL DRAFT` means device-local recovery. `EXPORTED` means a download was initiated, not that the browser confirmed the file was saved. Export a file for a separate, portable copy.
 
@@ -86,4 +88,4 @@ Edit sources in `dist/`, then rebuild. The build bundles the app and four AudioW
 
 Bug reports, device testing, sound design improvements and pull requests are welcome. Include the browser, device, orientation and reproduction steps in [issues](https://github.com/jaredkirby/hushfield/issues). The [documentation index](docs/README.md) links player/developer guides, the glossary and historical reviews.
 
-Hushfield uses the [MIT License](LICENSE). Demo sources are synthesized by the app; no recorded sample library is bundled. The build dependency esbuild has its own MIT license and is installed through npm.
+Hushfield uses the [MIT License](LICENSE). Demo sources are synthesized by the app. Three optional native Surge XT textures are bundled as WAV/patch outputs and load only when selected in **Your sound / trim**; their C4 pitch remains fixed as harmony changes. [Source provenance and authoring workflow](docs/SURGE-TEXTURE.md) describe the separate native development toolchain. The build dependency esbuild has its own MIT license and is installed through npm.

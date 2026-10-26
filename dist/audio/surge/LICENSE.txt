@@ -1,0 +1,7 @@
+Hushfield native Surge texture outputs
+
+The original Hushfield render recipes, rendered WAVs and edited patches in this directory are provided under the repository MIT license (../../../LICENSE). Copyright (c) 2026 Hushfield contributors.
+
+These outputs were authored with Surge XT from its initialization templates. Surge XT software is a separate GPL-3.0 project; no native engine binary or source is bundled in this audio directory. Surge's official output-ownership statement permits distribution and commercial use of generated sounds and patches: https://surge-synthesizer.github.io/faq/
+
+See manifest.json, per-asset metadata and toolchain-provenance.json for the exact source revision, original C4 note schedules, authoring settings, and output hashes.

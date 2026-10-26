@@ -12,7 +12,7 @@ Sources intentionally live alongside the page in `dist/`. Generated files live i
 
 ## Piece state and presets
 
-`piece-session.mjs` owns blend levels, Texture source and harmony following. `piecePlayback` derives audible gains from transport and temporary Solo; it does not depend on the active editor. Foundation continues generating while the Piece plays, including when its audible blend is zero.
+`piece-session.mjs` owns blend levels, Texture source and harmony following. `piecePlayback` derives audible gains from transport, bounded phrase factors and temporary Solo; it does not depend on the active editor. Foundation continues generating while the Piece plays, including when its audible blend is zero. Phrase factors multiply only normal audible levels; Solo bypasses those factors without editing Blend.
 
 `piece-presets.mjs` restores a complete configuration, including finishing, patches and live/linked relationships, and cancels pending source operations. Changing Foundation's Scene is narrower; New piece changes its seed while retaining sounds and blend. `piece-blend.mjs` exposes the persistent levels and transient Solo controls through the common value adjuster.
 
@@ -38,9 +38,9 @@ flowchart LR
 
 Foundation feeds the grain processor directly before its audible fader. Live capture pauses with transport. A freeze request copies the available bounded phrase into the existing sample representation; frozen/imported material retains its original harmony/pitch. Switching back to live mode retains the optional stored sample.
 
-Foundation and Orbit receive dedicated `MessageChannel` ports after both processors acknowledge readiness. Foundation publishes chord pitches directly; Motion quantizes new notes to current chord tones unless explicitly unlinked. Existing sustained voices finish normally. UI animation does not schedule notes.
+Foundation and Orbit receive dedicated `MessageChannel` ports after both processors acknowledge readiness. A separate readiness-gated channel connects Foundation to Texture. Foundation publishes chord pitches and phrase factors directly at chord changes and at 10 Hz on the audio clock; Texture slews a density multiplier and Motion gates automatic events deterministically while physics and explicit auditions continue. Main-thread status updates smoothly adjust normal part gains, while event/grain timing remains independent of drawing. Classic pieces publish unity factors. Motion quantizes new notes to current chord tones unless explicitly unlinked. Existing sustained voices finish normally. UI animation does not schedule notes.
 
-`piece-space.mjs` sums normal parts through shared filtering, stereo width and generated convolution room before Tape. Motion's per-bank effects remain upstream. Explicit Motion auditions bypass the part fader but still enter shared finishing. Original-source preview and Test sound connect to master directly; source preview pauses the Piece.
+`piece-space.mjs` provides named part inputs and sums normal dry parts through shared filtering and width before Tape. Modern per-part room sends receive the same tone, feed the generated convolution impulse, then pass through low/high cuts and room width. A versioned classic route retains the original shared room send and return. `space-settings.mjs` owns validated depth defaults. Motion's per-bank effects remain upstream. Explicit Motion auditions bypass the part fader but still enter shared finishing. Original-source preview and Test sound connect to master directly; source preview pauses the Piece.
 
 ## Audio module ownership
 
@@ -76,9 +76,9 @@ The five main editors are Foundation, Texture, Motion, Space and Tape. Your soun
 
 ## Files, recording and recovery
 
-`project-file.mjs` serializes version-4 sessions, validates versions 1–4 and migrates older namespaces/material/blend into the Piece model. Files embed WAV Texture material, Foundation voices, source/harmony relationships, patches, controls, volume and visual settings. They are configuration/material snapshots, not exact playback-position restoration; Solo is excluded. Loading is decoded and validated before application.
+`project-file.mjs` serializes version-5 sessions, validates versions 1–5 and migrates older namespaces/material/blend into the Piece model. Files embed WAV Texture material, Foundation voices, source/harmony relationships, patches, controls, volume and visual settings. They are configuration/material snapshots, not exact playback-position restoration; Solo is excluded. Loading is decoded and validated before application. Versions 1–4 force classic Foundation and room routing; explicit version-5 sound/depth modes survive re-export. Fresh defaults and complete presets use expressive Foundation version 2; saved settings objects missing that field remain classic. See [the compatibility decision](adr/0001-preserve-saved-sound-models.md).
 
-`sample-selection.mjs` gives each import, project, microphone take or frozen phrase ownership of its result. Newer selections invalidate older asynchronous results. Decoding can use an OfflineAudioContext without starting playback.
+`sample-selection.mjs` gives each import, project, microphone take, native-library selection or frozen phrase ownership of its result. Native source assets are same-origin WAVs fetched only on selection; metadata identifies their fixed original pitch. Newer selections invalidate older asynchronous results. Decoding can use an OfflineAudioContext without starting playback.
 
 `microphone-take.mjs` owns pending permission, cancellation, recorder events, its 60-second timer and track cleanup. `output-capture.mjs` associates chunks/completion with a take ID and waits for finalization before accepting another take. The capture processor enforces a five-minute frame limit; `wave-file.mjs` encodes PCM chunks incrementally instead of retaining duplicate full-length float buffers.
 
@@ -86,4 +86,4 @@ The five main editors are Foundation, Texture, Motion, Space and Tape. Your soun
 
 ## Checks and decisions
 
-See [testing](TESTING.md) for commands, browser diagnostics and evidence semantics, and [verification](../VERIFICATION.md) for the current acceptance boundary. Specs/reviews are indexed separately under [historical work](README.md#historical-specifications-and-reviews). `docs/adr/` is the optional decision location; no ADR files are currently recorded.
+See [testing](TESTING.md) for commands, browser diagnostics and evidence semantics, and [verification](../VERIFICATION.md) for the current acceptance boundary. Specs/reviews are indexed separately under [historical work](README.md#historical-specifications-and-reviews). `docs/adr/` records non-obvious compatibility decisions. Native authoring and deterministic listening fixtures are development tools, separate from the static application; see [the workflow](SURGE-TEXTURE.md).

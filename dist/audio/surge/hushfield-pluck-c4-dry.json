@@ -1,0 +1,182 @@
+{
+  "engine": "native Surge XT",
+  "engineVersion": "1.3.HEAD.f7b97c6",
+  "family": "pluck",
+  "intent": "damped physical string",
+  "processing": "dry; no enabled FX",
+  "sampleRate": 48000,
+  "durationSeconds": 24,
+  "channels": 2,
+  "encoding": "PCM16",
+  "rootMidi": 60,
+  "rootName": "C4",
+  "rootHz": 261.6255653005986,
+  "tuning": "12-TET, A4=440Hz",
+  "followsFoundationHarmony": false,
+  "noteSchedule": [
+    {
+      "on": 0.1,
+      "off": 1.2,
+      "midi": 60,
+      "velocity": 62
+    },
+    {
+      "on": 8.1,
+      "off": 9.2,
+      "midi": 60,
+      "velocity": 58
+    },
+    {
+      "on": 16.1,
+      "off": 17.2,
+      "midi": 60,
+      "velocity": 62
+    }
+  ],
+  "automation": [],
+  "template": "resources/data/patches_factory/Templates/Init Karplus-Strong.fxp",
+  "templateSha256": "d2d0f19cf44e7b4a50ff84acc35f923daa03d9a1fe7914e2ab07ebc4be9ef9ca",
+  "edits": [
+    {
+      "target": "volume",
+      "value": -12,
+      "display": "-12.00 dB"
+    },
+    {
+      "target": "scene[0].drift",
+      "value": 0.04,
+      "display": "4.00 %"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "scene[0].adsr[0].a",
+      "value": -7.965784284662087,
+      "display": "4.0 ms"
+    },
+    {
+      "target": "scene[0].adsr[0].d",
+      "value": 0.2630344058337938,
+      "display": "1.20 s"
+    },
+    {
+      "target": "scene[0].adsr[0].s",
+      "value": 0,
+      "display": "0.00 %"
+    },
+    {
+      "target": "scene[0].adsr[0].r",
+      "value": 0.2630344058337938,
+      "display": "1.20 s"
+    },
+    {
+      "target": "scene[0].osc[0].p[1] exciter",
+      "value": 0.62,
+      "display": "62.00 %"
+    },
+    {
+      "target": "scene[0].osc[0].p[2] decay1",
+      "value": 0.78,
+      "display": "78.00 %"
+    },
+    {
+      "target": "scene[0].osc[0].p[3] decay2",
+      "value": 0.74,
+      "display": "74.00 %"
+    }
+  ],
+  "rawMetrics": {
+    "peak": 0.0914587676525116,
+    "rms": 0.0030514013971564614,
+    "maxStep": 0.09540857374668121,
+    "dc": -3.210893871749207e-14,
+    "clippedSamples": 0
+  },
+  "wav": "hushfield-pluck-c4-dry.wav",
+  "wavSha256": "8e0290babe9ae6a3cb8177ada3e3402c1d40c507b0395990d603c49a53b779df",
+  "patch": "hushfield-pluck-c4-dry.fxp",
+  "patchSha256": "77d169fbf37bf10f9591a0f52af87350f24b6d17b1cef212be759ed92c40e1f5",
+  "humanListeningAcceptance": "pending",
+  "pcmReproducibility": "schedule and patch reproducible; native oscillator random state is not fully exposed",
+  "licenseEvidence": "https://surge-synthesizer.github.io/faq/",
+  "sourceCommit": "f7b97c682ade0b87da85ca5968b63d5c7c98e68d",
+  "sourceTag": "release_xt_1.3.4"
+}

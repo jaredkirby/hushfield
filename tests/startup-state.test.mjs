@@ -9,7 +9,7 @@ function startup(){
  const buttons=[{disabled:false},{disabled:true}];let resolve,reject,timer,reloaded=false;
  const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});
  const document={documentElement:root,getElementById:id=>({audioDetail:status,appLoadStatus:badge,reloadApp:reload})[id],querySelectorAll:selector=>selector==='.workspace,.transport'?regions:buttons};
- vm.runInNewContext(source.replace(/import\('\.\/build\/app\.js\?v=vintage-tape-1'\)/,"loadInstrument()"),{document,loadInstrument:()=>promise,setTimeout:fn=>{timer=fn;return 1;},clearTimeout:()=>{},location:{reload:()=>reloaded=true},console:{error(){}}});
+ vm.runInNewContext(source.replace(/import\('\.\/build\/app\.js\?v=[^']+'\)/,"loadInstrument()"),{document,loadInstrument:()=>promise,setTimeout:fn=>{timer=fn;return 1;},clearTimeout:()=>{},location:{reload:()=>reloaded=true},console:{error(){}}});
  return {root,status,badge,reload,regions,buttons,resolve,reject,slow:()=>timer(),retry:()=>callbacks.reload(),reloaded:()=>reloaded};
 }
 const x=startup();assert.equal(x.badge.textContent,'LOADING');assert.equal(x.root.dataset.appState,'loading');assert(x.buttons.every(b=>b.disabled));assert(x.regions.every(r=>r.attributes['aria-busy']==='true'&&'inert'in r.attributes));

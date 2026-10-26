@@ -1,0 +1,219 @@
+{
+  "sources": {
+    "music": "aee4ff60137db588038ec86a577f1c25750f1c87",
+    "ui": "0647c222ef70a3a4da2761cb5a2211a5c2754775",
+    "base": "6e5c607a76f53021ed4bb016fdd5a42a43edd817"
+  },
+  "musicFilesUnchanged": {
+    "dist/ambient-dsp.mjs": "b3727a539823dfc1d6051ea716113a42db15285e61703af4d9e93b08b680c81f",
+    "dist/ambient-settings.mjs": "b92586edebc51cb52538a5ff5145984a523873b39e22fdbcc5c0c84be5c8145b",
+    "dist/ambient-worklet.js": "94f1d9a6378be09ac900fc0c34d69abb73ee843d14da80a56acaa3574adbb4a8",
+    "dist/orbit-dsp.mjs": "c5ee7dec7ec7bea3ba94813dee604ba080ddca158f11edd00611e9a85fd48135",
+    "dist/orbit-worklet.js": "5d4cc13644b38248fe642c564ef171238c407cd9b9e57397137fd1623c519c9b",
+    "dist/piece-space.mjs": "d7aa499be8eb286731285c38a27ab86ee36d44b837a967830cd0b5b2c74edc4f",
+    "dist/piece-presets.mjs": "68da26062cdff687cb4a8162aa96b325d90c8678a8802d63e865c37a66ff4b0c",
+    "dist/project-file.mjs": "a88b4a734abd501d2af6aa4adeba4469760ebf9ee1d7cdc3f51e33c34112f7a2",
+    "dist/sound-patches.mjs": "4d1b380274d2ca6e3120a8b014a22393fed65c1875a8c4c1108ec261f51e9344",
+    "dist/audio/surge/manifest.json": "e4ee6bae78dc5a508be2f00f066d68b440c24f91dac0e7c7f499ba9b0e18afa8"
+  },
+  "listeningArtifacts": {
+    "shards-baseline-75s.wav": "aaab5ee6758dd0f9af67f108e7b98e33948914f3233947ceca0d520fd2dbc09a",
+    "shards-motion-75s.wav": "285418620fa78e0084e540b7990ac88754f9d40622374ca015cba39fce234f49",
+    "shards-foundation-75s.wav": "e80b680c458320edd235330a816baa1d08d237da0c5aded4272fbb58cd58698c",
+    "shards-full-75s.wav": "bbb8b8f782eef4d05da7131f6001eb5e24a28563363de3390de45b9ab785e091",
+    "shards-arc-180s.wav": "85cb6428c33a4392e68f23d20977ee516389323d696451581bec65a2db2b460e"
+  },
+  "recordedAt": "2026-10-26T04:10:03.815230+00:00",
+  "nodeTests": {
+    "passed": 99,
+    "failed": 0,
+    "files": 39,
+    "command": "npm test",
+    "durationMs": 9080.064292
+  },
+  "browser": {
+    "origin": "http://127.0.0.1:4890",
+    "newControlLayoutCases": 20,
+    "verifiedNavigationCases": 35,
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ],
+      [
+        820,
+        1180
+      ],
+      [
+        520,
+        768
+      ],
+      [
+        1280,
+        800
+      ]
+    ],
+    "groups": [
+      "Foundation/Sound",
+      "Space/Depth",
+      "Motion/Triggers/Brightness",
+      "Motion/Balls/Brightness"
+    ],
+    "views": [
+      "Foundation",
+      "Texture",
+      "Motion",
+      "Space",
+      "Tape",
+      "Visual",
+      "Source"
+    ],
+    "documentOverflowCases": 0,
+    "inspectorHorizontalOverflowCases": 0,
+    "squareErrorPixels": 0,
+    "transportSeparateAndVisible": true,
+    "exactColorEdit": {
+      "before": 38,
+      "after": 67,
+      "undo": 38,
+      "redo": 67
+    },
+    "depthKeyboardEdit": {
+      "before": 22,
+      "after": 23
+    },
+    "mixedBrightnessEdit": {
+      "individualThenAllShowsMixed": true,
+      "undoRestores18": true
+    },
+    "nativeSource": {
+      "name": "Surge evolving pad \u00b7 C4",
+      "seconds": 24,
+      "pitchRelationship": "original C4"
+    },
+    "livePlayback": {
+      "seconds": 92,
+      "masterMuted": true,
+      "blend": [
+        80,
+        35,
+        25
+      ],
+      "navigatedAndResized": true,
+      "endedPaused": true,
+      "consoleWarningsErrors": []
+    },
+    "noPausedOverlay": true,
+    "noTransportWaveform": true,
+    "depthChecksPassed": 7,
+    "pieceChecksPassed": 5,
+    "recovery": {
+      "explicitChoice": true,
+      "restoredPaused": true,
+      "color": 39,
+      "foundationRoom": 23,
+      "waveformSmoothing": 66,
+      "master": 0.55,
+      "source": "Surge evolving pad \u00b7 C4",
+      "historyCleared": true
+    }
+  },
+  "peerUiReview": {
+    "thread": "01a175cc-5033-7451-b4f6-c7c0d97bace3",
+    "standardsFindings": 0,
+    "specFindings": 0,
+    "mode": "read-only source review"
+  },
+  "physicalDeviceAcceptance": "not claimed",
+  "sourceHashes": {
+    "dist/app.js": "ee2138717c89cf18af0c50897444ae286f7f53eee4615787555db06ffdb8e551",
+    "dist/ambient-ui.mjs": "8759e6f825f5f994cd8816b62f92644ee825f29b16abc0efc854e10560d5b35b",
+    "dist/grain-worklet.js": "c5d0bdd9d937b97190ff2243b4d9f5f02b9b9ce077e43fbdc15f9feeac8eab76",
+    "dist/build/app.js": "725bc578e5d5e0b1bb18d17f242bffe16671b950698a2b1c949764e040aa7fd7",
+    "dist/build/grain-worklet.js": "48e43a1b8818d3fc18337d08d59f42dfc185eba62b29d6e05ca1b8e7d53b6428",
+    "dist/phone-ui.mjs": "efbc12786c4f5982e680856731e1aa04f78d57bcf67e984b2388ad7bec65d362",
+    "dist/sound-editor.mjs": "7cdeeb515bb3bd11aad4c345b74aa9db569367c38a528f41a598d1adc5a3620f"
+  },
+  "finalIndependentReview": {
+    "commit": "e3c4308ab0bd1fa8185703c7f45eadf6b9189544",
+    "standardsHardViolations": 0,
+    "standardsActionableSmells": 0,
+    "specActionableFindings": 0
+  },
+  "privatePromotion": {
+    "recordedAt": "2026-10-26T04:13:45.532615+00:00",
+    "commit": "f1eb200cf5a6c47e67285ad7338f2c9d430710f1",
+    "privateOrigin": "https://kirbys-mac-mini.tailac5a2a.ts.net:8449",
+    "handlerUnchanged": true,
+    "funnelEnabled": false,
+    "checks": [
+      {
+        "path": "/",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/build/app.js",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/build/grain-worklet.js",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/square-viewport.css",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/direct-controls.css",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "path": "/qa-musicality.html?saved",
+        "status": 200,
+        "bytesMatchLocal": true
+      },
+      {
+        "file": "shards-baseline-75s.wav",
+        "sha256Matches": true
+      },
+      {
+        "file": "shards-motion-75s.wav",
+        "sha256Matches": true
+      },
+      {
+        "file": "shards-foundation-75s.wav",
+        "sha256Matches": true
+      },
+      {
+        "file": "shards-full-75s.wav",
+        "sha256Matches": true
+      },
+      {
+        "file": "shards-arc-180s.wav",
+        "sha256Matches": true
+      }
+    ],
+    "browser": {
+      "combinedUiLoaded": true,
+      "soundControlsVisible": true,
+      "audioStartedAndAdvancedSeconds": 4,
+      "endedPaused": true,
+      "savedComparisonDurations": [
+        75,
+        75,
+        75,
+        75,
+        180
+      ]
+    }
+  }
+}

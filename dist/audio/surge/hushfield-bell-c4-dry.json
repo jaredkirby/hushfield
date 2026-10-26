@@ -1,0 +1,187 @@
+{
+  "engine": "native Surge XT",
+  "engineVersion": "1.3.HEAD.f7b97c6",
+  "family": "bell",
+  "intent": "soft FM2 bell",
+  "processing": "dry; no enabled FX",
+  "sampleRate": 48000,
+  "durationSeconds": 24,
+  "channels": 2,
+  "encoding": "PCM16",
+  "rootMidi": 60,
+  "rootName": "C4",
+  "rootHz": 261.6255653005986,
+  "tuning": "12-TET, A4=440Hz",
+  "followsFoundationHarmony": false,
+  "noteSchedule": [
+    {
+      "on": 0.1,
+      "off": 1.2,
+      "midi": 60,
+      "velocity": 62
+    },
+    {
+      "on": 8.1,
+      "off": 9.2,
+      "midi": 60,
+      "velocity": 58
+    },
+    {
+      "on": 16.1,
+      "off": 17.2,
+      "midi": 60,
+      "velocity": 62
+    }
+  ],
+  "automation": [],
+  "template": "resources/data/patches_factory/Templates/Init FM2.fxp",
+  "templateSha256": "30a55236f4b85c4b37978548a9dca70d81b75d5be9787ef6f5675f87b588cf66",
+  "edits": [
+    {
+      "target": "volume",
+      "value": -12,
+      "display": "-12.00 dB"
+    },
+    {
+      "target": "scene[0].drift",
+      "value": 0.04,
+      "display": "4.00 %"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "fx.type",
+      "value": 0,
+      "display": "Off"
+    },
+    {
+      "target": "scene[0].adsr[0].a",
+      "value": -6.380821783940931,
+      "display": "12.0 ms"
+    },
+    {
+      "target": "scene[0].adsr[0].d",
+      "value": 1.925999418556223,
+      "display": "3.80 s"
+    },
+    {
+      "target": "scene[0].adsr[0].s",
+      "value": 0,
+      "display": "0.00 %"
+    },
+    {
+      "target": "scene[0].adsr[0].r",
+      "value": 1.925999418556223,
+      "display": "3.80 s"
+    },
+    {
+      "target": "scene[0].osc[0].p[0] FM amount",
+      "value": 0.16,
+      "display": "16.00 %"
+    },
+    {
+      "target": "scene[0].osc[0].p[1] FM ratio",
+      "value": 2,
+      "display": "C : 2"
+    },
+    {
+      "target": "scene[0].osc[0].p[2] FM amount2",
+      "value": 0.045,
+      "display": "4.50 %"
+    },
+    {
+      "target": "scene[0].osc[0].p[3] FM ratio2",
+      "value": 3,
+      "display": "C : 3"
+    }
+  ],
+  "rawMetrics": {
+    "peak": 0.08867666125297546,
+    "rms": 0.020346431653956228,
+    "maxStep": 0.0036806289572268724,
+    "dc": -6.183854643626585e-12,
+    "clippedSamples": 0
+  },
+  "wav": "hushfield-bell-c4-dry.wav",
+  "wavSha256": "6803d26eacefc3d8867bc6f4eb111ce1de398d657eb73735ad94cf6f29bee4c5",
+  "patch": "hushfield-bell-c4-dry.fxp",
+  "patchSha256": "b5431970bced9a248ddb33a95bdaec14d6f8d52d33ffa6471c4f8693bf509581",
+  "humanListeningAcceptance": "pending",
+  "pcmReproducibility": "schedule and patch reproducible; native oscillator random state is not fully exposed",
+  "licenseEvidence": "https://surge-synthesizer.github.io/faq/",
+  "sourceCommit": "f7b97c682ade0b87da85ca5968b63d5c7c98e68d",
+  "sourceTag": "release_xt_1.3.4"
+}
