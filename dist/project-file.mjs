@@ -4,6 +4,7 @@ import { restoreAmbient } from "./ambient-settings.mjs";
 import { restoreVisual } from "./visual-analysis.mjs";
 import { restoreSoundState } from "./sound-patches.mjs";
 import { restoreSpace } from "./space-settings.mjs";
+import { restoreTape } from "./tape-settings.mjs";
 const PROJECT_FORMAT = "hushfield-project";
 const record = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 function restoreProjectFile(saved) {
@@ -51,6 +52,7 @@ async function decodeProject(text, { decodeAudio, defaults, ranges, controls }) 
   }
   if (["forward", "reverse", "pingpong"].includes(saved.params.scanMode)) params.scanMode = saved.params.scanMode;
   Object.assign(params, restoreSpace(saved.params, saved.version < 5));
+  Object.assign(params, restoreTape(saved.params));
   const selected = {};
   for (const [id, options] of Object.entries(controls)) selected[id] = options.includes(saved.controls[id]) ? saved.controls[id] : options[0];
   return {

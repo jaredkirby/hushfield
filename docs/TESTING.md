@@ -20,6 +20,7 @@ For one area, run its existing file, for example:
 node --test tests/piece-session.test.mjs tests/piece-presets.test.mjs
 node --test tests/session-recovery.test.mjs tests/project-roundtrip.test.mjs
 node --test tests/tape-impact.test.mjs tests/tape-dsp.test.mjs
+node --test tests/re201-dsp.test.mjs tests/re201-settings.test.mjs
 ```
 
 Source files live in `dist/`. The build emits the main bundle and four standalone worklets under `dist/build/`, embeds the three early shell scripts into HTML and updates source hashes. Include those generated changes with a source change. After committing a synchronized source/build, rebuilding should leave `dist/` unchanged:
@@ -42,6 +43,7 @@ Serve `dist/` from localhost or HTTPS, then open the route below on that server.
 | `/qa-piece.html` | Run offline checks | Foundation-fed live Texture, shared tone/width, direct processor harmony and finite stereo output. |
 | `/qa-synth.html` | Automatic | Orbit Worklet PCM, separate bank/item patches, effects, auditions, voice limits and stop behavior. |
 | `/qa-tape.html` | Run offline Tape checks | 44.1/48 kHz Worklet startup, bypass, coloration, repeats and delivered toggles. |
+| `/qa-space-echo.html` | Render audio comparisons / Run Worklet checks | Five 16-second, 48 kHz comparisons and ten offline assertions across 44.1/48 kHz for finite output, echo/spring tails, bypass and an audible difference. Static hosting can render and download clips; the listening server is needed only to save them for `?saved`. |
 | `/qa-ambient.html` | Automatic | Component-level Foundation/scene/voice rendering, stereo gesture changes and layer/audition routing. |
 | `/qa-visuals.html` | Run analysis checks | Real stereo analyser input and the three dithered renderers; plays a short, quiet test signal. |
 | `/qa-ambient-visual.html` | Automatic | Renderer-only timing samples at several canvas sizes. |
@@ -59,6 +61,16 @@ Play while navigating and rotating. Confirm that blend, selected settings, froze
 Use an isolated browser origin/unused port for generated recovery tests so you do not replace an existing draft. Recovery uses one database per origin, including the port; it is shared across paths on that origin.
 
 For audio changes, listen on the affected devices as well as checking PCM. Browser emulation and offline samples do not establish touch feel, latency, frame delivery, battery use, actual microphone operation or background continuity.
+
+## Space Echo checks and listening
+
+`tests/re201-dsp.test.mjs` checks all twelve head modes, constant-speed head timing, transient motor pitch changes and settling, per-pass frequency loss, independent spring timing, bounded sustained feedback, release after Feedback/Off, stereo bypass and model changes. Its frozen [Classic Tape fixture](../tests/fixtures/tape-classic-v1/README.md) requires exact same-runtime stereo Float32 PCM at 8, 44.1 and 48 kHz. Do not refresh the fixture when changing the current effect. `tests/re201-settings.test.mjs` covers explicit model selection, validation, project round trips, recovery and Worn memory compatibility.
+
+Open `/qa-space-echo.html` on any localhost or HTTPS static server. Render audio comparisons produces dry, Classic, all-heads-plus-spring, motor-glide and spring-only examples from the same synthesized phrase. They use a common source gain with no per-clip normalization, so compare level as well as character. These clips are recordings of our processor, not Roland hardware. Run Worklet checks exercises the built worklet separately from the Node engine tests.
+
+To retain the WAVs and receipt, run `npm run listening:serve` and render on that server. It saves `re201-*.wav` and `re201-receipt.json` under `.scratch/listening/artifacts/`. The `?saved` URL loads those files without rendering again. This comparison does not need `listening:prepare`; that preparation is for the separate full-Piece musicality comparison. See [listening-server prerequisites](../ops/README.md#listening-development-server) before hosting it. New renders replace files with the same names.
+
+Listen for distinct head rhythms, darker repeat tails, a pitch bend that settles after changing time and a spring response whose timing stays independent of tape speed. The [research note](research/re201-space-echo.md) identifies which behaviors come from manufacturer sources and which parameters are our approximations. Passing DSP checks does not establish a hardware match or a listening preference.
 
 ## Evidence
 

@@ -24,7 +24,7 @@ test('a project roundtrip retains stereo sample, overrides, voices, visuals, con
   assert.equal(restored.name,'My take');
   assert.deepEqual(restored.piece,session.piece);
   assert.equal(JSON.parse(serialized).version,5);
-  assert.deepEqual(restored.params,session.params);
+  assert.deepEqual(restored.params,{...session.params,tapeModel:1,echoMode:4,springMix:12});
   assert.deepEqual(restored.ambient,ambient);
   assert.deepEqual(restored.orbitSound,sounds);
   assert.equal(restored.visual.mode,'vector');assert.equal(restored.visual.gain,2);assert.equal(restored.visual.waveformSmoothing,38);
