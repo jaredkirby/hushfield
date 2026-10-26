@@ -55,6 +55,8 @@ class OrbitEngine {
     this.voices = [];
     this.harmony = [];
     this.followHarmony = false;
+    this.phrase = { motionDensity: 1 };
+    this.phraseCredit = { triggers: 1, balls: 1 };
     this.simulate = false;
     this.audible = false;
     this.triggerCount = 0;
@@ -89,6 +91,20 @@ class OrbitEngine {
   }
   setHarmony(notes) {
     this.harmony = Array.isArray(notes) ? notes.filter(Number.isFinite) : [];
+  }
+  setPhrase(phrase) {
+    const density = phrase?.motionDensity;
+    this.phrase = { motionDensity: Number.isFinite(density) ? clamp(density, .35, 1) : 1 };
+  }
+  allowEvent(bank) {
+    const density = this.phrase.motionDensity;
+    if (density === 1) return true;
+    // Each bank starts with a note; accumulated credit creates repeatable rests
+    // without changing the physics, consuming random state, or muting auditions.
+    this.phraseCredit[bank] += density;
+    if (this.phraseCredit[bank] < 1) return false;
+    this.phraseCredit[bank] -= 1;
+    return true;
   }
   setPatches(patches) {
     this.patches = restoreSoundState(patches);
@@ -128,6 +144,8 @@ class OrbitEngine {
       duration: patch.attack + patch.decay + patch.gate + patch.release,
       noise: (index + 1) * 893,
       coefficients: filterCoefficients(patch.cutoff, patch.resonance, this.rate),
+      toneCutoff: patch.cutoff,
+      toneTick: 0,
       z1: 0,
       z2: 0,
       left: Math.sqrt((1 - patch.pan / 100) / 2),
@@ -147,13 +165,13 @@ class OrbitEngine {
       const patch = patchFor(this.patches, "balls", ball.hue);
       const length = { minor: 7, major: 7, pentatonic: 5, chromatic: 12 }[patch.scale] || 12;
       const midi = Math.min(120, soundMidi(patch, (edge + ball.hue) % length) + (ball.hue % 3 === 0 ? 12 : 0));
-      this.note("balls", ball.hue, midi);
+      if (this.allowEvent("balls")) this.note("balls", ball.hue, midi);
     });
     for (const index of crossedPads(previous, this.state.phase + orientation, this.options.triggers)) {
       this.triggerCount++;
       if (this.audible) {
         const patch = patchFor(this.patches, "triggers", index);
-        if (this.note("triggers", index, soundMidi(patch, index))) this.hits.push({ index, time: this.frames / this.rate });
+        if (this.allowEvent("triggers") && this.note("triggers", index, soundMidi(patch, index))) this.hits.push({ index, time: this.frames / this.rate });
       }
     }
     if (this.hits.length > 48) this.hits.splice(0, this.hits.length - 48);
@@ -166,6 +184,7 @@ class OrbitEngine {
       balls: this.state.balls.map((ball) => ({ ...ball })),
       triggerCount: this.triggerCount,
       voices: this.voices.filter((voice) => voice.releaseAt === void 0).length,
+      phrase: { ...this.phrase },
       time: this.frames / this.rate
     };
   }
@@ -191,6 +210,17 @@ class OrbitEngine {
         let sample = waveform(voice, delta);
         voice.phase = (voice.phase + delta) % 1;
         voice.modPhase = (voice.modPhase + Math.min(0.46, voice.frequency * patch.fmRatio / this.rate)) % 1;
+        // A separate envelope opens/darkens the filter without changing the
+        // amplitude envelope. Zero depth keeps the classic static path exact.
+        if (patch.toneAmount && voice.toneTick-- <= 0) {
+          const amount = voice.age < patch.toneAttack ? voice.age / patch.toneAttack : Math.max(0, 1 - (voice.age - patch.toneAttack) / patch.toneDecay);
+          const target = clamp(patch.cutoff * 2 ** (patch.toneAmount * amount / 12), 30, this.rate * .46);
+          // Smooth control-rate changes to avoid zippering; cadence is tied to
+          // voice samples so processing block sizes do not change the sound.
+          voice.toneCutoff += (target - voice.toneCutoff) * (1 - Math.exp(-32 / (this.rate * .004)));
+          voice.coefficients = filterCoefficients(voice.toneCutoff, patch.resonance, this.rate);
+          voice.toneTick = 31;
+        }
         const c = voice.coefficients, filtered = c.b0 * sample + voice.z1;
         voice.z1 = c.b1 * sample - c.a1 * filtered + voice.z2;
         voice.z2 = c.b2 * sample - c.a2 * filtered;

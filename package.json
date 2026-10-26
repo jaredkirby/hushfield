@@ -8,7 +8,10 @@
     "build": "node ops/build.mjs",
     "test:interaction": "node --test tests/project-file.test.mjs tests/visual-analysis.test.mjs tests/ambient-points.test.mjs tests/startup-state.test.mjs tests/page-navigation.test.mjs tests/phone-shell.test.mjs tests/phone-controls.test.mjs tests/audio-startup.test.mjs",
     "test": "node --test tests/*.test.mjs",
-    "start": "python3 -m http.server 4878 --bind 127.0.0.1 --directory dist"
+    "start": "python3 -m http.server 4878 --bind 127.0.0.1 --directory dist",
+    "listening:prepare": "node ops/listening-prepare.mjs",
+    "listening:serve": "node ops/listening-server.mjs",
+    "surge:verify": "node --test tests/listening-artifacts.test.mjs"
   },
   "version": "0.1.0",
   "description": "An interactive ambient music instrument with granular synthesis, Orbit rhythms, tape echo and dithered visuals.",

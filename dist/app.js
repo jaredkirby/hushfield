@@ -3,6 +3,7 @@ import { selectPiecePreset } from "./piece-presets.mjs";
 import { restorePiece, piecePlayback } from "./piece-session.mjs";
 import { followChord } from "./piece-harmony.mjs";
 import { createPieceSpace } from "./piece-space.mjs";
+import { SPACE_DEFAULTS, SPACE_FIELDS } from "./space-settings.mjs";
 import { createRenderClock } from "./render-clock.mjs";
 import { createProcessorGuard, releaseAudioGraph } from "./audio-lifecycle.mjs";
 import { setupPieceBlend } from "./piece-blend.mjs";
@@ -26,10 +27,10 @@ import { requestPlaybackSession, resumeFromTap, verifyAudioClock, playTestNotes 
 import { boundary, containBalls, makeOrbitState, shapePoints } from "./orbit-physics.mjs?v=hushfield-1";
 const $ = (id) => document.getElementById(id);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
-const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
+const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, ...SPACE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
 let recovery, restoringSession = false, sampleDecoder;
-let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel;
-let phraseRequest, nextPhraseId = 0, foundationReady = false, motionReady = false;
+let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel, texturePhraseChannel;
+let phraseRequest, nextPhraseId = 0, foundationReady = false, motionReady = false, textureReady = false;
 function markEdited() {
   renderClock.invalidate();
   if (!restoringSession) recovery?.edited();
@@ -46,7 +47,7 @@ let reportedOrbitVoices = 0;
 let blendUI, visuals, volumeStepper, shapeStepper, soundEditors, showOrbitPanel, orbitAudio, limiter, tapeNode;
 let ambientState = { ...AMBIENT_DEFAULTS }, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
 let audioGeneration = 0, restartPending = false, clockSnapshot;
-let soundState = createSoundState();
+let soundState = selectPiecePreset("still", { defaults: initial, cancelPending() {} }).soundState;
 const orbitState = makeOrbitState();
 const padButtons = [], padFlashes = Array(MAX_PADS).fill(-Infinity);
 let paddleFlash = -Infinity;
@@ -93,6 +94,7 @@ function makeControl(parent, id, label, min, max, step, unit = "", display) {
   ranges[id] = { input, render };
   input.addEventListener("input", () => {
     params[id] = +input.value;
+    if (SPACE_FIELDS.some(field => field.id === id)) params.spaceVersion = 2;
     render();
     syncEngine();
     if (id === "orbitBalls") {
@@ -130,6 +132,11 @@ makeControl("delayControls", "feedback", "Feedback", 0, 80, 1, "%");
 makeControl("delayControls", "delayMix", "Mix", 0, 70, 1, "%");
 makeControl("spaceControls", "reverb", "Reverb", 0, 85, 1, "%");
 makeControl("spaceControls", "width", "Stereo width", 0, 100, 1, "%");
+const depthGroup = document.createElement("div");
+depthGroup.className = "control-group";
+depthGroup.innerHTML = '<div class="group-title"><h3>Depth</h3><span>PART ROOM</span></div><div id="depthControls"></div>';
+$("fxPage").querySelector(".control-grid").append(depthGroup);
+for (const field of SPACE_FIELDS) makeControl("depthControls", field.id, field.label, field.min, field.max, field.step, field.unit);
 for (const [id, label] of [["drive", "Drive"], ["wow", "Wow"], ["flutter", "Flutter"], ["hiss", "Hiss"], ["tapeTone", "Tone"]]) makeControl("tapeControls", id, label, 0, 100, 1, "%");
 makeControl("orbitControls", "orbitTriggers", "Triggers", 1, 24, 1);
 makeControl("orbitControls", "orbitBalls", "Balls", 1, 12, 1);
@@ -168,9 +175,8 @@ function syncEngine() {
   if (!audioReady || !engine) return;
   const send = { ...params, width: 100, position: params.position / 100 };
   engine.port.postMessage({ type: "params", params: send });
-  filter.type = $("filterType").value;
-  filter.frequency.setTargetAtTime(params.cutoff, ctx.currentTime, 0.03);
-  filter.Q.setTargetAtTime(params.resonance, ctx.currentTime, 0.03);
+  spaceBus?.setTone($("filterType").value, params.cutoff, params.resonance);
+  spaceBus?.setDepth(params);
   tapeNode?.port.postMessage(params);
   spaceBus?.setWidth(params.width);
   reverbWet.gain.setTargetAtTime(params.reverb / 100, ctx.currentTime, 0.05);
@@ -204,9 +210,12 @@ function resetAudioGraph() {
   harmonyChannel?.port1.close();
   harmonyChannel?.port2.close();
   harmonyChannel = null;
+  texturePhraseChannel?.port1.close();
+  texturePhraseChannel?.port2.close();
+  texturePhraseChannel = null;
   processorGuard.clear();
   releaseAudioGraph({ context: ctx, processors: [engine, tapeNode, ambientNode, recordDestination], orbit: orbitAudio });
-  foundationReady = motionReady = false;
+  foundationReady = motionReady = textureReady = false;
   foundationLayer = spaceBus = null;
   ctx = master = engine = orbitAudio = analyser = limiter = tapeNode = ambientNode = grainLayer = orbitLayer = recordDestination = void 0;
   lastMeter = 0;
@@ -277,6 +286,8 @@ async function initializeAudio() {
   textureNode.port.onmessage = ({ data }) => {
     if (textureNode !== engine) return;
     if (data.type === "ready") {
+      textureReady = true;
+      connectTexturePhrase();
       syncEngine();
       sendBuffer();
       syncTextureSource();
@@ -305,10 +316,10 @@ async function initializeAudio() {
   reverbWet = spaceBus.wet;
   grainLayer = ctx.createGain();
   engine.connect(grainLayer);
-  grainLayer.connect(spaceBus.input);
+  grainLayer.connect(spaceBus.parts.texture);
   orbitLayer = ctx.createGain();
-  orbitLayer.connect(spaceBus.input);
-  orbitAudio = createOrbitAudio(ctx, orbitLayer, soundState, spaceBus.input, {
+  orbitLayer.connect(spaceBus.parts.motion);
+  orbitAudio = createOrbitAudio(ctx, orbitLayer, soundState, spaceBus.parts.motion, {
     options: { ...orbitOptions(), balls: params.orbitBalls, triggers: params.orbitTriggers },
     balls,
     onReady() {
@@ -361,16 +372,18 @@ function createAmbientAudio() {
     if (data.type === "ready") {
       foundationReady = true;
       connectPieceHarmony();
+      connectTexturePhrase();
       node.port.postMessage({ type: "settings", value: { ...ambientState, enabled: true } });
       node.port.postMessage({ type: "play", value: running });
     } else {
       ambientStats = data;
+      syncPieceGains(1.2);
       updatePadLabels();
     }
   };
   foundationLayer = ctx.createGain();
   ambientNode.connect(foundationLayer);
-  foundationLayer.connect(spaceBus.input);
+  foundationLayer.connect(spaceBus.parts.foundation);
   ambientNode.connect(engine);
   connectPieceHarmony();
 }
@@ -380,14 +393,24 @@ function connectPieceHarmony() {
   orbitAudio.node.port.postMessage({ type: "harmonyPort", port: harmonyChannel.port2 }, [harmonyChannel.port2]);
   ambientNode.port.postMessage({ type: "harmonyPort", port: harmonyChannel.port1 }, [harmonyChannel.port1]);
 }
+function connectTexturePhrase() {
+  if (!foundationReady || !textureReady || texturePhraseChannel || !ambientNode || !engine) return;
+  texturePhraseChannel = new MessageChannel();
+  engine.port.postMessage({ type: "phrasePort", port: texturePhraseChannel.port2 }, [texturePhraseChannel.port2]);
+  ambientNode.port.postMessage({ type: "phrasePort", port: texturePhraseChannel.port1 }, [texturePhraseChannel.port1]);
+}
+function syncPieceGains(slew = .08) {
+  const mix = piecePlayback(piece, running, solo, ambientStats.phrase);
+  if (ctx) for (const [node, value] of [[foundationLayer, mix.foundation], [grainLayer, mix.texture], [orbitLayer, mix.motion]]) {
+    node?.gain.setTargetAtTime(value, ctx.currentTime, slew);
+  }
+}
 function syncPlayback() {
-  const mix = piecePlayback(piece, running, solo);
+  const mix = piecePlayback(piece, running, solo, ambientStats.phrase);
   engine?.port.postMessage({ type: "captureFoundation", value: running });
   engine?.port.postMessage({ type: "play", value: running && mix.texture > 0 });
   ambientNode?.port.postMessage({ type: "play", value: mix.generate });
-  if (ctx) for (const [node, value] of [[foundationLayer, mix.foundation], [grainLayer, mix.texture], [orbitLayer, mix.motion]]) {
-    node?.gain.setTargetAtTime(value, ctx.currentTime, 0.08);
-  }
+  syncPieceGains();
   orbitAudio?.setTransport({ simulate: running, audible: running && mix.motion > 0 });
   orbitAudio?.node.port.postMessage({ type: "followHarmony", value: piece.followHarmony });
 }
@@ -526,6 +549,44 @@ function generateDemo(key) {
   return createBuffer(channels, rate);
 }
 const demoNames = { glass: "Glass garden", piano: "Felt & fragments", rain: "After the rain", voice: "Vowel machine" };
+const surgeSources = document.createElement('optgroup');
+surgeSources.label = 'Surge textures · original C4';
+for (const [id, label] of [['pad', 'Evolving pad'], ['pluck', 'Damped pluck'], ['bell', 'Soft FM bell']]) {
+  const option = document.createElement('option');
+  option.value = 'surge-' + id; option.textContent = label + ' · C4'; surgeSources.append(option);
+}
+$("demo").append(surgeSources);
+let surgeManifest;
+async function loadSurgeTexture(id) {
+  try {
+    await sampleSelection.run(async () => {
+      if (!surgeManifest) {
+        const response = await fetch('./audio/surge/manifest.json');
+        if (!response.ok) throw new Error('The source library could not be loaded.');
+        const manifest = await response.json();
+        if (manifest.schema !== 1 || !Array.isArray(manifest.assets)) throw new Error('The source library is invalid.');
+        surgeManifest = manifest;
+      }
+      const asset = surgeManifest.assets.find(item => item.id === id);
+      if (!asset || !/^\.\/audio\/surge\/[a-z0-9-]+\.wav$/.test(asset.url)) throw new Error('This source is unavailable.');
+      const response = await fetch(asset.url);
+      if (!response.ok) throw new Error('The sound could not be loaded.');
+      const decoded = await decodeContext().decodeAudioData(await response.arrayBuffer());
+      if (decoded.duration > 60 || !decoded.length) throw new Error('This source has an unsupported duration.');
+      return { asset, decoded };
+    }, ({ asset, decoded }) => {
+      piece.source = 'sample';
+      setSample(decoded, asset.label + ' · C4', 'SURGE XT · ORIGINAL C4');
+      $("sourceType").textContent = 'NATIVE SURGE XT';
+      $("demo").value = 'surge-' + id;
+      syncTextureSource();
+      toast('C4 source selected. It keeps its original pitch as Foundation changes.');
+    });
+  } catch (error) {
+    $("demo").selectedIndex = -1;
+    toast('Could not load Surge texture: ' + error.message);
+  }
+}
 function loadDemo(key) {
   sampleSelection.cancel();
   demoKey = key;
@@ -1315,6 +1376,10 @@ $("volume").oninput = () => {
   if (master) master.gain.setTargetAtTime(+$("volume").value, ctx.currentTime, 0.03);
 };
 $("demo").onchange = () => {
+  if ($("demo").value.startsWith('surge-')) {
+    loadSurgeTexture($("demo").value.slice(6));
+    return;
+  }
   piece.source = "sample";
   loadDemo($("demo").value);
   syncTextureSource();

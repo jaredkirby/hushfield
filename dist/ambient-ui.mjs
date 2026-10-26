@@ -2,9 +2,15 @@ import { AMBIENT_FIELDS, AMBIENT_SCENES, applyAmbientScene } from "./ambient-set
 import { attachStepper, panelNav } from "./phone-ui.mjs?v=hushfield-1";
 function setupAmbientUI({ getState, onChange, onNew }) {
   const page = document.getElementById("ambientPage"), fields = page.querySelector(".ambient-fields"), records = [];
-  const nav = panelNav(page, [["compose", "Compose"], ["layers", "Voices"]], (key) => {
+  const nav = panelNav(page, [["compose", "Compose"], ["sound", "Sound"], ["layers", "Voices"]], (key) => {
     fields.querySelectorAll(".control").forEach((row) => row.hidden = row.dataset.group !== key);
+    refreshHelp();
   }, { className: "ambient-panel-tabs", ariaLabel: "Ambient control pages" });
+  function refreshHelp() {
+    page.querySelector('.ambient-help').textContent = page.dataset.controlPanel === 'sound'
+      ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + 'Color shapes harmonics. Drift moves each voice gently. Bloom changes color over time.'
+      : 'Drag voices to shape pitch and stereo position. Foundation supplies the harmony and live Texture material.';
+  }
   for (const field of AMBIENT_FIELDS.filter((f) => !["grains", "orbit", "space"].includes(f.id))) {
     const row = document.createElement("div");
     row.className = "control";
@@ -31,6 +37,7 @@ function setupAmbientUI({ getState, onChange, onNew }) {
       const state = getState();
       if (field.id === "scene") applyAmbientScene(state, +input.value);
       else state[field.id] = +input.value;
+      if (field.group === 'sound') state.compositionVersion = 2;
       refresh();
       onChange(field.id);
     });
@@ -44,6 +51,7 @@ function setupAmbientUI({ getState, onChange, onNew }) {
     document.body.classList.add("ambient-mode");
     document.getElementById("ambientSceneName").textContent = AMBIENT_SCENES[state.scene].name;
     document.getElementById("ambientSeed").textContent = "PIECE " + state.seed.toString(16).toUpperCase().padStart(8, "0");
+    refreshHelp();
   }
   document.getElementById("newAmbient").onclick = onNew;
   refresh();

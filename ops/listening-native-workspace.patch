@@ -1,0 +1,45 @@
+diff --git a/src/common/CMakeLists.txt b/src/common/CMakeLists.txt
+index 327e74e..04ddce5 100644
+--- a/src/common/CMakeLists.txt
++++ b/src/common/CMakeLists.txt
+@@ -71,6 +71,9 @@ else()
+   )
+ 
+   if(APPLE)
++    # Local headless macOS build: audio workgroup availability uses Objective-C++.
++    set_source_files_properties(${SURGE_JUCE_PATH}/modules/juce_audio_basics/juce_audio_basics.cpp
++      PROPERTIES COMPILE_FLAGS "-x objective-c++")
+     target_sources(juce_dsp_rack_sub PRIVATE
+       ${SURGE_JUCE_PATH}/modules/juce_core/juce_core.mm
+       ${SURGE_JUCE_PATH}/modules/juce_audio_formats/juce_audio_formats.mm
+diff --git a/src/common/SurgeStorage.cpp b/src/common/SurgeStorage.cpp
+index bb8def6..1c4ebc4 100644
+--- a/src/common/SurgeStorage.cpp
++++ b/src/common/SurgeStorage.cpp
+@@ -338,6 +338,10 @@ SurgeStorage::SurgeStorage(const SurgeStorage::SurgeStorageConfig &config) : oth
+     }
+ #endif
+ 
++    // Hushfield local authoring build: contain user state within the workspace.
++    if (auto *localUserData = getenv("HUSHFIELD_SURGE_USER_DATA"))
++        userDataPath = fs::path{localUserData};
++
+     try
+     {
+         userDataPathValid = false;
+diff --git a/src/surge-python/CMakeLists.txt b/src/surge-python/CMakeLists.txt
+index 88e9baa..4d486ec 100644
+--- a/src/surge-python/CMakeLists.txt
++++ b/src/surge-python/CMakeLists.txt
+@@ -10,6 +10,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
+   surge::surge-common
+   )
+ 
++# Local headless macOS binding: link frameworks used by retained JUCE core.
++if(APPLE)
++  target_link_libraries(${PROJECT_NAME} PRIVATE "-framework Cocoa" "-framework IOKit" "-framework Security")
++endif()
++
+ if(UNIX AND NOT APPLE)
+   find_package(Threads REQUIRED)
+ 

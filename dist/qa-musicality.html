@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hushfield listening comparisons</title>
+<style>body{max-width:1000px;margin:24px auto;padding:0 18px;background:#090909;color:#eeeeee;font:14px/1.6 ui-monospace,monospace}button,select{font:inherit;color:inherit;background:#191919;border:1px solid #888888;padding:10px}button:disabled{opacity:.5}a{color:#ffffff}audio{display:block;width:100%;margin:8px 0}article{border-top:1px solid #666666;padding:12px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere}label{display:inline-block;margin:8px 8px 8px 0}.status{min-height:3em}small{color:#bbbbbb}</style>
+<h1>Hear the musical changes</h1><p>Compare the captured original, new Motion instruments, new Foundation, and the full Piece. Each uses the same preset, seed and Blend. Playback gain matches stereo RMS across examples; human preference and phone/tablet acceptance are still open.</p>
+<label>Piece <select id="preset"><option value="shards">Glass shards</option><option value="still">Stillwater</option><option value="cloud">Slow cloud</option><option value="worn">Worn memory</option></select></label>
+<button id="render">Render comparison</button><button id="quick">Run short audio check</button>
+<p id="status" class="status" role="status">Ready. Run node ops/listening-prepare.mjs and node ops/listening-server.mjs first. Offline rendering makes no live sound.</p>
+<div id="players"></div><details><summary>Render evidence</summary><pre id="receipt"></pre></details>
+<p><small>The development fixture pins Grain randomness and delivers harmony/phrase payloads at deterministic audio blocks. DSP, bank effects, shared finishing, Tape and limiter run in the real browser audio graph. Separate production checks cover asynchronous MessagePort delivery. RMS matching is an energy comparison, not a perceptual loudness measurement.</small></p>
+<p><a href="audio/surge/manifest.json">Native Surge source manifest</a> · <a href="index.html">Open the instrument</a></p>
+<script type="module" src="qa-musicality.mjs"></script></html>

@@ -12,9 +12,11 @@ Solo makes one part audible even if its saved blend level is zero, while tempora
 
 Compose controls the scene, key, scale, chord length, activity and evolution. Voices adjusts the chord bed, melodic notes and airy noise. The four dots are sustained chord voices: drag vertically for scale steps and horizontally for pan. The pitches glide to their new values. Reset dots returns all four to their default positions.
 
-Hold chord pauses harmonic changes while the Piece continues. New piece changes the seed and restarts its musical progression while keeping sounds and blend settings.
+Sound adds **Color**, **Drift**, and **Bloom**. Color changes harmonic richness, Drift gently moves the voices independently, and Bloom changes their color over time. New Pieces use recurring motifs with deliberate rests and nearby chord voicings. Evolution also controls the depth of a two-minute phrase: Texture gradually grows while Motion becomes sparser, then their roles return. The saved Blend stays unchanged; Solo still isolates the requested part.
 
-The complete-piece menu is different from Scene. Stillwater, Slow cloud, Glass shards and Worn memory set Foundation, blend levels, live Texture source, linked Motion, sound patches and finishing controls together. The Scene card changes Foundation's scene without replacing the whole Piece. Existing optional source material remains available in Your sound / trim.
+Hold chord pauses harmonic changes while the Piece continues, including its slower musical development. New piece changes the seed and restarts its musical progression while keeping sounds and blend settings.
+
+The complete-piece menu is different from Scene. Stillwater, Slow cloud, Glass shards and Worn memory set Foundation, blend levels, live Texture source, linked Motion, sound patches and finishing controls together. Each complete preset has complementary trigger and ball instruments. The Scene card changes Foundation's scene without replacing the whole Piece. Existing optional source material remains available in Your sound / trim.
 
 ## Texture sources
 
@@ -32,6 +34,8 @@ Grain size and density shape smoothness and thickness. Position chooses material
 
 Your sound / trim opens the source tool. Import browser-decodable audio, choose a synthesized demo, or record the microphone. The app retains up to 60 seconds of source audio. Apply trim commits the selected range; Restore full sample returns to the retained original. Returning with Use this material selects it as Texture; opening an editor alone does not raise its blend level.
 
+The source menu also offers **Evolving pad**, **Damped pluck**, and **Soft FM bell** under **Surge textures · original C4**. These are 24-second recordings made by a native Surge XT engine, loaded locally only when selected. Their pitch is C4 at A4=440 Hz; they retain that pitch as Foundation changes. Use Texture Pitch, hold a matching harmony, or use the source as a less tonal background. [Native source details and listening comparisons](SURGE-TEXTURE.md).
+
 Listen to source pauses the Piece and plays the original material directly through master volume, bypassing shared Space and Tape. It is an audition, not a preview of the processed Texture.
 
 ## Motion and harmony
@@ -40,11 +44,11 @@ Motion uses Orbit: a rotating circle/polygon, bouncing balls and 1–24 equally 
 
 HARMONY LINKED makes new notes follow Foundation's current chord tones. Foundation continues supplying harmony at zero audible Foundation blend. INDEPENDENT NOTES uses patch tuning instead. Existing sustained notes finish normally when harmony changes. Imported and frozen Texture material is not retuned by this link.
 
-Triggers and Balls have separate sound banks. Select All or an individual item, then edit Voice, Envelope, Tone or Space. An All edit changes that field across the bank while retaining unrelated overrides. Bank delay/feedback/room controls apply to that bank. Listen and tapping a trigger audition its patch through shared finishing without raising the Motion blend level.
+Triggers and Balls have separate sound banks. Select All or an individual item, then edit Voice, Envelope, Tone, Brightness or Space. Brightness has its own attack, decay and signed depth in semitones, independent of amplitude. A zero depth leaves the static filter unchanged. An All edit changes that field across the bank while retaining unrelated overrides. Bank delay/feedback/room controls apply to that bank. Listen and tapping a trigger audition its patch through shared finishing without raising the Motion blend level.
 
 ## Shared finishing
 
-Space's filter, stereo width and room process the normal Foundation, Texture and Motion blend. Motion's own bank effects remain upstream of this shared path.
+Space's filter and stereo width process the normal Foundation, Texture and Motion blend. **Depth** sets each part's room send; Texture starts farther back than Foundation. **Room low cut** removes bass from ambience, and **Room high cut** darkens its tail. Reverb controls the overall room level. The modern room return also follows shared width. Motion's own bank effects remain upstream of this shared path.
 
 Tape starts Off in a new session. On adds a warm direct tape path and darker repeats. Drive, Wow, Flutter and Tone affect the direct signal even at zero echo Mix. Mix sets repeat level; Time sets delay length; Feedback controls repeats; Hiss follows the input envelope. Off bypasses the whole Tape effect, including repeats and coloration.
 
@@ -70,7 +74,7 @@ Expensive drawing is capped at 30 fps independently of audio processing. Audio t
 
 ## Save, recover and record
 
-Save project downloads a version-4 `.hushfield.json` file. It contains the retained sample/frozen phrase, Texture source relationship, blend, harmony link, Foundation voices, patches, controls, volume and Visual settings. Versions 1–3 load through migration; their retained material/blend are preserved and Motion uses independent tuning. The file restores configuration and material, not an exact playback position, waveform history or Solo state. Project input is limited to 30 MiB, including encoded audio.
+Save project downloads a version-5 `.hushfield.json` file. It contains the retained sample/frozen phrase, Texture source relationship, blend, harmony link, Foundation voices, patches, controls, volume and Visual settings. Versions 1–4 load through migration with retained material/blend and classic Foundation/shared-room behavior. Versions 1–3 keep independent Motion tuning. Re-exporting an older Piece retains its sound mode. Choosing a complete preset opts into new sounds and depth defaults; editing Foundation Sound opts into the evolving voice, and editing Depth opts into independent room sends. The file restores configuration and material, not an exact playback position, waveform history or Solo state. Project input is limited to 30 MiB, including encoded audio.
 
 Recovery stores one bounded draft per browser origin (scheme, host and port) in IndexedDB. Paths on the same origin share this draft. A previous draft is offered explicitly; edits do not overwrite it until you recover or discard it. Recovery replaces the current session and starts paused. Private browsing, storage clearing/quota, multiple tabs or eviction can affect availability; export a project for a separate copy.
 

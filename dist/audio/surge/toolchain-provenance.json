@@ -1,0 +1,91 @@
+{
+  "stage": "native-toolchain-and-six-candidates-validated",
+  "recordedAt": "2026-10-26T02:02:10.144231+00:00",
+  "upstreamRepository": "https://github.com/surge-synthesizer/surge",
+  "tag": "release_xt_1.3.4",
+  "commit": "f7b97c682ade0b87da85ca5968b63d5c7c98e68d",
+  "submodules": [
+    "cf5754b19c87ea63758802e3f4239c05a77f1412 libs/JUCE (cf5754b)",
+    " ec6edc5c39c25e4eb3fca51b753f9995e97215da libs/LuaJitLib/LuaJIT (ec6edc5)",
+    " 64af78c6a7959cd5753ad165ec9f65591aa96f2d libs/PEGTL (64af78c)",
+    " 087dd16e2d17e6b3f1c9a92817a8a7348ea08168 libs/clap-juce-extensions (087dd16)",
+    " df8f16c69ba1c1a15fb105f0c5a2e5b9ac6be742 libs/clap-juce-extensions/clap-libs/clap (df8f16c)",
+    " 7b53a685e11465154b4ccba3065224dbcbf8a893 libs/clap-juce-extensions/clap-libs/clap-helpers (7b53a68)",
+    " f7614460cd3e295f6f6132f9052984c7bca9a69d libs/eurorack/eurorack (f761446)",
+    " a33701196adfad74917046096bf5a2aa0ab0bb50 libs/fmt (a337011)",
+    " d0ea53db94a329bce56e9382852e0931d7744651 libs/libsamplerate (d0ea53d)",
+    " b7a0f2de07ed8692963605561fe1a3793885994b libs/melatonin_inspector (b7a0f2d)",
+    " 3eb56f2452244b343ce738efd067d1082b67f9b4 libs/oddsound-mts/MTS-ESP (3eb56f2)",
+    " 96292e6965f74d5e08108f5f717df0bf8aa06b57 libs/pffft (96292e6)",
+    " 0bd8896a4010f2d91b2340570c24fa08606ec406 libs/pybind11 (0bd8896)",
+    " 71fd833d9666141edcd1d3c109a80e228303d8d7 libs/simde (71fd833)",
+    " da8f73412998e4f1adf1100dc187533a51af77fd libs/simde/test/munit (da8f734)",
+    " ae9c7e4f3ab58c9b26c5b45995a8adc16ec0830d libs/sst/sst-basic-blocks (ae9c7e4)",
+    " 9418be4d6e059e236db43f99925f46492203ec55 libs/sst/sst-cpputils (9418be4)",
+    " 43a54d94370986f7fe92931493435f2a8b67603f libs/sst/sst-effects (43a54d9)",
+    " 9eb74b595c0fc244fdd67452fc17948edec4cf28 libs/sst/sst-filters (9eb74b5)",
+    " 49ee7eb761bc06d0c0a012659f975d59b868e3e8 libs/sst/sst-plugininfra (49ee7eb)",
+    " 614bbe87b80435d87ab8791564370e0c1d13627d libs/sst/sst-plugininfra/libs/filesystem/ghc-filesystem (614bbe8)",
+    " 16413c213de38e703d883006193734e8b1178d5d libs/sst/sst-plugininfra/libs/miniz (16413c2)",
+    " 42bfa678e4f2447d0f4c9a51b7ba7ea68f6da108 libs/sst/sst-waveshapers (42bfa67)",
+    " 4cbe55f2da86c0302368a681406553a1dd7074dd libs/tuning-library (4cbe55f)"
+  ],
+  "patch": "workspace-build.patch",
+  "patchSha256": "47b545e361a92e139826d248febfda7374be664981df50829d34d5281e0908b7",
+  "patchPurpose": [
+    "Redirect user data via HUSHFIELD_SURGE_USER_DATA for workspace containment.",
+    "Compile JUCE audio_basics as Objective-C++ in official headless build mode on macOS.",
+    "Link Cocoa, IOKit and Security framework dependencies of retained JUCE core in headless Python binding."
+  ],
+  "dependencies": {
+    "cmake": "3.31.6",
+    "numpy": "2.0.2",
+    "python": "3.9.6"
+  },
+  "configuration": {
+    "SURGE_BUILD_PYTHON_BINDINGS": "ON",
+    "SURGE_BUILD_TESTRUNNER": "OFF",
+    "SURGE_BUILD_XT": "OFF",
+    "SURGE_BUILD_FX": "OFF",
+    "SURGE_SKIP_JUCE_FOR_RACK": "ON",
+    "SURGE_COPY_AFTER_BUILD": "OFF",
+    "CMAKE_OSX_DEPLOYMENT_TARGET": "14.0",
+    "CMAKE_BUILD_TYPE": "Release",
+    "SURGE_SKIP_WERROR": "ON"
+  },
+  "systemInstall": false,
+  "paidCalls": false,
+  "attempts": [
+    {
+      "configuration": "default GUI helpers",
+      "result": "failed: pinned JUCE GUI calls CGWindowListCreateImage removed from host SDK27"
+    },
+    {
+      "configuration": "headless at default deployment10.9",
+      "result": "failed: unsupported libc++ target; JUCE audio_basics requires Objective-C++"
+    }
+  ],
+  "pythonAbi": "cpython-39-darwin",
+  "pythonVersion": "3.9.6 (default, Aug 13 2026, 04:25:06) \n[Clang 21.0.0 (clang-2100.3.33.1)]",
+  "extension": "build-headless/src/surge-python/surgepy.cpython-39-darwin.so",
+  "extensionSha256": "2f2c59bd321e52ec11a3a1493b00b07b5534eb1fd3127334f4225918e62ae343",
+  "tagObject": "751786ec136ae8ceb11953bab00329592a9b3f0c",
+  "peeledTagCommit": "f7b97c682ade0b87da85ca5968b63d5c7c98e68d",
+  "engineReportedVersion": "1.3.HEAD.f7b97c6",
+  "engineReportedVersionExplanation": "Detached checkout of verified release_xt_1.3.4 tag; upstream local build version embeds HEAD and commit.",
+  "loadVerified": true,
+  "completedAt": "2026-10-26T02:05:57.017767+00:00",
+  "recipe": {
+    "path": "render_candidates.py",
+    "sha256": "9e844e86bf8ba720ad19b5c86eab069b41584e76937f2ba9506a2a8adfc07d32"
+  },
+  "independentAnalyzer": {
+    "path": "analyze_candidates.py",
+    "sha256": "349621b12c97f2da0e69a255a65c7b6687aaaaeda436cec0e2c906ab81f568b5",
+    "report": "candidates/artifact-qa.json",
+    "result": "passed"
+  },
+  "candidateManifest": "candidates/manifest.json",
+  "humanListeningAcceptance": "pending",
+  "distribution": "Development-only isolated build; native source not included in application assets."
+}

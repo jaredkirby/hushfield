@@ -1,11 +1,14 @@
 # Documentation
 
-The player/developer guides below describe current `main`. Specifications and review reports record the scope and evidence of earlier work; they are not a second source of current product instructions.
+The player/developer guides below describe the current implementation. Specifications and review reports record the scope and evidence of earlier work; they are not a second source of current product instructions.
 
 ## Use Hushfield
 
 - [README and quick start](../README.md)
 - [Playing: parts, Texture sources, harmony, Tape, saving and recording](PLAYING.md)
+- [Native Surge sources and listening comparisons](SURGE-TEXTURE.md)
+- [Surge research and rationale](SURGE-XT-RESEARCH.md)
+- [Approved musicality specification](specs/surge-musicality.md)
 - [Glossary](../GLOSSARY.md)
 - [Verification and acceptance limits](../VERIFICATION.md)
 
@@ -27,6 +30,6 @@ The player/developer guides below describe current `main`. Specifications and re
 | Warm Tape defaults and cassette motion | [Vintage Tape](specs/vintage-tape.md) | [Vintage Tape review](VINTAGE-TAPE-REVIEW.md) |
 | Integration on main | — | [Integration review](INTEGRATION-REVIEW.md) |
 
-These scopes were integrated through [PR #14](https://github.com/jaredkirby/hushfield/pull/14). Original baseline hashes, counts and local-only scope notes remain historical. The Piece model supersedes the reliability spec's original version-3 format with version 4; warm vintage settings supersede the stronger new-session Tape defaults.
+These scopes were integrated through [PR #14](https://github.com/jaredkirby/hushfield/pull/14). Original baseline hashes, counts and local-only scope notes remain historical. The Piece model supersedes the reliability spec's original version-3 format with version 4; version 5 adds explicit sound/depth compatibility; warm vintage settings supersede the stronger new-session Tape defaults.
 
-The current interface appears in `images/ambient-first.jpg` and `images/vintage-tape.jpg`. `phone.jpg`, `ipad.jpg`, `desktop.jpg` and `tape-impact.jpg` show earlier iterations rather than the current navigation/defaults.
+Earlier interface screenshots appear in `images/ambient-first.jpg` and `images/vintage-tape.jpg`. `phone.jpg`, `ipad.jpg`, `desktop.jpg` and `tape-impact.jpg` show earlier iterations rather than the current navigation/defaults.

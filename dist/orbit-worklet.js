@@ -11,7 +11,10 @@ class OrbitProcessor extends AudioWorkletProcessor {
     this.port.onmessage = ({ data }) => {
       if (data.type === "harmonyPort") {
         this.harmonyPort = data.port;
-        this.harmonyPort.onmessage = ({ data: data2 }) => this.engine.setHarmony(data2.notes);
+        this.harmonyPort.onmessage = ({ data: data2 }) => {
+          this.engine.setHarmony(data2?.notes);
+          this.engine.setPhrase(data2?.phrase);
+        };
       } else if (data.type === "followHarmony") this.engine.followHarmony = Boolean(data.value);
       else if (data.type === "options") this.engine.configure(data.value);
       else if (data.type === "patches") this.engine.setPatches(data.value);
