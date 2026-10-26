@@ -1,5 +1,7 @@
 # Surge-inspired musical expression review
 
+Historical review of the music-only implementation and listening workflow. This work was combined with the direct-control UI and merged through [PR #22](https://github.com/jaredkirby/hushfield/pull/22) on 2026-10-25 (America/Los_Angeles), as `17794182f53d3175f88230200d83a734a58051e6`. Counts and findings below belong to their stated review stages; see the [combined integration record](UI-MUSIC-INTEGRATION.md) and [current verification](../VERIFICATION.md) for subsequent evidence.
+
 The user approved the implementation seams and six dependent tickets under [spec #15](https://github.com/jaredkirby/hushfield/issues/15). Implementation took place in an isolated worktree on `codex/surge-inspired-music`, from `6e5c607a76f53021ed4bb016fdd5a42a43edd817`. Separate workers owned Foundation/composition, Motion/direct phrase integration, and native authoring/listening preparation. Public-behavior red/green evidence is retained under ignored `.scratch/surge-musicality/worker-*.md`.
 
 Independent reviews compared `git diff 6e5c607a76f53021ed4bb016fdd5a42a43edd817...HEAD` at implementation commit `d64500c`. Reviewers read the approved spec and child tickets separately from the documented repository standards.
@@ -14,7 +16,7 @@ Heuristic, nonblocking:
 
 Production changes preserve documented audio-thread ownership, direct gesture activation, shared finishing, transient Solo, source-selection ownership, and saved-sound compatibility. No additional correctness risk emerged.
 
-Resolution: the repeated four-connection matrix remains explicit in this candidate. Both paths share the same width coefficient update and have real offline mono-width coverage. This is an accepted refactoring suggestion, not a documented-rule breach or release blocker.
+Resolution: the repeated four-connection matrix remained explicit in the reviewed implementation. Both paths share the same width coefficient update and have real offline mono-width coverage. This is an accepted refactoring suggestion, not a documented-rule breach or release blocker.
 
 ## Spec
 
@@ -42,13 +44,13 @@ Final counts: Standards 0 hard violations, 1 accepted nonblocking heuristic; Spe
 
 ## Validation and listening evidence
 
-- [Verification](../VERIFICATION.md): final full suite 69/69, synchronized build and clean diff check.
+- Music-only stage: full suite 69/69, synchronized build and clean diff check. [Current verification](../VERIFICATION.md) records the subsequent combined suite and supported-runtime checks.
 - [Browser receipt](../tests/surge-browser-results.json): 7 Depth checks, 5 Piece checks, 20 viewport cases, lazy native sources, navigation playback and explicit paused recovery.
 - [Listening receipt](../tests/surge-listening-results.json): four 75-second comparisons plus a 180-second development arc; actual source/harness hashes, settings, raw/matched metrics and independent saved-byte audits.
 - [Authoring and playback guide](SURGE-TEXTURE.md): native provenance, rebuild recipe, player and evidence limits.
 
-WAV artifacts remain under ignored `.scratch/listening/artifacts/`, with a saved player at `http://127.0.0.1:4886/qa-musicality.html`. Choose **Load saved comparison** to reopen them. The separate native authoring experiment produced six candidates; three dry sources ship lazily in the instrument.
+At review, WAV artifacts were retained under ignored `.scratch/listening/artifacts/`, served by the listening development server. These generated files are not included in a clone; see the [listening workflow](SURGE-TEXTURE.md) to prepare them and the [private preview](PRIVATE-PREVIEW.md) for the retained comparison set. Choose **Load saved comparison** to reopen existing artifacts. The separate native authoring experiment produced six candidates; three dry sources ship lazily in the instrument.
 
 ## Tracker completion
 
-Validation comments were added to implementation tickets #16–21 and all six were closed in dependency order. Parent spec #15 was verified open with an unchanged body. The local branch contains the implementation, render evidence and this final review record; no remote publication is required by this task.
+Validation comments were added to implementation tickets #16–21 and all six were closed in dependency order. Parent spec #15 was verified open with an unchanged body. At this review stage, the implementation, render evidence and review record were local. The later, separately authorized publication merged them with the UI in PR #22. Parent #15 remains open; technical completion does not establish musical preference or physical-device acceptance.

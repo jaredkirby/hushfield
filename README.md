@@ -5,9 +5,7 @@
 
 **Small gestures. Evolving sound.**
 
-Hushfield is one evolving ambient piece that you shape in your browser. Start with Foundation, reshape its sound into Texture, add harmony-linked Orbit movement, and finish the blend with Space and Tape. The interface uses a black-and-white OLED look with ordered dithering.
-
-![Hushfield with Foundation, Texture, Motion, Space and Tape editors](docs/images/ambient-first.jpg)
+Hushfield is one evolving ambient piece that you shape in your browser. Start with Foundation, reshape its sound into Texture, add harmony-linked Motion through Orbit, and finish the blend with Space and Tape. The interface uses a black-and-white OLED look with ordered dithering.
 
 ## Play locally
 
@@ -25,7 +23,7 @@ Use localhost or HTTPS for AudioWorklet and microphone support. Opening `index.h
 
 ## Make your first piece
 
-1. Tap **Start** on Foundation. A new session begins with Foundation audible and Texture/Motion at zero.
+1. Tap **Start** in the bottom bar. A fresh session begins with Foundation audible and Texture/Motion at zero; a recovered project starts paused with its saved blend.
 2. Move the four voice dots: up/down changes pitch within the scale; left/right changes stereo position.
 3. Open **Texture** and choose **Add texture**. It reshapes recent Foundation audio into grains; long grains make a smooth cloud and short grains make fragments.
 4. Open **Motion** and choose **Add motion**. Rotating shapes and bouncing balls add notes linked to Foundation's current harmony.
@@ -37,7 +35,7 @@ The five main editors are:
 
 | Editor | What it shapes |
 | --- | --- |
-| Foundation | Scene, key, scale, Color/Drift/Bloom, returning motifs, nearby voicings and voices. Labeled dots set pitch and pan; Foundation supplies live Texture material and Motion harmony. |
+| Foundation | Compose selects scene, key, scale and evolution; Sound shapes Color/Drift/Bloom; Voices balances chords, melody and air. Labeled dots set pitch and pan; Foundation supplies live Texture material and Motion harmony. |
 | Texture | Drag the grain position/length handles, then shape density, pitch, scatter and scanning. Controls remain editable at zero blend. Freeze a phrase or use your own material. |
 | Motion | Turn the orientation handle or move signed spin speed through zero. Select triggers to edit; shape individual or bank-wide sounds with the amplitude envelope handles and independent brightness controls. |
 | Space | Drag horizontally for filter cutoff and vertically for resonance. Separate width, per-part room sends and filtered ambience finish the whole blend. |
@@ -49,13 +47,13 @@ Choose **Stillwater**, **Slow cloud**, **Glass shards** or **Worn memory** for a
 
 ## Phone, iPad and desktop
 
-Portrait phones use stacked display/editor bays. iPad and desktop place the display beside the controls; narrow Split View uses the compact arrangement. Landscape phones and short windows use denser controls. Rotation and resizing preserve playback and musical edits.
+Portrait windows place controls below the square visual; landscape windows place them beside it. The layout follows the available viewport, including iPad Split View. Narrow or short control areas use fewer columns and internal scrolling. Rotation and resizing preserve playback and musical edits.
 
-The five editors and two secondary tools share a fixed square visual viewport, with playback and value adjustment in the bottom rail. Texture's adjustments open by default, with Display, Texture, Scan and Variation tabs; its display-only Wave smoothing control starts at 65%. Hide adjust hides the fields while preserving the visual square. Longer inspectors scroll inside their own bay; the surrounding page stays within the visible viewport and accounts for browser toolbars, safe areas and pinch zoom. Screenshots in `docs/images/` include earlier versions of the interface; they do not show every direct control.
+The five editors and two secondary tools share a fixed square visual viewport, with a separate **Start / Stop** button and value adjustment in the bottom rail. Tapping the visual edits or interacts with that view; it does not start or stop playback. Texture's adjustments open by default, with Display, Texture, Scan and Variation tabs; its display-only Wave smoothing control starts at 65%. Hide adjust hides the fields while preserving the visual square. Longer inspectors scroll inside their own bay; the surrounding page stays within the visible viewport and accounts for browser toolbars, safe areas and pinch zoom. Historical screenshots and validation records are linked from [verification](VERIFICATION.md); they are labeled by the behavior and baseline they recorded.
 
 ## Save and recover
 
-**Save project** downloads a `.hushfield.json` file with Texture material, blend/source/harmony relationships, sound patches, Foundation settings and visual settings. Current files use project schema **version 5**; versions 1–4 migrate automatically while retaining their classic sound modes. Solo is temporary and is not saved.
+**Save project** downloads a `.hushfield.json` file with Texture material, blend/source/harmony relationships, sound patches, Foundation settings and visual settings. Current files use project schema **version 5**; versions 1–4 migrate automatically while retaining their classic Foundation and shared-room sound modes, including after re-export. Choosing a complete preset opts into the current sound. Editing Foundation Sound switches Foundation synthesis to the evolving voice; editing any Space Depth control switches the whole Piece to independent room sends. Those two sound modes change independently. See the [saved-sound decision](docs/adr/0001-preserve-saved-sound-models.md). Solo is temporary and is not saved.
 
 Settings Undo/Redo keeps up to 40 edits in the current session. Loading a project, choosing a complete preset, changing the material or starting a New piece clears that history. It does not restore audio buffers, recordings or playback position.
 
@@ -67,7 +65,7 @@ Imported audio is processed locally and is not uploaded. Microphone access is re
 
 Audio needs a direct tap or click. If the piece is silent, try **Test sound**, then **Restart audio**. Check the blend and any active Solo as well as device volume and Bluetooth/AirPlay output. Restart rebuilds the audio context while keeping the session; finish recording/capture first.
 
-Background and locked-screen continuity are not guaranteed. Physical iPhone audio recovery has been confirmed, while current iPad touch/performance and the newer Orbit/Tape sound still need physical-device acceptance. [Verification](VERIFICATION.md) distinguishes fresh automated checks from recorded browser and device evidence.
+Background and locked-screen continuity are not guaranteed. Earlier physical iPhone recovery checks are recorded, but the merged UI/music update still needs physical-device touch/performance checks and human listening acceptance. [Verification](VERIFICATION.md) distinguishes fresh automated checks from recorded browser and device evidence.
 
 ## Develop
 
@@ -88,4 +86,4 @@ Edit sources in `dist/`, then rebuild. The build bundles the app and four AudioW
 
 Bug reports, device testing, sound design improvements and pull requests are welcome. Include the browser, device, orientation and reproduction steps in [issues](https://github.com/jaredkirby/hushfield/issues). The [documentation index](docs/README.md) links player/developer guides, the glossary and historical reviews.
 
-Hushfield uses the [MIT License](LICENSE). Demo sources are synthesized by the app. Three optional native Surge XT textures are bundled as WAV/patch outputs and load only when selected in **Your sound / trim**; their C4 pitch remains fixed as harmony changes. [Source provenance and authoring workflow](docs/SURGE-TEXTURE.md) describe the separate native development toolchain. The build dependency esbuild has its own MIT license and is installed through npm.
+Hushfield uses the [MIT License](LICENSE). The original demo sources are synthesized by the app. Three optional Surge XT textures are bundled as pre-rendered WAVs with their patches and provenance. Select them in **Your sound / trim** to fetch the recording from the same host; their C4 pitch remains fixed as harmony changes. Playing Hushfield requires no Surge installation. [Source provenance and authoring workflow](docs/SURGE-TEXTURE.md) describe the separate native development toolchain. The build dependency esbuild has its own MIT license and is installed through npm.

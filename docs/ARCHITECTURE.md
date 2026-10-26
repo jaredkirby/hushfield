@@ -26,10 +26,17 @@ flowchart LR
   R --> G
   G --> TG[Texture blend]
   O[Orbit Worklet and bank effects] --> MG[Motion blend]
-  FG --> P[Shared filter, width and room]
+  FG --> P[Shared dry filter and width]
   TG --> P
   MG --> P
+  FG --> SND[Individual room sends]
+  TG --> SND
+  MG --> SND
+  SND --> RF[Shared room-input filter]
+  RF --> IR[Room convolution]
+  IR --> RT[Room cuts, width and return level]
   P --> T[Tape]
+  RT --> T
   T --> L[Limiter]
   L --> M[Master volume]
   M --> D[Audio output]
@@ -40,7 +47,7 @@ Foundation feeds the grain processor directly before its audible fader. Live cap
 
 Foundation and Orbit receive dedicated `MessageChannel` ports after both processors acknowledge readiness. A separate readiness-gated channel connects Foundation to Texture. Foundation publishes chord pitches and phrase factors directly at chord changes and at 10 Hz on the audio clock; Texture slews a density multiplier and Motion gates automatic events deterministically while physics and explicit auditions continue. Main-thread status updates smoothly adjust normal part gains, while event/grain timing remains independent of drawing. Classic pieces publish unity factors. Motion quantizes new notes to current chord tones unless explicitly unlinked. Existing sustained voices finish normally. UI animation does not schedule notes.
 
-`piece-space.mjs` provides named part inputs and sums normal dry parts through shared filtering and width before Tape. Modern per-part room sends receive the same tone, feed the generated convolution impulse, then pass through low/high cuts and room width. A versioned classic route retains the original shared room send and return. `space-settings.mjs` owns validated depth defaults. Motion's per-bank effects remain upstream. Explicit Motion auditions bypass the part fader but still enter shared finishing. Original-source preview and Test sound connect to master directly; source preview pauses the Piece.
+`piece-space.mjs` provides named part inputs and sums normal dry parts through shared filtering and width before Tape. Modern per-part room sends receive the same tone, feed the generated convolution impulse, then pass through low/high cuts and room width. A versioned classic route retains the original shared room send and return. `space-settings.mjs` owns validated depth defaults. The diagram shows modern routing; classic routing takes its room send from the shared dry filter/width output and bypasses modern return cuts/width processing. Motion's per-bank effects remain upstream. Explicit Motion auditions bypass the part fader but still enter shared finishing. Original-source preview and Test sound connect to master directly; source preview pauses the Piece.
 
 ## Audio module ownership
 
@@ -68,15 +75,19 @@ Off bypasses the complete Tape effect at the existing 0.75 dry reference gain. O
 
 The five main editors are Foundation, Texture, Motion, Space and Tape. Your sound / trim and Visual are secondary tools. Stable internal IDs retain older links: `#ambient`, `#grain`, `#orbit`, `#fx`, `#tape`, `#sample` and `#visual` respectively. Source editing keeps Texture selected in the main navigation.
 
-`phone-ui.mjs` owns selection/increments and editor panels. `phone-shell.js` distinguishes device identity from available layout space, including iPad desktop-mode identity and narrow Split View. `adaptive.css` adds wide layouts after the OLED styles. Resizing changes presentation without rebuilding audio or moving the source editor between parents.
+`phone-ui.mjs` owns direct sliders, exact-entry dialogs, selection/increments and editor panels. `visual-editors.mjs` and `visual-editor-math.mjs` map visual gestures and keyboard edits to the same parameter setters as the precise controls. `sound-editor.mjs` and its model handle individual/All targets and mixed values; selecting a target does not audition it. `motion-controls.mjs` supplies Motion's additional direct controls.
+
+`control-history.mjs` stores up to 40 settings snapshots. Nested edit-start/end events group one continuous gesture into one Undo entry; cancellation restores its start. Application integration owns restore/synchronization and clears history when material, project, complete preset, recovery or New piece replaces the edit context. History excludes buffers, recordings and transport, and is not serialized as project or recovery history. The fixed square display and scrolling inspector keep the separate Start/Stop transport outside the edit surface.
+
+`phone-shell.js` distinguishes device identity from available layout space, including iPad desktop-mode identity and narrow Split View. `adaptive.css` adds wide layouts after the OLED styles. Resizing changes presentation without rebuilding audio or moving the source editor between parents.
 
 `ambient-interaction.mjs` turns dot gestures into bounded pitch/pan edits. `ambient-points.mjs` interpolates audio output timestamps for coherent motion. The animation callback schedules display work, but `render-clock.mjs` caps expensive drawing at 30 fps and skips unchanged paused frames. Relevant edits, layout changes and audio snapshots invalidate a frame. Audio processing proceeds independently.
 
-`oled-visuals.mjs` applies screen-stable Bayer dithering. `visual-analysis.mjs` passively captures independent stereo master channels, combining spectrum energy rather than summing waveforms that could cancel. `audio-visuals.mjs` renders Scope, Spectrum and Vector with display-only gain/trails/peaks and held-frame behavior. Trail/peak decay uses elapsed time rather than frame count. The blend/tools occupy a reserved bay so they do not cover Orbit triggers.
+`oled-visuals.mjs` applies screen-stable Bayer dithering. `visual-analysis.mjs` passively captures independent stereo master channels, combining spectrum energy rather than summing waveforms that could cancel. `audio-visuals.mjs` renders Scope, Spectrum and Vector with display-only gain/trails/peaks and held-frame behavior. Trail/peak decay uses elapsed time rather than frame count. Texture reuses the Scope renderer for its stereo material overview, while `texture-wave.mjs` and `texture-adjustments.mjs` provide display-only waveform smoothing and shared adjustment controls. Grain status includes both stereo waveform channels and phrase density. The blend/tools occupy a reserved bay so they do not cover Orbit triggers.
 
 ## Files, recording and recovery
 
-`project-file.mjs` serializes version-5 sessions, validates versions 1–5 and migrates older namespaces/material/blend into the Piece model. Files embed WAV Texture material, Foundation voices, source/harmony relationships, patches, controls, volume and visual settings. They are configuration/material snapshots, not exact playback-position restoration; Solo is excluded. Loading is decoded and validated before application. Versions 1–4 force classic Foundation and room routing; explicit version-5 sound/depth modes survive re-export. Fresh defaults and complete presets use expressive Foundation version 2; saved settings objects missing that field remain classic. See [the compatibility decision](adr/0001-preserve-saved-sound-models.md).
+`project-file.mjs` serializes version-5 sessions, validates versions 1–5 and migrates older namespaces/material/blend into the Piece model. Files embed WAV Texture material, Foundation voices, source/harmony relationships, patches, controls, volume and visual settings. They are configuration/material snapshots, not exact playback-position restoration; Solo is excluded. Loading is decoded and validated before application. Versions 1–4 force classic Foundation and room routing; explicit version-5 sound/depth modes survive re-export. Fresh defaults and complete presets use expressive Foundation version 2; saved settings objects missing that field remain classic. Editing Foundation Sound promotes Foundation synthesis independently; editing any Depth control opts the Piece into modern room routing for all three sends. See [the compatibility decision](adr/0001-preserve-saved-sound-models.md).
 
 `sample-selection.mjs` gives each import, project, microphone take, native-library selection or frozen phrase ownership of its result. Native source assets are same-origin WAVs fetched only on selection; metadata identifies their fixed original pitch. Newer selections invalidate older asynchronous results. Decoding can use an OfflineAudioContext without starting playback.
 
@@ -86,4 +97,4 @@ The five main editors are Foundation, Texture, Motion, Space and Tape. Your soun
 
 ## Checks and decisions
 
-See [testing](TESTING.md) for commands, browser diagnostics and evidence semantics, and [verification](../VERIFICATION.md) for the current acceptance boundary. Specs/reviews are indexed separately under [historical work](README.md#historical-specifications-and-reviews). `docs/adr/` records non-obvious compatibility decisions. Native authoring and deterministic listening fixtures are development tools, separate from the static application; see [the workflow](SURGE-TEXTURE.md).
+See [testing](TESTING.md) for commands, browser diagnostics and evidence semantics, and [verification](../VERIFICATION.md) for the current acceptance boundary. Specs/reviews are indexed separately under [historical work](README.md#specifications-and-evidence). `docs/adr/` records non-obvious compatibility decisions. Native authoring and deterministic listening fixtures are development tools, separate from the static application; see [the workflow](SURGE-TEXTURE.md).

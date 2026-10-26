@@ -1,6 +1,6 @@
 # Warm vintage Tape and responsive cassette
 
-Historical approved scope. Original baseline and local-only completion instructions are retained as a record; the work was subsequently integrated into main. See [current guides and review history](../README.md) for later behavior and superseding decisions.
+Historical approved scope, subsequently integrated through [PR #14](https://github.com/jaredkirby/hushfield/pull/14). Original requirements, baselines and local-only completion instructions remain a record of that stage. Later [PR #22](https://github.com/jaredkirby/hushfield/pull/22) added expressive synthesis, version-5 sound compatibility and direct controls. Use the [playing guide](../PLAYING.md) and [current verification](../../VERIFICATION.md) for present behavior and acceptance limits; [review history](../README.md) preserves the earlier evidence.
 
 The player confirms Tape is now audible but finds the default too intense. Make the default a warm vintage character while retaining the stronger control range and true bypass. Update the cassette to represent the sound: slow tape sway for Wow, fine ripples for Flutter, warmth at the head for Drive, and fading echo trails for Mix/Feedback. Preserve the black-and-white visual style, saved settings and full-piece routing.
 

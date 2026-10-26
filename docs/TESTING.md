@@ -2,7 +2,7 @@
 
 ## Build and Node checks
 
-From the repository root, use Node.js 22 or newer:
+From the repository root, use Node.js 22 or newer; CI exercises Node 22 and 24:
 
 ```sh
 npm ci
@@ -52,7 +52,7 @@ Offline rendering can outrun MessagePort delivery. Diagnostic code must connect 
 
 ## UI and device checks
 
-For layout/interaction changes, verify the five editors plus Your sound / trim and Visual, including their secondary control sections and both Motion sound banks. Check portrait/landscape phones, iPad, narrow Split View and short desktop windows for scroll range, clipped controls, stable display bounds and overlap with Orbit triggers.
+For layout/interaction changes, verify direct sliders, exact-entry Apply/Cancel, categorical menus, visual handles, keyboard controls and settings Undo/Redo. Check individual and All targets, including mixed values, and selection without audition. Confirm the separate Start/Stop button stays available. Verify the five editors plus Your sound / trim and Visual, including their secondary control sections and both Motion sound banks. Check portrait/landscape phones, iPad, narrow Split View and short desktop windows for scroll range, clipped controls, stable display bounds and overlap with Orbit triggers.
 
 Play while navigating and rotating. Confirm that blend, selected settings, frozen material and voice-dot positions survive, with temporary Solo restored by Full mix. For persistence changes, test explicit recovery into a paused session, failed storage, newer edits during asynchronous work, and export/load with retained stereo material.
 
@@ -77,6 +77,6 @@ npm run listening:prepare
 npm run listening:serve
 ```
 
-The dedicated server is loopback-only and stores WAVs/receipts under ignored `.scratch/listening/artifacts/`. Its fixture pins the original commit, generated module hashes and Grain randomness, and instruments deterministic control delivery. The main production worklets keep asynchronous direct ports and are checked separately. The full comparison includes four 75-second examples and a 180-second full arc; repeat rendering must retain exact control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Both WAV hashes are recorded; native WebAudio convolution can differ in its last floating-point bits. Playback attenuation equalizes stereo RMS without boosting/clipping, which is not a perceptual LUFS comparison. See [native authoring and listening details](SURGE-TEXTURE.md).
+Preparation needs npm dependencies and a Git checkout containing the original baseline commit; see [server prerequisites](../ops/README.md#listening-development-server). The dedicated server is loopback-only and stores WAVs/receipts under ignored `.scratch/listening/artifacts/`. Each run replaces the selected preset's receipt, including short checks. Use another checkout for fresh experiments when preserving a long listening set. Its fixture pins the original commit, generated module hashes and Grain randomness, and instruments deterministic control delivery. The main production worklets keep asynchronous direct ports and are checked separately. The full comparison includes four 75-second examples and a 180-second full arc; repeat rendering must retain exact control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Both WAV hashes are recorded; native WebAudio convolution can differ in its last floating-point bits. Playback attenuation equalizes stereo RMS without boosting/clipping, which is not a perceptual LUFS comparison. See [native authoring and listening details](SURGE-TEXTURE.md).
 
-New save files use schema 5. Compatibility tests load versions 1–4 through decode, retain classic sound/depth modes, and preserve those modes after re-export. The current browser receipt records explicit paused recovery of Color/Drift/Bloom, depth, brightness and native material. Existing golden Foundation PCM and neutral Motion energy checks protect classic behavior. Physical-device performance and human listening preference remain separate acceptance checks.
+New save files use schema 5. Compatibility tests load versions 1–4 through decode, retain classic sound/depth modes, and preserve those modes after re-export. The [integration browser receipt](../tests/ui-music-integration-results.json) records explicit paused recovery of Color/Drift/Bloom, depth, brightness and native material. Classic Foundation checks render frozen pre-change sources and the current classic engine in the same runtime, requiring byte-identical Float32 PCM at 8, 44.1 and 48 kHz. The [fixture README](../tests/fixtures/foundation-classic-v1/README.md) records source provenance; never update those reference sources alongside the current engine. A single Node-22 PCM hash is not a portable Node-24 oracle because JavaScript math implementations can differ. Neutral Motion energy/PCM checks protect its classic behavior. Physical-device performance and human listening preference remain separate acceptance checks.
