@@ -40,3 +40,18 @@ Both reviews were read-only source reviews at merge `e3c4308`. Additional browse
 After validation, the combined result is fast-forwarded into the existing music worktree on `codex/surge-inspired-music`. The persistent service keeps the same working directory and private Tailscale URL on 8449. The original music commit and UI commit remain available in history; the UI-only worktree and its excluded local files remain untouched. The saved long audio recordings remain the same files.
 
 The private promotion was verified at the existing HTTPS endpoint: the HTML, application/worklet bundles and new styles match the combined files; all five long WAV hashes match their original render receipt. The browser displays the square UI and Sound controls, advances audio for four seconds, pauses normally and opens the saved 75-second/180-second comparison set. The existing Serve proxy is unchanged and Funnel remains disabled.
+
+## Publication CI portability
+
+PR #22's Node 24 run exposed a runtime-specific classic-PCM hash: the unchanged
+original engine also produces `51ef9bb8…` on Node 24.22.1, while Node 22.22.0
+produces the recorded `5248ba72…`. The compatibility test now renders frozen,
+unmodified pre-change sources from `6e5c607` in the same runtime and requires
+byte-identical Float32 PCM at 8, 44.1 and 48 kHz. This retains exact classic-sound
+regression coverage across the supported runtimes without changing production DSP.
+Fixture provenance and source hashes are recorded in
+`tests/fixtures/foundation-classic-v1/README.md`.
+
+Fresh full suites pass 99/99 on Node 22.22.0 and Node 24.22.1. The build leaves
+shipped assets unchanged. An independent read-only review verified fixture bytes,
+isolated dependencies and exact comparisons, with no findings.

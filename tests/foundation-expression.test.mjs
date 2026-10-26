@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import { AmbientEngine } from '../dist/ambient-dsp.mjs';
 import { restoreAmbient } from '../dist/ambient-settings.mjs';
+import { AmbientEngine as ClassicFoundation } from './fixtures/foundation-classic-v1/ambient-dsp.mjs';
 
 function make(settings = {}, rate = 8000) {
   const engine = new AmbientEngine(rate);
@@ -36,21 +36,22 @@ test('Foundation Color changes audible harmonic character without a level jump',
   assert.ok(rms(high) / rms(low) > .7 && rms(high) / rms(low) < 1.4, 'Color primarily changes timbre');
 });
 
-test('saved classic Foundations retain captured baseline PCM and new controls validate', () => {
+test('saved classic Foundations retain exact original-engine PCM and new controls validate', () => {
   assert.equal(restoreAmbient().compositionVersion, 2, 'New Pieces use expressive synthesis');
   assert.equal(restoreAmbient(undefined, true).compositionVersion, 1, 'Projects predating Foundation retain classic synthesis');
   const saved = restoreAmbient({ seed: 719 });
   assert.equal(saved.compositionVersion, 1, 'Saved settings lacking a version retain classic synthesis');
-  const engine = new AmbientEngine(8000);
-  engine.set(saved);
-  engine.play(true);
-  const hash = createHash('sha256');
-  for (let frame = 0; frame < 32000; frame += 128) {
-    const output = [new Float32Array(128), new Float32Array(128)];
-    engine.process(output);
-    for (const channel of output) hash.update(new Uint8Array(channel.buffer));
+  // Compare against frozen pre-change sources under the same V8 math implementation.
+  // A runtime-specific golden hash rejects Node 24 even when the old engine agrees.
+  for (const rate of [8000, 44100, 48000]) {
+    const engine = new AmbientEngine(rate);
+    const reference = new ClassicFoundation(rate);
+    engine.set(saved);
+    reference.set(saved);
+    engine.play(true);
+    reference.play(true);
+    assert.deepEqual(render(engine, 4), render(reference, 4), `Classic PCM remains byte-exact at ${rate} Hz`);
   }
-  assert.equal(hash.digest('hex'), '5248ba72dd5eec62d4a0b0639e7319ef38e3ecd9a57dd361d1bbeac9dbe0618d', 'Captured pre-change PCM remains exact');
   const restored = restoreAmbient({ compositionVersion: 2, color: 200, drift: -20, bloom: NaN });
   assert.equal(restored.color, 100);
   assert.equal(restored.drift, 0);
