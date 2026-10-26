@@ -37,13 +37,15 @@ The Foundation, Texture and Motion blend controls set what you hear. Solo isolat
 | Texture | Drag the grain position and length handles. Adjust density, pitch, scatter and scanning, even at zero blend. Freeze a phrase or use your own material. |
 | Motion | Turn the orientation handle and set spin speed in either direction. Select individual triggers or a whole bank, then edit their amplitude envelopes and independent brightness controls. |
 | Space | Drag horizontally for filter cutoff and vertically for resonance. Set stereo width, each part's room send, and the room's filters. |
-| Tape | Echo sets the repeats; Character sets coloration. Drag the echo grid for time and feedback. Off bypasses the whole effect. |
+| Tape | Choose Classic or the RE-201-inspired Space Echo. Echo sets head mode, timing, feedback and spring level; Character sets coloration. Drag the echo grid for time and feedback. Off bypasses the whole effect. |
 
 Your sound / trim opens Texture's source editor, with draggable In and Out boundaries and readouts in seconds. Visual opens a scope, spectrum or vectorscope from any editor. Its settings change only the picture. Back to sound returns to the previous editor.
 
 Stillwater, Slow cloud, Glass shards and Worn memory are complete presets. They replace the blend, Foundation scene, sound patches and finishing settings. New piece changes the seed while keeping your sounds and mix.
 
 The [playing guide](docs/PLAYING.md) covers Texture sources, harmony, Tape controls and recording.
+
+Fresh sessions select Space Echo with Tape Off. Turn it On, then try Head mode 11 for three rhythmic echoes and a parallel spring, or mode 12 for spring alone. Head 3 time sets the longest delay; the other heads play at one third and two thirds of that time. Moving it bends the recorded echoes' pitch before they settle. This is a researched approximation with a synthetic spring, not a measured hardware clone. [Research and design limits](docs/research/re201-space-echo.md) describe the sources.
 
 ## Phone, iPad and desktop
 
@@ -58,6 +60,8 @@ The layout accounts for browser toolbars, safe areas and pinch zoom. [Verificati
 Save project downloads a `.hushfield.json` file containing Texture material, blend settings, source and harmony links, sound patches, Foundation settings and visual settings. Solo is temporary and is not saved.
 
 New files use schema version 5. Versions 1 through 4 load with their classic Foundation synthesis and shared-room routing, and keep those modes after re-export. A complete preset selects the current sound modes. Editing Foundation Sound switches its synthesis to the evolving voice. Editing any Space Depth control switches the whole Piece to independent room sends. These two changes are independent. The [saved-sound decision](docs/adr/0001-preserve-saved-sound-models.md) explains why.
+
+Saved Pieces without an explicit Tape model retain Classic, including older schema-5 files. Worn memory also keeps Classic. Selecting Space Echo is a separate choice, saved with its head mode and spring level.
 
 Undo and Redo keep up to 40 settings edits in a session. Loading a project, choosing a preset, replacing material or starting a New piece clears that history. Undo cannot restore discarded audio, recordings or playback position.
 

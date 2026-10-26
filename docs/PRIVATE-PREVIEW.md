@@ -34,3 +34,16 @@ curl --head http://127.0.0.1:4886/
 During this documentation review (2026-10-26 UTC), the LaunchAgent was running, the loopback page returned HTTP 200, and Serve still mapped 8449 to 4886 with the other handlers present. These checks did not rerun browser playback, comparison hashes or physical-device access, and did not change service/network state.
 
 The earlier [preview receipt](../tests/tailscale-preview-results.json) records matching HTTPS application/worklet bytes, five listening WAV hashes, byte-range responses, private-origin writes and rejection of an unrelated browser origin. That run also loaded all five saved examples and played the instrument for four seconds, then paused. It is historical evidence for its recorded revision, not a fresh result from this documentation review. Actual phone/tablet access and subjective listening acceptance still await user confirmation.
+
+## Space Echo candidate
+
+The RE-201-inspired Tape work has a separate private preview:
+
+- [Space Echo instrument](https://kirbys-mac-mini.tailac5a2a.ts.net:8450/#tape)
+- [Five saved listening examples](https://kirbys-mac-mini.tailac5a2a.ts.net:8450/qa-space-echo.html?saved)
+
+The user LaunchAgent `chat.kirby.hushfield-space-echo` serves `hushfield-docs` on loopback 4893. Tailscale Serve HTTPS port 8450 proxies that server. The source configuration is [the Space Echo plist](../ops/hushfield-space-echo-preview.plist), installed at `~/Library/LaunchAgents/chat.kirby.hushfield-space-echo.plist`. Logs use `/tmp/hushfield-space-echo-preview.out.log` and `.err.log`. The existing music preview on 8449 retains its own checkout and saved renders.
+
+The saved examples are deterministic 16-second, 48 kHz synthesized phrases through dry, Classic, three-head Space Echo, speed-change and spring-only settings. They use a common source gain, with no separate normalization. This is a comparison of our code, not recordings of Roland hardware. The local receipt records source/harness and WAV SHA-256 hashes. The saved WAVs live under `hushfield-docs/.scratch/listening/artifacts/`; retain that directory and checkout while the preview is needed.
+
+On 2026-10-26, the LaunchAgent was running, the HTTPS Worklet hash matched the tested local build, and a WAV range request returned the requested 64 bytes. Browser Worklet checks and explicit paused recovery are recorded in [the Space Echo receipt](../tests/re201-browser-results.json). Physical phone/tablet access and subjective listening acceptance remain open. The same private-access and recovery-origin limits above apply to port 8450.

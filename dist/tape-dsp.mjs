@@ -1,8 +1,9 @@
 import { TAPE_DEFAULTS } from "./tape-settings.mjs";
+import { SpaceEcho } from "./space-echo-dsp.mjs";
 import { tapeWow, tapeFlutter } from "./tape-motion.mjs";
 const smoothKeys = ["delayTime", "feedback", "mix", "drive", "wow", "flutter", "hiss", "tone", "on"];
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-class TapeDelay {
+class ClassicTapeDelay {
   constructor(rate) {
     this.rate = rate;
     this.length = Math.ceil(rate * 2) + 4;
@@ -69,6 +70,52 @@ class TapeDelay {
     }
   }
 }
-export {
-  TapeDelay
-};
+
+
+// Keep the saved classic algorithm intact. Run both machines only during a
+// model crossfade; a newly selected machine starts with empty tape history.
+class TapeDelay {
+  constructor(rate) {
+    this.rate = rate;
+    this.classic = new ClassicTapeDelay(rate);
+    this.spaceEcho = null;
+    this.values = { ...TAPE_DEFAULTS };
+    this.model = 0;
+    this.targetModel = 0;
+    this.modelSlew = 1 - Math.exp(-1 / (rate * .035));
+    this.scratch = [new Float32Array(128), new Float32Array(128)];
+  }
+  set(values) {
+    Object.assign(this.values, values);
+    const next = values.tapeModel === 2 ? 1 : values.tapeModel === 1 ? 0 : this.targetModel;
+    if (next !== this.targetModel) {
+      // A reversal during the fade must retain the audible destination.
+      if (next && this.model === 0) this.spaceEcho = new SpaceEcho(this.rate);
+      else if (!next && this.model === 1) this.classic = new ClassicTapeDelay(this.rate);
+      this.targetModel = next;
+    }
+    this.classic.set(this.values);
+    this.spaceEcho?.set(this.values);
+  }
+  process(input, output) {
+    if (!this.targetModel && this.model < 1e-7) {
+      this.model = 0;
+      this.classic.process(input, output);
+      return;
+    }
+    if (this.targetModel && this.model > 1 - 1e-7) {
+      this.model = 1;
+      this.spaceEcho.process(input, output);
+      return;
+    }
+    const count = output[0].length;
+    if (this.scratch[0].length !== count) this.scratch = [new Float32Array(count), new Float32Array(count)];
+    this.classic.process(input, output);
+    this.spaceEcho.process(input, this.scratch);
+    for (let i = 0; i < count; i++) {
+      this.model += (this.targetModel - this.model) * this.modelSlew;
+      for (let c = 0; c < 2; c++) output[c][i] += (this.scratch[c][i] - output[c][i]) * this.model;
+    }
+  }
+}
+export { TapeDelay };

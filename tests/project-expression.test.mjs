@@ -23,7 +23,7 @@ test('a new exported Piece retains expression, depth and editable Motion brightn
   const text = serializeProject({ buffer, name: 'Bloom take', params, controls: {}, ambient, orbitSound });
   assert.equal(JSON.parse(text).version, 5, 'The new format makes the compatibility boundary explicit');
   const restored = await decode(text);
-  assert.deepEqual(restored.params, params);
+  assert.deepEqual(restored.params, { ...params, tapeModel: 1, echoMode: 4, springMix: 12 });
   assert.equal(restored.ambient.compositionVersion, 2);
   assert.equal(restored.ambient.color, 65);
   assert.equal(restored.ambient.drift, 25);

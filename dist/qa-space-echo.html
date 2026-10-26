@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hushfield Space Echo listening</title>
+<style>body{max-width:850px;margin:32px auto;padding:0 20px;background:#101415;color:#eee;font:16px/1.6 system-ui}a{color:#e8ba8c}h1,h2{font-weight:500}button{font:inherit;padding:10px 16px;margin:0 8px 12px 0;background:#d8b28c;color:#111;border:0;border-radius:4px}audio{display:block;width:100%;margin:10px 0}section{border-top:1px solid #526064;padding:12px 0}pre{white-space:pre-wrap;font-size:13px}button:disabled{opacity:.5}</style>
+<h1>Space Echo listening comparison</h1>
+<p>RE-201-inspired Tape with the original twelve head modes and a synthetic spring. This compares our models using the same synthesized phrase. It is not a recording of Roland hardware.</p>
+<p><a href="/#tape">Play the instrument</a>. Choose Tape model → Space Echo, then turn Tape On. Try mode 11 for all three heads and spring, or mode 12 for spring alone.</p>
+<button id="render">Render audio comparisons</button><button id="check">Run Worklet checks</button>
+<p id="status" role="status">Renders silently. Press Play on a clip when ready to listen.</p><div id="clips"></div><pre id="results"></pre>
+<p>The clips use one common gain, with no individual normalization. The tape path is mono; the direct sound stays stereo. Pitch glides, spring response and saturation are designed approximations. Wear headphones and start at a low volume before trying high feedback.</p>
+<script type="module" src="qa-space-echo.mjs"></script></html>

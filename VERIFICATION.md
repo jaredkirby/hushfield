@@ -1,5 +1,15 @@
 # Verification
 
+## RE-201-inspired Tape candidate
+
+The Space Echo model adds the original twelve head/spring selections, one shared tape-speed history, filtered saturated feedback and a parallel synthetic spring. The [research](docs/research/re201-space-echo.md) separates original hardware evidence from our designed approximations. Existing projects without an explicit model and Worn memory retain Classic.
+
+Fresh local checks on 2026-10-26 passed build and all 121 Node test results. New tests cover head arrivals, spring timing/decay, feedback, pitch settling and repeat spectra at 44.1 and 48 kHz. A frozen original Tape fixture requires exact Classic stereo PCM at 8, 44.1 and 48 kHz in the same runtime. Model-switch stress includes 8, 44.1, 48 and 96 kHz; rapid reversal has its own continuity regression.
+
+Fresh browser checks passed ten real OfflineAudioContext/Worklet assertions at 44.1 and 48 kHz. Native model/head menus, Undo/Redo, exact Spring level entry, muted live playback, phone portrait and short landscape reachability, and explicit recovery into a paused session were exercised. The recovered draft retained Space Echo, mode 11, Spring level 37%, Tape On and master volume zero. Browser logs showed no warnings or errors during these checks. [Recorded receipt](tests/re201-browser-results.json).
+
+The [private comparison](https://kirbys-mac-mini.tailac5a2a.ts.net:8450/qa-space-echo.html?saved) contains five synthesized 16-second WAVs. Their hashes and the source/harness hashes were verified after rendering through the built Worklet. The [preview guide](docs/PRIVATE-PREVIEW.md#space-echo-candidate) identifies the separate service and checkout. These checks do not establish a measured hardware match, physical-device performance or human listening approval. Earlier evidence below retains its original revision and counts.
+
 ## Merged baseline
 
 [PR #22](https://github.com/jaredkirby/hushfield/pull/22) merged the musical-expression
