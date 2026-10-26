@@ -153,4 +153,3 @@ Desktop, 390×844, 320×568, 844×390 and 1024×768 layouts were inspected. Long
 Try: Start → Texture → Add texture → drag POSITION and the millisecond handle → Undo. Then shape the Space filter, try Tape Echo/Character, and select a Motion trigger → Envelope → drag A/S/R → Listen. Underlined values open exact entry. The [playing guide](PLAYING.md) explains editing and history boundaries.
 
 ![Actual candidate Space editor](images/visual-controls-space.jpg)
-

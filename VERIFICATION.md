@@ -76,6 +76,19 @@ record. They establish their original scope, rather than validating every later 
 | Earlier reliability UI/audio | 22 Orbit audio checks and 74 main/editor layout cases, including paused recovery | [Review](docs/RELIABILITY-REVIEW.md), [receipt](tests/reliability-browser-results.json) |
 | Earlier adaptive layout | 112 main views and 96 editor groups before the five-editor Piece redesign | [Receipt](tests/adaptive-layout-results.json) |
 
+## Documentation review
+
+The documentation refresh from `1779418` audited all 32 Markdown documents,
+including the agent routes and regression-fixture README. Relative file links and
+Markdown heading anchors were checked, with 166 valid references and no broken
+links. A fresh install, build and full Node 22 suite passed 99 results; rebuilding
+left production assets unchanged. The documented listening preparation command
+succeeded in the isolated checkout, and a temporary server on unused port 4892
+served the comparison page, baseline/current fixture configs and build manifest
+with HTTP 200 before being stopped. The shared preview and retained listening
+artifacts were not changed. This checks documentation commands, not new browser,
+listening or device acceptance.
+
 ## Reproduction and acceptance limits
 
 Run `npm ci`, `npm run build` and `npm test` with Node.js 22 or newer. CI covers
