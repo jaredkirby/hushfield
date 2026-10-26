@@ -1,0 +1,85 @@
+/* Direct editor surfaces occupy only the existing display bay. */
+body[data-page=fx] #displayStage #waveWrap{display:none!important}
+#displayStage>.visual-space-editor{top:var(--layer-bay);height:calc(100% - var(--layer-bay));bottom:0;padding:9px 14px 8px;box-sizing:border-box;overflow:hidden;color:#fff}
+body[data-page=fx] #displayStage>.visual-space-editor{display:flex;flex-direction:column;gap:8px}
+.visual-editor-caption,.visual-wave-readout{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#aaa;font:9px/1.3 monospace;letter-spacing:.15px;min-width:0}
+.visual-editor-caption output{color:#fff;white-space:nowrap}
+.visual-wave-editor{position:absolute;inset:0 0 17px;color:#fff;z-index:2;pointer-events:none;overflow:hidden}
+.visual-wave-readout{position:absolute;inset:0 0 auto;background:#000d;padding:7px 8px;min-height:24px;box-sizing:border-box;pointer-events:none}
+.visual-wave-plot{position:absolute;inset:28px 0 0;touch-action:none;pointer-events:auto;outline-offset:-2px;cursor:crosshair}
+.visual-wave-plot:focus-visible,.visual-filter-plot:focus-visible,.visual-echo-plot:focus-visible{outline:1px dashed #fff}
+.visual-handle,.visual-filter-handle,.visual-echo-handle{position:absolute;padding:3px 5px!important;box-sizing:border-box;background:#000;color:#fff;border:1px solid #fff;border-radius:2px;z-index:3;font:9px monospace;min-height:28px!important;min-width:40px;touch-action:none;cursor:ew-resize;transform:translateX(-50%);white-space:nowrap}
+.visual-handle:focus-visible,.visual-filter-handle:focus-visible,.visual-echo-handle:focus-visible{outline:2px solid #fff;outline-offset:3px;background:#fff;color:#000}
+.visual-handle:hover,.visual-filter-handle:hover,.visual-echo-handle:hover{background:#fff;color:#000}
+.grain-position,.trim-in{top:0}
+.grain-length,.trim-out{bottom:0}
+.grain-length{border-style:dashed}
+.grain-scatter-region,.grain-window-region,.trim-selection-region{position:absolute;inset:0 auto 0;pointer-events:none}
+.grain-scatter-region{border-top:1px dotted #aaa;border-bottom:1px dotted #aaa;background:repeating-linear-gradient(90deg,#ffffff08 0 1px,transparent 1px 12px)}
+.grain-window-region{background:transparent;border-left:1px solid #fff;border-right:1px solid #fff;border-top:1px solid #aaa;border-bottom:1px solid #aaa}
+.trim-selection-region{border-left:1px solid #fff;border-right:1px solid #fff;background:#ffffff08}
+.visual-wave-editor[data-mode=grain] .trim-in,.visual-wave-editor[data-mode=grain] .trim-out,.visual-wave-editor[data-mode=grain] .trim-selection-region,.visual-wave-editor[data-mode=trim] .grain-position,.visual-wave-editor[data-mode=trim] .grain-length,.visual-wave-editor[data-mode=trim] .grain-window-region,.visual-wave-editor[data-mode=trim] .grain-scatter-region{display:none}
+.visual-filter-plot{position:relative;flex:1;min-height:24px;margin:13px 12px 19px;touch-action:none;cursor:crosshair;outline-offset:4px}
+.visual-filter-plot svg,.visual-echo-plot svg{position:absolute;width:100%;height:100%;inset:0;overflow:visible;pointer-events:none}
+.filter-response{fill:none;stroke:#fff;stroke-width:1.8;vector-effect:non-scaling-stroke}
+.filter-grid{fill:none;stroke:#444;stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:2 5}
+.visual-filter-handle,.visual-echo-handle{transform:translate(-50%,-50%);cursor:move;min-width:28px!important;width:28px;height:28px;font:18px monospace;padding:0!important}
+.filter-axis{position:absolute;top:calc(100% + 16px);left:-10px;right:-10px;display:flex;justify-content:space-between;font:8px monospace;color:#aaa;pointer-events:none}
+.visual-space-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:6px;border-top:1px solid #555;padding-top:7px;flex:none}
+.visual-space-controls label{min-width:0;display:grid;grid-template-columns:1fr 64px;grid-template-rows:16px 26px;gap:1px 3px;color:#aaa;font:9px monospace;align-items:center}
+.visual-space-controls label>span{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.visual-space-controls output{color:#fff}
+.visual-space-controls svg{width:64px;height:14px;grid-column:2;grid-row:1}
+.visual-space-controls path{fill:none;stroke:#aaa;stroke-width:1;vector-effect:non-scaling-stroke}
+.visual-space-controls input[type=range]{display:block!important;appearance:none;-webkit-appearance:none;box-sizing:border-box;grid-column:1/-1;min-width:0;width:100%;max-width:100%;height:24px;margin:0;padding:0;border:0;border-radius:0;accent-color:#fff;cursor:ew-resize;touch-action:pan-y;background:transparent!important}
+.visual-space-controls input[type=range]::-webkit-slider-runnable-track{height:3px;border:0;border-radius:0;background:linear-gradient(to right,#fff var(--visual-range-fill,50%),#555 var(--visual-range-fill,50%))}
+.visual-space-controls input[type=range]::-moz-range-track{height:3px;border:0;border-radius:0;background:linear-gradient(to right,#fff var(--visual-range-fill,50%),#555 var(--visual-range-fill,50%))}
+.visual-space-controls input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;box-sizing:border-box;width:9px;height:16px;margin-top:-6.5px;border:1px solid #fff;border-radius:1px;background:#fff;box-shadow:0 0 0 2px #000}
+.visual-space-controls input[type=range]::-moz-range-thumb{box-sizing:border-box;width:9px;height:16px;border:1px solid #fff;border-radius:1px;background:#fff;box-shadow:0 0 0 2px #000}
+.visual-space-controls input[type=range]:focus-visible{outline:1px dashed #fff;outline-offset:1px}
+#displayStage #tapeDeck{container-type:size}
+#displayStage #tapeDeck #tapeCanvas{height:calc(100% - 106px)}
+.visual-tape-editor{position:absolute;inset:auto 0 0;height:106px;border-top:1px solid #666;padding:7px 16px 4px;box-sizing:border-box;color:#fff;background:#000}
+.visual-echo-plot{position:absolute;left:30px;right:30px;top:40px;bottom:28px;touch-action:none;cursor:crosshair;outline-offset:4px}
+.echo-baseline{fill:none;stroke:#555;stroke-width:1;vector-effect:non-scaling-stroke}
+.echo-repeats{fill:none;stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke}
+.visual-tape-editor[data-bypassed=true] .echo-repeats{stroke:#777;stroke-dasharray:3 3}
+.echo-axis{position:absolute;bottom:4px;left:16px;right:16px;display:flex;justify-content:space-between;font:8px monospace;color:#aaa;pointer-events:none}
+@container (max-height:190px){
+  #displayStage #tapeDeck #tapeCanvas{height:calc(100% - 82px)}
+  .visual-tape-editor{height:82px;padding-top:4px}
+  .visual-echo-plot{top:32px;bottom:23px}
+  .visual-tape-editor .visual-editor-caption{font-size:8px}
+}
+@media(max-width:480px){
+  .visual-wave-readout{font-size:8px;padding-left:5px;padding-right:5px;gap:3px}
+  #displayStage>.visual-space-editor{padding:6px 9px;gap:4px}
+  .visual-space-editor .visual-editor-caption{font-size:8px;gap:3px}
+  .visual-space-controls{gap:10px;padding-top:4px}
+  .visual-space-controls label{font-size:8px;grid-template-columns:1fr 34px;grid-template-rows:14px 24px}
+  .visual-space-controls svg{width:34px}
+  .visual-editor-caption{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){.visual-wave-editor *,.visual-space-editor *,.visual-tape-editor *{transition:none!important}}
+/* Height queries use the usable art area, excluding the persistent blend bay. */
+#displayStage>.visual-space-editor{container-type:size;gap:4px!important}
+@container (max-height:130px){
+  .visual-space-editor>.visual-editor-caption{font-size:7px;line-height:1.1;min-height:8px}
+  .visual-space-editor>.visual-filter-plot{min-height:12px;margin:8px 12px 10px}
+  .visual-space-editor .filter-axis{top:calc(100% + 9px);font-size:7px}
+  .visual-space-editor .visual-filter-handle{min-width:24px!important;min-height:24px!important;width:24px;height:24px;font-size:16px}
+  .visual-space-editor>.visual-space-controls{gap:8px;margin-top:1px;padding-top:2px}
+  .visual-space-editor .visual-space-controls label{display:flex;gap:5px;min-height:22px;font-size:7px}
+  .visual-space-editor .visual-space-controls label>span{flex:none;gap:4px}
+  .visual-space-editor .visual-space-controls svg{display:none}
+  .visual-space-editor .visual-space-controls input[type=range]{flex:1 1 0;min-width:18px;width:0;height:22px}
+}
+@container (max-height:120px){
+  #displayStage #tapeDeck #tapeCanvas{display:none}
+  .visual-tape-editor{height:100%;border-top:0;padding-top:5px}
+  .visual-tape-editor .visual-echo-plot{top:33px;bottom:25px}
+  .visual-tape-editor .echo-axis{font-size:7px}
+}
+
+/* Match source-position geometry to Scope's plot margins. */
+.visual-wave-editor[data-mode=grain] .visual-wave-plot{left:24px;right:10px}

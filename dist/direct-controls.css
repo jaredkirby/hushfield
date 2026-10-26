@@ -1,0 +1,42 @@
+/* Direct editing fits inside the existing card/bay sizes; the shared rail stays available. */
+body.common-controls .direct-control .parameter-editor{display:flex;align-items:center;gap:5px;min-width:0;width:100%;height:calc(100% - 14px)}
+body.common-controls .direct-control .parameter-value{display:flex;flex:0 1 auto;align-items:flex-end;justify-content:center;width:auto;max-width:58%;min-width:0;height:100%;min-height:0!important;padding:0 1px!important;border:0;background:transparent;color:#fff;font:11px/1.1 monospace;gap:0;cursor:text}
+body.common-controls .direct-control .parameter-readout{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-bottom:1px dotted #777;padding-bottom:1px}
+body.common-controls .direct-control .parameter-readout:before{content:none!important}
+body.common-controls .direct-control .parameter-range[type=range]{display:block!important;appearance:none;-webkit-appearance:none;flex:1 1 0;min-width:12px;width:0;height:100%;min-height:14px;margin:0;padding:0;border:0;border-radius:0;background:transparent!important;box-shadow:none;cursor:ew-resize;touch-action:pan-y}
+body.common-controls .direct-control .parameter-range::-webkit-slider-runnable-track{height:3px;border:0;background:linear-gradient(to right,#fff var(--parameter-position),#444 var(--parameter-position));border-radius:0}
+body.common-controls .direct-control .parameter-range::-moz-range-track{height:3px;border:0;background:linear-gradient(to right,#fff var(--parameter-position),#444 var(--parameter-position));border-radius:0}
+body.common-controls .direct-control .parameter-range::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;height:14px;width:7px;border:1px solid #fff;border-radius:1px;background:#fff;margin-top:-5.5px;box-shadow:0 0 0 2px #000}
+body.common-controls .direct-control .parameter-range::-moz-range-thumb{height:12px;width:5px;border:1px solid #fff;border-radius:1px;background:#fff;box-shadow:0 0 0 2px #000}
+body.common-controls .direct-control .parameter-choice{display:block;width:100%;min-width:0;height:100%;min-height:18px;max-height:44px;margin:0;padding:0 14px 0 1px;border:0;border-radius:0;background:#000;color:#fff;font:11px monospace;text-overflow:ellipsis;cursor:pointer;color-scheme:dark}
+body.common-controls .direct-control input[hidden]{display:none!important}
+body.common-controls .direct-control .parameter-editor>:focus-visible{outline:1px solid #fff;outline-offset:1px}
+body.common-controls .direct-control .parameter-editor>:disabled{opacity:.35;cursor:default}
+body.common-controls .direct-control[data-mixed=true] .parameter-range{opacity:.5}
+body.common-controls .direct-control[data-mixed=true] .parameter-readout{font-style:italic}
+body.common-controls .piece-blend>.direct-control .parameter-editor{grid-column:1;grid-row:2;height:100%;gap:3px}
+body.common-controls .piece-blend>.direct-control .part-solo{grid-column:2;grid-row:2}
+body.common-controls .piece-blend>.direct-control .parameter-value{font-size:10px}
+body.common-controls .utility-strip .direct-control .parameter-editor{height:28px;gap:3px}
+body.common-controls .utility-strip .direct-control .parameter-value{font-size:10px}
+body.common-controls .orbit-shape-tools.direct-control .parameter-editor{height:calc(100% - 14px)}
+body.wide-ui.common-controls:not([data-height-tier=tight]) .direct-control .parameter-value,body.wide-ui.common-controls:not([data-height-tier=tight]) .direct-control .parameter-choice{font-size:12px}
+body.common-controls[data-height-tier=tight] .direct-control .parameter-editor{height:calc(100% - 10px);gap:3px}
+body.common-controls[data-height-tier=tight] .direct-control .parameter-value,body.common-controls[data-height-tier=tight] .direct-control .parameter-choice{font-size:9px}
+body.common-controls[data-height-tier=tight] .direct-control .parameter-range::-webkit-slider-thumb{height:11px;margin-top:-4px}
+body.common-controls[data-height-tier=tight] .direct-control .parameter-range::-moz-range-thumb{height:9px}
+body.common-controls[data-height-tier=tight] .piece-blend>.direct-control .parameter-editor{height:100%}
+body.common-controls[data-height-tier=tight] .utility-strip .direct-control .parameter-editor{height:25px}
+/* The inspector already has a fixed grid row. Added editor content scrolls here only. */
+body.common-controls .page{overscroll-behavior:contain;scrollbar-width:thin}
+.direct-value-dialog{box-sizing:border-box;width:min(340px,calc(100vw - 32px));max-height:calc(100dvh - 24px);margin:auto;padding:20px;border:1px solid #fff;border-radius:0;background:#080808;color:#fff;font:13px/1.5 monospace;overflow:auto;color-scheme:dark}
+.direct-value-dialog::backdrop{background:#000b}
+.direct-value-dialog form{display:grid;gap:12px}
+.direct-value-dialog label{font-size:14px}
+.direct-value-dialog input{box-sizing:border-box;width:100%;min-height:44px;padding:8px;border:1px solid #aaa;background:#000;color:#fff;font:20px monospace}
+.direct-value-dialog p{margin:0;font:11px/1.5 monospace;color:#aaa}
+.direct-value-dialog output{display:block;font:18px monospace}
+.direct-value-dialog form>div{display:flex;gap:10px;justify-content:flex-end}
+.direct-value-dialog button{min-height:44px;min-width:88px;padding:8px 12px;border:1px solid #aaa;background:#000;color:#fff;font:12px monospace}
+.direct-value-dialog button[type=submit]{background:#fff;color:#000}
+@media(pointer:coarse){.direct-value-dialog input{font-size:20px}}

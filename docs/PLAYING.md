@@ -4,21 +4,27 @@ Hushfield makes one Piece from three sound parts: Foundation, Texture and Motion
 
 ## Start and blend
 
-Tap Start to play the complete Piece. Opening another editor changes the controls and display, not the music. Select a value card and use the common minus/plus pair. A zero blend level means that part is inaudible; Add texture sets Texture to 35%, and Add motion sets Motion to 25%. These actions set the level; they do not start a stopped Piece.
+Tap Start in the bottom bar to play the complete Piece, and Stop to pause. Enter or Space also activates the focused button. Opening another editor changes the controls and display, not the music. Drag a slider to change a continuous value; tap its underlined readout for exact entry with a range and formatted preview. Categories such as scene, scale, waveform and shape have direct menus. The common minus/plus pair still adjusts the selected control, and holding a button repeats. A zero blend level means that part is inaudible; Add texture sets Texture to 35%, and Add motion sets Motion to 25%. These actions set the level; they do not start a stopped Piece.
+
+The bottom bar contains Start/Stop and the minus/plus controls. Its output waveform is turned off; Visual still provides the main output visualizations.
+
+The visual viewport stays square and fixed while editing. It uses the screen height in landscape and the screen width in portrait, with a small outer margin. The header, navigation and adjustments sit beside it in landscape and below it in portrait. Scroll that control area without moving or resizing the visual; editor tabs stay pinned while scrolling, and Start/Stop and minus/plus remain at the bottom of the control area. The square resizes only when the available viewport changes. Nearly square windows reserve enough room to keep controls reachable.
 
 Solo makes one part audible even if its saved blend level is zero, while temporarily silencing the other parts. Full mix restores their saved levels. Solo is not written to project files or recovery drafts.
 
 ## Foundation
 
-Compose controls the scene, key, scale, chord length, activity and evolution. Voices adjusts the chord bed, melodic notes and airy noise. The four dots are sustained chord voices: drag vertically for scale steps and horizontally for pan. The pitches glide to their new values. Reset dots returns all four to their default positions.
+Compose controls the scene, key, scale, chord length, activity and evolution. Voices adjusts the chord bed, melodic notes and airy noise. The four dots are sustained chord voices: drag vertically for scale steps and horizontally for pan. The pitches glide to their new values. Each dot shows its voice number and note, with pitch/stereo guides during a drag. Reset dots returns all four to their default positions.
 
 Sound adds **Color**, **Drift**, and **Bloom**. Color changes harmonic richness, Drift gently moves the voices independently, and Bloom changes their color over time. New Pieces use recurring motifs with deliberate rests and nearby chord voicings. Evolution also controls the depth of a two-minute phrase: Texture gradually grows while Motion becomes sparser, then their roles return. The saved Blend stays unchanged; Solo still isolates the requested part.
 
 Hold chord pauses harmonic changes while the Piece continues, including its slower musical development. New piece changes the seed and restarts its musical progression while keeping sounds and blend settings.
 
-The complete-piece menu is different from Scene. Stillwater, Slow cloud, Glass shards and Worn memory set Foundation, blend levels, live Texture source, linked Motion, sound patches and finishing controls together. Each complete preset has complementary trigger and ball instruments. The Scene card changes Foundation's scene without replacing the whole Piece. Existing optional source material remains available in Your sound / trim.
+The Whole piece menu is different from Scene. Stillwater, Slow cloud, Glass shards and Worn memory set Foundation, blend levels, live Texture source, linked Motion, sound patches and finishing controls together. Each complete preset has complementary trigger and ball instruments. The Scene card changes Foundation's scene without replacing the whole Piece. Existing optional source material remains available in Your sound / trim.
 
 ## Texture sources
+
+Texture starts with its adjustments visible. Hide adjust hides the Texture fields while keeping the blend and toolbar available; Adjust shows them again. The visual square keeps its size and position. Display contains Wave smoothing: 0 keeps the detailed trace, while higher values make it flow more smoothly; the default is 65%. This changes the picture only, is saved with Visual settings, and supports Undo/Redo. Escape also hides the Texture fields when focus is inside. Texture, Scan and Variation remain available as tabs in the dock.
 
 The source status distinguishes three kinds of material:
 
@@ -30,9 +36,11 @@ The source status distinguishes three kinds of material:
 
 Start the Piece and let it play briefly before choosing Freeze phrase. During the first four seconds, the available phrase may be shorter; at least a quarter-second of material is required. Use live foundation switches back to evolving material without discarding the stored optional source.
 
-Grain size and density shape smoothness and thickness. Position chooses material; Scatter spreads grain positions; Pitch transposes them. Scan direction, range, speed, wander and smoothing move through the material, while Motion controls add static/hold/jump/reverse/elastic/chaotic behavior. Texture's synthesis controls are inactive until it is added or soloed.
+Drag POSITION on the waveform to choose the read anchor, and the millisecond handle to resize the grain window. Dragging the waveform itself also moves the read anchor. The shaded scatter area and density/overlap readout show how the settings relate. Texture uses Visual Scope's renderer: stacked left/right traces, a dotted grid and fading trails with the same dither treatment. It displays the full source phrase so the read anchor and grain length line up with the material. Visual Scope itself shows a short window of the post-effects mix. Scanning can continue moving the playback head.
 
-Your sound / trim opens the source tool. Import browser-decodable audio, choose a synthesized demo, or record the microphone. The app retains up to 60 seconds of source audio. Apply trim commits the selected range; Restore full sample returns to the retained original. Returning with Use this material selects it as Texture; opening an editor alone does not raise its blend level.
+Grain length and density shape smoothness and thickness. Position scatter spreads grain positions; Pitch transposes them. Scan direction, range, speed, wander and smoothing move through the material. The Variation section adds Repeat position, Jump chance, Skip grain, Reverse chance, Pitch variation and Timing variation. Texture remains editable at zero blend, with an inaudible status; raise its blend, Add texture or Solo to hear it.
+
+Your sound / trim opens the source tool. Import browser-decodable audio, choose a synthesized demo, or record the microphone. The app retains up to 60 seconds of source audio. Drag IN and OUT on the waveform, or drag near a boundary to move the nearest edge. Seconds readouts show both endpoints and the selected duration; the boundaries cannot cross. Apply trim commits the selected range; Restore full sample returns to the retained original. Returning with Use this material selects it as Texture; opening an editor alone does not raise its blend level.
 
 The source menu also offers **Evolving pad**, **Damped pluck**, and **Soft FM bell** under **Surge textures · original C4**. These are 24-second recordings made by a native Surge XT engine, loaded locally only when selected. Their pitch is C4 at A4=440 Hz; they retain that pitch as Foundation changes. Use Texture Pitch, hold a matching harmony, or use the source as a less tonal background. [Native source details and listening comparisons](SURGE-TEXTURE.md).
 
@@ -40,37 +48,52 @@ Listen to source pauses the Piece and plays the original material directly throu
 
 ## Motion and harmony
 
-Motion uses Orbit: a rotating circle/polygon, bouncing balls and 1–24 equally spaced trigger marks. Spin rate controls the rhythm; Reverse spin changes its direction. Stop spin sets zero RPM, halting new automatic notes while existing sound tails can decay. Scatter resets the balls.
+Motion uses Orbit: a rotating circle/polygon, bouncing balls and 1–24 equally spaced trigger marks. Turn the orientation handle to offset the shape, or enter an angle in degrees. Signed spin speed passes through zero: negative values rotate counterclockwise, positive values clockwise. Stop spin sets zero RPM, halting new automatic notes while existing sound tails can decay. Scatter resets the balls. Tap the Orbit background to give the balls a nudge.
 
 HARMONY LINKED makes new notes follow Foundation's current chord tones. Foundation continues supplying harmony at zero audible Foundation blend. INDEPENDENT NOTES uses patch tuning instead. Existing sustained notes finish normally when harmony changes. Imported and frozen Texture material is not retuned by this link.
 
-Triggers and Balls have separate sound banks. Select All or an individual item, then edit Voice, Envelope, Tone, Brightness or Space. Brightness has its own attack, decay and signed depth in semitones, independent of amplitude. A zero depth leaves the static filter unchanged. An All edit changes that field across the bank while retaining unrelated overrides. Bank delay/feedback/room controls apply to that bank. Listen and tapping a trigger audition its patch through shared finishing without raising the Motion blend level.
+Triggers and Balls have separate sound banks. Tap a trigger mark to select its sound for editing; selection does not audition it. The target menu selects All or an individual item, and the scope label identifies what will change. Edit Voice, Envelope, Tone, Brightness or Space. Brightness has its own attack, decay and signed depth in semitones, independent of amplitude; zero depth retains the static filter.
+
+All shows Mixed where the sounds differ. Changing a field applies that field across the bank while retaining unrelated overrides. The envelope graph shows the first sound when envelopes differ: drag A, D, H and R horizontally for attack, decay, hold and release time, or S vertically for sustain. Numeric controls remain available beneath the graph. Bank delay/feedback/room controls are grouped separately and always apply to the whole bank.
+
+Listen auditions the selected patch through shared finishing without raising the Motion blend. For an All target, Listen first auditions the first sound, not the entire bank.
 
 ## Shared finishing
 
-Space's filter and stereo width process the normal Foundation, Texture and Motion blend. **Depth** sets each part's room send; Texture starts farther back than Foundation. **Room low cut** removes bass from ambience, and **Room high cut** darkens its tail. Reverb controls the overall room level. The modern room return also follows shared width. Motion's own bank effects remain upstream of this shared path.
+Space's filter, stereo width and room process the normal Foundation, Texture and Motion blend. Depth sets each part's room send, with Texture starting farther back than Foundation. Room low cut removes bass from ambience and Room high cut darkens its tail. Reverb controls overall room level; the modern return also follows shared width. Drag the filter handle or response surface horizontally for cutoff and vertically for resonance; moving right raises the cutoff and moving up increases resonance. Filter type remains a direct menu. Width and room have separate sliders and visual indicators. The curve is a settings preview, not a measured spectrum. Motion's own bank effects remain upstream of this shared path.
 
-Tape starts Off in a new session. On adds a warm direct tape path and darker repeats. Drive, Wow, Flutter and Tone affect the direct signal even at zero echo Mix. Mix sets repeat level; Time sets delay length; Feedback controls repeats; Hiss follows the input envelope. Off bypasses the whole Tape effect, including repeats and coloration.
+Tape starts Off in a new session. On adds a warm direct tape path and darker repeats. Echo contains Time, Feedback and Echo level; Character contains Drive, Wow, Flutter, Hiss and Tone. Drag the echo grid horizontally to set repeat time and vertically to set feedback.
 
-The new-session settings are Time 0.36 s, Feedback 28%, Mix 16%, Drive 16%, Wow 10%, Flutter 6%, Hiss 4% and Tone 42%. Loaded project settings are retained, and Worn memory deliberately uses a stronger character.
+Drive, Wow, Flutter and Tone affect the direct signal even at zero Echo level. Echo level sets repeat level; Time sets delay length; Feedback controls repeats; Hiss follows the input envelope. Off bypasses the whole Tape effect, including repeats and coloration. You can edit the settings while it is bypassed.
+
+The new-session settings are Time 0.36 s, Feedback 28%, Echo level 16%, Drive 16%, Wow 10%, Flutter 6%, Hiss 4% and Tone 42%. Loaded project settings are retained, and Worn memory deliberately uses a stronger character.
 
 ![Tape with warm vintage settings](images/vintage-tape.jpg)
 
-The cassette illustrates the settings and signal level: Wow sways the path, Flutter adds ripples, Drive brightens the head and Mix/Feedback shape fading repeats. This is an illustration, not measured tape telemetry. Movement settles in bypass, freezes while stopped and respects reduced motion.
+The cassette illustrates the settings and signal level: Wow sways the path, Flutter adds ripples, Drive brightens the head and Echo level/Feedback shape fading repeats. The echo grid makes time and feedback directly editable. Both displays illustrate settings rather than measured tape telemetry. Movement settles in bypass, freezes while stopped and respects reduced motion.
 
 ## Visual and keyboard controls
 
-Visual opens Scope, Spectrum or Vector from any editor. Scope shows left/right waveforms; Spectrum shows logarithmic frequency bands; Vector shows the stereo phase image and correlation. Display gain, trails, smoothing, range and peak decay do not change the sound. Hold view freezes the picture while the Piece continues. Back to sound returns to the previous editor.
+Visual opens Scope, Spectrum or Vector from any editor. Scope shows left/right waveforms; Spectrum shows logarithmic frequency bands; Vector shows the stereo phase image and correlation. Display gain, trails, smoothing, range and peak decay do not change the sound. Drag Spectrum to inspect frequency and level. Hold picture freezes the picture while the Piece continues; it is distinct from Hold chord and Freeze phrase. Back to sound returns to the previous editor.
 
 | Key | Action |
 | --- | --- |
 | Space | Start/stop the Piece when focus is outside a button, link, input or select. |
 | F | Hold/release the current chord under the same focus rule. |
-| Left / Right on a parameter | Decrease/increase the selected value. |
+| Arrows on a slider | Adjust its value; Home / End reach its bounds. |
+| Enter / Space on an underlined numeric readout | Open exact entry; Apply commits and Cancel leaves the value unchanged. |
+| Arrows on grain/trim, filter, echo, orientation or envelope handles | Adjust the corresponding values. Shift makes larger steps on supported visual handles. |
+| Cmd/Ctrl + Z / Cmd/Ctrl + Shift + Z | Undo / Redo settings when focus is outside text entry, menus and dialogs. |
 | Arrows on a voice dot | Adjust pitch or stereo position. |
 | Home on a voice dot | Reset that voice. |
 
 Expensive drawing is capped at 30 fps independently of audio processing. Audio timestamps keep voice movement aligned with the Piece; paused views redraw when relevant state changes.
+
+## Undo settings
+
+Undo and Redo in the utility strip keep up to 40 settings edits. A slider drag or visual gesture is one edit, so Undo restores the value from before the gesture. This covers blend, Foundation, Texture, Motion sounds, shared effects, master volume and Visual settings. Navigation and auditions do not become settings edits.
+
+History belongs to the current material and configuration. Loading a project or recovery draft, choosing a complete preset, starting a New piece, or replacing/committing source material clears it. Moving trim boundaries is reversible; Apply trim commits audio and clears settings history. Restore full sample returns to the retained original. Undo does not rewind playback, restore recordings or recover discarded audio buffers.
 
 ## Save, recover and record
 

@@ -148,8 +148,9 @@ class GrainEngine extends AudioWorkletProcessor {
     }
     this.frameCounter += out[0].length;
     if (this.frameCounter >= sampleRate / 15) {
-      const wave = live ? Array.from({ length: 160 }, (_, i) => this.recent[0][((this.recentFrames === this.recent[0].length ? this.writeIndex : 0) + Math.floor(i * this.recentFrames / 160)) % this.recent[0].length]) : null;
-      this.port.postMessage({ sourceMode: this.sourceMode, playing: this.playing, phraseDensity: this.phraseDensity, liveSeconds: this.recentFrames / sampleRate, wave, scan: this.scan, count: this.grains.length, peak, grains: this.grains.slice(-45).map((g) => ({ position: (g.position % Math.max(1, len) + len) % Math.max(1, len) / Math.max(1, len), life: g.age / g.duration })) });
+      const sourceWave = channel => live ? Array.from({ length: 160 }, (_, i) => this.recent[channel][((this.recentFrames === this.recent[0].length ? this.writeIndex : 0) + Math.floor(i * this.recentFrames / 160)) % this.recent[0].length]) : null;
+      const wave = sourceWave(0), waveRight = sourceWave(1);
+      this.port.postMessage({ sourceMode: this.sourceMode, playing: this.playing, phraseDensity: this.phraseDensity, liveSeconds: this.recentFrames / sampleRate, wave, waveRight, scan: this.scan, count: this.grains.length, peak, grains: this.grains.slice(-45).map((g) => ({ position: (g.position % Math.max(1, len) + len) % Math.max(1, len) / Math.max(1, len), life: g.age / g.duration })) });
       this.frameCounter = 0;
     }
     return true;

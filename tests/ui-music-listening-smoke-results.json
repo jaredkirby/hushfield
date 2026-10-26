@@ -1,0 +1,1519 @@
+{
+  "schema": 1,
+  "fixture": {
+    "schema": 1,
+    "baseline": "6e5c607a76f53021ed4bb016fdd5a42a43edd817",
+    "grainSeed": 26025,
+    "controlDelivery": "Fixture-only transport starts at frame6144, per-block delivery of production harmony/phrase payloads and acknowledged snapshots at suspended graph barriers; production asynchronous MessagePorts require separate integration checks.",
+    "sourceFiles": {
+      "baseline/dist/piece-session.mjs": "44a0fd2f484c8ade6b302ffbb3520dba5a2b831f12fc9456ca13f86db764fb46",
+      "baseline/dist/ambient-points.mjs": "930c70317bcb7eae0c79a44662828b57229e3001b3b5f087758eb4397a7cddc4",
+      "baseline/dist/ambient-settings.mjs": "f067b072123fb58c64b7468f1aa6c1bf00ecc554c67e9c4178b2c7cd5c0c2eb7",
+      "baseline/dist/sound-patches.mjs": "7d6f018b0f1e1000d452df4dcca94bf505cfdd1855a41ad1bb293c842a21954d",
+      "baseline/dist/piece-presets.mjs": "176f53aca9958462818c1f20accc3f727434bf94725135fd4f6b7928683ce212",
+      "baseline/dist/orbit-audio.mjs": "119319ce25abc43712e2a95dd9b4f7c57ec2b5eadc3a701213399ebdd66c1eb5",
+      "baseline/dist/piece-space.mjs": "25f4689bc5f0825c280ae9f994717ecf51db09fc5e243e97f59a731831734c50",
+      "baseline/dist/tape-settings.mjs": "fb810dacd566832de3c52467227806726f78ffc18f12dfda1f32e45559952956",
+      "baseline/../baseline-config.mjs": "a22d5f45623a84187e753eb483ca5e51c9b435eb2e879db4e1919fc27517bea0",
+      "baseline/dist/ambient-dsp.mjs": "dd6cb0c26b61eb414f6fb24cb51d98da76e2c6e0e5cf2fd55aa09cc56b1ec2a0",
+      "baseline/dist/ambient-worklet.js": "454adb75867dc39e1ecdccc562f953f2b3425180e829b37b1e5650283185e175",
+      "baseline/dist/piece-harmony.mjs": "6dbfe3ae90e96429d3a7328a64006f67caba98d51b534172443cc06b7991cd8b",
+      "baseline/dist/orbit-physics.mjs": "100f753121b627abb52d7aed6f2ed664966480924ac3cfa8376360d37c896dd9",
+      "baseline/dist/orbit-pads.mjs": "4cd9b1705aaa480d3608e2d8952dcfb684a5aa9d6f07d4de76fbd901754f3047",
+      "baseline/dist/orbit-dsp.mjs": "0914dca91b80803e80cb03f16917cd461977dfca4752e3378c41bdde291d6c59",
+      "baseline/dist/orbit-worklet.js": "63538d3b5fa11e9d72766f7ecd28c145d0cc8f10f5f8d64db8372f01a7b27c70",
+      "baseline/dist/grain-worklet.js": "1141398374c44e6800c16097e981296fe015a873a2c873cbc8246dfd709e703e",
+      "baseline/dist/tape-motion.mjs": "44d041514202d2122d1584126d6e75656734bd5d1765f7c8abeb1943a01565b8",
+      "baseline/dist/tape-dsp.mjs": "684b6d8ea8e24d76489f6994eb8688e7f6e426ef7c27c3c6548349525a4b2c18",
+      "baseline/dist/tape-worklet.js": "d69aa334afe1644f1254f1fd90da9362b88634019cc5973108a32777fd5651e7",
+      "current/dist/piece-session.mjs": "c6a8497270186ec6d620bf1b8112394b5543520097a61bd10437d97f56ec4867",
+      "current/dist/ambient-points.mjs": "930c70317bcb7eae0c79a44662828b57229e3001b3b5f087758eb4397a7cddc4",
+      "current/dist/ambient-settings.mjs": "b92586edebc51cb52538a5ff5145984a523873b39e22fdbcc5c0c84be5c8145b",
+      "current/dist/sound-patches.mjs": "4d1b380274d2ca6e3120a8b014a22393fed65c1875a8c4c1108ec261f51e9344",
+      "current/dist/space-settings.mjs": "47ae0230d974c4a97c07ef22b606045ef1465cbc02f00d4bf9fedabd78b60d88",
+      "current/dist/piece-presets.mjs": "68da26062cdff687cb4a8162aa96b325d90c8678a8802d63e865c37a66ff4b0c",
+      "current/dist/orbit-audio.mjs": "119319ce25abc43712e2a95dd9b4f7c57ec2b5eadc3a701213399ebdd66c1eb5",
+      "current/dist/piece-space.mjs": "d7aa499be8eb286731285c38a27ab86ee36d44b837a967830cd0b5b2c74edc4f",
+      "current/dist/tape-settings.mjs": "fb810dacd566832de3c52467227806726f78ffc18f12dfda1f32e45559952956",
+      "current/.scratch/listening/current-config.mjs": "d8c93619b7239c74f738fd7d5868d7bb942518d2ecea525621f560cc68cbefe7",
+      "current/dist/ambient-dsp.mjs": "b3727a539823dfc1d6051ea716113a42db15285e61703af4d9e93b08b680c81f",
+      "current/dist/ambient-worklet.js": "94f1d9a6378be09ac900fc0c34d69abb73ee843d14da80a56acaa3574adbb4a8",
+      "current/dist/piece-harmony.mjs": "6dbfe3ae90e96429d3a7328a64006f67caba98d51b534172443cc06b7991cd8b",
+      "current/dist/orbit-physics.mjs": "100f753121b627abb52d7aed6f2ed664966480924ac3cfa8376360d37c896dd9",
+      "current/dist/orbit-pads.mjs": "4cd9b1705aaa480d3608e2d8952dcfb684a5aa9d6f07d4de76fbd901754f3047",
+      "current/dist/orbit-dsp.mjs": "c5ee7dec7ec7bea3ba94813dee604ba080ddca158f11edd00611e9a85fd48135",
+      "current/dist/orbit-worklet.js": "5d4cc13644b38248fe642c564ef171238c407cd9b9e57397137fd1623c519c9b",
+      "current/dist/grain-worklet.js": "c5d0bdd9d937b97190ff2243b4d9f5f02b9b9ce077e43fbdc15f9feeac8eab76",
+      "current/dist/tape-motion.mjs": "44d041514202d2122d1584126d6e75656734bd5d1765f7c8abeb1943a01565b8",
+      "current/dist/tape-dsp.mjs": "684b6d8ea8e24d76489f6994eb8688e7f6e426ef7c27c3c6548349525a4b2c18",
+      "current/dist/tape-worklet.js": "d69aa334afe1644f1254f1fd90da9362b88634019cc5973108a32777fd5651e7"
+    },
+    "outputs": {
+      "baseline/config.js": "79d6315aac8763d7b1e9fd495d53c0593a2d6b6efe76bc1ecd71462fa68771ac",
+      "baseline/ambient-worklet.js": "9330e7cd61bd1a57ee570e9a1984e1d7bd25edc9f1f26d1228688140efd7e0af",
+      "baseline/orbit-worklet.js": "89edf054161df54e7392febdb92bea5fe9bfa4af5bce2f0ebc32007fd0c316f7",
+      "baseline/grain-worklet.js": "719bab552116170231092dd35f2378081900516a9e8a4c4698438b6eb7b80748",
+      "baseline/tape-worklet.js": "408d63f8de7f13753febf48031751456bc258fe8d375513559d05f44cdabf5cf",
+      "current/config.js": "77bc591850d34b8f84ae6983f0ce0cae4e0ffb813e36ebf7d480420c0b60c583",
+      "current/ambient-worklet.js": "4dbdc54e035ea2e22f5dfffb6c907df60476969aaa7b3a15d69d05779a330852",
+      "current/orbit-worklet.js": "32ff9a96321b9ea9b564b9cd751ff0fb09da17108f449809e77305f1ff2ce5a1",
+      "current/grain-worklet.js": "331cc2f13ffa35f88fffcffb7ebb51fdad77813ef420651643c6dcb58d81213a",
+      "current/tape-worklet.js": "b1d0e914c077d6d14e8abc12731f6ba3fb5945f0c0599b48f650d400a8cc5073"
+    },
+    "harnessFiles": {
+      "ops/listening-prepare.mjs": "2d4b90242cdc2afe3f5b2ab0129d4b3cbe6e729e151b0ab73c7ee91133ff2770",
+      "ops/listening-server.mjs": "988a8d51a042187ecaddd780b0835ab6c11ec328d36cb06eadc4e3c4dcdc4a79",
+      "dist/qa-musicality.mjs": "3a14572d5320b556ea8981a26f3eebf983119885786000de4bf2039aeba3aa2e",
+      "dist/qa-musicality.html": "ec413fa64e2e8f08a9fd2dce78c7a048007846048379a0f3758fb81cd2bea8c7"
+    },
+    "fixtureHash": "280c2bf711f48812739e0b086b6c5a52dccf3e8ac502b1302d21ebe762016cb8"
+  },
+  "preset": "shards",
+  "seconds": 3,
+  "arc": 6,
+  "seed": 26025,
+  "blend": {
+    "foundation": 80,
+    "texture": 30,
+    "motion": 25
+  },
+  "matching": "Stereo RMS attenuation to quietest raw example; no gain boost. Not perceptual LUFS.",
+  "humanListeningAcceptance": "pending",
+  "physicalDeviceAcceptance": "pending",
+  "repeatability": {
+    "baseline": {
+      "accepted": true,
+      "sameControls": true,
+      "sha256Matches": false,
+      "firstSha256": "915e8981f375b0a0c949796ca74a54f13c555e3ae2ca288d17647f3990fd598c",
+      "repeatSha256": "e041af4069d32408578775090255ca7f5f88e025b5ed5fdd0cd34dab959c21e1",
+      "maxFloatDifference": 1.1175870895385742e-08,
+      "rmsDifference": 7.193046161701561e-10,
+      "tolerance": 1e-06
+    },
+    "full": {
+      "accepted": true,
+      "sameControls": true,
+      "sha256Matches": false,
+      "firstSha256": "bc4ee76b117730b47c4ab0db222d19bb17faf7d53627d1fb45a75b6d408868a9",
+      "repeatSha256": "db012b55ec566a923163beb4c5a2e367d0a094a8a34822ee0699b74a0e5a558a",
+      "maxFloatDifference": 9.313225746154785e-09,
+      "rmsDifference": 3.878278814499923e-10,
+      "tolerance": 1e-06
+    }
+  },
+  "variants": [
+    {
+      "variant": "baseline",
+      "file": "shards-baseline-3s.wav",
+      "raw": {
+        "rms": 0.009306273956645123,
+        "peak": 0.03787184879183769,
+        "maxStep": 0.0019436608999967575,
+        "frames": 144000,
+        "sampleRate": 48000,
+        "duration": 3
+      },
+      "playbackGain": 1,
+      "matched": {
+        "rms": 0.009306273956645123,
+        "peak": 0.03787184879183769,
+        "maxStep": 0.0019436608999967575,
+        "frames": 144000,
+        "sampleRate": 48000,
+        "duration": 3
+      },
+      "sha256": "915e8981f375b0a0c949796ca74a54f13c555e3ae2ca288d17647f3990fd598c",
+      "rawPcmWavSha256": "915e8981f375b0a0c949796ca74a54f13c555e3ae2ca288d17647f3990fd598c",
+      "settings": {
+        "enabled": true,
+        "scene": 3,
+        "name": "Glass horizon",
+        "key": 9,
+        "scale": 2,
+        "change": 36,
+        "activity": 55,
+        "evolution": 55,
+        "pads": 50,
+        "melody": 65,
+        "air": 10,
+        "space": 80,
+        "brightness": 62,
+        "bell": 0.6,
+        "grains": 0,
+        "orbit": 0,
+        "hold": false,
+        "seed": 26025,
+        "points": [
+          {
+            "x": 0.17,
+            "y": 0.35
+          },
+          {
+            "x": 0.39,
+            "y": 0.4
+          },
+          {
+            "x": 0.61,
+            "y": 0.32
+          },
+          {
+            "x": 0.83,
+            "y": 0.37
+          }
+        ],
+        "compositionVersion": 1
+      },
+      "params": {
+        "sampleLevel": 100,
+        "orbitLevel": 100,
+        "position": 50,
+        "size": 70,
+        "density": 28,
+        "spray": 75,
+        "pitch": 12,
+        "scanOn": true,
+        "scanMode": "forward",
+        "range": 100,
+        "wander": 10,
+        "speed": 0.65,
+        "smooth": 0,
+        "static": 0,
+        "jump": 35,
+        "hold": 8,
+        "reverse": 35,
+        "elastic": 12,
+        "chaos": 35,
+        "freeze": false,
+        "cutoff": 16000,
+        "resonance": 0.6,
+        "delayTime": 0.36,
+        "feedback": 28,
+        "delayMix": 30,
+        "tapeOn": false,
+        "drive": 16,
+        "wow": 10,
+        "flutter": 6,
+        "hiss": 4,
+        "tapeTone": 42,
+        "reverb": 24,
+        "width": 75,
+        "orbitBalls": 5,
+        "orbitTriggers": 8,
+        "orbitGravity": 35,
+        "orbitBounce": 84,
+        "orbitSpin": 12,
+        "orbitRotation": 0
+      },
+      "piece": {
+        "foundation": 80,
+        "texture": 30,
+        "motion": 25,
+        "source": "foundation",
+        "followHarmony": true
+      },
+      "patches": {
+        "triggers": {
+          "base": {
+            "wave": "triangle",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 35,
+            "attack": 0.01,
+            "decay": 0.18,
+            "sustain": 20,
+            "gate": 0.1,
+            "release": 1.5,
+            "cutoff": 14000,
+            "resonance": 0.6,
+            "fmRatio": 2.75,
+            "fmAmount": 10,
+            "drive": 0,
+            "pan": 0,
+            "delaySend": 12,
+            "reverbSend": 45,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.3,
+            "feedback": 25,
+            "reverbTime": 2.2
+          },
+          "items": {}
+        },
+        "balls": {
+          "base": {
+            "wave": "sine",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 28,
+            "attack": 0.01,
+            "decay": 0.08,
+            "sustain": 15,
+            "gate": 0.1,
+            "release": 0.9,
+            "cutoff": 14000,
+            "resonance": 0.6,
+            "fmRatio": 2.75,
+            "fmAmount": 0,
+            "drive": 0,
+            "pan": 0,
+            "delaySend": 12,
+            "reverbSend": 45,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.42,
+            "feedback": 25,
+            "reverbTime": 1.6
+          },
+          "items": {}
+        }
+      },
+      "graph": {
+        "foundation": "baseline",
+        "motion": "baseline",
+        "space": "baseline"
+      },
+      "phrases": []
+    },
+    {
+      "variant": "motion",
+      "file": "shards-motion-3s.wav",
+      "raw": {
+        "rms": 0.009327218099823106,
+        "peak": 0.03888611122965813,
+        "maxStep": 0.0019505079835653305,
+        "frames": 144000,
+        "sampleRate": 48000,
+        "duration": 3
+      },
+      "playbackGain": 0.997754513408625,
+      "matched": {
+        "rms": 0.00930627395709625,
+        "peak": 0.03879879415035248,
+        "maxStep": 0.0019461270421743393,
+        "frames": 144000,
+        "sampleRate": 48000,
+        "duration": 3
+      },
+      "sha256": "7154789594a0e7123805b86802e928b20db779cf9fb210576d115cc11140d281",
+      "rawPcmWavSha256": "650ad57b2000cb52a7ba066976f6332bdb5945663339a29dbfdde589d8cb7e96",
+      "settings": {
+        "enabled": true,
+        "scene": 3,
+        "name": "Glass horizon",
+        "key": 9,
+        "scale": 2,
+        "change": 36,
+        "activity": 55,
+        "evolution": 55,
+        "pads": 50,
+        "melody": 65,
+        "air": 10,
+        "space": 80,
+        "brightness": 62,
+        "bell": 0.6,
+        "grains": 0,
+        "orbit": 0,
+        "hold": false,
+        "seed": 26025,
+        "points": [
+          {
+            "x": 0.17,
+            "y": 0.35
+          },
+          {
+            "x": 0.39,
+            "y": 0.4
+          },
+          {
+            "x": 0.61,
+            "y": 0.32
+          },
+          {
+            "x": 0.83,
+            "y": 0.37
+          }
+        ],
+        "compositionVersion": 1
+      },
+      "params": {
+        "sampleLevel": 100,
+        "orbitLevel": 100,
+        "position": 50,
+        "size": 70,
+        "density": 28,
+        "spray": 75,
+        "pitch": 12,
+        "scanOn": true,
+        "scanMode": "forward",
+        "range": 100,
+        "wander": 10,
+        "speed": 0.65,
+        "smooth": 0,
+        "static": 0,
+        "jump": 35,
+        "hold": 8,
+        "reverse": 35,
+        "elastic": 12,
+        "chaos": 35,
+        "freeze": false,
+        "cutoff": 16000,
+        "resonance": 0.6,
+        "delayTime": 0.36,
+        "feedback": 28,
+        "delayMix": 30,
+        "tapeOn": false,
+        "drive": 16,
+        "wow": 10,
+        "flutter": 6,
+        "hiss": 4,
+        "tapeTone": 42,
+        "reverb": 24,
+        "width": 75,
+        "orbitBalls": 5,
+        "orbitTriggers": 8,
+        "orbitGravity": 35,
+        "orbitBounce": 84,
+        "orbitSpin": 12,
+        "orbitRotation": 0
+      },
+      "piece": {
+        "foundation": 80,
+        "texture": 30,
+        "motion": 25,
+        "source": "foundation",
+        "followHarmony": true
+      },
+      "patches": {
+        "triggers": {
+          "base": {
+            "wave": "sine",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 27,
+            "attack": 0.003,
+            "decay": 0.22,
+            "sustain": 5,
+            "gate": 0.04,
+            "release": 2.1,
+            "cutoff": 2200,
+            "resonance": 0.6,
+            "fmRatio": 2.75,
+            "fmAmount": 140,
+            "drive": 0,
+            "pan": -18,
+            "toneAttack": 0.002,
+            "toneDecay": 0.32,
+            "toneAmount": 30,
+            "delaySend": 28,
+            "reverbSend": 36,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.25,
+            "feedback": 32,
+            "reverbTime": 2.4
+          },
+          "items": {}
+        },
+        "balls": {
+          "base": {
+            "wave": "sine",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 23,
+            "attack": 0.006,
+            "decay": 0.38,
+            "sustain": 12,
+            "gate": 0.06,
+            "release": 1.6,
+            "cutoff": 2800,
+            "resonance": 0.6,
+            "fmRatio": 3.5,
+            "fmAmount": 85,
+            "drive": 0,
+            "pan": 24,
+            "toneAttack": 0.004,
+            "toneDecay": 0.5,
+            "toneAmount": 24,
+            "delaySend": 22,
+            "reverbSend": 42,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.375,
+            "feedback": 25,
+            "reverbTime": 2.8
+          },
+          "items": {}
+        }
+      },
+      "graph": {
+        "foundation": "baseline",
+        "motion": "current",
+        "space": "baseline"
+      },
+      "phrases": []
+    },
+    {
+      "variant": "foundation",
+      "file": "shards-foundation-3s.wav",
+      "raw": {
+        "rms": 0.009477893450956728,
+        "peak": 0.03528903052210808,
+        "maxStep": 0.002355842269025743,
+        "frames": 144000,
+        "sampleRate": 48000,
+        "duration": 3
+      },
+      "playbackGain": 0.9818926541852735,
+      "matched": {
+        "rms": 0.009306273955740064,
+        "peak": 0.0346500389277935,
+        "maxStep": 0.0023131842026486993,
+        "frames": 144000,
+        "sampleRate": 48000,
+        "duration": 3
+      },
+      "sha256": "32e6f57f21f50bfabe3af27830c39d4e33468a1c3978a03444a2e067d9eb6d69",
+      "rawPcmWavSha256": "7bce5c0d80ff5c5fe18ed493773f8c07aa6e94890c270a5bda279f5a0620e9ea",
+      "settings": {
+        "enabled": true,
+        "scene": 3,
+        "name": "Glass horizon",
+        "key": 9,
+        "scale": 2,
+        "change": 36,
+        "activity": 55,
+        "evolution": 55,
+        "pads": 50,
+        "melody": 65,
+        "air": 10,
+        "space": 80,
+        "brightness": 62,
+        "bell": 0.6,
+        "compositionVersion": 2,
+        "color": 38,
+        "drift": 22,
+        "bloom": 45,
+        "grains": 0,
+        "orbit": 0,
+        "hold": false,
+        "seed": 26025,
+        "points": [
+          {
+            "x": 0.17,
+            "y": 0.35
+          },
+          {
+            "x": 0.39,
+            "y": 0.4
+          },
+          {
+            "x": 0.61,
+            "y": 0.32
+          },
+          {
+            "x": 0.83,
+            "y": 0.37
+          }
+        ]
+      },
+      "params": {
+        "sampleLevel": 100,
+        "orbitLevel": 100,
+        "position": 50,
+        "size": 70,
+        "density": 28,
+        "spray": 75,
+        "pitch": 12,
+        "scanOn": true,
+        "scanMode": "forward",
+        "range": 100,
+        "wander": 10,
+        "speed": 0.65,
+        "smooth": 0,
+        "static": 0,
+        "jump": 35,
+        "hold": 8,
+        "reverse": 35,
+        "elastic": 12,
+        "chaos": 35,
+        "freeze": false,
+        "cutoff": 16000,
+        "resonance": 0.6,
+        "delayTime": 0.36,
+        "feedback": 28,
+        "delayMix": 30,
+        "tapeOn": false,
+        "drive": 16,
+        "wow": 10,
+        "flutter": 6,
+        "hiss": 4,
+        "tapeTone": 42,
+        "reverb": 24,
+        "width": 75,
+        "orbitBalls": 5,
+        "orbitTriggers": 8,
+        "orbitGravity": 35,
+        "orbitBounce": 84,
+        "orbitSpin": 12,
+        "orbitRotation": 0
+      },
+      "piece": {
+        "foundation": 80,
+        "texture": 30,
+        "motion": 25,
+        "source": "foundation",
+        "followHarmony": true
+      },
+      "patches": {
+        "triggers": {
+          "base": {
+            "wave": "triangle",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 35,
+            "attack": 0.01,
+            "decay": 0.18,
+            "sustain": 20,
+            "gate": 0.1,
+            "release": 1.5,
+            "cutoff": 14000,
+            "resonance": 0.6,
+            "fmRatio": 2.75,
+            "fmAmount": 10,
+            "drive": 0,
+            "pan": 0,
+            "delaySend": 12,
+            "reverbSend": 45,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.3,
+            "feedback": 25,
+            "reverbTime": 2.2
+          },
+          "items": {}
+        },
+        "balls": {
+          "base": {
+            "wave": "sine",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 28,
+            "attack": 0.01,
+            "decay": 0.08,
+            "sustain": 15,
+            "gate": 0.1,
+            "release": 0.9,
+            "cutoff": 14000,
+            "resonance": 0.6,
+            "fmRatio": 2.75,
+            "fmAmount": 0,
+            "drive": 0,
+            "pan": 0,
+            "delaySend": 12,
+            "reverbSend": 45,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.42,
+            "feedback": 25,
+            "reverbTime": 1.6
+          },
+          "items": {}
+        }
+      },
+      "graph": {
+        "foundation": "current",
+        "motion": "baseline",
+        "space": "baseline"
+      },
+      "phrases": [
+        {
+          "at": 0,
+          "phase": 0,
+          "elapsed": 0,
+          "foundation": 1,
+          "texture": 0.8075,
+          "motion": 1,
+          "textureDensity": 0.6699999999999999,
+          "motionDensity": 1
+        },
+        {
+          "at": 0.25066666666666665,
+          "phase": 0.002088888888888701,
+          "elapsed": 0.2506666666666441,
+          "foundation": 0.9999985788558537,
+          "texture": 0.8075082900075197,
+          "motion": 0.9999917099924803,
+          "textureDensity": 0.6700142114414622,
+          "motionDensity": 0.9999846042717492
+        },
+        {
+          "at": 0.5013333333333333,
+          "phase": 0.004177777777780142,
+          "elapsed": 0.5013333333336171,
+          "foundation": 0.9999943156682212,
+          "texture": 0.8075331586020429,
+          "motion": 0.9999668413979571,
+          "textureDensity": 0.6700568433177878,
+          "motionDensity": 0.9999384197390632
+        },
+        {
+          "at": 0.752,
+          "phase": 0.006266666666671584,
+          "elapsed": 0.7520000000005901,
+          "foundation": 0.9999872111714786,
+          "texture": 0.8075746014997083,
+          "motion": 0.9999253985002917,
+          "textureDensity": 0.6701278882852142,
+          "motionDensity": 0.9998614543576847
+        },
+        {
+          "at": 0.9999999999999999,
+          "phase": 0.008333333333340775,
+          "elapsed": 1.000000000000893,
+          "foundation": 0.9999773873234504,
+          "texture": 0.8076319072798726,
+          "motion": 0.9998680927201274,
+          "textureDensity": 0.6702261267654956,
+          "motionDensity": 0.9997550293373796
+        },
+        {
+          "at": 1.2506666666666666,
+          "phase": 0.010422222222232217,
+          "elapsed": 1.250666666667866,
+          "foundation": 0.9999646345539078,
+          "texture": 0.8077062984355377,
+          "motion": 0.9997937015644623,
+          "textureDensity": 0.6703536544609218,
+          "motionDensity": 0.9996168743340014
+        },
+        {
+          "at": 1.5013333333333332,
+          "phase": 0.012511111111123659,
+          "elapsed": 1.501333333334839,
+          "foundation": 0.9999490455881208,
+          "texture": 0.8077972340692952,
+          "motion": 0.9997027659307048,
+          "textureDensity": 0.6705095441187917,
+          "motionDensity": 0.999447993871309
+        },
+        {
+          "at": 1.7519999999999998,
+          "phase": 0.014600000000015101,
+          "elapsed": 1.752000000001812,
+          "foundation": 0.9999306231114431,
+          "texture": 0.807904698516582,
+          "motion": 0.999595301483418,
+          "textureDensity": 0.6706937688855692,
+          "motionDensity": 0.9992484170406334
+        },
+        {
+          "at": 2,
+          "phase": 0.016666666666684295,
+          "elapsed": 2.000000000002115,
+          "foundation": 0.9999096112735764,
+          "texture": 0.8080272675708048,
+          "motion": 0.9994727324291952,
+          "textureDensity": 0.6709038872642368,
+          "motionDensity": 0.9990207887970768
+        },
+        {
+          "at": 2.2506666666666666,
+          "phase": 0.01875555555555347,
+          "elapsed": 2.2506666666664166,
+          "foundation": 0.9998855618330925,
+          "texture": 0.8081675559736271,
+          "motion": 0.9993324440263729,
+          "textureDensity": 0.6711443816690751,
+          "motionDensity": 0.9987602531918354
+        },
+        {
+          "at": 2.501333333333333,
+          "phase": 0.020844444444422648,
+          "elapsed": 2.501333333330718,
+          "foundation": 0.9998586898174231,
+          "texture": 0.8083243093983656,
+          "motion": 0.9991756906016344,
+          "textureDensity": 0.6714131018257696,
+          "motionDensity": 0.9984691396887496
+        },
+        {
+          "at": 2.752,
+          "phase": 0.02293333333329183,
+          "elapsed": 2.7519999999950193,
+          "foundation": 0.9998289998555386,
+          "texture": 0.8084975008426915,
+          "motion": 0.9990024991573085,
+          "textureDensity": 0.6717100014446139,
+          "motionDensity": 0.9981474984350016
+        }
+      ]
+    },
+    {
+      "variant": "full",
+      "file": "shards-full-3s.wav",
+      "raw": {
+        "rms": 0.009441998022230069,
+        "peak": 0.03522532805800438,
+        "maxStep": 0.002443337405566126,
+        "frames": 144000,
+        "sampleRate": 48000,
+        "duration": 3
+      },
+      "playbackGain": 0.9856254931143388,
+      "matched": {
+        "rms": 0.009306273956288467,
+        "peak": 0.03471898287534714,
+        "maxStep": 0.00240821554325521,
+        "frames": 144000,
+        "sampleRate": 48000,
+        "duration": 3
+      },
+      "sha256": "4940c40a428467ea26addbfd219cea313d1071ec47befddca209ecddd1fce058",
+      "rawPcmWavSha256": "bc4ee76b117730b47c4ab0db222d19bb17faf7d53627d1fb45a75b6d408868a9",
+      "settings": {
+        "enabled": true,
+        "scene": 3,
+        "name": "Glass horizon",
+        "key": 9,
+        "scale": 2,
+        "change": 36,
+        "activity": 55,
+        "evolution": 55,
+        "pads": 50,
+        "melody": 65,
+        "air": 10,
+        "space": 80,
+        "brightness": 62,
+        "bell": 0.6,
+        "compositionVersion": 2,
+        "color": 38,
+        "drift": 22,
+        "bloom": 45,
+        "grains": 0,
+        "orbit": 0,
+        "hold": false,
+        "seed": 26025,
+        "points": [
+          {
+            "x": 0.17,
+            "y": 0.35
+          },
+          {
+            "x": 0.39,
+            "y": 0.4
+          },
+          {
+            "x": 0.61,
+            "y": 0.32
+          },
+          {
+            "x": 0.83,
+            "y": 0.37
+          }
+        ]
+      },
+      "params": {
+        "sampleLevel": 100,
+        "orbitLevel": 100,
+        "position": 50,
+        "size": 70,
+        "density": 28,
+        "spray": 75,
+        "pitch": 12,
+        "scanOn": true,
+        "scanMode": "forward",
+        "range": 100,
+        "wander": 10,
+        "speed": 0.65,
+        "smooth": 0,
+        "static": 0,
+        "jump": 35,
+        "hold": 8,
+        "reverse": 35,
+        "elastic": 12,
+        "chaos": 35,
+        "freeze": false,
+        "cutoff": 16000,
+        "resonance": 0.6,
+        "delayTime": 0.36,
+        "feedback": 28,
+        "delayMix": 30,
+        "tapeOn": false,
+        "drive": 16,
+        "wow": 10,
+        "flutter": 6,
+        "hiss": 4,
+        "tapeTone": 42,
+        "reverb": 24,
+        "width": 75,
+        "orbitBalls": 5,
+        "orbitTriggers": 8,
+        "orbitGravity": 35,
+        "orbitBounce": 84,
+        "orbitSpin": 12,
+        "orbitRotation": 0,
+        "spaceVersion": 2,
+        "foundationRoom": 22,
+        "textureRoom": 65,
+        "motionRoom": 30,
+        "roomLow": 180,
+        "roomHigh": 7500
+      },
+      "piece": {
+        "foundation": 80,
+        "texture": 30,
+        "motion": 25,
+        "source": "foundation",
+        "followHarmony": true
+      },
+      "patches": {
+        "triggers": {
+          "base": {
+            "wave": "sine",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 27,
+            "attack": 0.003,
+            "decay": 0.22,
+            "sustain": 5,
+            "gate": 0.04,
+            "release": 2.1,
+            "cutoff": 2200,
+            "resonance": 0.6,
+            "fmRatio": 2.75,
+            "fmAmount": 140,
+            "drive": 0,
+            "pan": -18,
+            "toneAttack": 0.002,
+            "toneDecay": 0.32,
+            "toneAmount": 30,
+            "delaySend": 28,
+            "reverbSend": 36,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.25,
+            "feedback": 32,
+            "reverbTime": 2.4
+          },
+          "items": {}
+        },
+        "balls": {
+          "base": {
+            "wave": "sine",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 23,
+            "attack": 0.006,
+            "decay": 0.38,
+            "sustain": 12,
+            "gate": 0.06,
+            "release": 1.6,
+            "cutoff": 2800,
+            "resonance": 0.6,
+            "fmRatio": 3.5,
+            "fmAmount": 85,
+            "drive": 0,
+            "pan": 24,
+            "toneAttack": 0.004,
+            "toneDecay": 0.5,
+            "toneAmount": 24,
+            "delaySend": 22,
+            "reverbSend": 42,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.375,
+            "feedback": 25,
+            "reverbTime": 2.8
+          },
+          "items": {}
+        }
+      },
+      "graph": {
+        "foundation": "current",
+        "motion": "current",
+        "space": "current"
+      },
+      "phrases": [
+        {
+          "at": 0,
+          "phase": 0,
+          "elapsed": 0,
+          "foundation": 1,
+          "texture": 0.8075,
+          "motion": 1,
+          "textureDensity": 0.6699999999999999,
+          "motionDensity": 1
+        },
+        {
+          "at": 0.25066666666666665,
+          "phase": 0.002088888888888701,
+          "elapsed": 0.2506666666666441,
+          "foundation": 0.9999985788558537,
+          "texture": 0.8075082900075197,
+          "motion": 0.9999917099924803,
+          "textureDensity": 0.6700142114414622,
+          "motionDensity": 0.9999846042717492
+        },
+        {
+          "at": 0.5013333333333333,
+          "phase": 0.004177777777780142,
+          "elapsed": 0.5013333333336171,
+          "foundation": 0.9999943156682212,
+          "texture": 0.8075331586020429,
+          "motion": 0.9999668413979571,
+          "textureDensity": 0.6700568433177878,
+          "motionDensity": 0.9999384197390632
+        },
+        {
+          "at": 0.752,
+          "phase": 0.006266666666671584,
+          "elapsed": 0.7520000000005901,
+          "foundation": 0.9999872111714786,
+          "texture": 0.8075746014997083,
+          "motion": 0.9999253985002917,
+          "textureDensity": 0.6701278882852142,
+          "motionDensity": 0.9998614543576847
+        },
+        {
+          "at": 0.9999999999999999,
+          "phase": 0.008333333333340775,
+          "elapsed": 1.000000000000893,
+          "foundation": 0.9999773873234504,
+          "texture": 0.8076319072798726,
+          "motion": 0.9998680927201274,
+          "textureDensity": 0.6702261267654956,
+          "motionDensity": 0.9997550293373796
+        },
+        {
+          "at": 1.2506666666666666,
+          "phase": 0.010422222222232217,
+          "elapsed": 1.250666666667866,
+          "foundation": 0.9999646345539078,
+          "texture": 0.8077062984355377,
+          "motion": 0.9997937015644623,
+          "textureDensity": 0.6703536544609218,
+          "motionDensity": 0.9996168743340014
+        },
+        {
+          "at": 1.5013333333333332,
+          "phase": 0.012511111111123659,
+          "elapsed": 1.501333333334839,
+          "foundation": 0.9999490455881208,
+          "texture": 0.8077972340692952,
+          "motion": 0.9997027659307048,
+          "textureDensity": 0.6705095441187917,
+          "motionDensity": 0.999447993871309
+        },
+        {
+          "at": 1.7519999999999998,
+          "phase": 0.014600000000015101,
+          "elapsed": 1.752000000001812,
+          "foundation": 0.9999306231114431,
+          "texture": 0.807904698516582,
+          "motion": 0.999595301483418,
+          "textureDensity": 0.6706937688855692,
+          "motionDensity": 0.9992484170406334
+        },
+        {
+          "at": 2,
+          "phase": 0.016666666666684295,
+          "elapsed": 2.000000000002115,
+          "foundation": 0.9999096112735764,
+          "texture": 0.8080272675708048,
+          "motion": 0.9994727324291952,
+          "textureDensity": 0.6709038872642368,
+          "motionDensity": 0.9990207887970768
+        },
+        {
+          "at": 2.2506666666666666,
+          "phase": 0.01875555555555347,
+          "elapsed": 2.2506666666664166,
+          "foundation": 0.9998855618330925,
+          "texture": 0.8081675559736271,
+          "motion": 0.9993324440263729,
+          "textureDensity": 0.6711443816690751,
+          "motionDensity": 0.9987602531918354
+        },
+        {
+          "at": 2.501333333333333,
+          "phase": 0.020844444444422648,
+          "elapsed": 2.501333333330718,
+          "foundation": 0.9998586898174231,
+          "texture": 0.8083243093983656,
+          "motion": 0.9991756906016344,
+          "textureDensity": 0.6714131018257696,
+          "motionDensity": 0.9984691396887496
+        },
+        {
+          "at": 2.752,
+          "phase": 0.02293333333329183,
+          "elapsed": 2.7519999999950193,
+          "foundation": 0.9998289998555386,
+          "texture": 0.8084975008426915,
+          "motion": 0.9990024991573085,
+          "textureDensity": 0.6717100014446139,
+          "motionDensity": 0.9981474984350016
+        }
+      ]
+    },
+    {
+      "variant": "arc",
+      "file": "shards-arc-6s.wav",
+      "raw": {
+        "rms": 0.01063882123302191,
+        "peak": 0.041636448353528976,
+        "maxStep": 0.002443337405566126,
+        "frames": 288000,
+        "sampleRate": 48000,
+        "duration": 6
+      },
+      "playbackGain": 0.8747467179690279,
+      "matched": {
+        "rms": 0.009306273955682955,
+        "peak": 0.03642134740948677,
+        "maxStep": 0.0021373014023993164,
+        "frames": 288000,
+        "sampleRate": 48000,
+        "duration": 6
+      },
+      "sha256": "0088b51f3c9f2ff4697592578a36fad7078aff0391f76a56010de9e6cb0b9478",
+      "rawPcmWavSha256": "564c12322710675e56e22f43da3279c3b0b27d86b1bf68ddf16f3f28f3f46303",
+      "settings": {
+        "enabled": true,
+        "scene": 3,
+        "name": "Glass horizon",
+        "key": 9,
+        "scale": 2,
+        "change": 36,
+        "activity": 55,
+        "evolution": 55,
+        "pads": 50,
+        "melody": 65,
+        "air": 10,
+        "space": 80,
+        "brightness": 62,
+        "bell": 0.6,
+        "compositionVersion": 2,
+        "color": 38,
+        "drift": 22,
+        "bloom": 45,
+        "grains": 0,
+        "orbit": 0,
+        "hold": false,
+        "seed": 26025,
+        "points": [
+          {
+            "x": 0.17,
+            "y": 0.35
+          },
+          {
+            "x": 0.39,
+            "y": 0.4
+          },
+          {
+            "x": 0.61,
+            "y": 0.32
+          },
+          {
+            "x": 0.83,
+            "y": 0.37
+          }
+        ]
+      },
+      "params": {
+        "sampleLevel": 100,
+        "orbitLevel": 100,
+        "position": 50,
+        "size": 70,
+        "density": 28,
+        "spray": 75,
+        "pitch": 12,
+        "scanOn": true,
+        "scanMode": "forward",
+        "range": 100,
+        "wander": 10,
+        "speed": 0.65,
+        "smooth": 0,
+        "static": 0,
+        "jump": 35,
+        "hold": 8,
+        "reverse": 35,
+        "elastic": 12,
+        "chaos": 35,
+        "freeze": false,
+        "cutoff": 16000,
+        "resonance": 0.6,
+        "delayTime": 0.36,
+        "feedback": 28,
+        "delayMix": 30,
+        "tapeOn": false,
+        "drive": 16,
+        "wow": 10,
+        "flutter": 6,
+        "hiss": 4,
+        "tapeTone": 42,
+        "reverb": 24,
+        "width": 75,
+        "orbitBalls": 5,
+        "orbitTriggers": 8,
+        "orbitGravity": 35,
+        "orbitBounce": 84,
+        "orbitSpin": 12,
+        "orbitRotation": 0,
+        "spaceVersion": 2,
+        "foundationRoom": 22,
+        "textureRoom": 65,
+        "motionRoom": 30,
+        "roomLow": 180,
+        "roomHigh": 7500
+      },
+      "piece": {
+        "foundation": 80,
+        "texture": 30,
+        "motion": 25,
+        "source": "foundation",
+        "followHarmony": true
+      },
+      "patches": {
+        "triggers": {
+          "base": {
+            "wave": "sine",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 27,
+            "attack": 0.003,
+            "decay": 0.22,
+            "sustain": 5,
+            "gate": 0.04,
+            "release": 2.1,
+            "cutoff": 2200,
+            "resonance": 0.6,
+            "fmRatio": 2.75,
+            "fmAmount": 140,
+            "drive": 0,
+            "pan": -18,
+            "toneAttack": 0.002,
+            "toneDecay": 0.32,
+            "toneAmount": 30,
+            "delaySend": 28,
+            "reverbSend": 36,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.25,
+            "feedback": 32,
+            "reverbTime": 2.4
+          },
+          "items": {}
+        },
+        "balls": {
+          "base": {
+            "wave": "sine",
+            "key": "C",
+            "scale": "minor",
+            "octave": 0,
+            "transpose": 0,
+            "level": 23,
+            "attack": 0.006,
+            "decay": 0.38,
+            "sustain": 12,
+            "gate": 0.06,
+            "release": 1.6,
+            "cutoff": 2800,
+            "resonance": 0.6,
+            "fmRatio": 3.5,
+            "fmAmount": 85,
+            "drive": 0,
+            "pan": 24,
+            "toneAttack": 0.004,
+            "toneDecay": 0.5,
+            "toneAmount": 24,
+            "delaySend": 22,
+            "reverbSend": 42,
+            "enabled": true
+          },
+          "effects": {
+            "delayTime": 0.375,
+            "feedback": 25,
+            "reverbTime": 2.8
+          },
+          "items": {}
+        }
+      },
+      "graph": {
+        "foundation": "current",
+        "motion": "current",
+        "space": "current"
+      },
+      "phrases": [
+        {
+          "at": 0,
+          "phase": 0,
+          "elapsed": 0,
+          "foundation": 1,
+          "texture": 0.8075,
+          "motion": 1,
+          "textureDensity": 0.6699999999999999,
+          "motionDensity": 1
+        },
+        {
+          "at": 0.25066666666666665,
+          "phase": 0.002088888888888701,
+          "elapsed": 0.2506666666666441,
+          "foundation": 0.9999985788558537,
+          "texture": 0.8075082900075197,
+          "motion": 0.9999917099924803,
+          "textureDensity": 0.6700142114414622,
+          "motionDensity": 0.9999846042717492
+        },
+        {
+          "at": 0.5013333333333333,
+          "phase": 0.004177777777780142,
+          "elapsed": 0.5013333333336171,
+          "foundation": 0.9999943156682212,
+          "texture": 0.8075331586020429,
+          "motion": 0.9999668413979571,
+          "textureDensity": 0.6700568433177878,
+          "motionDensity": 0.9999384197390632
+        },
+        {
+          "at": 0.752,
+          "phase": 0.006266666666671584,
+          "elapsed": 0.7520000000005901,
+          "foundation": 0.9999872111714786,
+          "texture": 0.8075746014997083,
+          "motion": 0.9999253985002917,
+          "textureDensity": 0.6701278882852142,
+          "motionDensity": 0.9998614543576847
+        },
+        {
+          "at": 0.9999999999999999,
+          "phase": 0.008333333333340775,
+          "elapsed": 1.000000000000893,
+          "foundation": 0.9999773873234504,
+          "texture": 0.8076319072798726,
+          "motion": 0.9998680927201274,
+          "textureDensity": 0.6702261267654956,
+          "motionDensity": 0.9997550293373796
+        },
+        {
+          "at": 1.2506666666666666,
+          "phase": 0.010422222222232217,
+          "elapsed": 1.250666666667866,
+          "foundation": 0.9999646345539078,
+          "texture": 0.8077062984355377,
+          "motion": 0.9997937015644623,
+          "textureDensity": 0.6703536544609218,
+          "motionDensity": 0.9996168743340014
+        },
+        {
+          "at": 1.5013333333333332,
+          "phase": 0.012511111111123659,
+          "elapsed": 1.501333333334839,
+          "foundation": 0.9999490455881208,
+          "texture": 0.8077972340692952,
+          "motion": 0.9997027659307048,
+          "textureDensity": 0.6705095441187917,
+          "motionDensity": 0.999447993871309
+        },
+        {
+          "at": 1.7519999999999998,
+          "phase": 0.014600000000015101,
+          "elapsed": 1.752000000001812,
+          "foundation": 0.9999306231114431,
+          "texture": 0.807904698516582,
+          "motion": 0.999595301483418,
+          "textureDensity": 0.6706937688855692,
+          "motionDensity": 0.9992484170406334
+        },
+        {
+          "at": 2,
+          "phase": 0.016666666666684295,
+          "elapsed": 2.000000000002115,
+          "foundation": 0.9999096112735764,
+          "texture": 0.8080272675708048,
+          "motion": 0.9994727324291952,
+          "textureDensity": 0.6709038872642368,
+          "motionDensity": 0.9990207887970768
+        },
+        {
+          "at": 2.2506666666666666,
+          "phase": 0.01875555555555347,
+          "elapsed": 2.2506666666664166,
+          "foundation": 0.9998855618330925,
+          "texture": 0.8081675559736271,
+          "motion": 0.9993324440263729,
+          "textureDensity": 0.6711443816690751,
+          "motionDensity": 0.9987602531918354
+        },
+        {
+          "at": 2.501333333333333,
+          "phase": 0.020844444444422648,
+          "elapsed": 2.501333333330718,
+          "foundation": 0.9998586898174231,
+          "texture": 0.8083243093983656,
+          "motion": 0.9991756906016344,
+          "textureDensity": 0.6714131018257696,
+          "motionDensity": 0.9984691396887496
+        },
+        {
+          "at": 2.752,
+          "phase": 0.02293333333329183,
+          "elapsed": 2.7519999999950193,
+          "foundation": 0.9998289998555386,
+          "texture": 0.8084975008426915,
+          "motion": 0.9990024991573085,
+          "textureDensity": 0.6717100014446139,
+          "motionDensity": 0.9981474984350016
+        },
+        {
+          "at": 3,
+          "phase": 0.024999999999938995,
+          "elapsed": 2.999999999992679,
+          "foundation": 0.9997968576198207,
+          "texture": 0.8086849972177123,
+          "motion": 0.9988150027822877,
+          "textureDensity": 0.6720314238017924,
+          "motionDensity": 0.9977992908813916
+        },
+        {
+          "at": 3.2506666666666666,
+          "phase": 0.02708888888880817,
+          "elapsed": 3.2506666666569806,
+          "foundation": 0.9997615774262404,
+          "texture": 0.808890798346931,
+          "motion": 0.998609201653069,
+          "textureDensity": 0.672384225737596,
+          "motionDensity": 0.9974170887842709
+        },
+        {
+          "at": 3.501333333333333,
+          "phase": 0.029177777777677348,
+          "elapsed": 3.501333333321282,
+          "foundation": 0.9997234960150155,
+          "texture": 0.8091129399124096,
+          "motion": 0.9983870600875904,
+          "textureDensity": 0.672765039849845,
+          "motionDensity": 0.9970045401626678
+        },
+        {
+          "at": 3.752,
+          "phase": 0.031266666666546525,
+          "elapsed": 3.7519999999855833,
+          "foundation": 0.999682619946046,
+          "texture": 0.8093513836480649,
+          "motion": 0.9981486163519351,
+          "textureDensity": 0.6731738005395398,
+          "motionDensity": 0.9965617160821653
+        },
+        {
+          "at": 4,
+          "phase": 0.033333333333193695,
+          "elapsed": 3.999999999983243,
+          "foundation": 0.9996394354121108,
+          "texture": 0.8096032934293537,
+          "motion": 0.9978967065706463,
+          "textureDensity": 0.6736056458788919,
+          "motionDensity": 0.9960938836312003
+        },
+        {
+          "at": 4.250666666666667,
+          "phase": 0.03542222222206288,
+          "elapsed": 4.250666666647545,
+          "foundation": 0.9995930211659922,
+          "texture": 0.8098740431983789,
+          "motion": 0.9976259568016211,
+          "textureDensity": 0.674069788340078,
+          "motionDensity": 0.9955910626315821
+        },
+        {
+          "at": 4.501333333333333,
+          "phase": 0.037511111110932055,
+          "elapsed": 4.501333333311846,
+          "foundation": 0.999543834737713,
+          "texture": 0.8101609640300075,
+          "motion": 0.9973390359699925,
+          "textureDensity": 0.6745616526228699,
+          "motionDensity": 0.9950582096585575
+        },
+        {
+          "at": 4.752,
+          "phase": 0.03959999999980123,
+          "elapsed": 4.751999999976148,
+          "foundation": 0.9994918846001223,
+          "texture": 0.8104640064992867,
+          "motion": 0.9970359935007133,
+          "textureDensity": 0.6750811539987772,
+          "motionDensity": 0.9944954165013247
+        },
+        {
+          "at": 5,
+          "phase": 0.041666666666448395,
+          "elapsed": 4.999999999973808,
+          "foundation": 0.9994377761337755,
+          "texture": 0.810779639219643,
+          "motion": 0.996720360780357,
+          "textureDensity": 0.6756222386622451,
+          "motionDensity": 0.9939092414492344
+        },
+        {
+          "at": 5.250666666666667,
+          "phase": 0.04375555555531758,
+          "elapsed": 5.250666666638109,
+          "foundation": 0.999380355053341,
+          "texture": 0.8111145955221772,
+          "motion": 0.9963854044778226,
+          "textureDensity": 0.6761964494665896,
+          "motionDensity": 0.9932871797445278
+        },
+        {
+          "at": 5.501333333333333,
+          "phase": 0.045844444444186755,
+          "elapsed": 5.50133333330241,
+          "foundation": 0.9993201984245885,
+          "texture": 0.8114655091899001,
+          "motion": 0.9960344908100999,
+          "textureDensity": 0.6767980157541145,
+          "motionDensity": 0.9926354829330427
+        },
+        {
+          "at": 5.752,
+          "phase": 0.04793333333305593,
+          "elapsed": 5.751999999966712,
+          "foundation": 0.9992573166100926,
+          "texture": 0.8118323197744592,
+          "motion": 0.9956676802255408,
+          "textureDensity": 0.677426833899073,
+          "motionDensity": 0.9919542632760042
+        }
+      ]
+    }
+  ]
+}
