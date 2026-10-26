@@ -4,8 +4,8 @@ These three files are unmodified `dist/` sources from Hushfield commit
 `6e5c607a76f53021ed4bb016fdd5a42a43edd817`, before expressive Foundation synthesis.
 They are test-only reference code and must not be updated alongside the current engine.
 
-The regression renders this reference and the current classic mode in the same runtime
-and requires byte-identical Float32 PCM. JavaScript transcendental math may differ
+The regression in [foundation-expression.test.mjs](../../foundation-expression.test.mjs) renders this reference and the current classic mode in the same
+runtime and requires byte-identical Float32 PCM at 8, 44.1 and 48 kHz. JavaScript transcendental math may differ
 between V8 versions, so a hash captured on Node 22 is not a portable Node 24 oracle.
 The original Node 22 8 kHz / seed 719 / four-second interleaved-block hash was
 `5248ba72dd5eec62d4a0b0639e7319ef38e3ecd9a57dd361d1bbeac9dbe0618d`.

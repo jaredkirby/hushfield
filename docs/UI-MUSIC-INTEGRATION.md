@@ -1,5 +1,7 @@
 # UI and music integration
 
+Historical integration and publication record. The combined work merged through [PR #22](https://github.com/jaredkirby/hushfield/pull/22) on 2026-10-25 (America/Los_Angeles), as `17794182f53d3175f88230200d83a734a58051e6`. [Current verification](../VERIFICATION.md) summarizes supported checks and acceptance limits; the [playing guide](PLAYING.md) describes current controls.
+
 The user requested coordination with UI thread `01a175cc-5033-7451-b4f6-c7c0d97bace3`. Its committed snapshot is `0647c222ef70a3a4da2761cb5a2211a5c2754775` on `codex/visual-editor-controls`; the music/private-hosting snapshot is `aee4ff60137db588038ec86a577f1c25750f1c87` on `codex/surge-inspired-music`. The integration branch is `codex/music-ui-integration`, created separately so conflict resolution did not interrupt the working preview.
 
 ## Combined behavior
@@ -37,7 +39,7 @@ Both reviews were read-only source reviews at merge `e3c4308`. Additional browse
 
 ## Preview promotion
 
-After validation, the combined result is fast-forwarded into the existing music worktree on `codex/surge-inspired-music`. The persistent service keeps the same working directory and private Tailscale URL on 8449. The original music commit and UI commit remain available in history; the UI-only worktree and its excluded local files remain untouched. The saved long audio recordings remain the same files.
+After validation, the combined result was fast-forwarded into the existing music worktree on `codex/surge-inspired-music`. The persistent service keeps the same working directory and private Tailscale URL on 8449. The original music commit and UI commit remain available in history; the UI-only worktree and its excluded local files remain untouched. The saved long audio recordings remain the same files.
 
 The private promotion was verified at the existing HTTPS endpoint: the HTML, application/worklet bundles and new styles match the combined files; all five long WAV hashes match their original render receipt. The browser displays the square UI and Sound controls, advances audio for four seconds, pauses normally and opens the saved 75-second/180-second comparison set. The existing Serve proxy is unchanged and Funnel remains disabled.
 
@@ -55,3 +57,7 @@ Fixture provenance and source hashes are recorded in
 Fresh full suites pass 99/99 on Node 22.22.0 and Node 24.22.1. The build leaves
 shipped assets unchanged. An independent read-only review verified fixture bytes,
 isolated dependencies and exact comparisons, with no findings.
+
+## Merged release
+
+The Node 24 portability repair was included in the published branch before merge. [PR checks](https://github.com/jaredkirby/hushfield/actions/runs/40269448393) passed on Node 22 and Node 24, with the security check also passing. [Post-merge CI](https://github.com/jaredkirby/hushfield/actions/runs/40269509243) also passed for `17794182f53d3175f88230200d83a734a58051e6`. Both source histories are retained in merge `1779418`; the original research note was preserved before local main was synchronized. Publication leaves parent spec #15 open and does not resolve the separate musical-preference or physical-device acceptance checks.
