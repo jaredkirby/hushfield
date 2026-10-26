@@ -12,7 +12,7 @@
  regions.forEach(region=>{region.setAttribute('inert','');region.setAttribute('aria-busy','true');});
  const slow=setTimeout(()=>{if(!loaded){status.textContent='Still loading. Tabs work; reload if needed.';reload.hidden=false;}},8000);
  reload.addEventListener('click',()=>location.reload());
- import('./build/app.js?v=vintage-tape-1').then(()=>{
+ import('./build/app.js?v=original-transport-1').then(()=>{
   loaded=true;clearTimeout(slow);reload.hidden=true;state('ready','READY');root.dataset.appReady='true';
   regions.forEach(region=>{region.removeAttribute('inert');region.setAttribute('aria-busy','false');});
   buttons.forEach((button,index)=>button.disabled=disabled[index]);

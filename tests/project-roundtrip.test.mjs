@@ -17,7 +17,7 @@ async function decode(bytes) {
 test('a project roundtrip retains stereo sample, overrides, voices, visuals, controls and volume', async () => {
   const sounds=createSoundState();editSound(sounds,'triggers',2,'wave','square');
   const ambient=restoreAmbient({key:2,orbit:30,points:[{x:.3,y:.4},{x:.4,y:.5},{x:.6,y:.6},{x:.8,y:.5}]});
-  const session={piece:{foundation:45,texture:25,motion:15,source:'frozen',followHarmony:true},name:'My take',buffer:buffer([[.5,-.5,0],[-.25,.25,1]]),params:{position:23,orbitBalls:7,scanMode:'reverse',freeze:true},ambient,visual:{mode:'vector',gain:2,trail:40},orbitSound:sounds,controls:{filterType:'highpass',orbitShape:'6'},volume:.35};
+  const session={piece:{foundation:45,texture:25,motion:15,source:'frozen',followHarmony:true},name:'My take',buffer:buffer([[.5,-.5,0],[-.25,.25,1]]),params:{position:23,orbitBalls:7,scanMode:'reverse',freeze:true},ambient,visual:{mode:'vector',gain:2,trail:40,waveformSmoothing:38},orbitSound:sounds,controls:{filterType:'highpass',orbitShape:'6'},volume:.35};
   const serialized=serializeProject(session);
   const restored=await decodeProject(serialized,{decodeAudio:decode,defaults:{position:50,orbitBalls:5,scanMode:'forward',freeze:false},ranges:{position:{min:0,max:100,step:.1},orbitBalls:{min:1,max:12,step:1}},controls:{filterType:['lowpass','highpass'],orbitShape:['0','6']}});
   assert.equal(restored.name,'My take');
@@ -26,7 +26,7 @@ test('a project roundtrip retains stereo sample, overrides, voices, visuals, con
   assert.deepEqual(restored.params,session.params);
   assert.deepEqual(restored.ambient,ambient);
   assert.deepEqual(restored.orbitSound,sounds);
-  assert.equal(restored.visual.mode,'vector');assert.equal(restored.visual.gain,2);
+  assert.equal(restored.visual.mode,'vector');assert.equal(restored.visual.gain,2);assert.equal(restored.visual.waveformSmoothing,38);
   assert.deepEqual(restored.controls,session.controls);assert.equal(restored.volume,.35);
   assert.deepEqual([...restored.buffer.getChannelData(0)],[16383/32768,-.5,0]);
   assert.deepEqual([...restored.buffer.getChannelData(1)],[-.25,8191/32768,32767/32768]);

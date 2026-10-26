@@ -1,12 +1,13 @@
 import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';
-function shell({width=390,height=664,visualHeight=height,scale=1,safeTop=0,safeBottom=0,ua='',platform='',touch=0,coarse=false,screenWidth=width,screenHeight=height,search=''}={}){
+function shell({width=390,height=664,visualHeight=height,dynamicHeight,scale=1,safeTop=0,safeBottom=0,ua='',platform='',touch=0,coarse=false,screenWidth=width,screenHeight=height,search=''}={}){
  const callbacks={},variables={},classes=new Set(),bodyClasses=new Set(),changes=[],label={textContent:''};
  const body={classList:{toggle:(name,on)=>on?bodyClasses.add(name):bodyClasses.delete(name)},dataset:{}},root={dataset:{},classList:{toggle:(name,on)=>on?classes.add(name):classes.delete(name)},style:{setProperty:(key,value)=>variables[key]=value}};
  const media={matches:coarse,addEventListener:(event,fn)=>callbacks.media=fn},narrow={matches:width<=600,addEventListener:(event,fn)=>callbacks.narrow=fn};
  const view={width,height:visualHeight,offsetTop:0,scale,addEventListener:(event,fn)=>callbacks['visual'+event]=fn};
+ const viewport={height:dynamicHeight},doc={documentElement:root,body,activeElement:null,getElementById:()=>label,addEventListener:(event,fn)=>callbacks[event]=fn,createElement:()=>({style:{},setAttribute(){},getBoundingClientRect:()=>({height:viewport.height??view.height})})};body.append=()=>{};
  const window={visualViewport:view,addEventListener:(event,fn)=>callbacks[event]=fn,dispatchEvent:event=>{changes.push(event.detail);callbacks[event.type]?.(event);}};
- vm.runInNewContext(fs.readFileSync(new URL('../dist/phone-shell.js',import.meta.url),'utf8'),{document:{documentElement:root,body,getElementById:()=>label},window,navigator:{userAgent:ua,platform,maxTouchPoints:touch},screen:{width:screenWidth,height:screenHeight},innerWidth:width,innerHeight:height,matchMedia:q=>q.includes('coarse')?media:narrow,URLSearchParams,location:{search},getComputedStyle:()=>({paddingTop:safeTop+'px',paddingBottom:safeBottom+'px'}),requestAnimationFrame:fn=>fn(),Math,parseFloat,CustomEvent:class{constructor(type,{detail}){this.type=type;this.detail=detail;}}});
- return {body,root,classes,bodyClasses,variables,callbacks,media,view,label,changes,profile:window.HushfieldViewport.profile};
+ vm.runInNewContext(fs.readFileSync(new URL('../dist/phone-shell.js',import.meta.url),'utf8'),{document:doc,window,navigator:{userAgent:ua,platform,maxTouchPoints:touch},screen:{width:screenWidth,height:screenHeight},innerWidth:width,innerHeight:height,matchMedia:q=>q.includes('coarse')?media:narrow,URLSearchParams,location:{search},getComputedStyle:()=>({paddingTop:safeTop+'px',paddingBottom:safeBottom+'px'}),requestAnimationFrame:fn=>fn(),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){callbacks.dynamicresize=this.fn;}},Math,parseFloat,CustomEvent:class{constructor(type,{detail}){this.type=type;this.detail=detail;}}});
+ return {body,root,doc,viewport,classes,bodyClasses,variables,callbacks,media,view,label,changes,profile:window.HushfieldViewport.profile};
 }
 const x=shell({height:844,visualHeight:664,ua:'iPhone',touch:5,coarse:true});assert(x.classes.has('phone-layout')&&x.bodyClasses.has('phone-ui'));assert.equal(x.body.dataset.device,'phone');assert.equal(x.variables['--app-height'],'664px');
 x.view.height=540;x.callbacks.visualresize();assert.equal(x.variables['--app-height'],'540px');assert.equal(x.body.dataset.heightTier,'tight');
@@ -24,4 +25,18 @@ assert.equal(shell({width:1280,height:800,ua:'Android',coarse:true,touch:5}).bod
 assert.equal(shell({width:900,height:412,ua:'Android Mobile',coarse:true,touch:5}).body.dataset.layout,'phone-landscape');
 assert.equal(shell({width:1024,height:600}).body.dataset.heightTier,'compact','Wide editors account for the height of their extra rows');
 assert.equal(shell({width:1024,height:580}).body.dataset.heightTier,'tight');
+const browserBars=shell({width:1280,height:744,visualHeight:638,dynamicHeight:744,ua:'iPad',platform:'iPad',touch:5});
+assert.equal(browserBars.variables['--app-height'],'744px','Use newly available space when visualViewport is stale');
+browserBars.doc.activeElement={tagName:'SELECT'};browserBars.callbacks.focusin();
+assert.equal(browserBars.variables['--app-height'],'744px','Focusing a menu must not reintroduce the browser-chrome gap');
+browserBars.doc.activeElement=null;
+browserBars.viewport.height=800;browserBars.callbacks.dynamicresize();
+assert.equal(browserBars.variables['--app-height'],'800px','CSS viewport changes update the app even without a visualViewport event');
+browserBars.doc.activeElement={tagName:'INPUT',type:'number'};browserBars.view.height=430;browserBars.callbacks.focusin();
+assert.equal(browserBars.variables['--app-height'],'430px','Keep exact-entry controls above the keyboard');
+browserBars.doc.activeElement=null;browserBars.callbacks.focusout();
+assert.equal(browserBars.variables['--app-height'],'800px','Reclaim the full area after keyboard dismissal');
+browserBars.doc.activeElement={tagName:'INPUT',type:'range'};browserBars.callbacks.focusin();
+assert.equal(browserBars.variables['--app-height'],'800px','A selected slider does not restrict the app to a stale viewport');
+assert.equal(shell({height:744,visualHeight:638,dynamicHeight:0}).variables['--app-height'],'638px','Older browsers retain the visualViewport fallback');
 console.log('PASS: phone/iPad/desktop identity, modern iPad desktop UA, tablet portrait/landscape, Split View, legacy links, rotation, visible height, safe areas and pinch zoom.');

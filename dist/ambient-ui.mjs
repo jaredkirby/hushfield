@@ -1,4 +1,4 @@
-import { AMBIENT_FIELDS, AMBIENT_SCENES, applyAmbientScene } from "./ambient-settings.mjs?v=hushfield-1";
+import { AMBIENT_FIELDS, AMBIENT_SCENES, AMBIENT_KEYS, AMBIENT_SCALES, applyAmbientScene } from "./ambient-settings.mjs?v=hushfield-1";
 import { attachStepper, panelNav } from "./phone-ui.mjs?v=hushfield-1";
 function setupAmbientUI({ getState, onChange, onNew }) {
   const page = document.getElementById("ambientPage"), fields = page.querySelector(".ambient-fields"), records = [];
@@ -25,7 +25,8 @@ function setupAmbientUI({ getState, onChange, onNew }) {
     input.value = getState()[field.id];
     row.append(top, input);
     fields.append(row);
-    const stepper = attachStepper(row, input, { label: "Ambient " + field.label, step: field.step, format: field.format || ((v) => v + "%") });
+    const choices = field.id === "scene" ? AMBIENT_SCENES.map(s => s.name) : field.id === "key" ? AMBIENT_KEYS : field.id === "scale" ? AMBIENT_SCALES : undefined;
+    const stepper = attachStepper(row, input, { choices, label: "Foundation " + field.label, step: field.step, format: field.format || ((v) => v + "%") });
     records.push({ field, input, stepper });
     input.addEventListener("input", () => {
       const state = getState();
@@ -45,6 +46,10 @@ function setupAmbientUI({ getState, onChange, onNew }) {
     document.getElementById("ambientSceneName").textContent = AMBIENT_SCENES[state.scene].name;
     document.getElementById("ambientSeed").textContent = "PIECE " + state.seed.toString(16).toUpperCase().padStart(8, "0");
   }
+  const preset = document.getElementById("piecePreset"), presetLabel = document.createElement('label');
+  presetLabel.className = 'piece-preset-label'; presetLabel.htmlFor = preset.id; presetLabel.textContent = 'Whole piece';
+  preset.before(presetLabel);
+  document.querySelector('.ambient-help').textContent = 'Voice dots: pitch ↑↓ · stereo ←→. Scene shapes Foundation; Whole piece replaces all parts and effects.';
   document.getElementById("newAmbient").onclick = onNew;
   refresh();
   return { refresh, nav };

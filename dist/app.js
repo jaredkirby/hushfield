@@ -1,3 +1,6 @@
+import { createControlHistory } from "./control-history.mjs";
+import { setupVisualEditors } from "./visual-editors.mjs";
+import { setupMotionControls } from "./motion-controls.mjs";
 import { TAPE_DEFAULTS } from "./tape-settings.mjs";
 import { selectPiecePreset } from "./piece-presets.mjs";
 import { restorePiece, piecePlayback } from "./piece-session.mjs";
@@ -11,14 +14,17 @@ import { createSampleSelection } from "./sample-selection.mjs";
 import { createOutputCapture } from "./output-capture.mjs";
 import { createMicrophoneTake } from "./microphone-take.mjs";
 import { serializeProject, decodeProject } from "./project-file.mjs?v=hushfield-1";
-import { setupAudioVisuals } from "./audio-visuals.mjs?v=hushfield-1";
+import { setupAudioVisuals, createVisualRenderer } from "./audio-visuals.mjs?v=hushfield-1";
 import { setupAmbientPoints } from "./ambient-interaction.mjs?v=hushfield-1";
 import { ambientVisualSeconds, outputAudioTime } from "./ambient-points.mjs?v=hushfield-1";
 import { AMBIENT_DEFAULTS, AMBIENT_SCENES, AMBIENT_KEYS, AMBIENT_SCALES, ambientChord, ambientChordName, restoreAmbient } from "./ambient-settings.mjs?v=hushfield-1";
 import { setupAmbientUI, drawAmbient } from "./ambient-ui.mjs?v=hushfield-1";
+import { prepareTextureWave } from "./texture-wave.mjs";
+import { setupTextureAdjustments } from "./texture-adjustments.mjs";
+import { setupSquareViewport } from "./square-viewport.mjs";
 import { ditherCanvas, drawTape } from "./oled-visuals.mjs?v=hushfield-1";
 import { PAD_COUNT, MAX_PADS, ORBIT_SCALES as scales, crossedPads, padAngle, padGeometry, padSound } from "./orbit-pads.mjs?v=hushfield-1";
-import { attachStepper, phoneStepFor, setupPhoneUI, setupSharedAdjuster, ensureVisibleSelection } from "./phone-ui.mjs?v=hushfield-1";
+import { attachStepper, phoneStepFor, setupPhoneUI, setupSharedAdjuster, ensureVisibleSelection, panelNav } from "./phone-ui.mjs?v=hushfield-1";
 import { createSoundState, patchFor, editSound, resetSound, restoreSoundState, soundMidi, noteName } from "./sound-patches.mjs?v=hushfield-1";
 import { createOrbitAudio } from "./orbit-audio.mjs?v=hushfield-1";
 import { setupSoundEditors } from "./sound-editor.mjs?v=hushfield-1";
@@ -28,6 +34,7 @@ const $ = (id) => document.getElementById(id);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
 let recovery, restoringSession = false, sampleDecoder;
+let visualEditors, motionControls, controlHistory, textureAdjustments;
 let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel;
 let phraseRequest, nextPhraseId = 0, foundationReady = false, motionReady = false;
 function markEdited() {
@@ -42,6 +49,8 @@ function decodeContext() {
 }
 let params = { ...initial }, ctx, engine, master, filter, reverbWet, analyser, recordDestination, buffer, originalBuffer, sourceName = "Glass garden", demoKey = "glass", running = false, activeTab = "ambient", stats = { scan: 0.5, count: 0, peak: 0, grains: [] }, outputRecording = false, micRecording = false, previewNode, toastTimer, balls = [], lastFrame = 0, lastMeter = 0, orbitVoices = /* @__PURE__ */ new Set(), audioReady = false, playPending = false;
 const ranges = {};
+const textureScopeRenderer = createVisualRenderer();
+let textureScopeContext;
 let reportedOrbitVoices = 0;
 let blendUI, visuals, volumeStepper, shapeStepper, soundEditors, showOrbitPanel, orbitAudio, limiter, tapeNode;
 let ambientState = { ...AMBIENT_DEFAULTS }, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
@@ -93,6 +102,9 @@ function makeControl(parent, id, label, min, max, step, unit = "", display) {
   ranges[id] = { input, render };
   input.addEventListener("input", () => {
     params[id] = +input.value;
+    if (id === "trimStart") params.trimStart = Math.min(params.trimStart, params.trimEnd - .1);
+    if (id === "trimEnd") params.trimEnd = Math.max(params.trimEnd, params.trimStart + .1);
+    input.value = params[id];
     render();
     syncEngine();
     if (id === "orbitBalls") {
@@ -111,15 +123,15 @@ function makeControl(parent, id, label, min, max, step, unit = "", display) {
   render();
 }
 makeControl("grainControls", "position", "Position", 0, 100, 0.1, "%", (v) => v.toFixed(1) + "%");
-makeControl("grainControls", "size", "Size", 15, 1500, 1, " ms");
+makeControl("grainControls", "size", "Grain length", 15, 1500, 1, " ms");
 makeControl("grainControls", "density", "Density", 1, 80, 0.1, " /s");
-makeControl("grainControls", "spray", "Spray", 0, 100, 1, "%");
+makeControl("grainControls", "spray", "Position scatter", 0, 100, 1, "%");
 makeControl("grainControls", "pitch", "Pitch", -24, 24, 1, " st", (v) => (v >= 0 ? "+" : "") + v + " st");
 makeControl("scanControls", "range", "Range", 1, 100, 1, "%");
 makeControl("scanControls", "wander", "Wander", 0, 100, 1, "%");
 makeControl("scanControls", "speed", "Speed", 0, 2, 0.01, "\xD7");
 makeControl("scanControls", "smooth", "Smoothing", 0, 100, 1, "%");
-for (const [id, label] of [["static", "Static"], ["jump", "Jump"], ["hold", "Hold"], ["reverse", "Reverse"], ["elastic", "Elastic"], ["chaos", "Chaos"]]) makeControl("motionControls", id, label, 0, 100, 1, "%");
+for (const [id, label] of [["static", "Repeat position"], ["jump", "Jump chance"], ["hold", "Skip grain"], ["reverse", "Reverse chance"], ["elastic", "Pitch variation"], ["chaos", "Timing variation"]]) makeControl("motionControls", id, label, 0, 100, 1, "%");
 makeControl("trimControls", "trimStart", "Start", 0, 99.9, 0.1, "%");
 makeControl("trimControls", "trimEnd", "End", 0.1, 100, 0.1, "%");
 makeControl("trimControls", "denoise", "Denoise gate", 0, 80, 1, "%", (v) => v === 0 ? "Off" : v + "%");
@@ -127,7 +139,7 @@ makeControl("filterControls", "cutoff", "Cutoff", 100, 2e4, 1, " Hz", (v) => v >
 makeControl("filterControls", "resonance", "Resonance", 0.1, 12, 0.1, " Q");
 makeControl("delayControls", "delayTime", "Time", 0.05, 1.5, 0.01, " s");
 makeControl("delayControls", "feedback", "Feedback", 0, 80, 1, "%");
-makeControl("delayControls", "delayMix", "Mix", 0, 70, 1, "%");
+makeControl("delayControls", "delayMix", "Echo level", 0, 70, 1, "%");
 makeControl("spaceControls", "reverb", "Reverb", 0, 85, 1, "%");
 makeControl("spaceControls", "width", "Stereo width", 0, 100, 1, "%");
 for (const [id, label] of [["drive", "Drive"], ["wow", "Wow"], ["flutter", "Flutter"], ["hiss", "Hiss"], ["tapeTone", "Tone"]]) makeControl("tapeControls", id, label, 0, 100, 1, "%");
@@ -161,10 +173,13 @@ function refreshControls() {
   }
   updatePadLabels();
   volumeStepper?.render();
+  textureAdjustments?.refresh();
   updateTransport();
 }
 function syncEngine() {
   renderClock.invalidate();
+  visualEditors?.refresh();
+  motionControls?.refresh();
   if (!audioReady || !engine) return;
   const send = { ...params, width: 100, position: params.position / 100 };
   engine.port.postMessage({ type: "params", params: send });
@@ -264,7 +279,7 @@ async function initializeAudio() {
   activation.catch(() => {
   });
   if (!ctx.audioWorklet) throw new Error("The sound engine is unavailable. Test sound still checks device output.");
-  await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=vintage-tape-1");
+  await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=texture-source-scope-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
   await context.audioWorklet.addModule("./build/tape-worklet.js?v=vintage-tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
@@ -415,21 +430,26 @@ function refreshPieceUI() {
   }
   if ($("pieceHint")) $("pieceHint").textContent = solo ? "SOLO \xB7 " + solo.toUpperCase() : activeTab === "grain" ? "LONG GRAINS: SMOOTH \xB7 SHORT: FRAGMENTS" : activeTab === "orbit" ? piece.followHarmony ? "FOLLOWS FOUNDATION HARMONY" : "INDEPENDENT NOTES" : "ONE PIECE \xB7 THREE PARTS";
   const textureOff = piece.texture === 0 && solo !== "texture";
-  $("grainPage").querySelector(".control-grid").toggleAttribute("inert", textureOff);
-  $("grainPage").querySelectorAll(".control-grid button,.control-grid input,.control-grid select").forEach((control) => control.disabled = textureOff);
+  $("grainPage").querySelector(".control-grid").removeAttribute("inert");
+  $("grainPage").querySelectorAll(".control-grid button,.control-grid input,.control-grid select").forEach((control) => control.disabled = false);
+  if (textureOff && activeTab === "grain") $("pieceHint").textContent = "TEXTURE INAUDIBLE · EDIT FREELY / ADD OR SOLO TO HEAR";
+  visualEditors?.refresh();
   $("openVisual")?.setAttribute("aria-pressed", String(activeTab === "visual"));
   if ($("openVisual")) $("openVisual").textContent = activeTab === "visual" ? "Back to sound" : "Visual";
   if (buffer) $("duration").textContent = formatTime(live && activeTab !== "sample" ? stats.liveSeconds || 0 : buffer.duration);
   document.body.dataset.textureEnabled = String(piece.texture > 0 || solo === "texture");
   document.body.dataset.motionEnabled = String(piece.motion > 0 || solo === "motion");
-  if ($("waveHint")) $("waveHint").textContent = live && activeTab !== "sample" ? "RECENT FOUNDATION \u2192 TEXTURE" : "DRAG TO EXPLORE THE SOURCE";
+  $("waveform").setAttribute("aria-label", activeTab === "sample" ? "Source waveform. Drag In and Out to select material." : "Texture waveform. Drag to set read anchor or resize grain length.");
+  if ($("waveHint")) $("waveHint").textContent = live && activeTab !== "sample" ? "SOURCE SCOPE · RECENT FOUNDATION · L / R" : activeTab === "sample" ? "DRAG IN / OUT TO SELECT MATERIAL" : "SOURCE SCOPE · FULL PHRASE · L / R";
 }
 async function freezePhrase() {
   if (piece.source !== "foundation") {
+    controlHistory?.begin("Use live foundation");
     sampleSelection.cancel();
     piece.source = "foundation";
     markEdited();
     syncTextureSource();
+    controlHistory?.end();
     return;
   }
   if (!running || phraseRequest) return toast("Play the piece briefly before freezing a phrase.");
@@ -472,6 +492,7 @@ function syncAmbient() {
   refreshPieceUI();
 }
 function newAmbientPiece() {
+  controlHistory?.clear();
   markEdited();
   ambientState.seed = crypto.getRandomValues(new Uint32Array(1))[0];
   ambientStats = { ...ambientStats, elapsed: 0, section: 1 };
@@ -536,6 +557,7 @@ function sendBuffer() {
   if (engine && buffer) engine.port.postMessage({ type: "sample", channels: Array.from({ length: buffer.numberOfChannels }, (_, c) => buffer.getChannelData(c).slice()), sampleRate: buffer.sampleRate, position: params.position / 100 });
 }
 function setSample(b, name, type = "IMPORTED AUDIO", keepOriginal = false) {
+  controlHistory?.clear();
   markEdited();
   if (previewNode) {
     try {
@@ -639,7 +661,7 @@ function showTab(name) {
   ensureVisibleSelection();
 }
 function updateTransport() {
-  $("playBtn").innerHTML = running ? "<span>STOP</span>" : `<span>${ctx && audioReady && ctx.state !== "running" ? "RESUME" : "START"}</span>`;
+  $("playLabel").textContent = running ? "STOP" : ctx && audioReady && ctx.state !== "running" ? "RESUME" : "START";
   $("playBtn").setAttribute("aria-label", running ? "Stop instrument" : "Start instrument");
   const held = ambientState.hold;
   $("freezeBtn").textContent = "Hold chord";
@@ -703,7 +725,7 @@ async function testSound() {
     activation.catch(() => {
     });
     if (+$("volume").value === 0) {
-      $("audioDetail").textContent = "VOL is 0%. Select VOL and use +.";
+      $("audioDetail").textContent = "VOL is 0%. Raise the volume slider.";
       return;
     }
     playTestNotes(context, master);
@@ -752,7 +774,7 @@ async function restartAudio() {
     running = true;
     syncPlayback();
     updateTransport();
-    $("audioDetail").textContent = +$("volume").value === 0 ? "VOL is 0%. Select VOL and use +." : "Audio restarted \xB7 instrument running \xB7 VOL " + Math.round(+$("volume").value * 100) + "%.";
+    $("audioDetail").textContent = +$("volume").value === 0 ? "VOL is 0%. Raise the volume slider." : "Audio restarted \xB7 instrument running \xB7 VOL " + Math.round(+$("volume").value * 100) + "%.";
   } catch (e) {
     running = false;
     updateTransport();
@@ -849,7 +871,10 @@ function updatePadLabels() {
     button.style.setProperty("--pad-color", sound.color);
     button.classList.toggle("muted-pad", !sound.enabled);
     button.setAttribute("aria-label", `Trigger ${i + 1}, ${sound.note}, ${sound.tone}`);
-    button.title = `Trigger ${i + 1}: ${sound.note} \xB7 tap to play and edit`;
+    button.title = `Trigger ${i + 1}: ${sound.note} · select to edit; Listen auditions`;
+    const selected = soundEditors?.getSelection?.("triggers") === i;
+    button.classList.toggle("selected-pad", selected);
+    button.setAttribute("aria-pressed", String(selected));
   });
 }
 function resizePads() {
@@ -862,20 +887,16 @@ function resizePads() {
     button.type = "button";
     button.className = "orbit-pad";
     button.dataset.pad = i;
-    button.addEventListener("click", async () => {
+    button.addEventListener("click", () => {
       soundEditors.select("triggers", i);
       showOrbitPanel("triggers");
-      try {
-        await ensureAudio();
-        triggerPad(i, true);
-      } catch (e) {
-        toast(e.message);
-      }
+      updatePadLabels();
+      $("orbitPadStatus").textContent = `TRIGGER ${i + 1} SELECTED · LISTEN TO AUDITION`;
     });
     padButtons.push(button);
     layer.append(button);
   }
-  if (changed) $("orbitPadStatus").textContent = params.orbitTriggers + " TRIGGERS \xB7 TAP TO PLAY / EDIT";
+  if (changed) $("orbitPadStatus").textContent = params.orbitTriggers + " TRIGGERS \xB7 SELECT TO EDIT";
   updatePadLabels();
 }
 function setupOrbitPads() {
@@ -903,9 +924,9 @@ function changeSound(bank, index, field, value) {
 async function previewSound(bank, index) {
   try {
     await ensureAudio();
-    const target = index === "all" ? 0 : index, p = patchFor(soundState, bank, index), midi = piece.followHarmony ? followChord(soundMidi(p, target), ambientStats.chordNotes) : soundMidi(p, target);
+    const target = index === "all" ? 0 : index, p = patchFor(soundState, bank, target), midi = piece.followHarmony ? followChord(soundMidi(p, target), ambientStats.chordNotes) : soundMidi(p, target);
     orbitAudio.play(bank, target, midi, p, true);
-    $("orbitPadStatus").textContent = `${bank === "triggers" ? "TRIGGER" : "BALL"} ${index === "all" ? "BANK" : index + 1} \xB7 ${noteName(midi)} \xB7 ${p.wave.toUpperCase()}`;
+    $("orbitPadStatus").textContent = `${bank === "triggers" ? "TRIGGER" : "BALL"} ${target + 1} \xB7 ${noteName(midi)} \xB7 ${p.wave.toUpperCase()}`;
   } catch (e) {
     toast(e.message);
   }
@@ -940,7 +961,7 @@ function drawMini() {
   }
   ditherCanvas(canvas);
 }
-function drawWave() {
+function drawWave(dt = 1 / 30) {
   const fit = fitCanvas($("waveform"));
   if (!fit || !buffer) return;
   const { c, w, h } = fit;
@@ -948,21 +969,33 @@ function drawWave() {
   const live = piece.source === "foundation" && activeTab !== "sample";
   const data = live ? stats.wave || new Float32Array(160) : buffer.getChannelData(0);
   const pos = running ? stats.scan : params.position / 100;
-  let peakGlobal = 0.1;
-  for (let i = 0; i < data.length; i += 233) peakGlobal = Math.max(peakGlobal, Math.abs(data[i]));
-  const spread = params.size / 1e3 / (live ? 4 : buffer.duration) * w;
-  const gradient = c.createLinearGradient(0, 0, 0, h);
-  gradient.addColorStop(0, "#bbb");
-  gradient.addColorStop(1, "#555");
-  for (let x = 0; x < w; x += 2) {
-    const idx = Math.floor(x / w * data.length), step = Math.max(1, Math.floor(data.length / w));
-    let peak = 0;
-    for (let j = idx; j < idx + step && j < data.length; j += Math.max(1, Math.floor(step / 12))) peak = Math.max(peak, Math.abs(data[j]));
-    const amp = peak / peakGlobal * h * 0.39;
-    const selected = activeTab === "sample" ? x / w >= params.trimStart / 100 && x / w <= params.trimEnd / 100 : Math.abs(x - pos * w) < spread / 2;
-    c.fillStyle = selected ? "#fff" : gradient;
-    c.globalAlpha = selected ? 0.95 : 0.6;
-    c.fillRect(x, h / 2 - amp, 1.1, Math.max(1, amp * 2));
+  if (activeTab === "grain") {
+    const visual = visuals.settings(), smoothing = visual.waveformSmoothing;
+    const right = live ? stats.waveRight || data : buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : data;
+    if (textureScopeContext?.buffer !== buffer || textureScopeContext.source !== piece.source || textureScopeContext.smoothing !== smoothing) {
+      textureScopeRenderer.clear(); textureScopeContext = {buffer,source:piece.source,smoothing};
+    }
+    const leftWave = prepareTextureWave(data, smoothing, w), rightWave = prepareTextureWave(right, smoothing, w);
+    // Scope's own renderer provides the stereo lanes, grid, gain and afterglow.
+    // The full source stays on the x axis so grain-position handles stay honest.
+    textureScopeRenderer.draw(fit, {left:leftWave,right:rightWave,rate:ctx?.sampleRate || buffer.sampleRate},
+      {...visual,mode:'scope',trail:reducedMotion.matches ? 0 : visual.trail}, dt, {overview:true,dither:false});
+  } else {
+    let peakGlobal = .1;
+    for (let i = 0; i < data.length; i += 233) peakGlobal = Math.max(peakGlobal, Math.abs(data[i]));
+    const gradient = c.createLinearGradient(0, 0, 0, h);
+    gradient.addColorStop(0, "#bbb");
+    gradient.addColorStop(1, "#555");
+    for (let x = 0; x < w; x += 2) {
+      const idx = Math.floor(x / w * data.length), step = Math.max(1, Math.floor(data.length / w));
+      let peak = 0;
+      for (let j = idx; j < idx + step && j < data.length; j += Math.max(1, Math.floor(step / 12))) peak = Math.max(peak, Math.abs(data[j]));
+      const amp = peak / peakGlobal * h * .39;
+      const selected = activeTab === "sample" ? x / w >= params.trimStart / 100 && x / w <= params.trimEnd / 100 : false;
+      c.fillStyle = selected ? "#fff" : gradient;
+      c.globalAlpha = selected ? 0.95 : .6;
+      c.fillRect(x, h / 2 - amp, 1.1, Math.max(1, amp * 2));
+    }
   }
   c.globalAlpha = 1;
   if (activeTab === "sample") {
@@ -977,23 +1010,22 @@ function drawWave() {
       c.stroke();
     }
   } else {
-    c.fillStyle = "#ffffff10";
-    c.fillRect(pos * w - spread / 2, 0, spread, h);
     for (const grain of stats.grains || []) {
       c.fillStyle = `rgba(255,255,255,${(1 - grain.life) * 0.4})`;
-      c.fillRect(grain.position * w, h - 12, 2, 8);
+      c.fillRect(24 + grain.position * (w - 34), h - 12, 2, 8);
     }
     c.strokeStyle = "#fff";
     c.lineWidth = 1;
     c.beginPath();
-    c.moveTo(pos * w, 0);
-    c.lineTo(pos * w, h);
+    const cursorX = 24 + pos * (w - 34);
+    c.moveTo(cursorX, 0);
+    c.lineTo(cursorX, h);
     c.stroke();
     c.fillStyle = "#fff";
     c.beginPath();
-    c.moveTo(pos * w - 3, 0);
-    c.lineTo(pos * w + 3, 0);
-    c.lineTo(pos * w, 5);
+    c.moveTo(cursorX - 3, 0);
+    c.lineTo(cursorX + 3, 0);
+    c.lineTo(cursorX, 5);
     c.fill();
   }
 }
@@ -1127,11 +1159,13 @@ function frame(time) {
         ditherCanvas($("tapeCanvas"));
       }
     } else {
-      drawWave();
+      drawWave(dt);
       ditherCanvas($("waveform"));
     }
   }
   $("grainCount").textContent = activeTab === "orbit" ? `${balls.length} BALLS \xB7 ${orbitVoices.size} VOICES` : ambientState.enabled ? `${ambientStats.notes} NOTES \xB7 SECTION ${ambientStats.section}` : `${running ? stats.count : 0} ACTIVE GRAINS`;
+  const outputFit = fitCanvas($("outputScope"));
+  if (outputFit) visuals.outputFrame(outputFit, dt, reducedMotion.matches);
   if (analyser) {
     analyser.getByteFrequencyData(frequencyData);
     lastMeter += (Math.max(...frequencyData) / 255 - lastMeter) * (1 - Math.exp(-dt / 0.1));
@@ -1276,6 +1310,7 @@ function toggleMic() {
   else microphone.start();
 }
 function applyPreset(key) {
+  controlHistory?.clear();
   const selected = selectPiecePreset(key, { defaults: initial, cancelPending: sampleSelection.cancel });
   if (!selected) return;
   markEdited();
@@ -1412,26 +1447,7 @@ $("randomize").onclick = () => {
   refreshControls();
   toast("A new grain texture.");
 };
-let draggingWave = false;
-function wavePosition(e) {
-  markEdited();
-  const r = $("waveform").getBoundingClientRect();
-  params.position = clamp((e.clientX - r.left) / r.width * 100, 0, 100);
-  ranges.position.input.value = params.position;
-  ranges.position.render();
-  stats.scan = params.position / 100;
-  syncEngine();
-}
-$("waveform").addEventListener("pointerdown", (e) => {
-  draggingWave = true;
-  $("waveform").setPointerCapture(e.pointerId);
-  wavePosition(e);
-});
-$("waveform").addEventListener("pointermove", (e) => {
-  if (draggingWave) wavePosition(e);
-});
-$("waveform").addEventListener("pointerup", () => draggingWave = false);
-$("waveform").addEventListener("pointercancel", () => draggingWave = false);
+// Waveform gestures are owned by visualEditors: Texture anchor/size and separate trim boundaries.
 document.addEventListener("keydown", (e) => {
   if (["INPUT", "SELECT", "TEXTAREA", "BUTTON", "A"].includes(e.target.tagName) || $("about").open) return;
   if (e.code === "Space") {
@@ -1491,8 +1507,7 @@ function setupDisplay() {
   document.querySelector(".main-panel").after(utility);
   utility.append($("freezeBtn"), $("recordOut"), document.querySelector(".volume-label"), document.querySelector(".meter"));
   for (const id of ["delayMix", "feedback", "delayTime"]) $("tapeControls").prepend(document.querySelector(`[data-control="${id}"]`));
-  $("delayControls").innerHTML = '<p class="fx-tape-copy">Magnetic repeats on the master bus.</p><button class="large-action" id="openTape">Edit tape echo</button>';
-  $("openTape").onclick = () => showTab("tape");
+  $("delayControls").closest(".control-group").remove();
 }
 setupDisplay();
 let editorBeforeVisual = "ambient";
@@ -1545,6 +1560,7 @@ blendUI = setupPieceBlend({ getPiece: () => piece, getSolo: () => solo, onSolo(k
   syncAmbient();
 } });
 visuals = setupAudioVisuals({ onChange: markEdited });
+textureAdjustments = setupTextureAdjustments({getSmoothing: () => visuals.settings().waveformSmoothing, setSmoothing: value => visuals.setWaveformSmoothing(value), invalidate: () => renderClock.invalidate()});
 ambientPoints = setupAmbientPoints({ getState: () => ambientState, getStatus: () => ambientStats, onChange: () => {
   ambientPointsDirty = true;
   markEdited();
@@ -1562,16 +1578,85 @@ shapeTop.className = "control-top";
 shapeTop.textContent = "Shape";
 shape.prepend(shapeTop);
 shapeStepper = attachStepper(shape, $("orbitShape"), { label: "Shape", format: (v) => v ? v + " points" : "Circle" });
-soundEditors = setupSoundEditors({ getState: () => soundState, getHarmonyLinked: () => piece.followHarmony, getCount: (bank) => bank === "triggers" ? params.orbitTriggers : params.orbitBalls, onChange: changeSound, onReset: (bank, index) => {
+soundEditors = setupSoundEditors({ getState: () => soundState, getHarmonyLinked: () => piece.followHarmony, getCount: (bank) => bank === "triggers" ? params.orbitTriggers : params.orbitBalls, onSelect: (bank, index) => {
+  updatePadLabels();
+  $("orbitPadStatus").textContent = index === "all" ? `ALL ${bank.toUpperCase()} SELECTED · LISTEN FIRST TO AUDITION` : `${bank === "triggers" ? "TRIGGER" : "BALL"} ${index + 1} SELECTED · LISTEN TO AUDITION`;
+}, onChange: changeSound, onReset: (bank, index) => {
   markEdited();
   resetSound(soundState, bank, index);
   orbitAudio?.stop(bank, index === "all" ? void 0 : index);
   orbitAudio?.sync(soundState);
   updatePadLabels();
 }, onPreview: previewSound });
+
+function editParameters(patch) {
+  markEdited();
+  for (const [id, value] of Object.entries(patch)) {
+    if (!ranges[id] || !Number.isFinite(value)) continue;
+    const input = ranges[id].input;
+    params[id] = clamp(value, +input.min, +input.max);
+    if (id === "trimStart") params.trimStart = Math.min(params.trimStart, params.trimEnd - .1);
+    if (id === "trimEnd") params.trimEnd = Math.max(params.trimEnd, params.trimStart + .1);
+    input.value = params[id];
+    ranges[id].render();
+  }
+  if ('position' in patch) stats.scan = params.position / 100;
+  if ('orbitBalls' in patch) resizeBalls();
+  if ('orbitTriggers' in patch) resizePads();
+  if ('orbitRotation' in patch) containBalls(orbitState, orbitOptions());
+  trimInfo(); updateOrbitReadout(); syncEngine();
+}
+function setupControlHistory() {
+  const undo = document.createElement('button'), redo = document.createElement('button');
+  undo.type = redo.type = 'button'; undo.id = 'undoControl'; redo.id = 'redoControl';
+  undo.textContent = 'Undo'; redo.textContent = 'Redo';
+  undo.disabled = redo.disabled = true;
+  document.querySelector('.utility-strip').prepend(undo, redo);
+  controlHistory = createControlHistory({
+    capture: () => ({ params, piece, ambient: ambientState, sound: soundState, visual: visuals.settings(), volume: +$('volume').value,
+      controls: Object.fromEntries(projectControls.map(id => [id, $(id).value])) }),
+    restore(snapshot) {
+      params = snapshot.params; piece = snapshot.piece; ambientState = snapshot.ambient; soundState = snapshot.sound;
+      for (const [id, value] of Object.entries(snapshot.controls)) $(id).value = value;
+      $('volume').value = snapshot.volume;
+      master?.gain.setTargetAtTime(snapshot.volume, ctx.currentTime, .03);
+      visuals.restore(snapshot.visual); resizeBalls(); refreshControls(); syncTextureSource(); syncAmbient(); markEdited();
+    },
+    onChange({canUndo,canRedo,label}) { undo.disabled = !canUndo; redo.disabled = !canRedo; undo.setAttribute('aria-label',label ? 'Undo '+label : 'Undo control change'); }
+  });
+  document.addEventListener('hushfield:editstart', e => controlHistory.begin(e.detail?.label || 'control change'));
+  document.addEventListener('hushfield:editend', e => controlHistory.end({cancelled: Boolean(e.detail?.cancelled)}));
+  undo.onclick = () => controlHistory.undo(); redo.onclick = () => controlHistory.redo();
+  document.addEventListener('keydown', e => {
+    if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'z' || (e.target.matches('textarea,select,input:not([type=range])')) || document.querySelector('dialog[open]')) return;
+    e.preventDefault(); e.shiftKey ? controlHistory.redo() : controlHistory.undo();
+  });
+  // Discrete settings changes share history; transport, file I/O and navigation do not.
+  const buttons = ['scanToggle','tapeToggle','freezeBtn','randomize','reverseSpin','stopSpin','followHarmony','partAction','useTextureSample'];
+  for (const id of buttons) {
+    const button = $(id); if (!button) continue;
+    const handler = button.onclick;
+    button.onclick = event => { controlHistory.begin(button.textContent.trim()); try { handler?.(event); } finally { controlHistory.end(); markEdited(); } };
+  }
+  for (const id of ['filterType','scanMode']) {
+    const input = $(id); let previous = input.value;
+    input.addEventListener('focus', () => previous = input.value);
+    const handler = input.onchange;
+    input.onchange = event => { const next = input.value; input.value = previous; controlHistory.begin(id === 'filterType' ? 'filter type' : 'scan direction'); input.value = next; handler?.(event); controlHistory.end(); previous = next; markEdited(); };
+  }
+}
+
 showOrbitPanel = setupPhoneUI({ showPage: showTab, currentPage: () => activeTab });
 setupOrbitPads();
 setupSharedAdjuster();
+visualEditors = setupVisualEditors({ getParams: () => params, setParams: editParameters, getPage: () => activeTab, getDuration: () => buffer?.duration || 0, getSource: () => piece.source, getFilterType: () => $("filterType").value });
+motionControls = setupMotionControls({ getParams: () => params, setParams: editParameters });
+const tapePanels = panelNav($("tapePage"), [["echo", "Echo"], ["character", "Character"]], key => {
+  $("tapePage").dataset.tapePanel = key;
+  for (const row of $("tapeControls").children) row.hidden = key === "echo" ? !["delayTime","feedback","delayMix"].includes(row.dataset.control) : ["delayTime","feedback","delayMix"].includes(row.dataset.control);
+}, { ariaLabel: "Tape controls" });
+setupSquareViewport();
+setupControlHistory();
 loadDemo("glass");
 resetBalls();
 updateOrbitReadout();
@@ -1598,10 +1683,10 @@ recovery = setupRecoveryUI({
   onError: (error) => toast("Recovery: " + error.message)
 });
 document.addEventListener("input", (event) => {
-  if (!["audioFile", "projectFile"].includes(event.target.id)) markEdited();
+  if (!["audioFile", "projectFile", "visualProbe"].includes(event.target.id) && !event.target.closest(".direct-value-dialog")) markEdited();
 });
 document.addEventListener("change", (event) => {
-  if (!["audioFile", "projectFile"].includes(event.target.id)) markEdited();
+  if (!["audioFile", "projectFile", "visualProbe"].includes(event.target.id) && !event.target.closest(".direct-value-dialog")) markEdited();
 });
 document.addEventListener("click", (event) => {
   if (event.target.closest("#scanToggle,#tapeToggle,#reverseSpin,#stopSpin,#addPoint,#removePoint")) markEdited();
@@ -1611,4 +1696,4 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", () => recovery.flush());
 for (const event of ["input", "change", "click", "pointermove", "keydown"]) document.addEventListener(event, () => renderClock.invalidate());
-for (const event of ["resize", "orientationchange", "hushfield:layoutchange"]) window.addEventListener(event, () => renderClock.invalidate());
+for (const event of ["resize", "orientationchange", "hushfield:layoutchange", "hushfield:visualresize"]) window.addEventListener(event, () => renderClock.invalidate());

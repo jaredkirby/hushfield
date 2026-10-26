@@ -10,7 +10,7 @@ npm run build
 npm test
 ```
 
-`npm test` runs every `tests/*.test.mjs` file. The current suite reports 43 passing test results across 27 files: some files use individual Node tests, while earlier files run assertions as one file-level result. This is not a count of all individual assertions.
+`npm test` runs every `tests/*.test.mjs` file. The current suite reports 73 passing test results across 34 files: some files use individual Node tests, while earlier files run assertions as one file-level result. This is not a count of all individual assertions.
 
 `npm run test:interaction` is the fixed fast subset for project validation, stereo math, voice dots, startup, navigation, viewport profiles, selected-value controls and audio activation. Run the full suite for recording, recovery, source ownership, Piece routing/presets, Orbit or Tape changes.
 

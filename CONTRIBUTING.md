@@ -18,7 +18,10 @@ Do not edit `dist/build/` or the embedded scripts in `index.html` by hand. Build
 - Treat Hushfield as one Piece. Foundation supplies live Texture material and Motion harmony; editor navigation must not change playback, blend or source relationships.
 - Keep Solo transient. Complete presets restore their full configuration, while legacy files retain their material and blend through migration.
 - Keep the OLED/dithered visual system and stable display/editor/transport bounds across the five editors and secondary tools.
-- Use the shared selected-value minus/plus controls. Keep phone, iPad, Split View and desktop layouts usable without page scrolling.
+- Use direct native sliders, underlined readouts for exact entry and native menus for categories. Keep the shared selected-value minus/plus rail as an alternative. Preserve keyboard focus, accessible labels and disabled/inert behavior through startup and refresh.
+- Keep phone, iPad, Split View and desktop layouts usable without outer page scrolling. Longer inspectors may scroll inside the existing editor bay. Visual handles and precise controls must edit the same underlying values.
+- Keep Texture editable at zero blend, with its inaudible state visible. Separate trigger selection from Listen, identify individual/All targets, show mixed values honestly and distinguish bank-wide effects.
+- Group each continuous edit into one settings Undo/Redo entry. Cancelled gestures restore their starting state. History excludes buffers, recording and transport; clear it when material, projects, complete presets or New piece replace its context.
 - Keep audio activation in the direct tap handler, ahead of worklet-loading awaits. Synthesis and musical timing belong on the audio thread; drawing remains separately capped.
 - Preserve the shared normal Space/Tape path, independent Motion banks, explicit auditions and true Tape bypass. New vintage defaults must not overwrite saved settings or the deliberately stronger Worn memory preset.
 - Retain recording ownership, track cleanup, latest-selection behavior, explicit paused recovery and truthful save/export status.
@@ -28,7 +31,7 @@ Do not edit `dist/build/` or the embedded scripts in `index.html` by hand. Build
 
 Use meaningful tests for changed behavior and run the existing full suite before handoff. The fast interaction subset does not cover all recording, recovery, Piece, Orbit or Tape behavior. See [testing](docs/TESTING.md) for focused commands and browser diagnostics.
 
-For layout work, check affected editor sections/banks at portrait phone, short landscape, iPad, Split View and desktop sizes. Verify playback/settings survive navigation and rotation. For DSP changes, combine PCM checks with listening; report browser emulation and physical-device checks separately. Recorded receipts are historical evidence, not a substitute for a fresh run of changed behavior.
+For layout work, check affected editor sections/banks at portrait phone, short landscape, iPad, Split View and desktop sizes. Verify playback/settings survive navigation and rotation. Check sliders, exact-entry Apply/Cancel, categorical choices, visual handles and the fallback rail. Include zero-blend Texture, mixed All targets, selection without audition, gesture Undo/Redo and startup unlocking of inert controls. For DSP changes, combine PCM checks with listening; report browser emulation and physical-device checks separately. Recorded receipts are historical evidence, not a substitute for a fresh run of changed behavior.
 
 ## Issues and pull requests
 

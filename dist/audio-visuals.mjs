@@ -2,12 +2,12 @@ import { attachStepper, ensureVisibleSelection } from "./phone-ui.mjs?v=hushfiel
 import { ditherCanvas } from "./oled-visuals.mjs?v=hushfield-1";
 import { VISUAL_DEFAULTS, restoreVisual, createVisualCapture, stereoMetrics, vectorPoint, scopeWindow, spectrumBands, decayPeak } from "./visual-analysis.mjs?v=hushfield-1";
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
-function drawVisualGrid(c, w, h, mode, maxHz = 2e4) {
+function drawVisualGrid(c, w, h, mode, maxHz = 2e4, compact = false) {
   c.strokeStyle = "#333";
   c.lineWidth = 1;
   c.font = "8px monospace";
   c.fillStyle = "#999";
-  const top = 12, bottom = h - 34;
+  const top = compact ? 5 : 12, bottom = h - (compact ? 5 : 34);
   if (mode === "vector") {
     const x = w / 2, y = (top + bottom) / 2, r = Math.max(12, Math.min(w * 0.43, (bottom - top) * 0.48));
     c.beginPath();
@@ -42,6 +42,20 @@ function drawVisualGrid(c, w, h, mode, maxHz = 2e4) {
   }
   return { left: 24, right: w - 10, top, bottom };
 }
+// Shared signed line treatment for Scope and the source-position waveform.
+function drawScopeTrace(c, samples, {left, right, cy, amplitude, gain = 1, start = 0, count = samples.length, interpolate = false}) {
+  c.beginPath();
+  const width = Math.max(1, right - left);
+  for (let px = 0; px <= Math.round(width); px++) {
+    const index = Math.min(Math.max(0, count - 1), px / width * Math.max(0, count - 1));
+    const at = start + Math.floor(index), next = Math.min(samples.length - 1, at + 1);
+    const value = samples[at] || 0;
+    const sample = interpolate ? value + ((samples[next] || 0) - value) * (index % 1) : value;
+    const x = left + px, y = cy - clamp(sample * gain, -1, 1) * amplitude;
+    px ? c.lineTo(x, y) : c.moveTo(x, y);
+  }
+  c.stroke();
+}
 function createVisualRenderer(makeCanvas = () => document.createElement("canvas")) {
   const trail = makeCanvas(), tc = trail.getContext("2d", { willReadFrequently: true });
   let mode, peaks = new Float32Array(64), autoGain = 1;
@@ -50,7 +64,7 @@ function createVisualRenderer(makeCanvas = () => document.createElement("canvas"
     peaks.fill(-120);
     autoGain = 1;
   }
-  function draw({ c, w, h }, data, state, dt) {
+  function draw({ c, w, h }, data, state, dt, options = {}) {
     if (trail.width !== Math.round(w) || trail.height !== Math.round(h) || mode !== state.mode) {
       trail.width = Math.round(w);
       trail.height = Math.round(h);
@@ -64,7 +78,11 @@ function createVisualRenderer(makeCanvas = () => document.createElement("canvas"
     const gain = state.gain * (state.auto ? autoGain : 1);
     c.fillStyle = "#000";
     c.fillRect(0, 0, w, h);
-    const grid = drawVisualGrid(c, w, h, state.mode, Math.min(2e4, data.rate / 2));
+    if (options.hideSilent && metrics.rms <= 1e-4) {
+      clear();
+      return metrics;
+    }
+    const grid = options.frameless ? {left:8,right:w-8,top:5,bottom:h-5} : drawVisualGrid(c, w, h, state.mode, Math.min(2e4, data.rate / 2), options.compact);
     if (state.mode === "spectrum") {
       const bands = spectrumBands(data.db, data.rate, data.fftSize), { left, right, top, bottom } = grid, bw = (right - left) / 64;
       const gradient = c.createLinearGradient(0, bottom, 0, top);
@@ -99,18 +117,19 @@ function createVisualRenderer(makeCanvas = () => document.createElement("canvas"
       tc.lineWidth = 1;
       tc.strokeStyle = "#eee";
       if (state.mode === "scope") {
-        const { left, right, top, bottom } = grid, win = scopeWindow(data.left, data.rate * state.time / 1e3), span = (bottom - top) / 2;
-        for (let channel = 0; channel < 2; channel++) {
-          const samples = channel ? data.right : data.left, cy = top + span * (channel + 0.5);
+        const lanes = options.single ? 1 : 2;
+        // A single trace follows the louder channel, retaining right-only and
+        // opposite-phase output that an L+R average could erase.
+        const singleSamples = options.single && data.right.reduce((sum,v)=>sum+v*v,0) > data.left.reduce((sum,v)=>sum+v*v,0) ? data.right : data.left;
+        const { left, right, top, bottom } = grid, win = options.overview ? {start:0,count:singleSamples.length} : scopeWindow(singleSamples, data.rate * state.time / 1e3), span = (bottom - top) / lanes;
+        for (let channel = 0; channel < lanes; channel++) {
+          const samples = options.single ? singleSamples : channel ? data.right : data.left, cy = top + span * (channel + 0.5);
           tc.strokeStyle = channel ? "#aaa" : "#fff";
-          tc.beginPath();
-          for (let px = 0; px <= Math.round(right - left); px++) {
-            const at = win.start + Math.min(win.count - 1, Math.floor(px / (right - left) * (win.count - 1))), x = left + px, y = cy - clamp(samples[at] * gain, -1, 1) * span * 0.45;
-            px ? tc.lineTo(x, y) : tc.moveTo(x, y);
+          drawScopeTrace(tc, samples, {left, right, cy, amplitude: span * .45, gain, start: win.start, count: win.count});
+          if (!options.frameless) {
+            c.fillStyle = "#aaa";
+            c.fillText(channel ? "R" : "L", 5, cy + 3);
           }
-          tc.stroke();
-          c.fillStyle = "#aaa";
-          c.fillText(channel ? "R" : "L", 5, cy + 3);
         }
       } else {
         const { x, y, r } = grid;
@@ -124,7 +143,7 @@ function createVisualRenderer(makeCanvas = () => document.createElement("canvas"
       }
       c.drawImage(trail, 0, 0);
     }
-    ditherCanvas(c.canvas);
+    if (options.dither !== false) ditherCanvas(c.canvas);
     return metrics;
   }
   return { draw, clear };
@@ -132,11 +151,34 @@ function createVisualRenderer(makeCanvas = () => document.createElement("canvas"
 function setupAudioVisuals({ onChange = () => {
 } } = {}) {
   let state = { ...VISUAL_DEFAULTS }, held = false, capture, lastData, lastWidth = 0, lastHeight = 0, lastMetrics = { peak: 0, rms: 0, correlation: null };
-  const renderer = createVisualRenderer(), page = document.getElementById("visualPage"), canvas = document.getElementById("visualCanvas");
-  page.innerHTML = '<nav class="visual-modes" aria-label="Visual mode"></nav><div class="visual-actions"><button type="button" id="visualAuto">Auto gain</button><button type="button" id="visualHold">Hold view</button><span id="visualSignal">POST FX · STEREO</span></div><div class="visual-fields"></div><p id="visualHelp" class="visual-help"></p>';
+  const renderer = createVisualRenderer(), outputRenderer = createVisualRenderer(), page = document.getElementById("visualPage"), canvas = document.getElementById("visualCanvas");
+  page.innerHTML = '<nav class="visual-modes" aria-label="Visual mode"></nav><div class="visual-actions"><button type="button" id="visualAuto">Auto gain</button><button type="button" id="visualHold">Hold picture</button><span id="visualSignal">POST FX · PICTURE ONLY</span></div><div class="visual-fields"></div><p id="visualHelp" class="visual-help"></p>';
   const nav = page.querySelector(".visual-modes"), fields = page.querySelector(".visual-fields"), records = [];
   const caption = document.querySelector(".visual-caption");
   caption.innerHTML = '<span id="visualCaption">SPECTRUM</span><span id="visualReadout">START SOUND TO VIEW</span>';
+  const stage = document.getElementById('visualStage');
+  const probe = document.createElement('div'); probe.className = 'visual-probe'; probe.hidden = true;
+  probe.innerHTML = '<span class="visual-probe-line"></span><output class="visual-probe-label"></output><input id="visualProbe" type="range" min="0" max="1000" step="1" value="566" aria-label="Inspect spectrum frequency">';
+  stage.append(probe);
+  const probeInput = probe.querySelector('input'), probeLine = probe.querySelector('.visual-probe-line'), probeLabel = probe.querySelector('output');
+  let probeFraction = .566, probing = false, probeUsed = false;
+  function updateProbe() {
+    stage.dataset.mode = state.mode;
+    probe.hidden = state.mode !== 'spectrum';
+    const data = lastData || empty, maxHz = Math.min(20000, data.rate / 2), hz = 20 * (maxHz / 20) ** probeFraction;
+    const bin = Math.min(data.db.length - 1, Math.round(hz / (data.rate / data.fftSize))), db = data.db[bin];
+    const text = (hz >= 1000 ? (hz / 1000).toFixed(2)+' kHz' : Math.round(hz)+' Hz') + ' · ' + (Number.isFinite(db) ? db.toFixed(1)+' dBFS' : 'no signal');
+    const width = canvas.clientWidth, x = 24 + Math.max(0,width-34) * probeFraction;
+    probeLine.style.left = x+'px'; probeLabel.style.left = Math.max(75,Math.min(width-75,x))+'px';
+    probeLine.hidden = !probeUsed; probeLabel.textContent = probeUsed ? text : 'Drag spectrum to inspect';
+    probeInput.value = Math.round(probeFraction*1000); probeInput.setAttribute('aria-valuetext',text);
+  }
+  function positionProbe(event) { const rect=canvas.getBoundingClientRect();probeFraction=clamp((event.clientX-rect.left-24)/Math.max(1,rect.width-34),0,1);probeUsed=true;updateProbe(); }
+  canvas.addEventListener('pointerdown',event=>{if(state.mode!=='spectrum'||event.button!==0)return;event.preventDefault();probing=true;canvas.setPointerCapture(event.pointerId);positionProbe(event);});
+  canvas.addEventListener('pointermove',event=>{if(probing)positionProbe(event);});
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,()=>probing=false);
+  probeInput.addEventListener('input',()=>{probeFraction=+probeInput.value/1000;probeUsed=true;updateProbe();});
+  const historyEvent = (type,label) => page.dispatchEvent(new CustomEvent('hushfield:'+type,{bubbles:true,detail:{label,source:'visual'}}));
   const descriptions = { scope: "Stereo waveforms. Time sets the window; gain and trails shape the display.", spectrum: "Logarithmic frequency bands with falling peaks. Levels show the post-effects mix.", vector: "Stereo phase portrait. Mono is vertical; opposite-phase audio spreads horizontally." };
   for (const [mode, label] of [["scope", "Scope"], ["spectrum", "Spectrum"], ["vector", "Vector"]]) {
     const button = document.createElement("button");
@@ -144,12 +186,14 @@ function setupAudioVisuals({ onChange = () => {
     button.textContent = label;
     button.dataset.visualMode = mode;
     button.addEventListener("click", () => {
+      historyEvent("editstart", "visual mode");
       state.mode = mode;
       onChange();
       held = false;
       renderer.clear();
       refresh();
       ensureVisibleSelection();
+      historyEvent("editend", "visual mode");
     });
     nav.append(button);
   }
@@ -180,16 +224,22 @@ function setupAudioVisuals({ onChange = () => {
   }
   const auto = document.getElementById("visualAuto"), hold = document.getElementById("visualHold");
   auto.onclick = () => {
+    historyEvent("editstart", "display auto gain");
     state.auto = !state.auto;
     onChange();
     refresh();
+    historyEvent("editend", "display auto gain");
   };
   hold.onclick = () => {
     held = !held;
+    // The transport continues reading the capture while this picture is held.
+    if (held && lastData) lastData = {...lastData,left:lastData.left.slice(),right:lastData.right.slice(),db:lastData.db.slice()};
     refresh();
   };
   function refresh() {
     page.dataset.visualMode = state.mode;
+    probe.hidden = state.mode !== "spectrum";
+    stage.dataset.mode = state.mode;
     nav.querySelectorAll("button").forEach((button) => {
       const active = button.dataset.visualMode === state.mode;
       button.classList.toggle("active", active);
@@ -198,7 +248,7 @@ function setupAudioVisuals({ onChange = () => {
     auto.disabled = state.mode === "spectrum";
     auto.textContent = state.mode === "spectrum" ? "LOG FREQUENCY" : state.auto ? "AUTO GAIN ON" : "AUTO GAIN OFF";
     auto.setAttribute("aria-pressed", String(state.mode !== "spectrum" && state.auto));
-    hold.textContent = held ? "Resume view" : "Hold view";
+    hold.textContent = held ? "Resume picture" : "Hold picture";
     hold.setAttribute("aria-pressed", String(held));
     document.getElementById("visualHelp").textContent = descriptions[state.mode];
     document.getElementById("visualCaption").textContent = state.mode.toUpperCase();
@@ -215,8 +265,15 @@ function setupAudioVisuals({ onChange = () => {
     capture?.dispose();
     capture = createVisualCapture(context, source);
     renderer.clear();
+    outputRenderer.clear();
+  }, outputFrame(fit, dt, reducedMotion = false) {
+    const data = capture?.read(0, false) || empty;
+    const metrics = outputRenderer.draw(fit, data,
+      // Twice the previous width: retain the same horizontal waveform scale.
+      {...VISUAL_DEFAULTS,mode:'scope',time:40,trail:reducedMotion ? 0 : VISUAL_DEFAULTS.trail}, dt, {single:true,frameless:true,hideSilent:true});
+    fit.c.canvas.dataset.signal = String(metrics.rms > 1e-4);
   }, frame(fit, dt) {
-    if (held && fit.w === lastWidth && fit.h === lastHeight) return;
+    if (held && fit.w === lastWidth && fit.h === lastHeight) { updateProbe(); return; }
     const data = held ? lastData || empty : capture?.read(state.smoothing, state.mode === "spectrum") || empty;
     lastData = data;
     lastWidth = fit.w;
@@ -228,6 +285,9 @@ function setupAudioVisuals({ onChange = () => {
     if (el.textContent !== value) el.textContent = value;
     canvas.dataset.signal = String(signal);
     canvas.dataset.correlation = String(lastMetrics.correlation);
+    updateProbe();
+  }, setWaveformSmoothing(value) {
+    state.waveformSmoothing = Math.round(clamp(value, 0, 100)); onChange();
   }, settings: () => ({ ...state }), restore(saved) {
     state = restoreVisual(saved);
     held = false;
@@ -239,5 +299,6 @@ function setupAudioVisuals({ onChange = () => {
 export {
   createVisualRenderer,
   drawVisualGrid,
+  drawScopeTrace,
   setupAudioVisuals
 };
