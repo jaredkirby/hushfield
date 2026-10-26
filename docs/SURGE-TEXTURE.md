@@ -65,7 +65,7 @@ npm run listening:prepare
 npm run listening:serve
 ```
 
-Open **http://127.0.0.1:4886/qa-musicality.html**. The page reports readiness, rendering progress and errors. **Run short audio check** exercises the graph quickly; **Render comparison** creates the full listening set:
+Open **http://127.0.0.1:4886/qa-musicality.html**. Use **Load saved comparison** to reopen an existing set without rendering again. The page reports readiness, rendering progress and errors. **Run short audio check** exercises the graph quickly; **Render comparison** creates the full listening set:
 
 - A: captured original baseline at commit `6e5c607a76f53021ed4bb016fdd5a42a43edd817`.
 - B: new Motion patches and brightness behavior, with original Foundation and finishing.
@@ -79,7 +79,7 @@ The fixture uses real browser AudioWorklets, Motion bank effects, the shared Spa
 
 Playback levels are attenuated to the quietest example's stereo RMS. No version is boosted into clipping. This matches measured signal energy, not perceived loudness or LUFS. Listen at a comfortable level and compare note clarity, evolving color, recognizable phrases, transitions, silence and long-term fatigue.
 
-WAVs and JSON receipts are saved under `.scratch/listening/artifacts/` and remain playable from the comparison page. Receipts contain source/fixture hashes, seeds, exact settings, raw metrics, playback gain and resulting WAV hashes. Repeated baseline/full renders are checked before claiming reproducible PCM. The native Surge recordings are separate optional material; they are not automatically inserted into these live-Foundation comparisons.
+WAVs and JSON receipts are saved under `.scratch/listening/artifacts/` and remain playable from the comparison page. Receipts contain source/fixture hashes, seeds, exact settings, raw metrics, playback gain and resulting WAV hashes. Repeated baseline/full renders must retain identical actual-engine control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Native WebAudio convolution may differ in its last floating-point bits, so both raw WAV hashes and measured differences are retained rather than claiming byte identity. Seeded core-engine compatibility tests separately require exact PCM. The native Surge recordings are separate optional material; they are not automatically inserted into these live-Foundation comparisons.
 
 ## Provenance and acceptance
 

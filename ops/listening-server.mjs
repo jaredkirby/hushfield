@@ -20,6 +20,9 @@ http.createServer(async(req,res)=>{try{
  const folder=prefix==='/.listening/'?path.join(root,'.scratch/listening/build'):prefix==='/.listening-artifacts/'?output:path.join(root,'dist');
  const relative=decodeURIComponent(url.pathname.slice(prefix.length)||'index.html');const file=path.resolve(folder,relative);
  if(!file.startsWith(folder+path.sep)){res.writeHead(403);res.end();return;}
- const data=await readFile(file);res.writeHead(200,{'Content-Type':types[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store'});res.end(req.method==='HEAD'?undefined:data);
+ const data=await readFile(file),headers={'Content-Type':types[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store','Accept-Ranges':'bytes'};
+ const range=req.headers.range?.match(/^bytes=(\d+)-(\d*)$/);
+ if(range){const start=Number(range[1]),end=Math.min(data.length-1,range[2]?Number(range[2]):data.length-1);if(start>end||start>=data.length){res.writeHead(416,{'Content-Range':`bytes */${data.length}`});res.end();return;}const slice=data.subarray(start,end+1);res.writeHead(206,{...headers,'Content-Range':`bytes ${start}-${end}/${data.length}`,'Content-Length':slice.length});res.end(req.method==='HEAD'?undefined:slice);return;}
+ res.writeHead(200,{...headers,'Content-Length':data.length});res.end(req.method==='HEAD'?undefined:data);
  }catch(error){res.writeHead(error.code==='ENOENT'?404:500,{'Content-Type':'text/plain'});res.end(error.code==='ENOENT'?'File not found. Run node ops/listening-prepare.mjs before rendering.':error.message);}
 }).listen(port,'127.0.0.1',()=>console.log(`Listening comparison: http://127.0.0.1:${port}/qa-musicality.html\nSaved WAVs/receipts: ${output}`));

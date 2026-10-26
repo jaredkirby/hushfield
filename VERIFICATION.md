@@ -1,12 +1,20 @@
 # Verification
 
-## Current code and fresh checks
+## Current musical-expression candidate
 
-Documentation was checked against **main at `758f0e0`**, the merged [integration PR #14](https://github.com/jaredkirby/hushfield/pull/14), on 2026-10-25. A fresh local `npm run build` and `npm test` passed **43 Node test results across 27 files**, with no shipped-asset changes after rebuilding. The [main-branch CI run](https://github.com/jaredkirby/hushfield/actions/runs/40230745513) passed on Node 22 and 24 at that revision.
+The Surge-inspired candidate is implemented on `codex/surge-inspired-music`, from baseline `6e5c607a76f53021ed4bb016fdd5a42a43edd817`, in an isolated worktree. On 2026-10-25 (Pacific), the final `npm run build` left generated bundles unchanged and `npm test` passed **69 results across 32 files, zero failures**. `git diff --check` passed. The count includes individual Node tests and older file-level assertion suites, rather than every assertion.
 
-These automated checks cover rendered granular/Foundation PCM, live Foundation-to-Texture capture, Piece levels/Solo/presets, Motion harmony and sample-clock timing, independent banks, warm/strong Tape and true bypass, recording ownership, source selection, project migration/roundtrip, recovery races/errors, viewport profiles, navigation, startup and build consistency. The count includes individual Node tests and older file-level assertion suites; it is not a count of every assertion.
+New checks cover distinct preset/bank PCM, independent brightness contours, expressive Foundation timbre and bounded output, deterministic seed/block behavior, exact captured classic PCM, phrase development/pause/hold, returning motifs/rests, closer chord movement, linked worklet density changes without main-thread callbacks, schema-5 persistence and versions 1–4 compatibility, and genuine native Surge artifacts. Existing four-minute autonomous Foundation, recording, source-selection, recovery, Piece, Orbit and Tape suites also pass.
 
-This refresh changes documentation only. Browser receipts below are existing recorded results, not new browser runs performed during this documentation pass.
+Fresh browser evidence is in [the candidate receipt](tests/surge-browser-results.json): **7** real offline depth checks, **5** production Piece audio checks, **20** viewport-only cases across phone/landscape/tablet/Split View/desktop, all three on-demand native sources, 44 seconds of muted live playback across navigation, and explicit paused recovery of new controls and imported material. Viewport emulation establishes layout; muted playback establishes clock/graph behavior, not speaker listening quality.
+
+The [listening workflow](docs/SURGE-TEXTURE.md) pins the original Git sources and current module/harness hashes, renders real browser graphs, and discloses deterministic fixture transport/control delivery separately from production asynchronous-port checks. It records raw levels and WAV hashes, uses RMS attenuation without gain boosts, and checks repeated controls exactly plus Float32 output within 1e-6 (0.033 PCM16 steps). Browser convolution may vary in its last floating-point bits; byte identity is not claimed for the full graph.
+
+The completed [listening receipt](tests/surge-listening-results.json) records four 75-second examples and a 180-second arc, plus independent WAV header/hash/level verification. Matched stereo RMS is approximately 0.015465 across all five, with peaks below 0.077. Baseline/full repeat maximum Float32 differences are 2.61e-8 / 2.24e-8; control snapshots match exactly. PCM16 repeat files can differ by one least-significant sample step at quantization boundaries; their differing hashes are recorded explicitly. The player was exercised through actual playback, reached 5.16 seconds, reported duration 75 seconds without media errors, and was left paused. The delivery server gained length/range headers afterward; the receipt records that separate delivery hash and preserves the actual render provenance.
+
+The [independent review](docs/SURGE-MUSICALITY-REVIEW.md) records Standards and Spec separately, including a nonblocking duplication suggestion. Human musical preference and physical-device acceptance remain open.
+
+The earlier main-branch check below remains historical evidence: documentation at `758f0e0` passed 43 Node results, and its [CI run](https://github.com/jaredkirby/hushfield/actions/runs/40230745513) passed Node 22 and 24. That CI run does not validate this candidate branch.
 
 ## Recorded browser evidence
 

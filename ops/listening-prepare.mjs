@@ -39,6 +39,7 @@ for(const [label,sourceRoot] of [['baseline',baselineRoot],['current',root]]){
  for(const file of Object.keys(result.metafile.inputs))manifest.sourceFiles[label+'/'+path.relative(sourceRoot,file)]=sha(await readFile(file));
  for(const file of Object.keys(result.metafile.outputs))manifest.outputs[label+'/'+path.basename(file)]=sha(await readFile(file));
 }
-manifest.fixtureHash=sha(JSON.stringify({sourceFiles:manifest.sourceFiles,outputs:manifest.outputs,grainSeed:manifest.grainSeed,controlDelivery:manifest.controlDelivery}));
+manifest.harnessFiles={};for(const file of ['ops/listening-prepare.mjs','ops/listening-server.mjs','dist/qa-musicality.mjs','dist/qa-musicality.html'])manifest.harnessFiles[file]=sha(await readFile(path.join(root,file)));
+manifest.fixtureHash=sha(JSON.stringify({harnessFiles:manifest.harnessFiles,sourceFiles:manifest.sourceFiles,outputs:manifest.outputs,grainSeed:manifest.grainSeed,controlDelivery:manifest.controlDelivery}));
 await writeFile(path.join(scratch,'build/manifest.json'),JSON.stringify(manifest,null,2)+'\n');
 console.log('Listening fixture prepared: '+manifest.fixtureHash+'\nStart node ops/listening-server.mjs, then open /qa-musicality.html.');

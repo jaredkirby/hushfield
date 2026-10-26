@@ -1,6 +1,6 @@
 # Surge-inspired musical expression for Hushfield
 
-Status: approved by the user on 2026-10-25; implementation underway.
+Status: approved by the user on 2026-10-25; implemented locally; technical evidence in VERIFICATION.md.
 Baseline: 6e5c607a76f53021ed4bb016fdd5a42a43edd817.
 Branch: codex/surge-inspired-music, isolated from current interface work.
 
