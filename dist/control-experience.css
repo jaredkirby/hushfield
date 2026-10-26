@@ -59,3 +59,9 @@ body[data-texture-enabled=false] #grainPage .control-grid{opacity:1}
  body.phone-ui[data-height-tier] .main-panel{grid-template-rows:17px minmax(0,1.25fr) minmax(0,1fr)}
  body.phone-ui[data-height-tier=tight] .main-panel{grid-template-rows:minmax(0,1.25fr) minmax(0,1fr)}
 }
+
+/* The preset is a complete-settings command, shared by both Tape panels. */
+#tapePresetControl{grid-column:1/-1;height:auto!important;min-height:66px;display:grid;grid-template-columns:minmax(90px,1fr) minmax(0,2fr);align-items:center;gap:4px 10px}
+#tapePresetControl>.parameter-editor{height:28px!important}
+#tapePresetControl>label{font:10px monospace;color:#aaa}
+#tapePresetDescription{grid-column:1/-1;margin:0;font:10px/1.4 monospace}
