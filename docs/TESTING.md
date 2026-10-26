@@ -20,7 +20,7 @@ For one area, run its existing file, for example:
 node --test tests/piece-session.test.mjs tests/piece-presets.test.mjs
 node --test tests/session-recovery.test.mjs tests/project-roundtrip.test.mjs
 node --test tests/tape-impact.test.mjs tests/tape-dsp.test.mjs
-node --test tests/re201-dsp.test.mjs tests/re201-settings.test.mjs
+node --test tests/re201-dsp.test.mjs tests/re201-settings.test.mjs tests/tape-presets.test.mjs
 ```
 
 Source files live in `dist/`. The build emits the main bundle and four standalone worklets under `dist/build/`, embeds the three early shell scripts into HTML and updates source hashes. Include those generated changes with a source change. After committing a synchronized source/build, rebuilding should leave `dist/` unchanged:
@@ -65,6 +65,8 @@ For audio changes, listen on the affected devices as well as checking PCM. Brows
 ## Space Echo checks and listening
 
 `tests/re201-dsp.test.mjs` checks all twelve head modes, constant-speed head timing, transient motor pitch changes and settling, per-pass frequency loss, independent spring timing, bounded sustained feedback, release after Feedback/Off, stereo bypass and model changes. Its frozen [Classic Tape fixture](../tests/fixtures/tape-classic-v1/README.md) requires exact same-runtime stereo Float32 PCM at 8, 44.1 and 48 kHz. Do not refresh the fixture when changing the current effect. `tests/re201-settings.test.mjs` covers explicit model selection, validation, project round trips, recovery and Worn memory compatibility.
+
+`tests/tape-presets.test.mjs` checks isolated preset application, derived names, settings Undo, project round trips and distinct PCM with bounded decaying tails. In the browser, check selection on both Tape panels, Custom settings after manual edits, On/Off preservation and named recovery into a paused session.
 
 Open `/qa-space-echo.html` on any localhost or HTTPS static server. Render audio comparisons produces dry, Classic, all-heads-plus-spring, motor-glide and spring-only examples from the same synthesized phrase. They use a common source gain with no per-clip normalization, so compare level as well as character. These clips are recordings of our processor, not Roland hardware. Run Worklet checks exercises the built worklet separately from the Node engine tests.
 

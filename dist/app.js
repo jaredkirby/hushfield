@@ -1,6 +1,7 @@
 import { createControlHistory } from "./control-history.mjs";
 import { setupVisualEditors } from "./visual-editors.mjs";
 import { setupMotionControls } from "./motion-controls.mjs";
+import { TAPE_PRESETS, applyTapePreset, matchingTapePreset } from "./tape-presets.mjs";
 import { TAPE_DEFAULTS, SPACE_ECHO_DEFAULTS, SPACE_ECHO_MODES } from "./tape-settings.mjs";
 import { selectPiecePreset } from "./piece-presets.mjs";
 import { restorePiece, piecePlayback } from "./piece-session.mjs";
@@ -156,15 +157,61 @@ for (const [id, label] of [["drive", "Drive"], ["wow", "Wow"], ["flutter", "Flut
 makeControl("tapeControls", "tapeModel", "Tape model", 1, 2, 1, "", value => value === 2 ? "Space Echo" : "Classic", [{ value: 1, label: "Classic" }, { value: 2, label: "Space Echo" }]);
 makeControl("tapeControls", "echoMode", "Head mode", 1, 12, 1, "", value => SPACE_ECHO_MODES[value - 1].label, SPACE_ECHO_MODES);
 makeControl("tapeControls", "springMix", "Spring level", 0, 70, 1, "%");
+const tapePresetRow = document.createElement("div");
+tapePresetRow.className = "control direct-control";
+tapePresetRow.id = "tapePresetControl";
+tapePresetRow.dataset.control = "tapePreset";
+const tapePresetLabel = document.createElement("label");
+tapePresetLabel.htmlFor = "tapePreset";
+tapePresetLabel.textContent = "Tape preset";
+const tapePresetMenu = document.createElement("select");
+tapePresetMenu.id = "tapePreset";
+tapePresetMenu.className = "parameter-choice";
+tapePresetMenu.setAttribute("aria-describedby", "tapePresetDescription");
+const customTapePreset = document.createElement("option");
+customTapePreset.value = "";
+customTapePreset.textContent = "Custom settings";
+customTapePreset.disabled = true;
+tapePresetMenu.append(customTapePreset);
+for (const preset of TAPE_PRESETS) {
+  const option = document.createElement("option");
+  option.value = preset.id;
+  option.textContent = preset.label;
+  tapePresetMenu.append(option);
+}
+const tapePresetDescription = document.createElement("p");
+tapePresetDescription.id = "tapePresetDescription";
+tapePresetDescription.className = "muted";
+const tapePresetEditor = document.createElement("div");
+tapePresetEditor.className = "parameter-editor";
+tapePresetEditor.append(tapePresetMenu);
+tapePresetRow.append(tapePresetLabel, tapePresetEditor, tapePresetDescription);
+$("tapeControls").prepend(tapePresetRow);
+tapePresetMenu.addEventListener("change", () => {
+  const selected = TAPE_PRESETS.find(preset => preset.id === tapePresetMenu.value);
+  if (!selected) return;
+  controlHistory?.begin("Tape preset: " + selected.label);
+  try {
+    params = applyTapePreset(params, selected.id);
+    refreshControls();
+    markEdited();
+  } finally { controlHistory?.end(); }
+});
+function refreshTapePreset() {
+  const preset = matchingTapePreset(params);
+  tapePresetMenu.value = preset?.id || "";
+  tapePresetDescription.textContent = preset?.description || "Your current Tape settings. Choosing a preset keeps Tape On or Off as you set it.";
+}
 let activeTapePanel = "echo";
 function refreshTapeControls() {
   const spaceEcho = params.tapeModel === 2;
   const echoFields = ["delayTime", "feedback", "delayMix", "echoMode", "springMix"];
   for (const row of $("tapeControls").children) {
     const id = row.dataset.control;
-    row.hidden = id === "tapeModel" ? false : activeTapePanel === "echo" ? !echoFields.includes(id) : echoFields.includes(id);
+    row.hidden = ["tapeModel", "tapePreset"].includes(id) ? false : activeTapePanel === "echo" ? !echoFields.includes(id) : echoFields.includes(id);
     if (["echoMode", "springMix"].includes(id) && !spaceEcho) row.hidden = true;
   }
+  refreshTapePreset();
   ranges.delayTime.render();
   $("delayTime").title = spaceEcho ? "Longest head time. Heads 1, 2 and 3 are at one third, two thirds and this time. Up to 1.5 seconds extends the original hardware range." : "Time between echoes.";
   const note = $("tapePage").querySelector(".tape-note");
@@ -207,6 +254,7 @@ function refreshControls() {
   updateTransport();
 }
 function syncEngine() {
+  refreshTapePreset();
   renderClock.invalidate();
   visualEditors?.refresh();
   motionControls?.refresh();
@@ -1596,6 +1644,7 @@ function setupDisplay() {
   utility.append($("freezeBtn"), $("recordOut"), document.querySelector(".volume-label"), document.querySelector(".meter"));
   for (const id of ["delayMix", "feedback", "delayTime"]) $("tapeControls").prepend(document.querySelector(`[data-control="${id}"]`));
   $("tapeControls").prepend(document.querySelector('[data-control="tapeModel"]'));
+  $("tapeControls").prepend(tapePresetRow);
   $("delayControls").closest(".control-group").remove();
 }
 setupDisplay();

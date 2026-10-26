@@ -1,5 +1,11 @@
 # Verification
 
+## Tape starting presets
+
+The five Tape presets add Gentle echo, Slapback, Three-head drift, Dub trails and Spring chamber. Fresh checks on 2026-10-26 passed all 125 Node results, including pairwise PCM differences, bounded decaying preset tails, isolated Tape changes, one-step Undo and actual project round trips. No DSP algorithm changed in this update.
+
+Browser checks exercised all five selections, preserved both On and Off, verified Custom settings after manual/Classic changes and restored named settings with Undo/Redo. The menu remained reachable in phone portrait, short landscape, iPad, Split View and desktop layouts without outer-page overflow. Explicit recovery restored Dub trails into a paused session with master volume zero. The [preset receipt](tests/tape-presets-browser-results.json) records values and layout bounds; the [desktop screenshot](docs/images/tape-presets-desktop.jpg) shows the menu in the existing Tape editor. These checks do not replace physical-device or subjective listening acceptance.
+
 ## RE-201-inspired Tape candidate
 
 The Space Echo model adds the original twelve head/spring selections, one shared tape-speed history, filtered saturated feedback and a parallel synthetic spring. The [research](docs/research/re201-space-echo.md) separates original hardware evidence from our designed approximations. Existing projects without an explicit model and Worn memory retain Classic.

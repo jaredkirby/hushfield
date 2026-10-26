@@ -78,6 +78,8 @@ Drive also saturates each stereo direct channel. The direct path has no tape del
 
 `tape-settings.mjs` separates existing numeric defaults from explicit fresh-session Space Echo settings. New Pieces select model 2, Head mode 4 and Spring level 12%, with Tape Off. Mode 4 has no spring return. Saved settings missing a valid explicit model select Classic regardless of schema version; export records the selected model. Worn memory explicitly retains Classic. Head mode and spring level survive save and recovery even while Tape is Off. `tape-motion.mjs` supplies the cassette illustration's Wow/Flutter curves. Its movement represents settings and signal level, not measured processor telemetry, and stops with bypass, pause or reduced motion.
 
+`tape-presets.mjs` defines five complete Tape sound configurations. Applying one copies only its sound fields and preserves `tapeOn`. The native command menu wraps the change in one settings-history entry. Its displayed name is derived by exact comparison with the current numeric fields, so no preset ID can become stale in a saved project or recovery draft. Manual edits and Classic settings show Custom settings.
+
 ## Interface and rendering
 
 The five main editors are Foundation, Texture, Motion, Space and Tape. Your sound / trim and Visual are secondary tools. Stable internal IDs retain older links: `#ambient`, `#grain`, `#orbit`, `#fx`, `#tape`, `#sample` and `#visual` respectively. Source editing keeps Texture selected in the main navigation.

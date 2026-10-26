@@ -1,0 +1,210 @@
+{
+  "browser": "Codex in-app browser on macOS",
+  "presetChecks": [
+    {
+      "feedback": "8",
+      "mode": "1",
+      "preset": "slapback",
+      "spring": "0",
+      "tapeOn": "false",
+      "time": "0.24",
+      "volume": "0.55"
+    },
+    {
+      "feedback": "43",
+      "mode": "11",
+      "preset": "drift",
+      "spring": "20",
+      "tapeOn": "false",
+      "time": "0.6",
+      "volume": "0.55"
+    },
+    {
+      "feedback": "61",
+      "mode": "9",
+      "preset": "dub",
+      "spring": "12",
+      "tapeOn": "false",
+      "time": "0.75",
+      "volume": "0.55"
+    },
+    {
+      "feedback": "0",
+      "mode": "12",
+      "preset": "spring",
+      "spring": "48",
+      "tapeOn": "false",
+      "time": "0.36",
+      "volume": "0.55"
+    },
+    {
+      "feedback": "28",
+      "mode": "4",
+      "preset": "gentle",
+      "spring": "12",
+      "tapeOn": "false",
+      "time": "0.36",
+      "volume": "0.55"
+    }
+  ],
+  "layouts": [
+    {
+      "height": 844,
+      "outerHeight": 844,
+      "outerWidth": 390,
+      "preset": {
+        "bottom": 745,
+        "height": 28,
+        "left": 143,
+        "right": 371,
+        "top": 717,
+        "width": 228,
+        "x": 143,
+        "y": 717
+      },
+      "transportBottom": 836,
+      "width": 390
+    },
+    {
+      "height": 390,
+      "outerHeight": 390,
+      "outerWidth": 844,
+      "preset": {
+        "bottom": 335.5,
+        "height": 28,
+        "left": 548.65625,
+        "right": 826,
+        "top": 307.5,
+        "width": 277.34375,
+        "x": 548.65625,
+        "y": 307.5
+      },
+      "transportBottom": 382,
+      "width": 844
+    },
+    {
+      "height": 1024,
+      "outerHeight": 1024,
+      "outerWidth": 768,
+      "preset": {
+        "bottom": 1173.5,
+        "height": 28,
+        "left": 270,
+        "right": 746,
+        "top": 1145.5,
+        "width": 476,
+        "x": 270,
+        "y": 1145.5
+      },
+      "transportBottom": 1015,
+      "width": 768
+    },
+    {
+      "height": 768,
+      "outerHeight": 768,
+      "outerWidth": 507,
+      "preset": {
+        "bottom": 862,
+        "height": 28,
+        "left": 182,
+        "right": 488,
+        "top": 834,
+        "width": 306,
+        "x": 182,
+        "y": 834
+      },
+      "transportBottom": 760,
+      "width": 507
+    },
+    {
+      "height": 720,
+      "outerHeight": 720,
+      "outerWidth": 1280,
+      "preset": {
+        "bottom": 398,
+        "height": 28,
+        "left": 913.65625,
+        "right": 1259,
+        "top": 370,
+        "width": 345.34375,
+        "x": 913.65625,
+        "y": 370
+      },
+      "transportBottom": 711,
+      "width": 1280
+    }
+  ],
+  "reachability": [
+    {
+      "height": 1024,
+      "menuBottom": 864.5,
+      "menuTop": 836.5,
+      "scrollBottom": 935,
+      "transportTop": 936,
+      "width": 768
+    },
+    {
+      "height": 768,
+      "menuBottom": 607,
+      "menuTop": 579,
+      "scrollBottom": 680,
+      "transportTop": 681,
+      "width": 507
+    },
+    {
+      "height": 844,
+      "menuBottom": 587,
+      "menuTop": 559,
+      "scrollBottom": 756,
+      "transportTop": 757,
+      "width": 390
+    },
+    {
+      "height": 390,
+      "menuBottom": 180.5,
+      "menuTop": 152.5,
+      "scrollBottom": 326,
+      "transportTop": 327,
+      "width": 844
+    }
+  ],
+  "undoRedo": true,
+  "manualEditShowsCustom": true,
+  "classicShowsCustom": true,
+  "explicitPresetOptsIntoSpaceEcho": true,
+  "availableOnBothPanels": true,
+  "mutedLivePlayback": true,
+  "recovery": {
+    "explicit": true,
+    "paused": true,
+    "preset": "dub",
+    "mode": 9,
+    "time": 0.75,
+    "feedback": 61,
+    "spring": 12,
+    "tapeOn": true,
+    "volume": 0,
+    "historyCleared": true
+  },
+  "warningsOrErrors": [],
+  "checkedAt": "2026-10-26T21:41:43.998981+00:00",
+  "baseCommit": "bc39808e8d28c34df61a4364326e2f2e3cf26936",
+  "sourceHashes": {
+    "dist/app.js": "33a510eb9570a5c4c357c1caace422613ceaaf9e5a15725d91fcda363ef2f388",
+    "dist/tape-presets.mjs": "f8ad8a83983bc4e7210f9c6c69bce1d9f751bfd9e4b70e0a2d8df665008d7371",
+    "dist/control-experience.css": "ba45b134f85d1f1a7913d9b20f015e1290870541edf2a8bfca7d1b0fc070bf3d",
+    "dist/build/app.js": "832ba0a97a0c7a64bef5b6c487c18db10b5116905bd745861cbd51731242fd99",
+    "tests/tape-presets.test.mjs": "2ad3f3eafc58c2b53c80b485ed4a477678918b25034ebe9f8948606d1b27d2f7"
+  },
+  "node": {
+    "version": "22.22.0",
+    "results": 125,
+    "passed": 125,
+    "failed": 0
+  },
+  "preview": "https://kirbys-mac-mini.tailac5a2a.ts.net:8450/#tape",
+  "limits": [
+    "No physical device acceptance",
+    "No human subjective listening approval"
+  ]
+}

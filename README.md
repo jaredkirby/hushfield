@@ -45,6 +45,8 @@ Stillwater, Slow cloud, Glass shards and Worn memory are complete presets. They 
 
 The [playing guide](docs/PLAYING.md) covers Texture sources, harmony, Tape controls and recording.
 
+Tape preset offers Gentle echo, Slapback, Three-head drift, Dub trails and Spring chamber. A selection changes only the Tape sound, keeps its On/Off state and can be undone. Editing a value shows Custom settings.
+
 Fresh sessions select Space Echo with Tape Off. Turn it On, then try Head mode 11 for three rhythmic echoes and a parallel spring, or mode 12 for spring alone. Head 3 time sets the longest delay; the other heads play at one third and two thirds of that time. Moving it bends the recorded echoes' pitch before they settle. This is a researched approximation with a synthetic spring, not a measured hardware clone. [Research and design limits](docs/research/re201-space-echo.md) describe the sources.
 
 ## Phone, iPad and desktop
