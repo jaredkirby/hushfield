@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-27",
+  "browser": "Codex in-app browser",
+  "candidate": "Two draggable plates with measured-wet ripples and travelling reflections",
+  "checks": {
+    "upperPlateDrag": {
+      "before": {
+        "decay": 3,
+        "predelay": 20
+      },
+      "after": {
+        "decay": 8,
+        "predelay": 150
+      }
+    },
+    "singleUndoRestoresBoth": true,
+    "singleRedoRestoresBoth": true,
+    "lowerPlateKeyboardUpIncreasesSeparation": true,
+    "keyboardHomeEndReachBounds": true,
+    "otherModelsHidePlateHandles": true,
+    "reducedMotionCanvasByteIdentical": true,
+    "browserWarningsErrors": [],
+    "servedAppHashMatchesLocal": true
+  },
+  "layouts": [
+    {
+      "handles": [
+        {
+          "height": 71.4375,
+          "inBounds": true,
+          "visible": true,
+          "width": 276.015625
+        },
+        {
+          "height": 71.4375,
+          "inBounds": true,
+          "visible": true,
+          "width": 276.015625
+        }
+      ],
+      "height": 844,
+      "overflow": false,
+      "startVisible": true,
+      "width": 390
+    },
+    {
+      "handles": [
+        {
+          "height": 71.4375,
+          "inBounds": true,
+          "visible": true,
+          "width": 276.015625
+        },
+        {
+          "height": 71.4375,
+          "inBounds": true,
+          "visible": true,
+          "width": 276.015625
+        }
+      ],
+      "height": 390,
+      "overflow": false,
+      "startVisible": true,
+      "width": 844
+    },
+    {
+      "handles": [
+        {
+          "height": 160.375,
+          "inBounds": true,
+          "visible": true,
+          "width": 619.671875
+        },
+        {
+          "height": 160.375,
+          "inBounds": true,
+          "visible": true,
+          "width": 619.671875
+        }
+      ],
+      "height": 1024,
+      "overflow": false,
+      "startVisible": true,
+      "width": 768
+    },
+    {
+      "handles": [
+        {
+          "height": 160.375,
+          "inBounds": true,
+          "visible": true,
+          "width": 619.671875
+        },
+        {
+          "height": 160.375,
+          "inBounds": true,
+          "visible": true,
+          "width": 619.671875
+        }
+      ],
+      "height": 768,
+      "overflow": false,
+      "startVisible": true,
+      "width": 1024
+    },
+    {
+      "handles": [
+        {
+          "height": 191.609375,
+          "inBounds": true,
+          "visible": true,
+          "width": 740.3125
+        },
+        {
+          "height": 191.609375,
+          "inBounds": true,
+          "visible": true,
+          "width": 740.3125
+        }
+      ],
+      "height": 900,
+      "overflow": false,
+      "startVisible": true,
+      "width": 1440
+    }
+  ],
+  "review": "GPT-6.1 Sol review: keyboard semantics and cancellation refresh findings fixed; no outstanding actionable findings.",
+  "limits": "Viewport emulation is not a physical touch test. Escape, pointercancel, lost capture and external-edit cancellation were source reviewed; interrupted physical touch was not tested."
+}

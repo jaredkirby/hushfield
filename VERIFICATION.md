@@ -1,5 +1,31 @@
 # Verification
 
+## Space release verification
+
+The final Space revision passed the build and all 194 Node test results on 2026-10-27. Fresh sessions and Whole piece presets select Plate; saved models, malformed-file fallback and versions 1–6 retain their compatibility behavior. Fresh browser startup showed Plate selected with its controls enabled and no console warnings or errors.
+
+The approved Plate display uses a movable absorber above one vibrating sheet. Separation changes Decay only. Chamber keeps the rippling rebound tube, expands it to the square viewing bounds and carries waves into the center with a slower final drift. Earlier receipts below describe their recorded revisions and are historical evidence. Physical-device performance and hardware authenticity remain separate from automated verification.
+
+## Interactive Space visual candidate
+
+The 2026-10-27 visual revision adds two draggable Plate surfaces. Separation adjusts Decay and Pre-delay together, with a single Undo/Redo entry. Measured wet activity launches travelling reflections and surface ripples; Spring and Chamber also gain trails and depth. Existing DSP and saved parameter formats are unchanged. The individual controls remain available.
+
+The full existing suite passed 193 results, followed by the final build and consistency checks. [Browser observations](tests/space-plates-browser-results.json) cover native dragging, grouped Undo/Redo, keyboard bounds, five viewport sizes and static reduced-motion frames. GPT-6.1 Sol review found keyboard-direction and cancellation-refresh issues, both fixed. Interrupted physical touch and visual preference still require user testing. This remains a separate candidate.
+
+## Vintage Space candidate
+
+The isolated `codex/vintage-space` candidate centers Space on Original room, Plate, Spring and Chamber. Reverb exposes Amount, Decay, Pre-delay, Tone and Reverb width; Depth retains per-part sends and Filter retains whole-piece tone/width. The model illustrations respond to measured wet energy and respect reduced motion. Fresh startup keeps Chorus synth, Stillwater, Space Echo On and Original room.
+
+The build and full Node suite passed all 193 results. Schema 7 round trips all models and settings, accepts versions 1–7 and forces versions 1–6 to Original room while retaining their Foundation and Tape modes. The frozen original graph is compared against current output in the same browser runtime. The [research](docs/research/vintage-space.md) explains the plate diffusion tank, spring dispersion and chamber reflection design and separates these approximations from hardware evidence.
+
+[Audio evidence](tests/vintage-space-audio-results.json) records 45 passing native WebAudio checks, including exact Original room PCM in legacy and Depth routing at 12, 44.1 and 48 kHz; independent model controls; zero-Amount dry preservation; long tails; repeated selection continuity; latest selection after suspended recovery; and the complete Foundation → Space → Space Echo path. A regression caught a paused-slot reuse issue and a fade whose previous endpoint caused a switch-time jump. The fixes retain pending selection until audio time advances and explicitly anchor each new fade. Boundary comparisons at all three rates pass; a diagnostic calibration rejects the previously observed jump. Absolute musical headroom is checked separately from the full-scale sine continuity stimulus.
+
+[Browser evidence](tests/vintage-space-browser-results.json) records model selection, exact-entry Apply/Cancel, one-step Undo/Redo, model adjustment rail, Reverb/Depth/Filter navigation and explicit paused recovery of Spring with its settings. The new display reports wet activity and settles at zero Amount. Two live reduced-motion canvas captures were byte-identical. All five emulated viewport sizes retained a square display, reachable Start/Stop and no horizontal page overflow. The [screenshot](docs/images/vintage-space.png) shows the candidate.
+
+[Listening evidence](tests/vintage-space-listening-results.json) records ten 12-second, 48 kHz stereo WAVs: dry, Original room, Plate, Spring and Chamber, each with Tape off and Space Echo on. Every clip uses the same Stillwater Chorus synth seed, six seconds of excitation and six seconds of tail. The shared comparison mix emphasizes the reverb; files have no individual normalization. The largest saved peak is 0.1858. See [testing](docs/TESTING.md#vintage-space-checks-and-listening) for rendering and saved playback. The private preview app bundle and all ten retained clips matched local SHA-256 hashes.
+
+Impulse regeneration is synchronous on selection/Decay edits, coalesced while a fade is active; native convolution handles runtime audio. An Apple M4 Node diagnostic at 48 kHz/8-second decay measured generation at approximately 33–90 ms per model, and each stereo impulse occupies about 3.1 MB. These are development-machine measurements, not browser timing or device acceptance. Human listening, actual touch/battery behavior and hardware authenticity remain separate. Independent GPT-6.1 Sol Standards and Spec reviews of the committed change against `af4c346` each returned zero findings. No automatic merge or change to the favorite default is included.
+
 ## Foundation defaults and starting presets
 
 Fresh startup and Stillwater Whole piece now select Chorus synth, the Stillwater Scene and Space Echo with Tape on. Compatibility fallback settings remain unchanged, and recovery stays explicit and paused. Sound offers 18 starting presets that replace only Foundation's instrument, expressive mode, tone macros and Chords/Melody/Air levels. Matching names come from saved values rather than a preset identifier.
@@ -136,6 +162,38 @@ served the comparison page, baseline/current fixture configs and build manifest
 with HTTP 200 before being stopped. The shared preview and retained listening
 artifacts were not changed. This checks documentation commands, not new browser,
 listening or device acceptance.
+
+## Plate damper correction, 27 October 2026
+
+Following the original hardware research, the candidate now shows a fixed steel
+sheet and a movable absorber. Separation changes Decay alone. Pre-delay remains
+independent, and the animation has no travelling packets between the surfaces.
+The earlier two-plate browser receipt remains historical evidence of that version.
+
+The browser check first reproduced the old coupled behavior: End changed 3 s / 20 ms
+to 8 s / 150 ms. The corrected End retained 20 ms. A native upward drag changed
+Decay from 3 s to 6.3 s, and one Undo/Redo restored 3 s / 6.3 s without changing
+Pre-delay. Home, End and ArrowUp worked; a separately chosen 150 ms pre-delay
+survived a later damping edit. Spring and Filter hid the damper. Five viewport
+sizes kept its handle in bounds and transport visible, without horizontal overflow.
+Two full screenshots with reduced motion enabled were byte-identical. Cropped
+captures initially changed the browser viewport; explicit viewport stabilization
+and full captures resolved that measurement issue. Browser warnings/errors were empty.
+See [the damper receipt](tests/space-damper-browser-results.json).
+
+`npm test` passed all 193 tests. The production build and `git diff --check` passed.
+No DSP, saved-Piece schema or default changes were made. This verifies interaction
+and regression behavior, not a measured physical plate or physical touch performance.
+
+### Standards
+
+GPT-6.1 Sol review against `348bef1`: no actionable findings.
+
+### Spec
+
+GPT-6.1 Sol review against `348bef1` and the approved research recommendations:
+no actionable findings. The final visual polish removes the background glow from
+Plate so it cannot appear as a floating pulse in the gap.
 
 ## Reproduction and acceptance limits
 

@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-26",
+  "browser": "Codex in-app browser",
+  "checks": {
+    "originalDisablesNewControls": true,
+    "plateSelectionAndOneStepUndoRedo": true,
+    "exactDecayApplyUndoRedo": true,
+    "exactDecayCancelRestores4_2": true,
+    "modelAdjustmentRailAndUndo": true,
+    "depthAndFilterNavigation": true,
+    "wetVisualActivityAndAmountZeroQuiet": true,
+    "recoveryExplicitAndPaused": true,
+    "recoveryModel": "spring",
+    "recoveryDecay": 4.2,
+    "recoveryFoundation": "juno",
+    "recoveryTapeOn": true,
+    "reducedMotionCanvasIdentical": true
+  },
+  "layouts": [
+    {
+      "canvas": {
+        "height": 372,
+        "width": 372
+      },
+      "height": 844,
+      "overflow": false,
+      "start": {
+        "left": 8,
+        "right": 195,
+        "visible": true
+      },
+      "width": 390
+    },
+    {
+      "canvas": {
+        "height": 372,
+        "width": 372
+      },
+      "height": 390,
+      "overflow": false,
+      "start": {
+        "left": 390,
+        "right": 613,
+        "visible": true
+      },
+      "width": 844
+    },
+    {
+      "canvas": {
+        "height": 748,
+        "width": 748
+      },
+      "height": 1024,
+      "overflow": false,
+      "start": {
+        "left": 9,
+        "right": 384,
+        "visible": true
+      },
+      "width": 768
+    },
+    {
+      "canvas": {
+        "height": 748,
+        "width": 748
+      },
+      "height": 768,
+      "overflow": false,
+      "start": {
+        "left": 767,
+        "right": 891,
+        "visible": true
+      },
+      "width": 1024
+    },
+    {
+      "canvas": {
+        "height": 880,
+        "width": 880
+      },
+      "height": 900,
+      "overflow": false,
+      "start": {
+        "left": 899,
+        "right": 1165,
+        "visible": true
+      },
+      "width": 1440
+    }
+  ],
+  "limitations": "Browser emulation; physical touch, battery, audio device and listening acceptance not established."
+}

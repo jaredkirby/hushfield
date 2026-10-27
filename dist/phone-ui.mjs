@@ -169,7 +169,7 @@ export function setupPhoneUI({showPage,currentPage}){
   for(const control of document.querySelectorAll('#orbitControls .control'))control.dataset.panel='motion';
   const panels=panelNav(settings,[['motion','Orbit'],['triggers','Triggers'],['balls','Balls']],key=>{document.querySelector('.orbit-layout').dataset.controlPanel=key;},{className:'orbit-panel-tabs',ariaLabel:'ORBIT control pages'});
   const scatter=document.createElement('button');scatter.type='button';scatter.className='phone-scatter';scatter.textContent='↻ Scatter';scatter.addEventListener('click',()=>document.getElementById('resetBalls').click());document.querySelector('.orbit-spin-tools').append(scatter);
-  for(const pageId of ['grainPage','fxPage']){const page=document.getElementById(pageId),groups=[...page.querySelectorAll('.control-group')];panelNav(page,groups.map((group,i)=>[String(i),group.querySelector('h3').textContent]),key=>groups.forEach((group,i)=>group.classList.toggle('phone-selected',String(i)===key)));}
+  for(const pageId of ['grainPage']){const page=document.getElementById(pageId),groups=[...page.querySelectorAll('.control-group')];panelNav(page,groups.map((group,i)=>[String(i),group.querySelector('h3').textContent]),key=>groups.forEach((group,i)=>group.classList.toggle('phone-selected',String(i)===key)));}
   const about=document.createElement('button');about.type='button';about.className='phone-about';about.textContent='ⓘ';about.setAttribute('aria-label','About Hushfield');about.addEventListener('click',()=>document.getElementById('aboutBtn').click());document.querySelector('.head-actions').append(about);
   // Keep one source editor in every layout; moving it between parents on resize
   // can disrupt an active select, recording or keyboard focus on iPad.

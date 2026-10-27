@@ -21,6 +21,7 @@ node --test tests/piece-session.test.mjs tests/piece-presets.test.mjs
 node --test tests/session-recovery.test.mjs tests/project-roundtrip.test.mjs
 node --test tests/tape-impact.test.mjs tests/tape-dsp.test.mjs
 node --test tests/re201-dsp.test.mjs tests/re201-settings.test.mjs tests/tape-presets.test.mjs
+node --test tests/vintage-space-project.test.mjs tests/vintage-reverb.test.mjs
 node --test tests/tape-physics.test.mjs tests/tape-initial-state.test.mjs tests/tape-model-telemetry.test.mjs tests/tape-telemetry.test.mjs
 ```
 
@@ -41,6 +42,7 @@ Serve `dist/` from localhost or HTTPS, then open the route below on that server.
 
 | Route | Start | What it checks |
 | --- | --- | --- |
+| `/qa-space-reverb.html` | Run audio verification / Render Stillwater comparisons | Exact Original room compatibility against its frozen fixture, vintage model output, routing, controls, tail/headroom and model transitions in offline WebAudio. Renders five 12-second, 48 kHz listening clips with optional Space Echo; `?saved` loads retained files. |
 | `/qa-depth.html` | Run depth checks | Independent part room sends, filtered ambience, shared tone and modern return width using real offline WebAudio. |
 | `/qa-musicality.html` | Render comparison / short check | Reproducible full-graph listening examples; requires `npm run listening:prepare` and the dedicated `npm run listening:serve` server. |
 | `/qa-piece.html` | Run offline checks | Foundation-fed live Texture, shared tone/width, direct processor harmony and finite stereo output. |
@@ -77,6 +79,32 @@ To retain the WAVs and receipt, run `npm run listening:serve` and render on that
 
 Listen for distinct head rhythms, darker repeat tails, a pitch bend that settles after changing time and a spring response whose timing stays independent of tape speed. The [research note](research/re201-space-echo.md) identifies which behaviors come from manufacturer sources and which parameters are our approximations. Passing DSP checks does not establish a hardware match or a listening preference.
 
+## Vintage Space checks and listening
+
+The build in `ops/build.mjs` bundles `qa-space-reverb.mjs` into `dist/build/qa-space-reverb.js`. Rebuild before checking changed sources, then open `/qa-space-reverb.html` on localhost or HTTPS. Run audio verification exercises the real offline WebAudio graph, including exact Original room output against the immutable `tests/fixtures/space-original-v1/` source, vintage response differences, control behavior, wet routing, finite output, headroom and repeated model changes. Do not refresh that fixture alongside the current graph. Node tests and this browser harness cover different execution paths; neither establishes listening preference or physical-device performance.
+
+For a reproducible listening set, run these commands from the repository root:
+
+```sh
+npm run build
+mkdir -p .scratch/listening/artifacts
+ln -s ../.scratch/listening/artifacts dist/space-listening
+npm run listening:serve
+```
+
+Create the symlink once. If `dist/space-listening` already exists, check that it points to `../.scratch/listening/artifacts` rather than replacing it blindly. This comparison needs no `listening:prepare` run. The listening server binds to loopback on port 4886 by default and saves WAVs under `.scratch/listening/artifacts/`.
+
+1. Open `http://127.0.0.1:4886/qa-space-reverb.html`.
+2. Leave Tape unchecked and choose Render Stillwater comparisons. Wait for five clips and a server-save count of five.
+3. Check Tape and render again. Wait for another five successful server saves.
+4. Open `http://127.0.0.1:4886/qa-space-reverb.html?saved` to play or download both retained sets without rendering or saving again.
+
+Each set contains dry, Original room, Plate, Spring and Chamber. Every stereo clip runs for 12 seconds at 48 kHz, with six seconds of seeded Stillwater Chorus synth excitation followed by six seconds of tail. Dry bypasses Space reverb; checking Tape still applies Space Echo to that reference. The reverb examples use Amount 65%, Foundation send 100%, Decay 4 seconds, Pre-delay 25 ms, Tone 65% and Reverb width 100% to expose differences. Original room keeps its fixed response. The Tape set uses model 2 with the usual Tape settings and Hiss at zero. Gain is common, without individual normalization.
+
+Files are named `vintage-space-dry.wav`, `vintage-space-original.wav`, `vintage-space-plate.wav`, `vintage-space-spring.wav` and `vintage-space-chamber.wav`; the Tape versions add `-tape` before `.wav`. New renders overwrite files with the same names. Preserve a set elsewhere before experimenting if it is evidence you need to keep. Static hosting supports rendering and browser downloads, but server-save failures mean the retained `?saved` files were not updated. Its playback paths require the `dist/space-listening` symlink described above.
+
+Compare Plate density, Spring chirps and Chamber early reflections, then listen for muddy accumulation, ringing, level jumps and tail behavior with Tape off and on. Check the actual editor's model menu, direct sliders, exact entry, Undo/Redo, export/load and explicit recovery into a paused session. Original room must disable the new controls and retain its existing response. Tone filters new excitation, so existing tails decay naturally after an edit. Reverb width acts on the wet return independently of overall Width. The [research note](research/vintage-space.md) distinguishes source ideas from the implementation's approximations. This is a private candidate pending human audition.
+
 ## Evidence
 
 `tests/*-results.json` files are recorded receipts, not live tests automatically executed by `npm test`. Preserve their implementation/hash/date context when citing them. Do not present a historical receipt as a new run.
@@ -96,7 +124,7 @@ npm run listening:serve
 
 Preparation needs npm dependencies and a Git checkout containing the original baseline commit; see [server prerequisites](../ops/README.md#listening-development-server). The dedicated server is loopback-only and stores WAVs/receipts under ignored `.scratch/listening/artifacts/`. Each run replaces the selected preset's receipt, including short checks. Use another checkout for fresh experiments when preserving a long listening set. Its fixture pins the original commit, generated module hashes and Grain randomness, and instruments deterministic control delivery. The main production worklets keep asynchronous direct ports and are checked separately. The full comparison includes four 75-second examples and a 180-second full arc; repeat rendering must retain exact control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Both WAV hashes are recorded; native WebAudio convolution can differ in its last floating-point bits. Playback attenuation equalizes stereo RMS without boosting/clipping, which is not a perceptual LUFS comparison. See [native authoring and listening details](SURGE-TEXTURE.md).
 
-New save files use schema 6. Instrument compatibility checks preserve original synthesis for versions 1–5, retain the version-5 expressive mode, and round-trip all six instrument choices. Compatibility tests load versions 1–4 through decode, retain classic sound/depth modes, and preserve those modes after re-export. The [integration browser receipt](../tests/ui-music-integration-results.json) records explicit paused recovery of Color, Foundation room send, Wave smoothing, master volume and native material, with settings history cleared. Classic Foundation checks render frozen pre-change sources and the current classic engine in the same runtime, requiring byte-identical Float32 PCM at 8, 44.1 and 48 kHz. The [fixture README](../tests/fixtures/foundation-classic-v1/README.md) records source provenance; never update those reference sources alongside the current engine. A single Node-22 PCM hash is not a portable Node-24 oracle because JavaScript math implementations can differ. Neutral Motion energy/PCM checks protect its classic behavior. Physical-device performance and human listening preference remain separate acceptance checks.
+New save files use schema 7. Vintage Space migration checks retain Original room for versions 1–6 regardless of stray newer fields, preserve its routing after re-export, and round-trip all four reverb choices and controls through project decoding and explicit recovery. Instrument compatibility checks preserve original synthesis for versions 1–5, retain the version-5 expressive mode, and round-trip all six instrument choices. Compatibility tests load versions 1–4 through decode, retain classic sound/depth modes, and preserve those modes after re-export. The [integration browser receipt](../tests/ui-music-integration-results.json) records explicit paused recovery of Color, Foundation room send, Wave smoothing, master volume and native material, with settings history cleared. Classic Foundation checks render frozen pre-change sources and the current classic engine in the same runtime, requiring byte-identical Float32 PCM at 8, 44.1 and 48 kHz. The [fixture README](../tests/fixtures/foundation-classic-v1/README.md) records source provenance; never update those reference sources alongside the current engine. A single Node-22 PCM hash is not a portable Node-24 oracle because JavaScript math implementations can differ. Neutral Motion energy/PCM checks protect its classic behavior. Physical-device performance and human listening preference remain separate acceptance checks.
 
 
 ## Foundation instruments

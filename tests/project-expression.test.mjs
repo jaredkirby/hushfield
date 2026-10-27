@@ -21,9 +21,9 @@ test('a new exported Piece retains expression, depth and editable Motion brightn
   const ambient = restoreAmbient({ ...AMBIENT_DEFAULTS, compositionVersion: 2, color: 65, drift: 25, bloom: 75 });
   const params = { spaceVersion: 2, foundationRoom: 10, textureRoom: 70, motionRoom: 35, roomLow: 240, roomHigh: 6800 };
   const text = serializeProject({ buffer, name: 'Bloom take', params, controls: {}, ambient, orbitSound });
-  assert.equal(JSON.parse(text).version, 6, 'The new format makes the compatibility boundary explicit');
+  assert.equal(JSON.parse(text).version, 7, 'The new format makes the compatibility boundary explicit');
   const restored = await decode(text);
-  assert.deepEqual(restored.params, { ...params, tapeModel: 1, echoMode: 4, springMix: 12 });
+  assert.deepEqual(restored.params, { ...params, reverbModel: 'original', reverbDecay: 3, reverbPredelay: 20, reverbTone: 50, reverbWidth: 75, tapeModel: 1, echoMode: 4, springMix: 12 });
   assert.equal(restored.ambient.compositionVersion, 2);
   assert.equal(restored.ambient.color, 65);
   assert.equal(restored.ambient.drift, 25);

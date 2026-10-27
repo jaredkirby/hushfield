@@ -9,3 +9,6 @@ node_modules/
 *.hushfield.json
 *-capture.wav
 .scratch/
+
+# Local retained Space listening clips
+/dist/space-listening

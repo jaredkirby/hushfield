@@ -25,7 +25,7 @@ AudioWorklet and microphone access need localhost or HTTPS. Opening `index.html`
 2. Move the four voice dots. Up and down changes pitch within the scale; left and right changes stereo position.
 3. Open Texture and choose Add texture. Long grains make a smooth cloud; short grains make fragments of the recent Foundation audio.
 4. Open Motion and choose Add motion. Orbit's rotating shapes and bouncing balls add notes that follow Foundation's chord.
-5. Open Space to change the filter and room. Switch Tape on for coloration and darker repeats.
+5. Open Space to choose Original room, Plate, Spring or Chamber. Tape starts On for coloration and darker repeats.
 
 Drag sliders, tap underlined values for exact entry, or choose categories from their menus. The shared minus and plus buttons adjust the selected control. Hold either button to repeat. Undo and Redo restore settings, with each drag counted as one edit.
 
@@ -36,7 +36,7 @@ The Foundation, Texture and Motion blend controls set what you hear. Solo isolat
 | Foundation | Compose sets the scene, key, scale and evolution. Sound selects an Instrument with Color, Drift and Bloom; Voices balances chords, melody and air. The dots set pitch and pan. Foundation also supplies live Texture audio and Motion harmony. |
 | Texture | Drag the grain position and length handles. Adjust density, pitch, scatter and scanning, even at zero blend. Freeze a phrase or use your own material. |
 | Motion | Turn the orientation handle and set spin speed in either direction. Select individual triggers or a whole bank, then edit their amplitude envelopes and independent brightness controls. |
-| Space | Drag horizontally for filter cutoff and vertically for resonance. Set stereo width, each part's room send, and the room's filters. |
+| Space | Reverb selects Original room, Plate, Spring or Chamber with shared Amount. The vintage models add Decay, Pre-delay, Tone and Reverb width. Depth sets part sends and return filters; Filter sets cutoff, resonance and overall stereo width. |
 | Tape | Choose Classic or the RE-201-inspired Space Echo. Echo sets head mode, timing, feedback and spring level; Character sets coloration. Drag the echo grid for time and feedback. Off bypasses the whole effect. |
 
 Your sound / trim opens Texture's source editor, with draggable In and Out boundaries and readouts in seconds. Visual opens a scope, spectrum or vectorscope from any editor. Its settings change only the picture. Back to sound returns to the previous editor.
@@ -51,6 +51,8 @@ Fresh sessions start paused with Chorus synth, Stillwater and Space Echo with Ta
 
 Space Echo starts with Gentle echo settings. Try Head mode 11 for three rhythmic echoes and a parallel spring, or mode 12 for spring alone. Head 3 time sets the longest delay; the other heads play at one third and two thirds of that time. Moving it bends the recorded echoes' pitch before they settle. This is a researched approximation with a synthetic spring, not a measured hardware clone. [Research and design limits](docs/research/re201-space-echo.md) describe the sources.
 
+Plate is the default for fresh sessions and Whole piece presets. Saved Pieces retain their reverb choice, and older files retain Original room. Plate adds a dense tail, Spring adds dispersive echoes and Chamber adds early reflections. Space's Spring is independent of Tape's spring. The [playing guide](docs/PLAYING.md#shared-finishing), [model research](docs/research/vintage-space.md) and [listening comparison](dist/qa-space-reverb.html) describe the controls and limits.
+
 ## Phone, iPad and desktop
 
 The visual stays square. Controls sit below it in portrait and beside it in landscape, including iPad Split View. Narrow or short control areas use fewer columns and scroll internally. Rotation and resizing preserve playback and musical edits.
@@ -63,7 +65,7 @@ The layout accounts for browser toolbars, safe areas and pinch zoom. [Verificati
 
 Save project downloads a `.hushfield.json` file containing Texture material, blend settings, source and harmony links, sound patches, Foundation settings and visual settings. Solo is temporary and is not saved.
 
-New files use schema version 6 and store the selected Foundation instrument. Versions 1 through 5 retain the original Hushfield instrument; version 5 also retains its saved expressive/classic mode. Versions 1 through 4 load with their classic Foundation synthesis and shared-room routing, and keep those modes after re-export. A complete preset selects the current sound modes. Editing Foundation Sound switches its synthesis to the evolving voice. Editing any Space Depth control switches the whole Piece to independent room sends. These two changes are independent. The [saved-sound decision](docs/adr/0001-preserve-saved-sound-models.md) explains why.
+New files use schema version 7 and store the selected Foundation instrument and Space reverb model. Versions 1 through 6 retain Original room, including after re-export. Versions 1 through 5 retain the original Hushfield instrument; version 5 also retains its saved expressive/classic mode. Versions 1 through 4 load with their classic Foundation synthesis and shared-room routing, and keep those modes after re-export. A complete preset selects the current sound modes. Editing Foundation Sound switches its synthesis to the evolving voice. Editing any Space Depth control or explicitly selecting a reverb model switches the whole Piece to independent room sends. These two changes are independent. The [saved-sound decision](docs/adr/0001-preserve-saved-sound-models.md) explains why.
 
 Saved Pieces without an explicit Tape model retain Classic, including older schema-5 files. Worn memory also keeps Classic. Selecting Space Echo is a separate choice, saved with its head mode and spring level.
 
