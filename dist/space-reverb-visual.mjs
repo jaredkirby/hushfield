@@ -1,7 +1,7 @@
 // An illustrative sound field inside each reverb material. Only measured wet
 // activity launches wave fronts; these drawings are not a physical simulation.
 const TAU = Math.PI * 2;
-const CHAMBER_REBOUNDS_ONLY = true;
+const CHAMBER_TUBE_ONLY = true;
 const clamp = (x, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, Number(x) || 0));
 const states = new WeakMap();
 const grey = value => `rgb(${value},${value},${value})`;
@@ -170,9 +170,9 @@ function spring(c,s,time,width,tone,decay) {
 }
 function chamber(c,s,time,width,tone,decay,original) {
   const project = (x,y,z) => { const p=1/(1+z*2.8); return [500+x*(.65+width*.35)*p,445+y*p]; };
-  const reboundsOnly=!original && CHAMBER_REBOUNDS_ONLY;
+  const tubeOnly=!original && CHAMBER_TUBE_ONLY;
   // Visible boundaries make the depth legible even before playback.
-  if(!reboundsOnly) {
+  if(!tubeOnly) {
   for(let i=0;i<9;i++) {
     const z=i*.19, corners=[[-455,-350],[455,-350],[455,390],[-455,390],[-455,-350]].map(([x,y])=>project(x,y,z));
     line(c,corners,Math.max(18,65-i*6),.9);
@@ -192,11 +192,11 @@ function chamber(c,s,time,width,tone,decay,original) {
   for(const p of s.pulses) {
     const age=time-p.at, z=age*.48, strength=p.strength*Math.exp(-age/(.4+decay*.3));
     for(let echo=0;echo<(original?2:4);echo++) {
-      const points=[], depth=z+echo*.13, radius=160+age*230;
+      const points=[], outward=[], depth=z+echo*.13, radius=160+age*230;
       for(let i=0;i<=128;i++) {
         const a=i/128*TAU, r=radius*(1+.025*tone*Math.sin(a*8+p.seed));
         const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
-        if(reboundsOnly) {
+        if(tubeOnly) {
           // Radial velocity in the existing projection selects returning
           // segments. Echo depth alone does not identify a rebound.
           const dr=230*(1+.025*tone*Math.sin(a*8+p.seed));
@@ -205,17 +205,32 @@ function chamber(c,s,time,width,tone,decay,original) {
           const retreat=2.8*.48/(1+depth*2.8)-s.chamberGrowthRate/(1+s.chamberAge*.1), aspect=.65+width*.35;
           if(x*aspect*aspect*(dx-x*retreat)+y*(dy-y*retreat)>=0) {
             if(points.length>1) line(c,points,strength*(210-echo*38),1.7-echo*.2);
+            if(outward.length>1) line(c,outward,strength*(210-echo*38),1.7-echo*.2);
             points.length=0;
+            outward.length=0;
             continue;
           }
         }
-        points.push(project(x,y,depth));
+        const point=project(x,y,depth);
+        points.push(point);
+        if(tubeOnly) {
+          const dx=point[0]-500, dy=point[1]-445, rho=Math.hypot(dx,dy);
+          // Both edges meet at radius 160, then spread apart as a band.
+          if(rho>1e-6 && rho<160) {
+            const expansion=(320-rho)/rho;
+            outward.push([500+dx*expansion,445+dy*expansion]);
+          } else {
+            if(outward.length>1) line(c,outward,strength*(210-echo*38),1.7-echo*.2);
+            outward.length=0;
+          }
+        }
       }
       line(c,points,strength*(210-echo*38),1.7-echo*.2);
+      if(outward.length>1) line(c,outward,strength*(210-echo*38),1.7-echo*.2);
     }
   }
   if(!original) c.restore();
-  if(!reboundsOnly) glow(c,500,445,35+s.energy*55,35+s.energy*160);
+  if(!tubeOnly) glow(c,500,445,35+s.energy*55,35+s.energy*160);
 }
 export function drawSpaceReverb({c,w,h},settings={}, {time=0,level=0,reducedMotion=false}={}) {
   c.clearRect(0,0,w,h); if(w<20||h<90)return;
@@ -224,7 +239,7 @@ export function drawSpaceReverb({c,w,h},settings={}, {time=0,level=0,reducedMoti
   const t=Number.isFinite(time)?time:0,s=field(c,model,t,clamp(level),decay,reducedMotion);
   c.save(); const scale=Math.min(w/1000,(h-70)/930);
   c.translate((w-1000*scale)/2,35+(h-70-930*scale)/2);c.scale(scale,scale);c.lineJoin='round';c.lineCap='round';
-  if(model!=='plate' && !(model==='chamber' && CHAMBER_REBOUNDS_ONLY))glow(c,500,475,470,12+s.energy*22);
+  if(model!=='plate' && !(model==='chamber' && CHAMBER_TUBE_ONLY))glow(c,500,475,470,12+s.energy*22);
   if(model==='plate')plate(c,s,t,width,tone,decay);
   else if(model==='spring')spring(c,s,t,width,tone,decay);
   else chamber(c,s,t,width,tone,decay,model!=='chamber');
