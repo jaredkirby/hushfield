@@ -69,7 +69,7 @@
     "dist/sound-envelope.mjs": "4dfd4558f5175ffb5ec520783007ea4b41c926d09628e336efa60c2148d92e12",
     "dist/sound-editor.mjs": "7cdeeb515bb3bd11aad4c345b74aa9db569367c38a528f41a598d1adc5a3620f",
     "dist/orbit-physics.mjs": "100f753121b627abb52d7aed6f2ed664966480924ac3cfa8376360d37c896dd9",
-    "dist/app.js": "023aacc097bce4e9943767f8a49d8d9137312e1942f232c8ce94b5482ae7579e",
+    "dist/app.js": "7b2d1de4e35f84e24e4fc56265d0f2450c4492a56a7c1869efafc991b798a2db",
     "tests/fixtures/space-original-v1/piece-space.mjs": "d7aa499be8eb286731285c38a27ab86ee36d44b837a967830cd0b5b2c74edc4f",
     "dist/qa-space-reverb.mjs": "216d04137e15aa6876b1aefd2852a61e685fe6a8ce0ef99cbd9c3b1f8a5ace77",
     "dist/ambient-dsp.mjs": "0939ee7c3ab9a2591fbf88dd0e2d0ac791330b775d3a64d3e36ab35701914eee",

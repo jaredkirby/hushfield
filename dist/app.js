@@ -83,13 +83,10 @@ let ambientState = freshPiece.ambient, ambientUI, ambientPoints, ambientPointsDi
 let audioGeneration = 0, restartPending = false, clockSnapshot;
 let activeStartToken, auditionRevision = 0;
 const playbackIntent = createPlaybackIntent();
-const playbackDiagnostics = createPlaybackDiagnostics({ readState: () => {
-  let audioSession;
-  try { audioSession = navigator.audioSession; } catch {}
-  return { ...playbackIntent.status(), visibility: document.visibilityState, contextState: ctx?.state || 'off',
-    audioTime: ctx?.currentTime, audioSessionState: audioSession?.state,
-    audioSessionType: audioSession?.type };
-} });
+const playbackDiagnostics = createPlaybackDiagnostics({ readState: () => ({
+  ...playbackIntent.status(), visibility: document.visibilityState,
+  contextState: ctx?.state || 'off', audioTime: ctx?.currentTime
+}) });
 const resetTransition = createResetTransition({
   getAudio: () => ({ context: ctx, gain: master?.gain, playing: running }),
   getVolume: () => +$('volume').value
@@ -884,7 +881,6 @@ function updateTransport() {
   $("transportStatus").textContent = solo ? "SOLO · " + solo.toUpperCase() : running ? "PLAYING THE PIECE" : requested ? "PLAYBACK INTERRUPTED · STOP TO CANCEL" : "READY TO PLAY THE PIECE";
   refreshPieceUI();
   document.body.classList.toggle("playing", running);
-  try { if (navigator.mediaSession) navigator.mediaSession.playbackState = running ? 'playing' : 'paused'; } catch {}
 }
 function updateAudioState(message) {
   const state = ctx?.state || "off", active = state === "running";
@@ -1954,26 +1950,7 @@ function setupEditorResets() {
     };
   }
 }
-function setupPlaybackSession() {
-  try {
-    const session = navigator.mediaSession;
-    if (session) {
-      for (const action of ['play', 'pause', 'stop']) {
-        try {
-          session.setActionHandler(action, () => {
-            playbackDiagnostics.record('media-action', action);
-            if (action === 'play') void startPlayback();
-            else stopPlayback('system-' + action);
-          });
-        } catch {}
-      }
-      try { if (window.MediaMetadata) session.metadata = new MediaMetadata({ title: 'Hushfield', artist: 'An evolving ambient Piece' }); } catch {}
-    }
-    navigator.audioSession?.addEventListener('statechange', () => {
-      playbackDiagnostics.record('audio-session-state');
-      updateAudioState();
-    });
-  } catch {}
+function setupPlaybackCheck() {
   document.addEventListener('visibilitychange', () => playbackDiagnostics.record('visibility'));
   if (!new URLSearchParams(location.search).has('playbackCheck')) return;
   const panel = document.createElement('details'); panel.className = 'playback-check';
@@ -2046,7 +2023,7 @@ const tapePanels = panelNav($("tapePage"), [["echo", "Echo"], ["character", "Cha
 setupSquareViewport();
 setupControlHistory();
 setupEditorResets();
-setupPlaybackSession();
+setupPlaybackCheck();
 tapeInteraction = setupTapeLoopInteraction({ canvas: $('tapeCanvas'), getParams: () => params, setParams: editParameters,
   isActive: () => activeTab === 'tape', onBegin: detail => controlHistory.begin(detail.label),
   onEnd: detail => controlHistory.end({ cancelled: detail.cancelled }) });

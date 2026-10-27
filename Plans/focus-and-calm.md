@@ -21,6 +21,10 @@ The build and all 252 Node tests passed. Browser checks covered all five editors
 
 [Browser receipt](../tests/focus-browser-results.json) records the build/source hashes, cases and limitations. [Tape screenshot](../docs/images/focus-tape-candidate.jpg) shows the candidate. Live UI checks used master volume zero and do not establish listening preference.
 
+On 2026-10-27, the user reported an apparent Sony headphone noise-cancellation/transparency switch in Helium on a MacBook Pro. They reported the switch gone in a comparison build that removed the new Media Session integration and early Audio Session access while preserving the sound engine and existing audio activation. The exact headphone model and OS/browser versions were not recorded; the combined comparison does not identify the individual cause.
+
+The candidate therefore omits app-provided headset/lock-screen transport registration, Media Session metadata/playback-state updates and early Audio Session listeners or diagnostic reads. The local playback log records context and intent fields only. The earlier automated and browser results above belong to their recorded build and do not establish listening or device acceptance of this correction.
+
 ## Next actions and open acceptance
 
-Review the playable Tape candidate for visual enjoyment, gesture mapping and audible changes. Extend editor-specific interactions after that feedback. A broader calm-range/default listening pass is still pending. Follow the [device checklist](../docs/PLAYBACK-DEVICE-CHECK.md) for a 60-minute session, screen lock, calls and competing media on real phones and tablets. Call-versus-media interruption policy remains unverified where the browser supplies indistinguishable events.
+Review the playable Tape candidate for visual enjoyment, gesture mapping and audible changes. Extend editor-specific interactions after that feedback. A broader calm-range/default listening pass is still pending. Follow the [device checklist](../docs/PLAYBACK-DEVICE-CHECK.md) for a 60-minute session, screen lock, calls and competing media on real phones and tablets. The MacBook Pro/Sony/Helium comparison is a narrow human result; long-session reliability and call-versus-media behavior remain unverified. Reintroducing platform transport controls requires a separate headphone/device check.

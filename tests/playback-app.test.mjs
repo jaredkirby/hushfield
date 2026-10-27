@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 import { createPlaybackIntent } from '../dist/playback-intent.mjs';
 import { createSampleSelection } from '../dist/sample-selection.mjs';
+import { createPlaybackDiagnostics } from '../dist/playback-diagnostics.mjs';
 
 const app = await readFile(new URL('../dist/app.js', import.meta.url), 'utf8');
 function region(start, end) {
@@ -23,6 +24,23 @@ const deferred = () => {
   return { promise, resolve, reject };
 };
 const settle = () => new Promise(resolve => setImmediate(resolve));
+
+test('app diagnostics and page setup do not acquire platform audio sessions', () => {
+  let sessionReads = 0;
+  const navigator = {};
+  for (const key of ['audioSession', 'mediaSession']) Object.defineProperty(navigator, key, { get() {
+    sessionReads++;
+    throw Error('Page setup must not acquire a platform session');
+  } });
+  const sandbox = { navigator, createPlaybackDiagnostics, playbackIntent: createPlaybackIntent(),
+    ctx: undefined, location: { search: '' }, URLSearchParams,
+    document: { visibilityState: 'visible', addEventListener() {} } };
+  vm.createContext(sandbox);
+  vm.runInContext(region('const playbackDiagnostics =', 'const resetTransition =') +
+    region('function setupPlaybackCheck()', 'function setupControlHistory()') +
+    '\nsetupPlaybackCheck(); playbackDiagnostics.record("start-request");', sandbox);
+  assert.equal(sessionReads, 0, 'Diagnostic snapshots must not touch either platform session API');
+});
 
 // Run the production functions with browser activation, DOM and decode boundaries.
 // These fakes record output commands; they contain no playback-policy decisions.
@@ -91,6 +109,21 @@ test('actual app Stop stays available during Start and defeats late activation',
   assert.equal(app.running, false);
   assert.equal(f.gains.includes(true), false);
   assert.equal(f.element('audioStatus').textContent, 'AUDIO READY');
+});
+
+test('app transport updates do not acquire system media controls', async () => {
+  const f = fixture(), app = f.sandbox;
+  let sessionReads = 0;
+  Object.defineProperty(app.navigator, 'mediaSession', { get() {
+    sessionReads++;
+    throw Error('Transport must not acquire a media session');
+  } });
+  const pending = app.startPlayback();
+  f.finishActivation(); await pending;
+  assert.equal(app.running, true);
+  app.stopPlayback();
+  assert.equal(app.running, false);
+  assert.equal(sessionReads, 0, 'Start, context updates and Stop must leave system media controls alone');
 });
 
 test('app context restoration follows intent and cannot override explicit Stop', async () => {

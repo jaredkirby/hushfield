@@ -11,7 +11,10 @@ import {FOUNDATION_WAVE_DEFAULTS} from '../dist/foundation-wave-settings.mjs';
 // Exercise the production functions together, leaving unrelated audio startup
 // and the browser's native layout outside this focused DOM harness.
 const app = readFileSync(new URL('../dist/app.js', import.meta.url), 'utf8');
-const resetFunctions = app.slice(app.indexOf('function captureControlSettings()'), app.indexOf('function setupPlaybackSession()'));
+const resetStart = app.indexOf('function captureControlSettings()');
+const resetEnd = app.indexOf('function setupPlaybackCheck()', resetStart);
+assert.ok(resetStart >= 0 && resetEnd > resetStart, 'Production reset function boundaries must exist');
+const resetFunctions = app.slice(resetStart, resetEnd);
 const copy = value => JSON.parse(JSON.stringify(value));
 const tick = () => new Promise(resolve => setImmediate(resolve));
 
