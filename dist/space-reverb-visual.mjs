@@ -16,12 +16,12 @@ function glow(c, x, y, radius, strength) {
 function field(c, model, time, level, decay, reducedMotion) {
   let s = states.get(c);
   if (!s || s.model !== model || time < s.time || time - s.time > .5) {
-    s = { model, time, lastPulse: -Infinity, energy: 0, pulses: [], index: 0 };
+    s = { model, time, lastPulse: -Infinity, energy: 0, pulses: [], index: 0, chamberAge: 0 };
     states.set(c, s);
   }
   const dt = clamp(time - s.time, 0, .1); s.time = time;
   s.energy += (level - s.energy) * (1 - Math.exp(-dt / (level > s.energy ? .08 : .22)));
-  if (reducedMotion || time === 0) { s.pulses.length = 0; s.energy = 0; }
+  if (reducedMotion || time === 0) { s.pulses.length = 0; s.energy = 0; s.chamberAge = 0; }
   else {
     if (level > .002 && time - s.lastPulse > .27) {
       s.pulses.push({ at: time, strength: Math.min(1, Math.sqrt(level) * 3.2), seed: s.index++ });
@@ -31,6 +31,10 @@ function field(c, model, time, level, decay, reducedMotion) {
     // persistence while the audible tail is present, not an invented tail.
     if (level <= .002) for (const pulse of s.pulses) pulse.strength *= Math.exp(-dt * 12);
     s.pulses = s.pulses.filter(p => time - p.at < Math.min(5, .8 + decay * .55) && p.strength > .005).slice(-20);
+    if (model === 'chamber') {
+      if (level > .002) s.chamberAge = Math.min(6, s.chamberAge + dt);
+      else if (!s.pulses.length) s.chamberAge = 0;
+    }
   }
   return s;
 }
@@ -172,18 +176,24 @@ function chamber(c,s,time,width,tone,decay,original) {
     line(c,[project(x-6,-300,.9),project(x-6,360,.9)],145,1);
   }
   // Repeated arcs travel away from the listener and rebound on the walls.
+  if(!original) {
+    // Widen the whole tube together while measured wet activity continues.
+    const size=1+s.chamberAge*.1;
+    c.save(); c.translate(500,445); c.scale(size,size); c.translate(-500,-445);
+  }
   for(const p of s.pulses) {
     const age=time-p.at, z=age*.48, strength=p.strength*Math.exp(-age/(.4+decay*.3));
-    for(let echo=0;echo<(original?2:8);echo++) {
-      const points=[], depth=z+echo*.13, radius=160+age*230, growth=original?1:1+age*1.25;
+    for(let echo=0;echo<(original?2:4);echo++) {
+      const points=[], depth=z+echo*.13, radius=160+age*230;
       for(let i=0;i<=128;i++) {
         const a=i/128*TAU, r=radius*(1+.025*tone*Math.sin(a*8+p.seed));
         const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
-        points.push(project(x*growth,y*growth,depth));
+        points.push(project(x,y,depth));
       }
-      line(c,points,strength*(210-echo*(original?38:20)),1.7-echo*(original?.2:.1));
+      line(c,points,strength*(210-echo*38),1.7-echo*.2);
     }
   }
+  if(!original) c.restore();
   glow(c,500,445,35+s.energy*55,35+s.energy*160);
 }
 export function drawSpaceReverb({c,w,h},settings={}, {time=0,level=0,reducedMotion=false}={}) {
