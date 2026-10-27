@@ -35,8 +35,8 @@ function field(c, model, time, level, decay, reducedMotion) {
     s.pulses = s.pulses.filter(p => time - p.at < Math.min(5, .8 + decay * .55) && p.strength > .005).slice(-20);
     if (model === 'chamber') {
       if (level > .002) {
-        s.chamberAge = Math.min(6, s.chamberAge + dt);
-        if (s.chamberAge < 6) s.chamberGrowthRate = .1;
+        s.chamberAge = Math.min(30, s.chamberAge + dt);
+        if (s.chamberAge < 30) s.chamberGrowthRate = .1;
       }
       else if (!s.pulses.length) s.chamberAge = 0;
     }
@@ -168,7 +168,7 @@ function spring(c,s,time,width,tone,decay) {
     }
   }
 }
-function chamber(c,s,time,width,tone,decay,original) {
+function chamber(c,s,time,width,tone,decay,original,viewport) {
   const project = (x,y,z) => { const p=1/(1+z*2.8); return [500+x*(.65+width*.35)*p,445+y*p]; };
   const reboundsOnly=!original && CHAMBER_REBOUNDS_ONLY;
   // Visible boundaries make the depth legible even before playback.
@@ -184,9 +184,25 @@ function chamber(c,s,time,width,tone,decay,original) {
   }
   }
   // Repeated arcs travel away from the listener and rebound on the walls.
+  let size=1+s.chamberAge*.1, growthRate=s.chamberGrowthRate;
   if(!original) {
+    // Fit the unchanged contours and their strokes before masking returns.
+    // The limiting point's velocity also supplies the fitted scale velocity.
+    for(const pulse of s.pulses) for(let echo=0;echo<4;echo++) for(let i=0;i<=128;i++) {
+      const age=time-pulse.at, a=i/128*TAU, modulation=1+.025*tone*Math.sin(a*8+pulse.seed);
+      const r=(160+age*230)*modulation, p=1/(1+(age*.48+echo*.13)*2.8), aspect=.65+width*.35;
+      const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
+      const dx=Math.cos(r*Math.cos(a)/455)*Math.cos(a)*230*modulation;
+      const dy=Math.cos(r*Math.sin(a)/365)*Math.sin(a)*230*modulation;
+      for(const [position,velocity,low,high] of [
+        [x*aspect*p,aspect*p*(dx-x*2.8*.48*p),500-viewport.left,viewport.right-500],
+        [y*p,p*(dy-y*2.8*.48*p),445-viewport.top,viewport.bottom-445]
+      ]) {
+        const extent=Math.abs(position)+(1.7-echo*.2)/2, margin=position<0?low:high, fit=margin/extent;
+        if(fit<size) { size=fit; growthRate=-fit*Math.sign(position)*velocity/extent; }
+      }
+    }
     // Widen the whole tube together while measured wet activity continues.
-    const size=1+s.chamberAge*.1;
     c.save(); c.translate(500,445); c.scale(size,size); c.translate(-500,-445);
   }
   for(const p of s.pulses) {
@@ -202,7 +218,7 @@ function chamber(c,s,time,width,tone,decay,original) {
           const dr=230*(1+.025*tone*Math.sin(a*8+p.seed));
           const dx=Math.cos(r*Math.cos(a)/455)*Math.cos(a)*dr;
           const dy=Math.cos(r*Math.sin(a)/365)*Math.sin(a)*dr;
-          const retreat=2.8*.48/(1+depth*2.8)-s.chamberGrowthRate/(1+s.chamberAge*.1), aspect=.65+width*.35;
+          const retreat=2.8*.48/(1+depth*2.8)-growthRate/size, aspect=.65+width*.35;
           if(x*aspect*aspect*(dx-x*retreat)+y*(dy-y*retreat)>=0) {
             if(points.length>1) line(c,points,strength*(210-echo*38),1.7-echo*.2);
             points.length=0;
@@ -227,6 +243,9 @@ export function drawSpaceReverb({c,w,h},settings={}, {time=0,level=0,reducedMoti
   if(model!=='plate' && !(model==='chamber' && CHAMBER_REBOUNDS_ONLY))glow(c,500,475,470,12+s.energy*22);
   if(model==='plate')plate(c,s,t,width,tone,decay);
   else if(model==='spring')spring(c,s,t,width,tone,decay);
-  else chamber(c,s,t,width,tone,decay,model!=='chamber');
+  else chamber(c,s,t,width,tone,decay,model!=='chamber',{
+    left:(2-(w-1000*scale)/2)/scale, right:(w-2-(w-1000*scale)/2)/scale,
+    top:(2-35-(h-70-930*scale)/2)/scale, bottom:(h-2-35-(h-70-930*scale)/2)/scale
+  });
   c.restore();
 }
