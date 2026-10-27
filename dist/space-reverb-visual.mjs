@@ -171,12 +171,11 @@ function chamber(c,s,time,width,tone,decay,original) {
     line(c,[project(x,-300,.9),project(x,360,.9)],80,6);
     line(c,[project(x-6,-300,.9),project(x-6,360,.9)],145,1);
   }
-  // Chamber keeps the folded contours moving down the hall to its opening.
-  const travelTime=Math.min(5,.8+decay*.55)*.85;
+  // Repeated arcs travel away from the listener and rebound on the walls.
   for(const p of s.pulses) {
     const age=time-p.at, z=age*.48, strength=p.strength*Math.exp(-age/(.4+decay*.3));
     for(let echo=0;echo<(original?2:4);echo++) {
-      const points=[], depth=original?z+echo*.13:(1.21+echo*.13)*Math.max(0,1-age/travelTime), radius=160+age*230;
+      const points=[], depth=z+echo*.13, radius=160+age*230;
       for(let i=0;i<=128;i++) {
         const a=i/128*TAU, r=radius*(1+.025*tone*Math.sin(a*8+p.seed));
         const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
