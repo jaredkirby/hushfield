@@ -104,8 +104,14 @@ function plate(c, s, time, width, tone, decay) {
   // The absorber stays matte and still. Its open grain contrasts with the
   // continuous, brushed metal below, including when playback is stopped.
   const absorber = outline(damperCenter);
+  const underside = outline(damperCenter + 10);
+  // Solid black side faces hide the metal through the absorber's thickness.
+  c.fillStyle = '#000';
+  for (let edge = 0; edge < 4; edge++) {
+    path([absorber[edge], absorber[edge + 1], underside[edge + 1], underside[edge]]);
+    c.fill();
+  }
   path(absorber); c.fillStyle = '#171717'; c.fill();
-  line(c, outline(damperCenter + 10), 48, 2);
   c.save(); path(absorber); c.clip();
   for (let row = 0; row < 29; row++) {
     for (let col = 0; col < 100; col++) {

@@ -122,5 +122,10 @@
       "standards": 0,
       "spec": 0
     }
+  },
+  "opaqueThicknessFollowup": {
+    "baseline": "bdf24bd",
+    "change": "Four opaque black side faces cover the lower plate through the damper thickness; removed gray underside outline.",
+    "verification": "Production build, syntax and whitespace checks passed. Closed position visually checked in the real browser during playback. No full-suite rerun for this drawing-only follow-up."
   }
 }
