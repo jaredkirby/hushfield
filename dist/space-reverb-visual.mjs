@@ -37,68 +37,87 @@ function field(c, model, time, level, decay, reducedMotion) {
 export function plateLayout(w, h, decay = 3) {
   const scale = Math.min(w / 1000, (h - 70) / 930);
   const unit = clamp((decay - .5) / 7.5), gap = 135 + unit * 305;
-  return { scale, x: (w - 1000 * scale) / 2, y: 35 + (h - 70 - 930 * scale) / 2, gap, unit };
+  return { scale, x: (w - 1000 * scale) / 2, y: 35 + (h - 70 - 930 * scale) / 2, gap, unit, plateCenter: 620, damperCenter: 620 - gap };
 }
 function plate(c, s, time, width, tone, decay) {
-  const gap=plateLayout(1000,1000,decay).gap;
-  const project=(u,v,center,z=0)=>[500+(u-.5)*755+(v-.5)*125,center+(v-.5)*155-(u-.5)*45-z];
-  const upper=465-gap/2,lower=465+gap/2;
-  // Visible packets bounce through the gap; separation stretches travel time.
-  const journey=.2+clamp((decay-.5)/7.5)*.55;
-  for(const p of s.pulses) {
-    const age=time-p.at,travel=age/journey,bounce=Math.floor(travel),f=travel-bounce;
-    const strength=p.strength*Math.exp(-age/(.4+decay*.3));
-    for(let trail=7;trail>=0;trail--) {
-      const past=Math.max(0,travel-trail*.045),b=Math.floor(past),q=past-b;
-      const y=upper+(b%2?1-q:q)*gap;
-      const x=500+Math.sin(p.seed*.9+b*.7)*145*(.3+width*.7);
-      const radius=9+trail*3+(1-strength)*11;
-      c.beginPath();c.ellipse(x,y,radius*(.8+width*.6),radius*.33,0,0,TAU);
-      c.strokeStyle=grey(strength*(220-trail*24));c.lineWidth=1.6;c.stroke();
+  const { plateCenter, damperCenter, unit } = plateLayout(1000, 1000, decay);
+  const project = (u, v, center, z = 0) => [500 + (u - .5) * 755 + (v - .5) * 125, center + (v - .5) * 155 - (u - .5) * 45 - z];
+  const outline = center => [[0,0],[1,0],[1,1],[0,1],[0,0]].map(([u,v]) => project(u,v,center));
+  const path = points => { c.beginPath(); points.forEach(([x,y],i) => i ? c.lineTo(x,y) : c.moveTo(x,y)); };
+
+  // The absorber stays matte and still. Its open grain contrasts with the
+  // continuous, brushed metal below, including when playback is stopped.
+  const absorber = outline(damperCenter);
+  path(absorber); c.fillStyle = '#171717'; c.fill();
+  line(c, outline(damperCenter + 10), 48, 2);
+  c.save(); path(absorber); c.clip();
+  for (let row = 0; row < 29; row++) {
+    for (let col = 0; col < 100; col++) {
+      const hash = ((col * 37 + row * 71 + col * row * 13) % 101) / 101;
+      const [x,y] = project((col + hash * .7) / 100, (row + hash * .6) / 29, damperCenter);
+      c.fillStyle = grey(27 + hash * 35);
+      c.fillRect(x, y, hash > .7 ? 1.6 : .85, .85);
     }
-    // A dim reflected path gives each packet a sense of depth in the gap.
-    const x=500+Math.sin(p.seed*.9+bounce*.7)*145*(.3+width*.7);
-    line(c,[[x,upper+5],[x,lower-5]],strength*14,.8);
   }
-  for(const [side,center] of [[0,upper],[1,lower]]) {
-    const impacts=[];
-    for(const p of s.pulses) {
-      const age=time-p.at;
-      for(let n=side;n<=Math.min(12,age/journey);n+=2) {
-        const since=age-n*journey;
-        if(since<1.5)impacts.push({radius:since*.8,strength:p.strength*Math.exp(-age/(.5+decay*.3))*Math.exp(-since*1.7),u:.5+Math.sin(p.seed*.9+n*.7)*.19});
-      }
+  // Shallow slots belong to the absorber, never a second vibrating grid.
+  for (let n = 1; n < 15; n++) line(c, [project(n/15,.17,damperCenter),project(n/15,.83,damperCenter)], 8, 2);
+  c.restore(); line(c, absorber, 95, 1.2);
+  for (let n = -1; n <= 1; n++) line(c, [[486,damperCenter+n*5],[514,damperCenter+n*5]], 145, 1.2);
+
+  // Bending fronts spread from one driver and reflect within the same sheet.
+  // Image sources illustrate boundary reflections without travel in the gap.
+  const waves = [];
+  const lifetime = .32 + unit * 1.9;
+  for (const p of s.pulses.slice(-8)) {
+    const age = time - p.at;
+    const strength = p.strength * Math.exp(-age / lifetime);
+    if (strength < .008) continue;
+    for (const [u,v,gain] of [[.24,.48,1],[-.24,.48,.42],[1.76,.48,.42],[.24,-.48,.32],[.24,1.52,.32]]) {
+      waves.push({u,v,radius:age * .74,strength:strength * gain});
     }
-    const height=(u,v)=>{
-      let z=0;
-      for(const wave of impacts) { const d=Math.hypot((u-wave.u)/(.6+width*.5),(v-.5)*.45)-wave.radius;z+=Math.exp(-d*d*180)*Math.sin(d*(42+tone*20))*wave.strength; }
-      return z*18*Math.sin(Math.PI*u)*Math.sin(Math.PI*v);
-    };
-    const corners=[[0,0],[1,0],[1,1],[0,1],[0,0]].map(([u,v])=>project(u,v,center));
-    c.beginPath();corners.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));
-    const metal=c.createLinearGradient(130,center-90,830,center+90);metal.addColorStop(0,'#090909');metal.addColorStop(.55,'#292929');metal.addColorStop(1,'#080808');c.fillStyle=metal;c.fill();
-    for(let row=0;row<=20;row++) {
-      const v=row/20,points=[];
-      for(let k=0;k<=64;k++){const u=k/64;points.push(project(u,v,center,height(u,v)));}
-      line(c,points,50+Math.sin(Math.PI*v)*38+s.energy*110,.9);
-    }
-    for(let col=0;col<=20;col++) {
-      const u=col/20,points=[];
-      for(let k=0;k<=24;k++){const v=k/24;points.push(project(u,v,center,height(u,v)));}
-      line(c,points,27+s.energy*60,.7);
-    }
-    c.save();c.beginPath();corners.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.clip();
-    for(const wave of impacts) {
-      const points=[];
-      for(let i=0;i<=100;i++){const a=i/100*TAU,u=wave.u+Math.cos(a)*wave.radius*(.6+width*.5),v=.5+Math.sin(a)*wave.radius/.45;points.push(project(u,v,center,height(clamp(u),clamp(v))));}
-      line(c,points,wave.strength*230,1.5);
-    }
-    c.restore();line(c,corners,170,1.8);
-    line(c,[project(0,1,center+5),project(1,1,center+5)],75,2);
-    // Quiet grip marks make the material itself discoverable as a control.
-    for(let n=-1;n<=1;n++)line(c,[[486,center+n*5],[514,center+n*5]],155,1.4);
   }
-  line(c,[[930,upper],[940,upper],[935,upper],[935,lower],[930,lower],[940,lower]],65,1);
+  const height = (u,v) => {
+    let z = 0;
+    for (const wave of waves) {
+      const d = Math.hypot((u-wave.u)/(.85+width*.2),(v-wave.v)*.56)-wave.radius;
+      z += Math.exp(-d*d*210) * Math.sin(d*(48+tone*22)) * wave.strength;
+    }
+    return z * 15 * Math.sin(Math.PI*u) * Math.sin(Math.PI*v);
+  };
+  const metal = outline(plateCenter);
+  path(metal);
+  const sheen = c.createLinearGradient(200,plateCenter-100,750,plateCenter+100);
+  sheen.addColorStop(0,'#111'); sheen.addColorStop(.35,'#353535');
+  sheen.addColorStop(.48,'#484848'); sheen.addColorStop(.7,'#242424'); sheen.addColorStop(1,'#101010');
+  c.fillStyle = sheen; c.fill();
+  c.save(); path(metal); c.clip();
+  for (let row = 0; row <= 38; row++) {
+    const v = row/38, points = [];
+    for (let k = 0; k <= 56; k++) { const u=k/56; points.push(project(u,v,plateCenter,height(u,v))); }
+    line(c, points, 58 + Math.sin(v*Math.PI)*31 + s.energy*65, row%3 === 0 ? .8 : .45);
+  }
+  for (let col = 0; col <= 22; col++) {
+    const u=col/22, points=[];
+    for (let k=0;k<=20;k++) { const v=k/20; points.push(project(u,v,plateCenter,height(u,v))); }
+    line(c,points,40+s.energy*40,.55);
+  }
+  for (const wave of waves) {
+    const points=[];
+    for (let i=0;i<=96;i++) {
+      const angle=i/96*TAU, u=wave.u+Math.cos(angle)*wave.radius*(.85+width*.2), v=wave.v+Math.sin(angle)*wave.radius/.56;
+      points.push(project(u,v,plateCenter));
+    }
+    line(c,points,wave.strength*200,1.1);
+  }
+  c.restore(); line(c,metal,170,1.4);
+  line(c,[project(0,1,plateCenter+4),project(1,1,plateCenter+4)],75,2);
+  // One moving-coil driver and two smaller contact pickups on the metal.
+  for (const [u,v,r] of [[.24,.48,8],[.68,.28,4],[.79,.76,4]]) {
+    const [x,y]=project(u,v,plateCenter);
+    c.beginPath(); c.ellipse(x,y,r,r*.48,-.05,0,TAU);
+    c.fillStyle='#0b0b0b'; c.fill(); c.strokeStyle=grey(r===8?180:135); c.lineWidth=1.2; c.stroke();
+    if(r===8) { c.beginPath(); c.ellipse(x,y,3,1.5,0,0,TAU); c.stroke(); }
+  }
 }
 function spring(c,s,time,width,tone,decay) {
   // Three large coils recede into the display. Wave fronts compress and lift
@@ -166,7 +185,7 @@ export function drawSpaceReverb({c,w,h},settings={}, {time=0,level=0,reducedMoti
   const t=Number.isFinite(time)?time:0,s=field(c,model,t,clamp(level),decay,reducedMotion);
   c.save(); const scale=Math.min(w/1000,(h-70)/930);
   c.translate((w-1000*scale)/2,35+(h-70-930*scale)/2);c.scale(scale,scale);c.lineJoin='round';c.lineCap='round';
-  glow(c,500,475,470,12+s.energy*22);
+  if(model!=='plate')glow(c,500,475,470,12+s.energy*22);
   if(model==='plate')plate(c,s,t,width,tone,decay);
   else if(model==='spring')spring(c,s,t,width,tone,decay);
   else chamber(c,s,t,width,tone,decay,model!=='chamber');

@@ -2,15 +2,15 @@ import { plateLayout } from './space-reverb-visual.mjs';
 const clamp = value => Math.max(0, Math.min(1, value));
 export function plateSettings(unit) {
   const u=clamp(unit);
-  return { reverbDecay: Math.round((.5+u*7.5)*10)/10, reverbPredelay: Math.round(u*150) };
+  return { reverbDecay: Math.round((.5+u*7.5)*10)/10 };
 }
 export function setupSpacePlateControls({ stage, getParams, setParams, begin, end }) {
   let gesture=null;
-  const handles=['Upper','Lower'].map((name,side)=>{
+  const handles=['Plate damper'].map(name=>{
     const button=document.createElement('button');button.type='button';button.className='space-plate-handle';
-    button.setAttribute('role','slider');button.setAttribute('aria-label',name+' plate separation');
+    button.setAttribute('role','slider');button.setAttribute('aria-label',name+' separation');
     button.setAttribute('aria-valuemin','0');button.setAttribute('aria-valuemax','100');button.setAttribute('aria-orientation','vertical');
-    button.title='Drag plates apart for a longer, later tail. Arrow keys adjust; Escape cancels.';
+    button.title='Drag the damper away for a longer tail, closer for a shorter tail. Arrow keys adjust; Escape cancels.';
     stage.append(button);
     function finish(cancelled=false) {
       if(gesture?.button!==button)return;
@@ -22,7 +22,7 @@ export function setupSpacePlateControls({ stage, getParams, setParams, begin, en
       if(event.button!==0||gesture)return;
       event.preventDefault();event.stopPropagation();button.focus({preventScroll:true});
       const rect=stage.getBoundingClientRect(),layout=plateLayout(rect.width,rect.height,getParams().reverbDecay);
-      begin('Plate separation');gesture={button,id:event.pointerId,y:event.clientY,unit:layout.unit,scale:layout.scale,start:{reverbDecay:getParams().reverbDecay,reverbPredelay:getParams().reverbPredelay},moved:false};
+      begin('Plate damping');gesture={button,id:event.pointerId,y:event.clientY,unit:layout.unit,scale:layout.scale,start:{reverbDecay:getParams().reverbDecay},moved:false};
       button.setPointerCapture(event.pointerId);button.classList.add('dragging');
     });
     button.addEventListener('pointermove',event=>{
@@ -30,7 +30,7 @@ export function setupSpacePlateControls({ stage, getParams, setParams, begin, en
       const dy=event.clientY-gesture.y;
       if(Math.abs(dy)<2){if(gesture.moved)setParams(gesture.start);return;}
       gesture.moved=true;
-      const unit=gesture.unit+(side?1:-1)*dy*2/(305*gesture.scale);
+      const unit=gesture.unit-dy/(305*gesture.scale);
       setParams(plateSettings(unit));
     });
     button.addEventListener('pointerup',event=>{if(event.pointerId===gesture?.id)finish();});
@@ -43,26 +43,26 @@ export function setupSpacePlateControls({ stage, getParams, setParams, begin, en
       const direction=['ArrowUp','ArrowRight'].includes(event.key)?1:['ArrowDown','ArrowLeft'].includes(event.key)?-1:0;
       if(!direction&&!['Home','End'].includes(event.key))return;
       event.preventDefault();const unit=event.key==='Home'?0:event.key==='End'?1:(getParams().reverbDecay-.5)/7.5+direction*step;
-      begin('Plate separation');try{setParams(plateSettings(unit));}finally{end({cancelled:false});}
+      begin('Plate damping');try{setParams(plateSettings(unit));}finally{end({cancelled:false});}
     });
     document.addEventListener('pointerdown',event=>{if(gesture?.button===button&&!button.contains(event.target))finish(true);},true);
     window.addEventListener('blur',()=>finish(true));
     window.addEventListener('resize',()=>finish(true));
     return button;
   });
-  const hint=document.createElement('span');hint.className='space-plate-hint';hint.textContent='DRAG THE PLATES APART · LONGER, LATER TAIL';stage.append(hint);
+  const hint=document.createElement('span');hint.className='space-plate-hint';hint.textContent='DRAG THE DAMPER · CLOSER FOR A SHORTER TAIL';stage.append(hint);
   function refresh() {
     const p=getParams(),visible=p.reverbModel==='plate'&&document.body.dataset.page==='fx'&&document.body.dataset.spacePanel!=='filter';
     if(!visible&&gesture){const old=gesture;gesture=null;old.button.classList.remove('dragging');if(old.button.hasPointerCapture(old.id))old.button.releasePointerCapture(old.id);end({cancelled:true});return refresh();}
     hint.hidden=!visible;
     const rect=stage.getBoundingClientRect(),layout=plateLayout(rect.width,rect.height,p.reverbDecay);
-    handles.forEach((button,side)=>{
+    handles.forEach(button=>{
       button.hidden=!visible;
-      const center=465+(side?1:-1)*layout.gap/2;
+      const center=layout.damperCenter;
       button.style.left=(layout.x+75*layout.scale)+'px';button.style.top=(layout.y+(center-110)*layout.scale)+'px';
       button.style.width=850*layout.scale+'px';button.style.height=220*layout.scale+'px';
       button.setAttribute('aria-valuenow',String(Math.round(layout.unit*100)));
-      button.setAttribute('aria-valuetext',`Decay ${p.reverbDecay.toFixed(1)} seconds, pre-delay ${p.reverbPredelay} milliseconds`);
+      button.setAttribute('aria-valuetext',`Decay ${p.reverbDecay.toFixed(1)} seconds`);
     });
   }
   new ResizeObserver(refresh).observe(stage);

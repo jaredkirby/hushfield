@@ -157,6 +157,38 @@ with HTTP 200 before being stopped. The shared preview and retained listening
 artifacts were not changed. This checks documentation commands, not new browser,
 listening or device acceptance.
 
+## Plate damper correction, 27 October 2026
+
+Following the original hardware research, the candidate now shows a fixed steel
+sheet and a movable absorber. Separation changes Decay alone. Pre-delay remains
+independent, and the animation has no travelling packets between the surfaces.
+The earlier two-plate browser receipt remains historical evidence of that version.
+
+The browser check first reproduced the old coupled behavior: End changed 3 s / 20 ms
+to 8 s / 150 ms. The corrected End retained 20 ms. A native upward drag changed
+Decay from 3 s to 6.3 s, and one Undo/Redo restored 3 s / 6.3 s without changing
+Pre-delay. Home, End and ArrowUp worked; a separately chosen 150 ms pre-delay
+survived a later damping edit. Spring and Filter hid the damper. Five viewport
+sizes kept its handle in bounds and transport visible, without horizontal overflow.
+Two full screenshots with reduced motion enabled were byte-identical. Cropped
+captures initially changed the browser viewport; explicit viewport stabilization
+and full captures resolved that measurement issue. Browser warnings/errors were empty.
+See [the damper receipt](tests/space-damper-browser-results.json).
+
+`npm test` passed all 193 tests. The production build and `git diff --check` passed.
+No DSP, saved-Piece schema or default changes were made. This verifies interaction
+and regression behavior, not a measured physical plate or physical touch performance.
+
+### Standards
+
+GPT-6.1 Sol review against `348bef1`: no actionable findings.
+
+### Spec
+
+GPT-6.1 Sol review against `348bef1` and the approved research recommendations:
+no actionable findings. The final visual polish removes the background glow from
+Plate so it cannot appear as a floating pulse in the gap.
+
 ## Reproduction and acceptance limits
 
 Run `npm ci`, `npm run build` and `npm test` with Node.js 22 or newer. CI covers

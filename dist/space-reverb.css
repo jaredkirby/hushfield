@@ -11,7 +11,7 @@ body[data-page=fx][data-space-panel=filter] #displayStage>.visual-space-editor{d
 .space-model-help{grid-column:1/-1;margin:6px 0 0;color:#aaa;font:10px/1.5 monospace;font-weight:400}
 @media(max-width:480px){.space-reverb-caption,.space-reverb-readout{left:9px;right:9px;font-size:8px;gap:5px}}
 
-/* The two plate surfaces are also the controls. Transport remains separate. */
+/* The absorber controls damping above the fixed metal sheet. Transport remains separate. */
 .space-plate-handle{position:absolute!important;z-index:3;pointer-events:auto;touch-action:none;cursor:grab;background:transparent!important;border:0!important;padding:0!important;min-width:0!important;min-height:0!important;clip-path:polygon(0 20%,89% 0,100% 80%,11% 100%)}
 .space-plate-handle:hover,.space-plate-handle:focus-visible{background:rgba(255,255,255,.07)!important;outline:2px solid #fff;outline-offset:-8px}
 .space-plate-handle.dragging{cursor:grabbing;background:rgba(255,255,255,.05)!important}
