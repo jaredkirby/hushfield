@@ -18,7 +18,7 @@
     "dist/piece-space.mjs": "0dd6af8b12d3cddd7357d504108c73e5587d122012eb987af66d0c7284416b75",
     "dist/phone-ui.mjs": "a050b709e117ca8dd74da60cfc4aa6771af2afcfe6d6bad4d34d010e74b7dd5f",
     "dist/space-controls.mjs": "94a4f539fb7111f00e5dad68cb7b8bac613e05e2eca92bfa315f64a334ec7c43",
-    "dist/space-reverb-visual.mjs": "34d3a06e3713fc648764b4669561e5a62726c14a21ccbefd11bff2f633d0cebf",
+    "dist/space-reverb-visual.mjs": "873a57375ac8caf42a31df89c68cadea572046f523d6eebfe3ad7a44aba28673",
     "dist/space-plate-controls.mjs": "e59ee564f941f6e1090f13dedc92dd81e99adc0b47851afe85fc84442134b402",
     "dist/render-clock.mjs": "7152ad7b91cc67243a1818ade831da792c95b48cca09c801bb60a98103b4a667",
     "dist/audio-startup.mjs": "9d5e35c3998c0bcc6b80ad24327459bbd8a3b764be301044f22e7287a4a99042",

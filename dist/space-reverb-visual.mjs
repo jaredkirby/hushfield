@@ -45,25 +45,6 @@ function plate(c, s, time, width, tone, decay) {
   const outline = center => [[0,0],[1,0],[1,1],[0,1],[0,0]].map(([u,v]) => project(u,v,center));
   const path = points => { c.beginPath(); points.forEach(([x,y],i) => i ? c.lineTo(x,y) : c.moveTo(x,y)); };
 
-  // The absorber stays matte and still. Its open grain contrasts with the
-  // continuous, brushed metal below, including when playback is stopped.
-  const absorber = outline(damperCenter);
-  path(absorber); c.fillStyle = '#171717'; c.fill();
-  line(c, outline(damperCenter + 10), 48, 2);
-  c.save(); path(absorber); c.clip();
-  for (let row = 0; row < 29; row++) {
-    for (let col = 0; col < 100; col++) {
-      const hash = ((col * 37 + row * 71 + col * row * 13) % 101) / 101;
-      const [x,y] = project((col + hash * .7) / 100, (row + hash * .6) / 29, damperCenter);
-      c.fillStyle = grey(27 + hash * 35);
-      c.fillRect(x, y, hash > .7 ? 1.6 : .85, .85);
-    }
-  }
-  // Shallow slots belong to the absorber, never a second vibrating grid.
-  for (let n = 1; n < 15; n++) line(c, [project(n/15,.17,damperCenter),project(n/15,.83,damperCenter)], 8, 2);
-  c.restore(); line(c, absorber, 95, 1.2);
-  for (let n = -1; n <= 1; n++) line(c, [[486,damperCenter+n*5],[514,damperCenter+n*5]], 145, 1.2);
-
   // Bending fronts spread from one driver and reflect within the same sheet.
   // Image sources illustrate boundary reflections without travel in the gap.
   const waves = [];
@@ -118,6 +99,26 @@ function plate(c, s, time, width, tone, decay) {
     c.fillStyle='#0b0b0b'; c.fill(); c.strokeStyle=grey(r===8?180:135); c.lineWidth=1.2; c.stroke();
     if(r===8) { c.beginPath(); c.ellipse(x,y,3,1.5,0,0,TAU); c.stroke(); }
   }
+
+  // Paint the upper absorber last so it occludes the metal at close settings.
+  // The absorber stays matte and still. Its open grain contrasts with the
+  // continuous, brushed metal below, including when playback is stopped.
+  const absorber = outline(damperCenter);
+  path(absorber); c.fillStyle = '#171717'; c.fill();
+  line(c, outline(damperCenter + 10), 48, 2);
+  c.save(); path(absorber); c.clip();
+  for (let row = 0; row < 29; row++) {
+    for (let col = 0; col < 100; col++) {
+      const hash = ((col * 37 + row * 71 + col * row * 13) % 101) / 101;
+      const [x,y] = project((col + hash * .7) / 100, (row + hash * .6) / 29, damperCenter);
+      c.fillStyle = grey(27 + hash * 35);
+      c.fillRect(x, y, hash > .7 ? 1.6 : .85, .85);
+    }
+  }
+  // Shallow slots belong to the absorber, never a second vibrating grid.
+  for (let n = 1; n < 15; n++) line(c, [project(n/15,.17,damperCenter),project(n/15,.83,damperCenter)], 8, 2);
+  c.restore(); line(c, absorber, 95, 1.2);
+  for (let n = -1; n <= 1; n++) line(c, [[486,damperCenter+n*5],[514,damperCenter+n*5]], 145, 1.2);
 }
 function spring(c,s,time,width,tone,decay) {
   // Three large coils recede into the display. Wave fronts compress and lift

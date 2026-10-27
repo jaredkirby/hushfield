@@ -109,5 +109,18 @@
     "spec": 0,
     "model": "GPT-6.1 Sol"
   },
-  "limits": "Illustrative animation, not physical simulation. Viewport emulation is not physical touch or sustained frame-rate testing. Cancellation paths source-reviewed; no interrupted physical-touch test. Historical two-plate receipt describes the previous candidate."
+  "limits": "Illustrative animation, not physical simulation. Viewport emulation is not physical touch or sustained frame-rate testing. Cancellation paths source-reviewed; no interrupted physical-touch test. Historical two-plate receipt describes the previous candidate.",
+  "layeringFollowup": {
+    "baseline": "94abeda",
+    "change": "Paint opaque absorber after the metal and pickups so it stays in front at minimum separation.",
+    "browserChecks": [
+      "Minimum and maximum separation visually inspected on the Tailscale preview",
+      "Closed position checked during playback and stopped",
+      "Pre-delay remains 20 ms at both ends"
+    ],
+    "reviews": {
+      "standards": 0,
+      "spec": 0
+    }
+  }
 }
