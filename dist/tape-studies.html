@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hushfield · Tape variations</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#080808;color:#eee;font:12px/1.5 monospace}header{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid #444;padding-bottom:18px}h1{font-size:17px;font-weight:500;margin:0 0 5px}p{color:#aaa;margin:0}a{color:#ddd;text-underline-offset:4px}button,input{font:inherit}button{background:#111;border:1px solid #666;color:#eee;padding:9px 13px;min-height:38px;cursor:pointer}button:hover,button[aria-pressed=true]{background:#eee;color:#080808}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid white;outline-offset:4px}.controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding:18px 0 22px}.slider{display:grid;grid-template-columns:auto 34px;gap:4px 8px;min-width:150px;flex:1;max-width:230px}.slider input{grid-column:1/-1;width:100%;accent-color:white}.slider output{text-align:right;color:#aaa}.actions{display:flex;gap:8px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}article{min-width:0}.frame{border:1px solid #666;background:#000;aspect-ratio:1;overflow:hidden}canvas{display:block;width:100%;height:100%}h2{font-size:13px;font-weight:500;margin:15px 0 6px}article p{min-height:42px;font-size:11px;max-width:38em}article a{display:inline-block;margin-top:12px}footer{margin-top:28px;border-top:1px solid #444;padding-top:16px;color:#aaa;font-size:11px}footer a{margin-right:16px}.status{font-size:10px;color:#999;white-space:nowrap}@media(max-width:850px){body{padding:16px}.grid{grid-template-columns:1fr;max-width:540px;margin:auto}article p{min-height:0}header{align-items:flex-start}.status{white-space:normal;text-align:right}.controls{gap:12px}.slider{min-width:125px}footer a{display:inline-block;margin-bottom:9px}}
+</style>
+</head>
+<body>
+<header><div><h1>HUSHFIELD / TAPE STUDIES</h1><p>Three square compositions. Same tape, same effects.</p></div><span class="status" id="status">MOTION PREVIEW · NO AUDIO</span></header>
+<section class="controls" aria-label="Compare motion across all variations">
+<div class="actions"><button id="motion" aria-pressed="true">Pause motion</button><button id="bypass" aria-pressed="false">Bypass</button></div>
+<label class="slider">Wow<output id="wowValue">45%</output><input id="wow" type="range" min="0" max="100" value="45"></label>
+<label class="slider">Flutter<output id="flutterValue">25%</output><input id="flutter" type="range" min="0" max="100" value="25"></label>
+<label class="slider">Echo<output id="delayMixValue">35%</output><input id="delayMix" type="range" min="0" max="70" value="35"></label>
+<button id="defaults">Vintage defaults</button>
+</section>
+<main class="grid">
+<article><div class="frame"><canvas data-layout="loop" width="420" height="420" role="img" aria-label="Deep loop: two large upper reels with a long U-shaped tape path and playhead below"></canvas></div><h2>A / Deep loop</h2><p>Larger reels up top. A long, open tape loop gives Wow and Flutter room to move.</p><a href="/?tapeLayout=loop#tape">Try A in the instrument ↗</a></article>
+<article><div class="frame"><canvas data-layout="diagonal" width="420" height="420" role="img" aria-label="Diagonal: offset reels in opposite corners and an S-shaped tape path through a central playhead"></canvas></div><h2>B / Diagonal</h2><p>Reels in opposite corners. The tape sweeps through the center in an S curve.</p><a href="/?tapeLayout=diagonal#tape">Try B in the instrument ↗</a></article>
+<article><div class="frame"><canvas data-layout="vertical" width="420" height="420" role="img" aria-label="Vertical: stacked reels on the left with a long tape path and playhead on the right"></canvas></div><h2>C / Vertical</h2><p>Stacked reels leave a tall tape path beside them. Movement runs down the right side.</p><a href="/?tapeLayout=vertical#tape">Try C in the instrument ↗</a></article>
+</main>
+<footer>Transport references: <a href="https://www.nagraaudio.com/product/nagra-iv-s/" target="_blank" rel="noreferrer">Nagra IV-S</a><a href="https://revox.com/en-de/products/b77" target="_blank" rel="noreferrer">Revox B77</a><a href="https://articles.boss.info/history-of-the-space-echo/" target="_blank" rel="noreferrer">BOSS / Space Echo</a><a href="/#tape">Current Tape visual ↗</a></footer>
+<script type="module">
+import {drawTapeTransport} from './tape-transport.mjs';
+import {ditherCanvas} from './oled-visuals.mjs';
+const $=id=>document.getElementById(id), canvases=[...document.querySelectorAll('canvas')];
+const p={tapeOn:true,wow:45,flutter:25,drive:28,delayMix:35,delayTime:.36,feedback:50};
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let moving=!reduced.matches, seconds=0, angle=.4, last=0, dirty=true;
+function refresh(){for(const id of ['wow','flutter','delayMix']){$(id).value=p[id];$(id+'Value').value=p[id]+'%';}dirty=true;}
+for(const id of ['wow','flutter','delayMix']) $(id).addEventListener('input',()=>{p[id]=+$(id).value;refresh();});
+function motionState(){$('motion').textContent=moving?'Pause motion':'Play motion';$('motion').setAttribute('aria-pressed',String(moving));}
+$('motion').onclick=()=>{moving=!moving;motionState();dirty=true;};
+$('bypass').onclick=()=>{p.tapeOn=!p.tapeOn;$('bypass').setAttribute('aria-pressed',String(!p.tapeOn));$('bypass').textContent=p.tapeOn?'Bypass':'Tape bypassed';dirty=true;};
+$('defaults').onclick=()=>{Object.assign(p,{wow:10,flutter:6,drive:16,delayMix:16,feedback:28});refresh();};
+reduced.addEventListener('change',()=>{if(reduced.matches){moving=false;motionState();dirty=true;}});
+motionState();
+function frame(now){
+  if(now-last>=1000/30){
+    const dt=Math.min(.1,(now-last)/1000||0);last=now;
+    if(moving&&p.tapeOn&&!document.hidden){seconds+=dt;angle+=dt*(1.2+.4/p.delayTime);dirty=true;}
+    if(dirty){for(const canvas of canvases){drawTapeTransport({c:canvas.getContext('2d',{willReadFrequently:true}),w:canvas.width,h:canvas.height},p,angle,.45,seconds,canvas.dataset.layout);ditherCanvas(canvas);}dirty=false;}
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

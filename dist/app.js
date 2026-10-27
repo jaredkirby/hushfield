@@ -54,6 +54,15 @@ const textureScopeRenderer = createVisualRenderer();
 let textureScopeContext;
 let reportedOrbitVoices = 0;
 let blendUI, visuals, volumeStepper, shapeStepper, soundEditors, showOrbitPanel, orbitAudio, limiter, tapeNode;
+let tapeVisualSnapshot = null, tapeVisualSubscribed = false;
+function syncTapeVisualSubscription() {
+  const enabled = activeTab === "tape" && !document.hidden;
+  if (tapeNode && enabled !== tapeVisualSubscribed) {
+    tapeVisualSubscribed = enabled;
+    tapeNode.port.postMessage({ type: "visuals", enabled });
+  }
+}
+document.addEventListener("visibilitychange", syncTapeVisualSubscription);
 let ambientState = { ...AMBIENT_DEFAULTS }, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
 let audioGeneration = 0, restartPending = false, clockSnapshot;
 let soundState = selectPiecePreset("still", { defaults: initial, cancelPending() {} }).soundState;
@@ -234,6 +243,8 @@ function resetAudioGraph() {
   foundationLayer = spaceBus = null;
   ctx = master = engine = orbitAudio = analyser = limiter = tapeNode = ambientNode = grainLayer = orbitLayer = recordDestination = void 0;
   lastMeter = 0;
+  tapeVisualSnapshot = null;
+  tapeVisualSubscribed = false;
   renderClock.invalidate();
   orbitVoices = { size: 0 };
   audioReady = false;
@@ -290,7 +301,7 @@ async function initializeAudio() {
   if (!ctx.audioWorklet) throw new Error("The sound engine is unavailable. Test sound still checks device output.");
   await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=texture-source-scope-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/tape-worklet.js?v=vintage-tape-1");
+  await context.audioWorklet.addModule("./build/tape-worklet.js?v=tape-waveform-2");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
   await context.audioWorklet.addModule("./build/ambient-worklet.js?v=vintage-tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
@@ -323,7 +334,9 @@ async function initializeAudio() {
   tapeNode = new AudioWorkletNode(ctx, "tape-delay", { numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [2], processorOptions: { params } });
   const activeTape = tapeNode;
   activeTape.port.onmessage = ({ data }) => {
-    if (activeTape === tapeNode && data.type === "ready") syncEngine();
+    if (activeTape !== tapeNode) return;
+    if (data.type === "ready") { syncEngine(); syncTapeVisualSubscription(); }
+    else if (data.type === "tape-visuals") tapeVisualSnapshot = data;
   };
   tapeNode.connect(limiter);
   spaceBus = createPieceSpace(ctx, tapeNode);
@@ -707,6 +720,7 @@ const pageNames = ["ambient", "sample", "grain", "fx", "tape", "orbit", "visual"
 function showTab(name) {
   if (!pageNames.includes(name)) return;
   activeTab = name;
+  syncTapeVisualSubscription();
   window.HushfieldNavigation?.select(name, { notify: false });
   document.body.dataset.page = name;
   history.replaceState(null, "", "#" + name);
@@ -1169,6 +1183,7 @@ function drawOrbit(verts) {
   c.shadowBlur = 0;
   $("orbitAngle").textContent = `${Math.round((orbitState.phase * 180 / Math.PI + params.orbitRotation + 360) % 360)}\xB0`;
 }
+const tapeLayout = new URLSearchParams(location.search).get("tapeLayout") || "space-echo";
 let frequencyData = new Uint8Array(512), tapeAngle = 0, tapeSeconds = 0;
 const renderClock = createRenderClock(30);
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -1179,6 +1194,7 @@ function updateAmbientDisplay() {
 }
 function frame(time) {
   inspectAudioClock(time);
+  syncTapeVisualSubscription();
   if (ambientPointsDirty) {
     ambientPointsDirty = false;
     ambientNode?.port.postMessage({ type: "points", value: ambientState.points });
@@ -1216,7 +1232,11 @@ function frame(time) {
     } else if (activeTab === "tape") {
       const fit = fitCanvas($("tapeCanvas"));
       if (fit) {
-        drawTape(fit, params, tapeAngle, lastMeter, tapeSeconds);
+        drawTape(fit, params, tapeAngle, lastMeter, tapeSeconds, tapeLayout, {
+          dt, telemetry: tapeVisualSnapshot, audioTime: outputAudioTime(ctx, time),
+          running: running && ctx?.state === "running" && !document.hidden,
+          reducedMotion: reducedMotion.matches, trail: visuals.settings().trail
+        });
         ditherCanvas($("tapeCanvas"));
       }
     } else {
@@ -1553,7 +1573,7 @@ function setupDisplay() {
   stage.append($("waveWrap"), document.querySelector(".orbit-stage"));
   const deck = document.createElement("div");
   deck.id = "tapeDeck";
-  deck.innerHTML = '<canvas id="tapeCanvas" aria-label="Tape effect illustration: slow Wow sway, fine Flutter ripples, Drive head glow and fading echo trails"></canvas>';
+  deck.innerHTML = '<canvas id="tapeCanvas" aria-label="A physical tape loop folds and slides without crossing itself. The lower tape follows the audible Wow and Flutter; the head responds to sound and echo energy."></canvas>';
   stage.append(deck);
   const ambient = document.createElement("div");
   ambient.id = "ambientStage";

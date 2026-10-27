@@ -33,6 +33,7 @@ class TapeDelay {
   }
   process(input, output) {
     const p = this.p, t = this.target, rate = this.rate, n = this.length;
+    let echoEnergy = 0;
     for (let i = 0; i < output[0].length; i++) {
       for (const key of smoothKeys) p[key] += (t[key] - p[key]) * this.slew;
       const left = input[0]?.[i] || 0, right = input[1]?.[i] ?? left;
@@ -62,11 +63,13 @@ class TapeDelay {
         this.directLow[c] += directAlpha * (headSample - this.directLow[c]);
         const direct = source * (1 - p.on) + Math.tanh(this.directLow[c] * gain) / gain * (1 + p.drive * 0.5) * p.on;
         output[c][i] = direct * 0.75 + echo * p.mix * p.on;
+        echoEnergy += (echo * p.mix * p.on) ** 2;
       }
       this.head = (this.head + 1) % n;
       this.directHead = (this.directHead + 1) % this.directLength;
       this.clock++;
     }
+    this.echoRms = Math.sqrt(echoEnergy / (2 * output[0].length));
   }
 }
 export {
