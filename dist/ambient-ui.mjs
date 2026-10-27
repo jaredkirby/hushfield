@@ -1,7 +1,8 @@
 import { INSTRUMENT_LABELS, INSTRUMENT_HELP } from './foundation-instruments.mjs';
+import { FOUNDATION_PRESETS, matchingFoundationPreset } from './foundation-presets.mjs';
 import { AMBIENT_FIELDS, AMBIENT_SCENES, AMBIENT_KEYS, AMBIENT_SCALES, applyAmbientScene } from "./ambient-settings.mjs?v=hushfield-1";
 import { attachStepper, panelNav } from "./phone-ui.mjs?v=hushfield-1";
-function setupAmbientUI({ getState, onChange, onNew, onInstrument }) {
+function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
   const page = document.getElementById("ambientPage"), fields = page.querySelector(".ambient-fields"), records = [];
   const nav = panelNav(page, [["compose", "Compose"], ["sound", "Sound"], ["layers", "Voices"]], (key) => {
     fields.querySelectorAll(".control").forEach((row) => row.hidden = row.dataset.group !== key);
@@ -9,7 +10,7 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument }) {
   }, { className: "ambient-panel-tabs", ariaLabel: "Ambient control pages" });
   function refreshHelp() {
     page.querySelector('.ambient-help').textContent = page.dataset.controlPanel === 'sound'
-      ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + INSTRUMENT_HELP[getState().instrument || 'current']
+      ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + INSTRUMENT_HELP[getState().instrument || 'current'] + ' Starting presets change Foundation tone and voices; Scene and Tape stay as set.'
       : 'Voice dots: pitch ↑↓ · stereo ←→. Scene shapes Foundation; Whole piece replaces all parts and effects.';
   }
   const instrumentRow=document.createElement('div');
@@ -20,6 +21,27 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument }) {
   instrumentRow.append(instrumentLabel,instrumentSelect);fields.append(instrumentRow);
   const instrumentStepper=attachStepper(instrumentRow,instrumentSelect,{label:'Foundation Instrument',format:()=>INSTRUMENT_LABELS[instrumentSelect.value]});
   instrumentSelect.addEventListener('change',()=>onInstrument(instrumentSelect.value));
+  const presetRow=document.createElement('div');
+  presetRow.className='control direct-control';presetRow.dataset.group='sound';presetRow.hidden=true;
+  const startingLabel=document.createElement('label');startingLabel.htmlFor='ambient-preset';startingLabel.textContent='Starting preset';
+  const startingSelect=document.createElement('select');startingSelect.id='ambient-preset';
+  for(const preset of FOUNDATION_PRESETS){const option=document.createElement('option');option.value=preset.id;option.textContent=preset.label;startingSelect.append(option);}
+  presetRow.append(startingLabel,startingSelect);fields.append(presetRow);
+  const presetStepper=attachStepper(presetRow,startingSelect,{label:'Foundation starting preset',format:()=>{
+    const preset=FOUNDATION_PRESETS.find(preset=>preset.id===startingSelect.value);
+    return preset ? preset.label : 'Custom settings';
+  }});
+  // Keep the shared adjustment rail's flat ordering while grouping the native menu.
+  const presetMenu=presetStepper.inputElement;
+  presetMenu.querySelector('option[value=""]').textContent='Custom settings';
+  for(const [instrument,label] of Object.entries(INSTRUMENT_LABELS)){
+    const group=document.createElement('optgroup');group.label=label;
+    for(const preset of FOUNDATION_PRESETS.filter(preset=>preset.instrument===instrument))group.append(presetMenu.querySelector(`option[value="${preset.id}"]`));
+    presetMenu.append(group);
+  }
+  const presetDescription=document.createElement('p');presetDescription.id='ambient-preset-description';presetDescription.className='muted';
+  presetMenu.setAttribute('aria-describedby',presetDescription.id);presetRow.append(presetDescription);
+  startingSelect.addEventListener('change',()=>onPreset(startingSelect.value));
   for (const field of AMBIENT_FIELDS.filter((f) => !["grains", "orbit", "space"].includes(f.id))) {
     const row = document.createElement("div");
     row.className = "control";
@@ -56,6 +78,10 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument }) {
     const state = getState();
     instrumentSelect.value=state.instrument || 'current';
     instrumentStepper.render();
+    const startingPreset=matchingFoundationPreset(state);
+    startingSelect.value=startingPreset?.id || '';
+    presetStepper.render();
+    presetDescription.textContent=startingPreset?.description || 'Your current Foundation sound. Choose a starting preset, then shape it with the controls.';
     for (const { field, input, stepper } of records) {
       input.value = state[field.id];
       stepper.render();

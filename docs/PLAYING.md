@@ -4,6 +4,8 @@ Hushfield makes one Piece from three sound parts: Foundation, Texture and Motion
 
 ## Start and blend
 
+Fresh sessions start with Chorus synth, the Stillwater Scene and Space Echo with Tape on, using Gentle echo settings. Audio still waits for Start. Loading a saved Piece or explicitly recovering a draft restores its own settings.
+
 Tap Start in the bottom bar to play the complete Piece, and Stop to pause. Enter or Space also activates the focused button. Opening another editor changes the controls and display, not the music. Drag a slider to change a continuous value; tap its underlined readout for exact entry with a range and formatted preview. Categories such as scene, scale, waveform and shape have direct menus. The common minus/plus pair still adjusts the selected control, and holding a button repeats. A zero blend level means that part is inaudible; Add texture sets Texture to 35%, and Add motion sets Motion to 25%. These actions set the level; they do not start a stopped Piece.
 
 Start/Stop is a separate button in the bottom bar beside the minus/plus controls. Tapping the visual does not toggle playback. The bottom-bar output waveform is hidden; Visual provides the output visualizations. Pausing keeps the normal black visual without an overlay.
@@ -34,7 +36,20 @@ In **Sound**, choose **Instrument**. Hushfield keeps the existing voice; String 
 | Morph synth | SEM-inspired two-source synthesis and a low-pass → notch → high-pass filter morph. Color selects that shape, Drift moves the oscillators, and Bloom moves the filter cutoff. |
 | Bass synth | Minimoog-inspired three-oscillator bass and four-pole filtering. The chord layer plays one low voice, gliding between harmonies; Melody remains a separate voice. Color opens the filter, Drift spreads oscillator tuning, and Bloom moves the contour. |
 
-Instrument changes fade briefly during playback. Scene and New piece keep the selected instrument. Whole piece presets restore Hushfield along with their documented settings. Selecting a new instrument is one Undo/Redo edit and opts classic Pieces into expressive composition. Instrument choice does not change Blend or voice-dot settings. Bass synth uses the lowest voice dot for its chord sound; all four notes still guide linked Motion. Every instrument supplies live Texture through the existing Foundation connection.
+Instrument changes fade briefly during playback. Scene and New piece keep the selected instrument. The Stillwater Whole piece preset restores Chorus synth and Space Echo with Tape on; the other Whole piece presets retain Hushfield and their own settings. Selecting a new instrument is one Undo/Redo edit and opts classic Pieces into expressive composition. Instrument choice does not change Blend or voice-dot settings. Bass synth uses the lowest voice dot for its chord sound; all four notes still guide linked Motion. Every instrument supplies live Texture through the existing Foundation connection.
+
+The **Starting preset** menu in Sound offers three sounds per instrument. Choosing one selects its instrument and sets Color, Drift, Bloom, Chords, Melody and Air. It keeps the Scene, key, scale, chord timing, activity, evolution, voice dots and Hold chord, along with Blend, Texture, Motion, Space and Tape. Each selection is one Undo step. The name follows the actual settings; changing a sound control shows Custom settings, and Undo, loading or recovery restores a matching name. Scene can also change the voice levels, so it may make the sound Custom.
+
+| Instrument | Starting presets |
+| --- | --- |
+| Hushfield | Dusk veil, Lantern notes, Moving mist |
+| String ensemble | Velvet strings, Sunroom, Tidal strings |
+| Chorus synth | Stillwater chorus, Amber keys, Prism tide |
+| Complex synth | Copper bells, Ember field, Firefly drift |
+| Morph synth | Hollow reeds, Opal light, Estuary |
+| Bass synth | Cellar hum, Cinder pulse, Slow current |
+
+Stillwater chorus matches the fresh Foundation sound. Selecting this starting preset leaves your Scene and Tape choices in place; selecting Stillwater in Whole piece restores the complete default combination.
 
 Open [the listening comparison](../dist/qa-foundation.html) through the running preview server for dry and Space Echo examples. The page renders silently, then provides Play and Download WAV controls. See [model notes](FOUNDATION-MODELS.md) for approximations.
 

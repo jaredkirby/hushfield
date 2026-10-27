@@ -38,3 +38,18 @@ test('complete-piece selection opts into the new Foundation voice and part depth
     assert.ok(preset.params.textureRoom > preset.params.foundationRoom, 'Texture starts farther back than Foundation');
   }
 });
+
+test('Stillwater starts with Chorus synth and enabled Space Echo while other Whole piece presets keep their voices and Tape', () => {
+  const defaults = { ...TAPE_DEFAULTS, tapeModel: 2, echoMode: 4, springMix: 12 };
+  const still = selectPiecePreset('still', { defaults, cancelPending() {} });
+  assert.equal(still.ambient.scene, 0);
+  assert.equal(still.ambient.instrument, 'juno');
+  assert.equal(still.params.tapeOn, true);
+  assert.equal(still.params.tapeModel, 2);
+  assert.equal(still.params.echoMode, 4);
+  for (const key of ['cloud', 'shards', 'worn']) {
+    const selected = selectPiecePreset(key, { defaults, cancelPending() {} });
+    assert.equal(selected.ambient.instrument, 'current');
+    assert.equal(selected.params.tapeOn, key === 'worn');
+  }
+});

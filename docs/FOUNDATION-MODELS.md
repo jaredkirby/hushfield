@@ -12,7 +12,9 @@ These instruments use selected analog-synthesizer behaviors as design references
 
 Color, Drift and Bloom retain their 0–100 ranges but control each model's own behavior. The existing composer retains chord/motif timing, seed, voice-dot pitches and harmony messages. Selecting Bass synth changes the audible chord voicing to one note; it does not reduce the chord sent to Motion. Live Texture receives the chosen Foundation output before its audible Blend gain.
 
-New files store an instrument identifier in project schema 6. Versions 1–5 restore the original instrument, with their existing composition and room compatibility rules. Scene and New piece retain the instrument. Whole piece presets select the original Hushfield voice. New instrument selection opts into expressive composition; merely loading an old Piece does not.
+New files store an instrument identifier in project schema 6. Versions 1–5 restore the original instrument, with their existing composition and room compatibility rules. Scene and New piece retain the instrument. Fresh sessions and the Stillwater Whole piece preset select Chorus synth with Space Echo on. The other Whole piece presets retain the original Hushfield voice. New instrument selection opts into expressive composition; merely loading an old Piece does not.
+
+Foundation starting presets replace only the instrument, expressive model, Color, Drift, Bloom and Chords/Melody/Air levels. Names are derived from matching those values rather than stored in the project. Harmony, Scene, voice dots and shared finishing remain independent of the starting sound.
 
 ## Sources
 

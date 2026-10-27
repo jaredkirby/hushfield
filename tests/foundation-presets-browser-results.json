@@ -1,0 +1,63 @@
+{
+  "verifiedAt": "2026-10-27T04:36:54.039280+00:00",
+  "baseline": "02f75844291c8b019c85b4299ec07a7860a4cb59",
+  "browser": "Codex in-app Chromium browser on macOS",
+  "buildInputs": {
+    "dist/app.js": "949f09fd33aceee6158e058e3ce0fec1cdf746aef0c5eba3aaf34ee5dfb12720",
+    "dist/ambient-ui.mjs": "37d3e0a34f0b0bbe11c2a42e21ae261c96c22df66bcc044ba85f86c2c418fbaa",
+    "dist/foundation-presets.mjs": "123df5317e4491effafb12da2e2f9e8d912ed4f32df8024f94b22fa9e7336f21",
+    "dist/piece-presets.mjs": "81702dd99102841e8c7edac96a3cfce874eca37e8ae0540933de0e4849f96406",
+    "dist/build/app.js": "aaa1ac14c715b4a68fb03f4a0441cf716ea34691d519b1c2ce03ff68e25a4567"
+  },
+  "checks": [
+    "Before implementation, Foundation starting preset control was absent.",
+    "Fresh load selects Chorus synth, Stillwater and Tape On; transport remains Start.",
+    "All 18 native preset choices select during live playback, retaining Stillwater and Tape On.",
+    "Selecting Velvet strings switches instrument and parameters; one Undo restores Stillwater chorus; Redo restores Velvet strings.",
+    "Color edit displays Custom settings.",
+    "Focused preset shared rail advances Prism tide to Copper bells; Undo restores Prism tide.",
+    "Preset changes retain key G, Scene Stillwater and previously selected Tape Off.",
+    "Explicitly saved Estuary draft recovers Morph synth, prior key and Tape Off while remaining paused.",
+    "Stillwater Whole piece restores Chorus synth and Tape On.",
+    "No observed browser warning or error logs during live switching.",
+    "Existing private preview serves matching bundled app SHA256; real HTTPS page shows new defaults."
+  ],
+  "layouts": [
+    {
+      "width": 390,
+      "height": 844,
+      "outerOverflow": false,
+      "presetReachable": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "outerOverflow": false,
+      "presetReachable": true
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "outerOverflow": false,
+      "presetReachable": true
+    },
+    {
+      "width": 540,
+      "height": 720,
+      "outerOverflow": false,
+      "presetReachable": true
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "outerOverflow": false,
+      "presetReachable": true
+    }
+  ],
+  "screenshot": "docs/images/foundation-starting-presets.png",
+  "limitations": [
+    "Tablet and Split View controls require scrolling inside the existing editor bay.",
+    "Muted live playback checks control/graph behavior, not subjective sound quality.",
+    "Viewport emulation does not establish physical-device touch or battery acceptance."
+  ]
+}
