@@ -1,3 +1,5 @@
+import { drawSpaceEcho } from "./space-echo-visual.mjs";
+import { drawTapeTransport, TAPE_LAYOUTS } from "./tape-transport.mjs";
 import { tapeWow, tapeFlutter } from "./tape-motion.mjs";
 const bayer = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
 function ditherCanvas(canvas) {
@@ -9,136 +11,110 @@ function ditherCanvas(canvas) {
   }
   c.putImageData(frame, 0, 0);
 }
-function drawTape({ c, w, h }, p, angle, level, seconds = 0) {
+function drawTape({ c, w, h }, p, angle, level, seconds = 0, layout = "space-echo", runtime) {
+  if (layout === "space-echo") return drawSpaceEcho({c, w, h}, p, angle, level, seconds, runtime);
+  if (Object.hasOwn(TAPE_LAYOUTS, layout)) return drawTapeTransport({c, w, h}, p, angle, level, seconds, layout);
   c.clearRect(0, 0, w, h);
+  if (w <= 16 || h <= 16) return;
   c.save();
-  const scale = Math.min((w - 16) / 360, (h - 16) / 220);
-  c.translate((w - 360 * scale) / 2, (h - 220 * scale) / 2);
+  const scale = Math.min((w - 16) / 360, (h - 16) / 190);
+  c.translate((w - 360 * scale) / 2, (h - 190 * scale) / 2);
   c.scale(scale, scale);
-  const on = p.tapeOn, signal = Math.max(0, Math.min(1, level)), wow = on ? p.wow / 100 : 0, flutter = on ? p.flutter / 100 : 0;
-  const reelDrift = tapeWow(seconds, wow) / 5e-3 * 0.18 + tapeFlutter(seconds, flutter) / 35e-5 * 0.035;
-  const rect = (x, y, a, b, fill) => {
-    c.fillStyle = fill;
-    c.fillRect(x, y, a, b);
+  const on = p.tapeOn, signal = Math.max(0, Math.min(1, level));
+  const wow = on ? p.wow / 100 : 0, flutter = on ? p.flutter / 100 : 0;
+  const drift = tapeWow(seconds, wow) / 5e-3 * 0.18 + tapeFlutter(seconds, flutter) / 35e-5 * 0.035;
+  const circle = (x, y, r, fill, stroke) => {
+    c.beginPath();
+    c.arc(x, y, r, 0, Math.PI * 2);
+    if (fill) { c.fillStyle = fill; c.fill(); }
+    if (stroke) { c.strokeStyle = stroke; c.stroke(); }
   };
-  c.lineWidth = 1.3;
-  c.strokeStyle = "#fff";
-  c.beginPath();
-  c.moveTo(8, 0);
-  c.lineTo(352, 0);
-  c.lineTo(360, 8);
-  c.lineTo(360, 212);
-  c.lineTo(352, 220);
-  c.lineTo(8, 220);
-  c.lineTo(0, 212);
-  c.lineTo(0, 8);
-  c.closePath();
-  c.stroke();
-  for (const [x, y] of [[10, 10], [350, 10], [10, 210], [350, 210]]) {
-    c.strokeStyle = "#aaa";
-    c.beginPath();
-    c.arc(x, y, 3, 0, Math.PI * 2);
-    c.moveTo(x - 2, y);
-    c.lineTo(x + 2, y);
-    c.stroke();
-  }
-  c.fillStyle = "#fff";
-  c.font = "bold 13px monospace";
-  c.fillText("HUSHFIELD", 22, 26);
-  c.font = "9px monospace";
-  c.fillStyle = "#bbb";
-  c.fillText("VINTAGE TAPE / STEREO", 166, 26);
-  c.strokeStyle = "#777";
-  c.strokeRect(20, 38, 320, 125);
-  rect(24, 42, 312, 117, "#191919");
-  for (const [x, r, phase] of [[98, 49, angle + reelDrift], [262, 39, (angle + reelDrift) * 1.2]]) {
-    c.fillStyle = "#444";
-    c.beginPath();
-    c.arc(x, 100, 53, 0, Math.PI * 2);
-    c.fill();
-    c.strokeStyle = "#999";
-    c.stroke();
-    for (let radius = 24; radius < r; radius += 2) {
-      c.strokeStyle = radius % 4 ? "#444" : "#888";
-      c.beginPath();
-      c.arc(x, 100, radius, 0, Math.PI * 2);
-      c.stroke();
-    }
+
+  // Quiet, exposed reels leave most of the contrast for the moving tape.
+  c.lineWidth = 0.8;
+  for (const [x, radius, phase] of [[68, 34, angle + drift], [292, 29, (angle + drift) * 34 / 29]]) {
+    circle(x, 53, radius, "#222", "#777");
+    for (let r = 18; r < radius - 1; r += 2.5) circle(x, 53, r, null, "#555");
     c.save();
-    c.translate(x, 100);
+    c.translate(x, 53);
     c.rotate(phase);
-    c.fillStyle = "#ccc";
-    c.beginPath();
-    c.arc(0, 0, 25, 0, Math.PI * 2);
-    c.fill();
-    for (let j = 0; j < 3; j++) {
-      const a = j * Math.PI * 2 / 3;
-      c.save();
-      c.rotate(a);
-      rect(7, -4, 13, 8, "#000");
-      c.restore();
-    }
+    circle(0, 0, 17, "#999", "#aaa");
     c.fillStyle = "#000";
-    c.beginPath();
-    c.arc(0, 0, 7, 0, Math.PI * 2);
-    c.fill();
-    c.strokeStyle = "#fff";
-    c.stroke();
+    for (let spoke = 0; spoke < 3; spoke++) {
+      c.rotate(Math.PI * 2 / 3);
+      c.fillRect(6, -2.5, 9, 5);
+    }
+    circle(0, 0, 4, "#000");
     c.restore();
   }
-  const path = (lift = 0) => {
-    c.beginPath();
-    c.moveTo(50, 119);
-    c.lineTo(42, 178);
-    for (let x = 42; x <= 318; x += 3) {
-      const u = (x - 42) / 276, envelope = Math.sin(Math.PI * u);
-      const sway = tapeWow(seconds - u * 0.15, wow) / 5e-3 * 16;
-      const ripple = tapeFlutter(seconds - u * 0.8, flutter) / 35e-5 * 4;
-      c.lineTo(x, 178 + (sway + ripple - lift) * envelope);
-    }
-    c.lineTo(307, 119);
+
+  // Each free span moves, with the guides and head holding the tape in place.
+  const tapeY = (u, time = seconds, lift = 0) => {
+    const span = Math.sin(Math.PI * 2 * u);
+    const sway = tapeWow(time - u * 0.2, wow) / 5e-3 * 22;
+    const ripple = tapeFlutter(time - u * 0.8, flutter) / 35e-5 * 5.5;
+    return 118 + 22 * Math.sin(Math.PI * u) + (sway + ripple) * span - lift * Math.sin(Math.PI * u);
   };
+  const path = (time = seconds, lift = 0) => {
+    c.beginPath();
+    c.moveTo(36, 65);
+    c.lineTo(24, 118);
+    for (let x = 24; x <= 336; x += 1.5) c.lineTo(x, tapeY((x - 24) / 312, time, lift));
+    c.lineTo(319, 63);
+  };
+  c.lineJoin = "round";
+  c.lineCap = "round";
   if (on) {
-    for (let repeat = 3; repeat >= 1; repeat--) {
-      c.globalAlpha = p.delayMix / 100 * Math.pow(p.feedback / 100, repeat - 1) * (0.5 + signal * 0.5);
-      c.lineWidth = 1;
-      path(repeat * 5);
-      c.strokeStyle = "#fff";
+    for (let repeat = 4; repeat >= 1; repeat--) {
+      c.globalAlpha = p.delayMix / 100 * Math.pow(p.feedback / 100, repeat - 1) * (0.6 + signal * 0.4);
+      c.lineWidth = 1.2;
+      c.strokeStyle = "#ccc";
+      path(seconds - repeat * p.delayTime, repeat * (5 + p.delayTime * 7));
       c.stroke();
     }
     c.globalAlpha = 1;
   }
-  c.strokeStyle = on ? "#eee" : "#777";
-  c.lineWidth = 2;
+
+  // A bright ribbon and travelling marks make transport visible even at zero Wow.
   path();
+  c.lineWidth = 6;
+  c.strokeStyle = on ? "#eee" : "#666";
   c.stroke();
-  const warmth = on ? p.drive / 100 * (0.25 + 0.75 * signal) : 0, shade = Math.round(45 + 160 * Math.sqrt(warmth));
-  rect(148, 160, 64, 26, `rgb(${shade},${shade},${shade})`);
-  rect(151, 163, 58, 20, "#333");
-  c.strokeStyle = on ? "#fff" : "#777";
-  c.strokeRect(151, 163, 58, 20);
-  rect(169, 174, 22, 7, on ? "#eee" : "#777");
-  for (let i = 0; i < Math.ceil(warmth * 12); i++) rect(154 + i * 4, 166, 2, 5, "#ccc");
-  for (const x of [42, 318]) {
-    c.fillStyle = "#000";
+  c.lineWidth = 3.5;
+  c.strokeStyle = "#555";
+  c.stroke();
+  const travel = angle * 26;
+  c.strokeStyle = on ? "#fff" : "#888";
+  c.lineWidth = 1;
+  for (let x = 24 + ((travel % 13) + 13) % 13; x < 336; x += 13) {
+    const y = tapeY((x - 24) / 312);
     c.beginPath();
-    c.arc(x, 178, 9, 0, Math.PI * 2);
-    c.fill();
-    c.strokeStyle = "#fff";
-    c.stroke();
-    c.beginPath();
-    c.arc(x, 178, 3, 0, Math.PI * 2);
+    c.moveTo(x - 1, y - 1.5);
+    c.lineTo(x + 1, y + 1.5);
     c.stroke();
   }
-  c.fillStyle = "#fff";
-  c.font = "9px monospace";
-  c.fillText(on ? "WARMTH " + p.drive + "%" : "TAPE BYPASS", 22, 201);
-  c.fillStyle = "#bbb";
-  c.fillText("WOW " + (on ? p.wow : 0) + " / FLT " + (on ? p.flutter : 0), 135, 201);
-  c.fillText("ECHO " + (on ? p.delayMix : 0) + "%", 268, 201);
-  for (let i = 0; i < 9; i++) rect(300 + i * 3, 207, 2, 4, signal > i / 10 ? "#fff" : "#333");
+
+  const warmth = on ? p.drive / 100 * (0.25 + 0.75 * signal) : 0;
+  const shade = Math.round(35 + 170 * Math.sqrt(warmth));
+  c.fillStyle = `rgb(${shade},${shade},${shade})`;
+  c.fillRect(160, 143, 40, 28);
+  c.fillStyle = "#080808";
+  c.fillRect(164, 146, 32, 21);
+  c.lineWidth = 1;
+  c.strokeStyle = on ? "#ccc" : "#666";
+  c.strokeRect(164, 146, 32, 21);
+  c.fillStyle = on ? "#fff" : "#888";
+  c.fillRect(171, 140, 18, 6);
+  c.fillStyle = `rgb(${shade},${shade},${shade})`;
+  for (let i = 0; i < 5; i++) c.fillRect(169 + i * 5, 152, 2, 9);
+
+  for (const x of [24, 336]) {
+    circle(x, 118, 6, "#000", "#aaa");
+    circle(x, 118, 2, "#ccc");
+  }
   c.restore();
 }
+
 export {
   ditherCanvas,
   drawTape

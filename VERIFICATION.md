@@ -1,5 +1,11 @@
 # Verification
 
+## Tape physics and Space Echo integration
+
+The approved Tape mechanism is integrated with both audio models and the five Tape presets. Local checks on 2026-10-26 passed the build and all 143 Node results. Telemetry tests compare every output sample with the frozen pre-integration models at 44.1/48 kHz through presets, all twelve modes, bypass and rapid model reversals. Additional regressions cover motor glide, normalized head levels, transients between reporting blocks, subscription resets and invalid-telemetry fallback.
+
+Fresh browser checks passed all ten Space Echo Worklet assertions. Live checks covered Classic/Space Echo switches, selected-head indications, spring-only operation, preset Undo/Redo, pause and explicit recovery of Dub trails with Tape On and master volume zero. Recovery remained paused. The physical-loop tests retain separation, bounded return curvature and the saved starting arrangement. The mesh uses a bounded illustrative speed; it is not a calibrated tape-speed display. Hardware sound matching and physical-device performance remain separate from these checks.
+
 ## Tape starting presets
 
 The five Tape presets add Gentle echo, Slapback, Three-head drift, Dub trails and Spring chamber. Fresh checks on 2026-10-26 passed all 125 Node results, including pairwise PCM differences, bounded decaying preset tails, isolated Tape changes, one-step Undo and actual project round trips. No DSP algorithm changed in this update.

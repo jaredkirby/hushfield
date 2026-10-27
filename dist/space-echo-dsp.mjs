@@ -52,6 +52,10 @@ class SpaceEcho {
     this.slew = 1 - Math.exp(-1 / (rate * .035));
     this.motorSlew = 1 - Math.exp(-1 / (rate * .12));
     this.motor = 3 / .36;
+    this.visualSpeed = 1;
+    this.echoRms = this.springRms = 0;
+    this.headRms = [0, 0, 0];
+    this.headEnergy = new Float64Array(3);
     this.seed = 201;
     this.envelope = 0;
     this.springHigh = 0;
@@ -85,6 +89,9 @@ class SpaceEcho {
   }
   process(input, output) {
     const p = this.p, rate = this.rate;
+    const startTravel = this.travel, headEnergy = this.headEnergy;
+    headEnergy.fill(0);
+    let echoEnergy = 0, springEnergy = 0;
     const mode = SPACE_ECHO_MODES[this.mode - 1];
     const hp = Math.exp(-2 * Math.PI * 75 / rate);
     for (let i = 0; i < output[0].length; i++) {
@@ -114,6 +121,8 @@ class SpaceEcho {
         echo += this.low2[head] * this.headWeights[head];
         weights += this.headWeights[head];
       }
+      for (let head = 0; head < 3; head++) headEnergy[head] +=
+        (this.low2[head] * this.headWeights[head] * p.mix * p.on / Math.sqrt(Math.max(1, weights))) ** 2;
       // Average the selected returns in the loop so adding heads does not
       // multiply the feedback gain. The highest intensity can self-oscillate.
       const feedback = echo / Math.max(1, weights) * p.feedback * 1.45 * p.on;
@@ -129,10 +138,17 @@ class SpaceEcho {
       for (const path of this.springs) spring += path.process(this.springHigh * p.on);
       this.springWeight += (Number(mode.spring) - this.springWeight) * this.slew;
       const wet = echo / Math.sqrt(Math.max(1, weights)) * p.mix + spring / 3 * p.spring * this.springWeight;
+      echoEnergy += (echo / Math.sqrt(Math.max(1, weights)) * p.mix * p.on) ** 2;
+      springEnergy += (spring / 3 * p.spring * this.springWeight * p.on) ** 2;
       output[0][i] = left * .75 + p.on * ((preampL - left) * .75 + wet);
       output[1][i] = right * .75 + p.on * ((preampR - right) * .75 + wet);
       this.frame++;
     }
+    const count = output[0].length;
+    this.visualSpeed = (this.travel - startTravel) / count * rate * .12;
+    this.echoRms = Math.sqrt(echoEnergy / count);
+    this.springRms = Math.sqrt(springEnergy / count);
+    for (let i = 0; i < 3; i++) this.headRms[i] = Math.sqrt(headEnergy[i] / count);
   }
 }
 export { SpaceEcho };

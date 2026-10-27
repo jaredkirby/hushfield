@@ -21,6 +21,7 @@ node --test tests/piece-session.test.mjs tests/piece-presets.test.mjs
 node --test tests/session-recovery.test.mjs tests/project-roundtrip.test.mjs
 node --test tests/tape-impact.test.mjs tests/tape-dsp.test.mjs
 node --test tests/re201-dsp.test.mjs tests/re201-settings.test.mjs tests/tape-presets.test.mjs
+node --test tests/tape-physics.test.mjs tests/tape-initial-state.test.mjs tests/tape-model-telemetry.test.mjs tests/tape-telemetry.test.mjs
 ```
 
 Source files live in `dist/`. The build emits the main bundle and four standalone worklets under `dist/build/`, embeds the three early shell scripts into HTML and updates source hashes. Include those generated changes with a source change. After committing a synchronized source/build, rebuilding should leave `dist/` unchanged:
@@ -31,6 +32,8 @@ git diff --exit-code -- dist/
 ```
 
 CI runs install, build, full Node tests and this generated-file check on Node 22 and 24. It does not launch a browser, request a microphone, validate physical-device behavior or judge sound quality.
+
+Tape integration checks exercise finite telemetry, all twelve modes, all five presets, bypass, motor glides and rapid model reversals at 44.1/48 kHz. They compare every PCM sample against the frozen pre-telemetry models in `tests/fixtures/tape-models-v1`. Physics checks cover contact separation, the saved initial arrangement, return curvature, fixed head contacts and bounded waveform motion. For browser verification, run `/qa-space-echo.html`, then check live Tape model/preset switches, Undo/Redo, pause/restart and reduced motion. The canvas `data-tape-motion` receipt exposes source, transport speed, head weights and separate spring level for those checks.
 
 ## Browser diagnostics
 
