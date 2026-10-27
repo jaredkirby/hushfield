@@ -111,6 +111,7 @@ function plate(c, s, time, width, tone, decay) {
     path([absorber[edge], absorber[edge + 1], underside[edge + 1], underside[edge]]);
     c.fill();
   }
+  line(c, underside, 255, 1.2);
   path(absorber); c.fillStyle = '#171717'; c.fill();
   c.save(); path(absorber); c.clip();
   for (let row = 0; row < 29; row++) {
