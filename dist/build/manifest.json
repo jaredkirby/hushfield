@@ -46,7 +46,7 @@
     "dist/foundation-instruments/buchla.mjs": "6e58bb6dbd430494c0ce044f7710446eca784883073fc16cb0694a41392026b2",
     "dist/foundation-instruments/solina.mjs": "a91dbb5f728a5d813a28a9851ea06c63a83ae862f0646dca6b7ddb25d836b35f",
     "dist/foundation-instruments.mjs": "0f36d1980c8789d8cc063f2941ce85989367217bf78954ec5aad7b73fe8be711",
-    "dist/ambient-ui.mjs": "37d3e0a34f0b0bbe11c2a42e21ae261c96c22df66bcc044ba85f86c2c418fbaa",
+    "dist/ambient-ui.mjs": "6b76531783ccd18cac89bdc86990fcee2275ace1f0c6de5db0b8476f0af85ccd",
     "dist/texture-wave.mjs": "96e33b053ab208839e6a8abfed6de3bd004301ec98dc08cb344eeafc1af65d68",
     "dist/texture-adjustments.mjs": "21c1e43040d7ba3a5b84b64abe0ae202bc79049be105e652ac543f4a64ffaaef",
     "dist/square-viewport.mjs": "31409a2381edebb3bbc520122f02595bd24d5a698d36aa68499d032024d4e7fe",
