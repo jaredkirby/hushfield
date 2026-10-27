@@ -1,6 +1,6 @@
 # Hushfield
 
-One evolving ambient piece, shaped through related sound parts and shared finishing controls.
+One evolving ambient Piece for focus and calm, shaped through related sound parts and shared finishing controls.
 
 ## Language
 
@@ -56,6 +56,18 @@ The voice and effect settings for a Motion trigger or ball, including settings s
 _Avoid_: Whole piece preset
 
 ### Finishing and viewing
+
+**Editor defaults**:
+The sound and appearance configuration an editor has in a fresh Hushfield session.
+_Avoid_: Selected preset, loaded Piece, last-opened state
+
+**Editor visual**:
+The evolving monochrome dithered artwork within a sound editor, both a visual composition and an instrument for shaping sound.
+_Avoid_: Visual, when referring to an editor's artwork rather than the separate viewing tool
+
+**Visual**:
+The secondary viewing tool for a Piece, with scope, spectrum and vectorscope views.
+_Avoid_: Editor visual, when referring to this viewing tool
 
 **Space**:
 The shared filter, stereo width and room that finish the three sound parts together.

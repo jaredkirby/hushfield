@@ -65,3 +65,12 @@ body[data-texture-enabled=false] #grainPage .control-grid{opacity:1}
 #tapePresetControl>.parameter-editor{height:28px!important}
 #tapePresetControl>label{font:10px monospace;color:#aaa}
 #tapePresetDescription{grid-column:1/-1;margin:0;font:10px/1.4 monospace}
+/* Editor actions stay in the scrolling controls, outside the visual square. */
+.editor-reset-row{display:flex;justify-content:flex-end;flex:none;margin:0 0 7px;min-width:0}
+.editor-reset-button{font:10px monospace!important;min-height:36px;max-width:100%;padding:7px 10px!important;white-space:normal}
+#displayStage #tapeCanvas{touch-action:none;cursor:grab;outline-offset:-3px}
+#displayStage #tapeCanvas:active{cursor:grabbing}
+#displayStage #tapeCanvas:focus-visible{outline:1px dashed #fff}
+#tapeVisualStatus{position:absolute;top:4px;left:10px;right:10px;pointer-events:none;font:8px/1.2 monospace;color:#aaa;background:#000;z-index:1}
+.playback-check{padding:6px 12px;border-bottom:1px solid #555;font:10px monospace}
+.playback-check>div{display:flex;flex-wrap:wrap;gap:6px;padding-top:6px}

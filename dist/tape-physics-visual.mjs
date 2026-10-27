@@ -19,6 +19,10 @@ function drawTapeAfterglow(c, transport, motion, dt, moving, amount) {
     glow.clearRect(0, 0, canvas.width, canvas.height);
     return;
   }
+  if (!moving) {
+    c.drawImage(canvas, 0, 0);
+    return;
+  }
   // Use the Texture scope's exponential fade with a shorter tape afterglow,
   // so fast flutter stays distinct. Keep this buffer grayscale before dithering.
   glow.globalCompositeOperation = 'destination-out';
@@ -104,8 +108,13 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
   if (w <= 20 || h <= 20) return;
   let transport = transports.get(c);
   if (!transport) { transport = new TapeVisualTransport(); transports.set(c, transport); }
-  const motion = tapeVisualState(params, runtime.running === false ? null : runtime.telemetry, runtime.audioTime ?? seconds, seconds);
-  const moving = (runtime.running ?? (angle !== transport.lastAngle)) && params.tapeOn && !runtime.reducedMotion;
+  const moving = runtime.running === true && !!params.tapeOn && !runtime.reducedMotion;
+  // Only active Tape playback may consume advancing audio telemetry. Redraws
+  // while stopped or bypassed keep the held clock and never preview transport.
+  const motion = !moving && params.tapeOn && !runtime.reducedMotion && transport.heldMotion
+    ? { ...transport.heldMotion }
+    : tapeVisualState(params, moving ? runtime.telemetry : null,
+      runtime.audioTime ?? seconds, moving ? seconds : transport.seconds);
   const dt = runtime.dt ?? (transport.lastSeconds === undefined ? 0 : seconds - transport.lastSeconds);
   transport.advance(dt, moving, motion, params);
   transport.lastAngle = angle; transport.lastSeconds = seconds;
@@ -113,6 +122,7 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
   motion.waveform = transport.waveform;
   motion.modulation = params.tapeOn ? transport.modulation : null;
   if (runtime.reducedMotion) { motion.wow = motion.flutter = 0; motion.waveform = null; motion.modulation = null; }
+  if (moving) transport.heldMotion = { ...motion };
   const tape = transport.tape;
   const points = [];
   for (let i = 0; i < tape.n; i++) {
@@ -193,7 +203,7 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
   // Read-only render receipts used by browser QA; no audio or saved state.
   if (c.canvas?.dataset) c.canvas.dataset.tapeMotion = JSON.stringify({
     travel: tape.travel, phase: motion.seconds, moving: !!moving,
-    source: motion.live ? 'audio-processor' : 'preview',
+    source: !moving ? 'held' : motion.live ? 'audio-processor' : 'model',
     headOffset: tapeHeadOffset(297, motion), signal: motion.signal, echo: motion.echo,
     waveformPeak: motion.waveform ? Math.max(...motion.waveform.map(Math.abs)) : 0,
     speed: motion.speed, headWeights: motion.headWeights, headSignal: motion.headSignal, spring: motion.spring

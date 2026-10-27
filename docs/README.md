@@ -8,6 +8,7 @@ results and open device/listening acceptance.
 
 ## Play Hushfield
 
+- [Product direction: focus, calm and interactive visuals](PRODUCT-DIRECTION.md)
 - [README and quick start](../README.md)
 - [Playing: controls, parts, sources, harmony, effects, saving and recording](PLAYING.md)
 - [Glossary](../GLOSSARY.md)
@@ -20,9 +21,11 @@ results and open device/listening acceptance.
 - [Contributing](../CONTRIBUTING.md)
 - [Architecture and module ownership](ARCHITECTURE.md)
 - [Testing commands and browser diagnostics](TESTING.md)
+- [Background playback device checks and local evidence export](PLAYBACK-DEVICE-CHECK.md)
 - [Static hosting and local preview](../ops/README.md)
 - [Security reports and runtime boundaries](../SECURITY.md)
 - [Decision: preserve the sound of saved Pieces](adr/0001-preserve-saved-sound-models.md)
+- [Decision: preserve playback intent through interruptions](adr/0002-preserve-playback-intent-through-interruptions.md)
 - [Agent workflow entry point](../AGENTS.md): [domain context](agents/domain.md) and
   [issue tracking](agents/issue-tracker.md)
 - [Pull request template](../.github/PULL_REQUEST_TEMPLATE.md)

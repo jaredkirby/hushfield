@@ -2,13 +2,19 @@ import { INSTRUMENT_LABELS, INSTRUMENT_HELP } from './foundation-instruments.mjs
 import { FOUNDATION_PRESETS, matchingFoundationPreset } from './foundation-presets.mjs';
 import { AMBIENT_FIELDS, AMBIENT_SCENES, AMBIENT_KEYS, AMBIENT_SCALES, applyAmbientScene } from "./ambient-settings.mjs?v=hushfield-1";
 import { attachStepper, panelNav } from "./phone-ui.mjs?v=hushfield-1";
-function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
+import { FOUNDATION_WAVE_FIELDS, FOUNDATION_WAVE_DEFAULTS } from './foundation-wave-settings.mjs';
+function setupAmbientUI({ getState, getVisual, onVisualChange, onVisualReset, onChange, onNew, onInstrument, onPreset }) {
   const page = document.getElementById("ambientPage"), fields = page.querySelector(".ambient-fields"), records = [];
-  const nav = panelNav(page, [["compose", "Compose"], ["sound", "Sound"], ["layers", "Voices"]], (key) => {
+  const waveRecords = [];
+  const nav = panelNav(page, [["compose", "Compose"], ["sound", "Sound"], ["layers", "Voices"], ["waves", "Waves"]], (key) => {
     fields.querySelectorAll(".control").forEach((row) => row.hidden = row.dataset.group !== key);
     refreshHelp();
   }, { className: "ambient-panel-tabs", ariaLabel: "Ambient control pages" });
   function refreshHelp() {
+    if (page.dataset.controlPanel === 'waves') {
+      page.querySelector('.ambient-help').textContent = 'Picture only. Spacing growth opens the gaps toward the top. Stars sets the count; Twinkle adds a gentle shimmer.';
+      return;
+    }
     page.querySelector('.ambient-help').textContent = page.dataset.controlPanel === 'sound'
       ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + INSTRUMENT_HELP[getState().instrument || 'current'] + ' Starting presets change Foundation tone and voices; Scene and Tape stay as set.'
       : 'Voice dots: pitch ↑↓ · stereo ←→. Scene shapes Foundation; Whole piece replaces all parts and effects.';
@@ -74,7 +80,22 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
       onChange(field.id);
     });
   }
+  for (const field of FOUNDATION_WAVE_FIELDS) {
+    const row = document.createElement('div'); row.className = 'control'; row.dataset.group = 'waves'; row.hidden = true;
+    const top = document.createElement('div'); top.className = 'control-top';
+    const label = document.createElement('label'); label.htmlFor = field.id; label.textContent = field.label; top.append(label);
+    const input = document.createElement('input'); input.type = 'range'; input.id = field.id;
+    input.min = field.min; input.max = field.max; input.step = field.step; input.value = getVisual()[field.id];
+    row.append(top,input); fields.append(row);
+    const stepper = attachStepper(row,input,{label:'Foundation '+field.label,step:field.step,format:field.format});
+    waveRecords.push({field,input,stepper});
+    input.addEventListener('input',()=>{onVisualChange({[field.id]:+input.value});});
+  }
+  const resetRow = document.createElement('div'); resetRow.className = 'control'; resetRow.dataset.group = 'waves'; resetRow.hidden = true;
+  const reset = document.createElement('button'); reset.type = 'button'; reset.className = 'toggle'; reset.textContent = 'Reset waves'; reset.id = 'resetFoundationWaves';
+  reset.addEventListener('click',()=>{onVisualReset();refresh();}); resetRow.append(reset); fields.append(resetRow);
   function refresh() {
+    for (const {field,input,stepper} of waveRecords) {input.value=getVisual()[field.id];stepper.render();}
     const state = getState();
     instrumentSelect.value=state.instrument || 'current';
     instrumentStepper.render();
@@ -98,30 +119,25 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
   refresh();
   return { refresh, nav };
 }
-function drawAmbient({ c, w, h }, settings, status, time, level, points) {
+function drawAmbient({ c, w, h }, settings, status, time, level, points, visual = FOUNDATION_WAVE_DEFAULTS) {
   c.clearRect(0, 0, w, h);
   const t = time * 1e-3, center = h * 0.52;
-  for (let line = 0; line < 32; line++) {
-    const row = line / 31, p = row + 0.55 * row * (1 - row);
+  for (let line = 0; line < visual.foundationLines; line++) {
+    const row = line / (visual.foundationLines - 1), p = row + visual.foundationSpacing / 100 * row * (1 - row);
     c.strokeStyle = `rgb(${Math.round(40 + p * 135)},${Math.round(40 + p * 135)},${Math.round(40 + p * 135)})`;
     c.lineWidth = 1;
     c.beginPath();
     for (let x = 0; x <= w; x += 3) {
-      const u = x / w, envelope = Math.sin(u * Math.PI), wave = Math.sin(u * 14 + t * 0.13 + p * 19 * 0.22) * Math.sin(u * 5 - t * 0.07) * envelope * (12 + settings.evolution * 0.35);
+      const u = x / w, envelope = Math.sin(u * Math.PI), wave = Math.sin(u * visual.foundationFolds + t * 0.13 + p * 19 * 0.22) * Math.sin(u * visual.foundationFolds * 5 / 14 - t * 0.07) * envelope * (12 + settings.evolution * 0.35);
       let bend = 0;
       for (const point of points) {
         const distance = (u - point.x) * 5;
         bend += (point.y - 0.36) * h * 0.24 * Math.exp(-distance * distance);
       }
-      const y = center + (p - 0.5) * h * 0.36 + wave * (0.4 + p * 0.6) + bend;
+      const y = center + (p - 0.5) * h * visual.foundationHeight / 100 + wave * (0.4 + p * 0.6) + bend;
       x ? c.lineTo(x, y) : c.moveTo(x, y);
     }
     c.stroke();
-  }
-  c.fillStyle = "#777";
-  for (let i = 0; i < 36; i++) {
-    const x = i * 73.7 % w, y = i * 37.3 % (h * 0.7);
-    if (y < center - 20) c.fillRect(Math.floor(x), Math.floor(y), 1, 1);
   }
 }
 export {

@@ -1,0 +1,143 @@
+{
+  "kind": "hushfield-visual-playback-receipt",
+  "checks": [
+    {
+      "case": "ambient before Start",
+      "unchanged": true,
+      "frameGap": 12,
+      "first": {
+        "id": "ambientCanvas",
+        "hash": 2510858156
+      },
+      "second": {
+        "id": "ambientCanvas",
+        "hash": 2510858156
+      }
+    },
+    {
+      "case": "grain before Start",
+      "unchanged": true,
+      "frameGap": 12,
+      "first": {
+        "id": "waveform",
+        "hash": 1107345284
+      },
+      "second": {
+        "id": "waveform",
+        "hash": 1107345284
+      }
+    },
+    {
+      "case": "orbit before Start",
+      "unchanged": true,
+      "frameGap": 12,
+      "first": {
+        "id": "orbitCanvas",
+        "hash": 2918315333
+      },
+      "second": {
+        "id": "orbitCanvas",
+        "hash": 2918315333
+      }
+    },
+    {
+      "case": "fx before Start",
+      "unchanged": true,
+      "frameGap": 12,
+      "first": {
+        "id": "spaceCanvas",
+        "hash": 858499332
+      },
+      "second": {
+        "id": "spaceCanvas",
+        "hash": 858499332
+      }
+    },
+    {
+      "case": "tape before Start",
+      "unchanged": true,
+      "frameGap": 12,
+      "first": {
+        "id": "tapeCanvas",
+        "hash": 1381336885,
+        "motion": "{\"travel\":2912.2689526005847,\"phase\":0,\"moving\":false,\"source\":\"held\",\"headOffset\":0,\"signal\":0,\"echo\":0,\"waveformPeak\":0,\"headWeights\":[0,1,1],\"headSignal\":[0,0,0],\"spring\":0}"
+      },
+      "second": {
+        "id": "tapeCanvas",
+        "hash": 1381336885,
+        "motion": "{\"travel\":2912.2689526005847,\"phase\":0,\"moving\":false,\"source\":\"held\",\"headOffset\":0,\"signal\":0,\"echo\":0,\"waveformPeak\":0,\"headWeights\":[0,1,1],\"headSignal\":[0,0,0],\"spring\":0}"
+      }
+    },
+    {
+      "case": "Tape moving during playback",
+      "changed": true,
+      "frameGap": 12,
+      "first": {
+        "id": "tapeCanvas",
+        "hash": 3404452332,
+        "motion": "{\"travel\":2949.139894461051,\"phase\":0.9678770000238416,\"moving\":true,\"source\":\"audio-processor\",\"headOffset\":-0.22195758241437838,\"signal\":0.040328114330215784,\"echo\":0.0025916911662974495,\"waveformPeak\":0.007026096805930138,\"speed\":1.000338584957787,\"headWeights\":[0,1,1],\"headSignal\":[0,0.0030752537082721553,0.0022997192952131595],\"spring\":0}"
+      },
+      "second": {
+        "id": "tapeCanvas",
+        "hash": 3898040741,
+        "motion": "{\"travel\":2987.319952053373,\"phase\":1.5971303334048592,\"moving\":true,\"source\":\"audio-processor\",\"headOffset\":-1.890575854378297,\"signal\":0.07867058983680648,\"echo\":0.016216936942434944,\"waveformPeak\":0.01446674857288599,\"speed\":0.9992760634588027,\"headWeights\":[0,1,1],\"headSignal\":[0,0.011356502835090177,0.009980484391718981],\"spring\":0}"
+      }
+    },
+    {
+      "case": "Tape Off during playback",
+      "unchanged": true,
+      "playing": true,
+      "frameGap": 12,
+      "first": {
+        "id": "tapeCanvas",
+        "hash": 3911074076,
+        "motion": "{\"travel\":3041.4429005436873,\"phase\":2.5124133334048584,\"moving\":false,\"source\":\"held\",\"headOffset\":0,\"signal\":0,\"echo\":0,\"waveformPeak\":0.022262517362833023,\"headWeights\":[0,1,1],\"headSignal\":[0,0,0],\"spring\":0}"
+      },
+      "second": {
+        "id": "tapeCanvas",
+        "hash": 3911074076,
+        "motion": "{\"travel\":3041.4429005436873,\"phase\":2.5124133334048584,\"moving\":false,\"source\":\"held\",\"headOffset\":0,\"signal\":0,\"echo\":0,\"waveformPeak\":0.022262517362833023,\"headWeights\":[0,1,1],\"headSignal\":[0,0,0],\"spring\":0}"
+      }
+    },
+    {
+      "case": "Tape after Stop",
+      "unchanged": true,
+      "frameGap": 12,
+      "first": {
+        "id": "tapeCanvas",
+        "hash": 4230272245,
+        "motion": "{\"travel\":3105.856335466287,\"phase\":4.199795999999999,\"moving\":false,\"source\":\"held\",\"headOffset\":1.438079622226672,\"signal\":0.23801593144387626,\"echo\":0.044161754392214175,\"waveformPeak\":0.032400842756032944,\"speed\":0.9997896364569314,\"headWeights\":[0,1,1],\"headSignal\":[0,0.036190518306076266,0.0361616711686395],\"spring\":0}"
+      },
+      "second": {
+        "id": "tapeCanvas",
+        "hash": 4230272245,
+        "motion": "{\"travel\":3105.856335466287,\"phase\":4.199795999999999,\"moving\":false,\"source\":\"held\",\"headOffset\":1.438079622226672,\"signal\":0.23801593144387626,\"echo\":0.044161754392214175,\"waveformPeak\":0.032400842756032944,\"speed\":0.9997896364569314,\"headWeights\":[0,1,1],\"headSignal\":[0,0.036190518306076266,0.0361616711686395],\"spring\":0}"
+      }
+    },
+    {
+      "case": "Motion after Stop and focus redraw",
+      "unchanged": true,
+      "frameGap": 12,
+      "first": {
+        "id": "orbitCanvas",
+        "hash": 385527701
+      },
+      "second": {
+        "id": "orbitCanvas",
+        "hash": 385527701
+      }
+    }
+  ],
+  "date": "2026-10-27",
+  "browser": "Codex in-app browser on development Mac",
+  "liveVolume": 0,
+  "restoredVolume": 0.55,
+  "headphoneAcceptance": "Not tested in this browser check",
+  "warningErrors": [],
+  "sha256": {
+    "dist/app.js": "f25f4115dd76a597ebdd923f167fdc5d230f376471d0fa118ff8755198eff13a",
+    "dist/tape-physics-visual.mjs": "e2de5aa7e8e66948f785931424d7fe9f7ac02485e1e5f9c99b2229b7d2cd72c6",
+    "dist/build/app.js": "e75b218cb7a4c98bcad9a2cb5fb0f2df48fed9a8e3ea1e46fad225d4ffe58f3b",
+    "dist/build/manifest.json": "a15ac2c71098bd5d2f37d2fc44700e562c15cf86ddb912e6cfbf2062fb871c23"
+  }
+}

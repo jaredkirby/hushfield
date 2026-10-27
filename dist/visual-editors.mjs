@@ -195,5 +195,5 @@ export function setupVisualEditors({getParams, setParams, getPage, getDuration, 
   const observer=new MutationObserver(()=>{if(getPage()!==page)refresh();});
   observer.observe(document.body,{attributes:true,attributeFilter:['data-page']});
   refresh();
-  return {refresh,destroy(){finish(true);observer.disconnect();listeners.forEach(remove=>remove());nodes.forEach(node=>node.remove());}};
+  return {refresh,cancel(){finish(true);},destroy(){finish(true);observer.disconnect();listeners.forEach(remove=>remove());nodes.forEach(node=>node.remove());}};
 }
