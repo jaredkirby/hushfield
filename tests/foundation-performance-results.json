@@ -1,0 +1,148 @@
+{
+  "measurementLabel": "Final optimized instruments",
+  "sourceSha256": {
+    "dist/ambient-dsp.mjs": "0939ee7c3ab9a2591fbf88dd0e2d0ac791330b775d3a64d3e36ab35701914eee",
+    "dist/ambient-settings.mjs": "2de40f3657e0b6e532ba238ab76088019d8af861f5d07dc93dd3fe9c981865cc",
+    "dist/ambient-points.mjs": "930c70317bcb7eae0c79a44662828b57229e3001b3b5f087758eb4397a7cddc4",
+    "dist/foundation-instruments.mjs": "0f36d1980c8789d8cc063f2941ce85989367217bf78954ec5aad7b73fe8be711",
+    "dist/foundation-instruments/solina.mjs": "a91dbb5f728a5d813a28a9851ea06c63a83ae862f0646dca6b7ddb25d836b35f",
+    "dist/foundation-instruments/juno.mjs": "b930e01c86a906b8cd0191b735a202583a24375a356fb1473f06333d1ea4e13d",
+    "dist/foundation-instruments/buchla.mjs": "6e58bb6dbd430494c0ce044f7710446eca784883073fc16cb0694a41392026b2",
+    "dist/foundation-instruments/sem.mjs": "325c6317bf205409627969b36150e97bec32e98da1b5d1f4ba378f428bbf0921",
+    "dist/foundation-instruments/moog.mjs": "a605bd674c8791a7f2f463a81101e7cc03dae2110d741608fda63d6284422262"
+  },
+  "preoptimizationBaseline": {
+    "generatedAt": "2026-10-27T03:25:14.008Z",
+    "runtime": "v22.22.0",
+    "scenario": "Prewarmed 20.02 seconds; 1500 measured blocks across first chord overlap, maximal macros and layers; synchronous Node engine only; output arrays preallocated outside measurement.",
+    "results": [
+      {
+        "instrument": "current",
+        "blocks": 1500,
+        "medianMs": 0.13566600000001472,
+        "p99Ms": 0.4863340000001699,
+        "maxMs": 1.177000000000021,
+        "medianQuantumRatio": 0.05087475000000552,
+        "p99QuantumRatio": 0.18237525000006372
+      },
+      {
+        "instrument": "solina",
+        "blocks": 1500,
+        "medianMs": 0.23225000000002183,
+        "p99Ms": 0.7973329999999805,
+        "maxMs": 1.3845000000001164,
+        "medianQuantumRatio": 0.08709375000000819,
+        "p99QuantumRatio": 0.2989998749999927
+      },
+      {
+        "instrument": "juno",
+        "blocks": 1500,
+        "medianMs": 0.2119590000002063,
+        "p99Ms": 0.8560420000003433,
+        "maxMs": 1.2443339999999807,
+        "medianQuantumRatio": 0.07948462500007736,
+        "p99QuantumRatio": 0.3210157500001287
+      },
+      {
+        "instrument": "buchla",
+        "blocks": 1500,
+        "medianMs": 0.6136249999999563,
+        "p99Ms": 1.608791000000565,
+        "maxMs": 1.936000000000604,
+        "medianQuantumRatio": 0.23010937499998363,
+        "p99QuantumRatio": 0.6032966250002119
+      },
+      {
+        "instrument": "sem",
+        "blocks": 1500,
+        "medianMs": 1.8655830000025162,
+        "p99Ms": 3.136540999999852,
+        "maxMs": 3.661666999996669,
+        "medianQuantumRatio": 0.6995936250009436,
+        "p99QuantumRatio": 1.1762028749999445
+      },
+      {
+        "instrument": "moog",
+        "blocks": 1500,
+        "medianMs": 0.4307920000028389,
+        "p99Ms": 4.329583000002458,
+        "maxMs": 5.633875000003172,
+        "medianQuantumRatio": 0.1615470000010646,
+        "p99QuantumRatio": 1.6235936250009217
+      }
+    ],
+    "note": "Prior unoptimized SEM/Moog diagnostic; source hashes were not captured for this baseline."
+  },
+  "generatedAt": "2026-10-27T03:29:20.931Z",
+  "runtime": "v22.22.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M4",
+  "logicalCpus": 10,
+  "sampleRate": 48000,
+  "frames": 128,
+  "quantumMs": 2.6666666666666665,
+  "scenario": "Prewarmed 20.02 seconds; 1500 measured blocks across first chord overlap, maximal macros and layers; synchronous Node engine only; output arrays preallocated outside measurement.",
+  "limitations": [
+    "Diagnostic only; Node timing does not establish browser AudioWorklet deadline reliability.",
+    "Background load, JIT and garbage collection affect tail timings.",
+    "No browser graph, UI, shared Space/Tape, Texture, recording, mobile battery or physical-device acceptance included.",
+    "Moog intentionally has one gliding chord voice; other instruments retain outgoing chord overlap."
+  ],
+  "results": [
+    {
+      "instrument": "current",
+      "blocks": 1500,
+      "medianMs": 0.12591699999995853,
+      "p99Ms": 0.4731249999999818,
+      "maxMs": 1.1821249999999281,
+      "medianQuantumRatio": 0.04721887499998445,
+      "p99QuantumRatio": 0.17742187499999318
+    },
+    {
+      "instrument": "solina",
+      "blocks": 1500,
+      "medianMs": 0.22825000000011642,
+      "p99Ms": 0.6320000000000618,
+      "maxMs": 1.2619580000000497,
+      "medianQuantumRatio": 0.08559375000004366,
+      "p99QuantumRatio": 0.2370000000000232
+    },
+    {
+      "instrument": "juno",
+      "blocks": 1500,
+      "medianMs": 0.20675000000028376,
+      "p99Ms": 0.805417000000034,
+      "maxMs": 1.189082999999755,
+      "medianQuantumRatio": 0.07753125000010641,
+      "p99QuantumRatio": 0.30203137500001276
+    },
+    {
+      "instrument": "buchla",
+      "blocks": 1500,
+      "medianMs": 0.5912500000004002,
+      "p99Ms": 1.1964159999997719,
+      "maxMs": 1.8220839999994496,
+      "medianQuantumRatio": 0.22171875000015007,
+      "p99QuantumRatio": 0.44865599999991446
+    },
+    {
+      "instrument": "sem",
+      "blocks": 1500,
+      "medianMs": 0.3534159999999247,
+      "p99Ms": 0.7408340000001772,
+      "maxMs": 1.6448339999988093,
+      "medianQuantumRatio": 0.13253099999997175,
+      "p99QuantumRatio": 0.27781275000006644
+    },
+    {
+      "instrument": "moog",
+      "blocks": 1500,
+      "medianMs": 0.22287500000129512,
+      "p99Ms": 0.44195899999976973,
+      "maxMs": 0.7719170000000304,
+      "medianQuantumRatio": 0.08357812500048567,
+      "p99QuantumRatio": 0.16573462499991365
+    }
+  ]
+}

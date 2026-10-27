@@ -15,9 +15,10 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument }) {
   const instrumentRow=document.createElement('div');
   instrumentRow.className='control direct-control';instrumentRow.dataset.group='sound';instrumentRow.hidden=true;
   const instrumentLabel=document.createElement('label');instrumentLabel.htmlFor='ambient-instrument';instrumentLabel.textContent='Instrument';
-  const instrumentSelect=document.createElement('select');instrumentSelect.id='ambient-instrument';instrumentSelect.className='parameter-choice';instrumentSelect.setAttribute('aria-label','Foundation Instrument');
+  const instrumentSelect=document.createElement('select');instrumentSelect.id='ambient-instrument';instrumentSelect.className='parameter-choice';
   for(const [id,name] of Object.entries(INSTRUMENT_LABELS)){const option=document.createElement('option');option.value=id;option.textContent=name;instrumentSelect.append(option);}
-  const instrumentEditor=document.createElement('div');instrumentEditor.className='parameter-editor';instrumentEditor.append(instrumentSelect);instrumentRow.append(instrumentLabel,instrumentEditor);fields.append(instrumentRow);
+  instrumentRow.append(instrumentLabel,instrumentSelect);fields.append(instrumentRow);
+  const instrumentStepper=attachStepper(instrumentRow,instrumentSelect,{label:'Foundation Instrument',format:()=>INSTRUMENT_LABELS[instrumentSelect.value]});
   instrumentSelect.addEventListener('change',()=>onInstrument(instrumentSelect.value));
   for (const field of AMBIENT_FIELDS.filter((f) => !["grains", "orbit", "space"].includes(f.id))) {
     const row = document.createElement("div");
@@ -54,6 +55,7 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument }) {
   function refresh() {
     const state = getState();
     instrumentSelect.value=state.instrument || 'current';
+    instrumentStepper.render();
     for (const { field, input, stepper } of records) {
       input.value = state[field.id];
       stepper.render();

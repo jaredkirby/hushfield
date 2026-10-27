@@ -131,3 +131,23 @@ test('startup inert removal unlocks exact buttons and categorical choices withou
   category.input.disabled=true;category.controller.render();assert.equal(category.controller.inputElement.disabled,true);
   category.input.disabled=false;category.controller.render();assert.equal(category.controller.inputElement.disabled,false);
 });
+
+test('string instrument choices share the adjustment rail and nested history as one cancellable edit',()=>{
+ const names={current:'Hushfield',solina:'String ensemble',juno:'Chorus synth'};
+ const row=new Element('div'),input=new Element('select'),label=new Element('label');input.id='foundation-instrument';label.htmlFor=input.id;
+ for(const [value,name]of Object.entries(names)){const option=new Element('option');option.value=value;option.textContent=name;input.append(option);}
+ input.value='current';row.append(label,input);body.append(row);
+ const controller=attachStepper(row,input,{label:'Foundation Instrument',format:()=>names[input.value]});
+ let state={instrument:'current',compositionVersion:1};
+ const history=createControlHistory({capture:()=>state,restore:snapshot=>{state=snapshot;input.value=state.instrument;controller.render();}});
+ row.addEventListener('hushfield:editstart',()=>history.begin('instrument'));
+ row.addEventListener('hushfield:editend',event=>history.end({cancelled:event.detail.cancelled}));
+ input.addEventListener('change',()=>{history.begin('nested selection');state.instrument=input.value;state.compositionVersion=2;controller.render();history.end();});
+ setupSharedAdjuster();controller.inputElement.focus();const bar=transport.children.at(-1),up=bar.children[2];
+ assert.equal(input.hidden,true);assert.equal(label.htmlFor,controller.inputElement.id);
+ fire(up,'click',{detail:0});assert.equal(state.instrument,'solina');assert.equal(bar.children[1].children[0].textContent,'Foundation Instrument');assert.equal(bar.children[1].children[1].textContent,'String ensemble');
+ assert.equal(history.undo(),true);assert.deepEqual(state,{instrument:'current',compositionVersion:1});assert.equal(history.undo(),false);assert.equal(controller.inputElement.value,'current');
+ assert.equal(history.redo(),true);assert.equal(controller.inputElement.value,'solina');
+ fire(up,'pointerdown',{button:0,pointerId:51});assert.equal(state.instrument,'juno');fire(up,'pointercancel',{pointerId:51});assert.equal(state.instrument,'solina');assert.equal(controller.inputElement.value,'solina');
+ history.undo();assert.equal(state.instrument,'current');
+});
