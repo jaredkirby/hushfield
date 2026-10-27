@@ -5,14 +5,6 @@
 
 Hushfield is a browser instrument for ambient music. Move four voice dots to change a chord, turn that sound into grains, and add notes with rotating shapes and bouncing balls. Space and Tape process the mix. The display is black and white, with ordered dithering.
 
-## In motion
-
-Captured during playback, cropped to the square display.
-
-| Foundation | Texture | Tape |
-| --- | --- | --- |
-| ![Foundation's dithered landscape with four chord voice dots](docs/images/visual-foundation.jpg) | ![Texture's live stereo waveform with grain position and length handles](docs/images/visual-texture.jpg) | ![Tape's dithered loop, reels and echo heads above the echo grid](docs/images/visual-tape.jpg) |
-
 ## Play locally
 
 The repository includes a playable build in `dist/`. You need Python 3 for this server command, but no account, API key or backend.
