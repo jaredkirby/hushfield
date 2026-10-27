@@ -101,13 +101,13 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
 function drawAmbient({ c, w, h }, settings, status, time, level, points) {
   c.clearRect(0, 0, w, h);
   const t = time * 1e-3, center = h * 0.52;
-  for (let line = 0; line < 20; line++) {
-    const p = line / 19;
+  for (let line = 0; line < 32; line++) {
+    const row = line / 31, p = row + 0.55 * row * (1 - row);
     c.strokeStyle = `rgb(${Math.round(40 + p * 135)},${Math.round(40 + p * 135)},${Math.round(40 + p * 135)})`;
     c.lineWidth = 1;
     c.beginPath();
     for (let x = 0; x <= w; x += 3) {
-      const u = x / w, envelope = Math.sin(u * Math.PI), wave = Math.sin(u * 8 + t * 0.13 + line * 0.22) * Math.sin(u * 3 - t * 0.07) * envelope * (12 + settings.evolution * 0.35);
+      const u = x / w, envelope = Math.sin(u * Math.PI), wave = Math.sin(u * 14 + t * 0.13 + p * 19 * 0.22) * Math.sin(u * 5 - t * 0.07) * envelope * (12 + settings.evolution * 0.35);
       let bend = 0;
       for (const point of points) {
         const distance = (u - point.x) * 5;
