@@ -171,25 +171,16 @@ function chamber(c,s,time,width,tone,decay,original) {
     line(c,[project(x,-300,.9),project(x,360,.9)],80,6);
     line(c,[project(x-6,-300,.9),project(x-6,360,.9)],145,1);
   }
-  // Original keeps its folded reflections. Chamber fronts approach the room
-  // opening, then keep expanding into the foreground without a camera pole.
+  // Chamber keeps the folded contours moving down the hall to its opening.
+  const travelTime=Math.min(5,.8+decay*.55)*.85;
   for(const p of s.pulses) {
     const age=time-p.at, z=age*.48, strength=p.strength*Math.exp(-age/(.4+decay*.3));
     for(let echo=0;echo<(original?2:4);echo++) {
-      const points=[], depth=z+echo*.13, radius=160+age*230;
-      const travel=age-echo*.09;
-      if(!original && travel<0) continue;
-      const approach=1/(1+Math.max(0,.9-travel*1.5)*2.8);
-      const foreground=1+Math.max(0,travel-.6)*.7;
+      const points=[], depth=original?z+echo*.13:(1.21+echo*.13)*Math.max(0,1-age/travelTime), radius=160+age*230;
       for(let i=0;i<=128;i++) {
         const a=i/128*TAU, r=radius*(1+.025*tone*Math.sin(a*8+p.seed));
-        if(original) {
-          const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
-          points.push(project(x,y,depth));
-        } else {
-          const reach=(160+travel*420)*(1+.025*tone*Math.sin(a*8+p.seed))*approach*foreground;
-          points.push([500+Math.cos(a)*reach*(.65+width*.35),445+Math.sin(a)*reach*.8]);
-        }
+        const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
+        points.push(project(x,y,depth));
       }
       line(c,points,strength*(210-echo*38),1.7-echo*.2);
     }
