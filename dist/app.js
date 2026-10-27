@@ -31,7 +31,7 @@ import { createMicrophoneTake } from "./microphone-take.mjs";
 import { serializeProject, decodeProject } from "./project-file.mjs?v=hushfield-1";
 import { setupAudioVisuals, createVisualRenderer } from "./audio-visuals.mjs?v=hushfield-1";
 import { setupAmbientPoints } from "./ambient-interaction.mjs?v=hushfield-1";
-import { ambientVisualSeconds, outputAudioTime } from "./ambient-points.mjs?v=hushfield-1";
+import { outputAudioTime } from "./ambient-points.mjs?v=hushfield-1";
 import { AMBIENT_DEFAULTS, AMBIENT_SCENES, AMBIENT_KEYS, AMBIENT_SCALES, ambientChord, ambientChordName, restoreAmbient } from "./ambient-settings.mjs?v=hushfield-1";
 import { setupAmbientUI, drawAmbient } from "./ambient-ui.mjs?v=hushfield-1";
 import { prepareTextureWave } from "./texture-wave.mjs";
@@ -269,7 +269,7 @@ function refreshTapeControls() {
   $("delayTime").title = spaceEcho ? "Longest head time. Heads 1, 2 and 3 are at one third, two thirds and this time. Up to 1.5 seconds extends the original hardware range." : "Time between echoes.";
   const note = $("tapePage").querySelector(".tape-note");
   note.textContent = activeTapePanel === "mechanics"
-    ? "Picture only. Surface tension changes how freely the tape slides; Stiffness changes how easily it bends. The artwork keeps moving with audio stopped. Drag the artwork to change echo time and feedback."
+    ? "Picture only. Surface tension changes how freely the tape slides; Stiffness changes how easily it bends. The loop moves while sound is playing and Tape is on. Drag the artwork to change echo time and feedback."
     : spaceEcho
     ? "Space Echo uses three tape heads and a parallel spring. Head 3 time sets the longest delay; heads 1 and 2 play at one third and two thirds. Modes 5 through 12 add spring; mode 12 is spring only. Echo level and Spring level are independent. Time extends to 1.5 s beyond the original hardware range. Drive colors the direct sound too. Off bypasses the whole effect."
     : "Warm vintage color for the whole piece. Wow sways the tape; Flutter adds fine ripples. Echo level controls only the repeats. Character colors the direct sound too. Off bypasses the whole effect.";
@@ -564,6 +564,7 @@ function syncPieceGains(slew = .08) {
   }
 }
 function syncPlayback() {
+  renderClock.invalidate();
   const mix = piecePlayback(piece, running, solo, ambientStats.phrase);
   engine?.port.postMessage({ type: "captureFoundation", value: running });
   engine?.port.postMessage({ type: "play", value: running && mix.texture > 0 });
@@ -1266,12 +1267,12 @@ function drawWave(dt = 1 / 30) {
     c.fill();
   }
 }
-function drawOrbit(verts) {
+function drawOrbit(verts, now) {
   const fit = fitCanvas($("orbitCanvas"));
   if (!fit) return;
   const { c, w, h } = fit;
   c.clearRect(0, 0, w, h);
-  const { radius, cx, cy, ring } = padGeometry(w, h), now = performance.now() / 1e3, canvas = $("orbitCanvas");
+  const { radius, cx, cy, ring } = padGeometry(w, h), canvas = $("orbitCanvas");
   const phase = orbitState.phase + params.orbitRotation * Math.PI / 180;
   c.strokeStyle = "#555";
   c.lineWidth = 1;
@@ -1346,7 +1347,7 @@ function drawOrbit(verts) {
   $("orbitAngle").textContent = `${Math.round((orbitState.phase * 180 / Math.PI + params.orbitRotation + 360) % 360)}\xB0`;
 }
 const tapeLayout = new URLSearchParams(location.search).get("tapeLayout") || "space-echo";
-let frequencyData = new Uint8Array(512), tapeAngle = 0, tapeSeconds = 0, artSeconds = 0;
+let frequencyData = new Uint8Array(512), tapeAngle = 0, tapeSeconds = 0, artSeconds = 0, visualFrameTime = 0;
 const renderClock = createRenderClock(30);
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 reducedMotion.addEventListener('change', () => renderClock.invalidate());
@@ -1363,16 +1364,19 @@ function frame(time) {
     ambientNode?.port.postMessage({ type: "points", value: ambientState.points });
   }
   const foundationVisual = visuals.settings();
-  const watching = !document.hidden && !reducedMotion.matches && ['ambient', 'tape', 'fx'].includes(activeTab);
-  if (!renderClock.shouldDraw(time, running || !!previewNode || lastMeter > 1e-3 || watching)) {
+  const soundPlaying = (running || !!previewNode) && ctx?.state === 'running' && !document.hidden;
+  const moving = soundPlaying && !reducedMotion.matches;
+  const tapeMoving = moving && running && params.tapeOn;
+  if (!renderClock.shouldDraw(time, soundPlaying)) {
     requestAnimationFrame(frame);
     return;
   }
-  const dt = Math.min(0.1, (time - lastFrame) / 1e3 || 0.033);
+  const dt = moving ? Math.min(0.1, (time - lastFrame) / 1e3 || 0.033) : 0;
   lastFrame = time;
-  if (watching) artSeconds += dt;
+  if (moving) artSeconds += dt;
+  if (moving) visualFrameTime = time / 1000;
   const verts = boundary(shapePoints($("orbitShape").value), orbitState.phase + params.orbitRotation * Math.PI / 180);
-  if (activeTab === 'tape' && watching) {
+  if (activeTab === 'tape' && tapeMoving) {
     tapeAngle += dt * (1.2 + 0.4 / params.delayTime);
     tapeSeconds += dt;
   }
@@ -1383,10 +1387,10 @@ function frame(time) {
   if (activeTab === "ambient") {
     const fit = fitCanvas($("ambientCanvas"));
     if (fit) {
-      const seconds = ambientVisualSeconds(ambientStats, outputAudioTime(ctx, time), running && ambientState.enabled && ctx?.state === "running"), motionTime = reducedMotion.matches ? 0 : seconds, points = ambientPoints.render(fit.w, fit.h, motionTime, lastMeter, reducedMotion.matches);
+      const points = ambientPoints.render(fit.w, fit.h, reducedMotion.matches ? 0 : artSeconds, lastMeter, reducedMotion.matches);
       drawAmbient(fit, ambientState, ambientStats, (reducedMotion.matches ? 0 : artSeconds) * 1e3, lastMeter, points, foundationVisual);
       ditherCanvas($("ambientCanvas"));
-      drawFoundationStars(fit, foundationVisual, time / 1000, reducedMotion.matches);
+      drawFoundationStars(fit, foundationVisual, artSeconds, reducedMotion.matches);
     }
     updateAmbientDisplay();
   } else if (activeTab === "visual") {
@@ -1394,19 +1398,18 @@ function frame(time) {
     if (fit) visuals.frame(fit, dt);
   } else {
     if (activeTab === "orbit") {
-      drawOrbit(verts);
+      drawOrbit(verts, visualFrameTime);
       ditherCanvas($("orbitCanvas"));
     } else if (activeTab === "tape") {
       const fit = fitCanvas($("tapeCanvas"));
       if (fit) {
         drawTape(fit, params, tapeAngle, lastMeter, tapeSeconds, tapeLayout, {
           dt, telemetry: tapeVisualSnapshot, audioTime: outputAudioTime(ctx, time),
-          running: running && ctx?.state === "running" && !document.hidden,
-          animate: watching,
+          running: tapeMoving,
           reducedMotion: reducedMotion.matches, trail: visuals.settings().trail
         });
         ditherCanvas($("tapeCanvas"));
-        $('tapeVisualStatus').textContent = running && params.tapeOn ? 'LIVE TAPE · DRAG TO SHAPE ECHO' : 'VISUAL PREVIEW · AUDIO ' + (running ? 'BYPASSED' : 'STOPPED');
+        $('tapeVisualStatus').textContent = !params.tapeOn ? 'TAPE OFF · DRAG TO SHAPE ECHO' : tapeMoving ? 'LIVE TAPE · DRAG TO SHAPE ECHO' : 'TAPE PAUSED · START SOUND TO MOVE';
       }
     } else if (activeTab === 'fx' && document.body.dataset.spacePanel !== 'filter') {
       const fit = fitCanvas($('spaceCanvas'));
@@ -1431,7 +1434,7 @@ function frame(time) {
   if (outputFit) visuals.outputFrame(outputFit, dt, reducedMotion.matches);
   if (analyser) {
     analyser.getByteFrequencyData(frequencyData);
-    lastMeter += (Math.max(...frequencyData) / 255 - lastMeter) * (1 - Math.exp(-dt / 0.1));
+    lastMeter = soundPlaying ? lastMeter + (Math.max(...frequencyData) / 255 - lastMeter) * (1 - Math.exp(-dt / 0.1)) : 0;
     $("meterBar").style.height = lastMeter * 100 + "%";
   }
   requestAnimationFrame(frame);
@@ -1752,7 +1755,7 @@ function setupDisplay() {
   stage.append($("waveWrap"), document.querySelector(".orbit-stage"));
   const deck = document.createElement("div");
   deck.id = "tapeDeck";
-  deck.innerHTML = '<canvas id="tapeCanvas" tabindex="0" role="group" aria-label="Tape loop. Drag left or right for echo time, up or down for feedback. Arrow keys adjust; Escape cancels." title="Drag horizontally for echo time, vertically for feedback. Arrow keys adjust. Escape cancels."></canvas><span id="tapeVisualStatus">VISUAL PREVIEW · AUDIO STOPPED</span>';
+  deck.innerHTML = '<canvas id="tapeCanvas" tabindex="0" role="group" aria-label="Tape loop. Drag left or right for echo time, up or down for feedback. Arrow keys adjust; Escape cancels." title="Drag horizontally for echo time, vertically for feedback. Arrow keys adjust. Escape cancels."></canvas><span id="tapeVisualStatus">TAPE PAUSED · START SOUND TO MOVE</span>';
   stage.append(deck);
   const ambient = document.createElement("div");
   ambient.id = "ambientStage";

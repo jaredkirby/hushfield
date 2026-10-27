@@ -14,7 +14,7 @@ Players should be able to shape sound by interacting with the editor visuals. Ge
 
 A manual adjustment establishes the new baseline for ongoing development. The Piece continues evolving around that choice rather than gradually returning to the previous settings.
 
-Visual movement can continue independently when sound is stopped. The audio playback state must remain clear, and touching artwork must never unexpectedly start audio. Sound-changing gestures made while stopped can prepare settings for the next playback.
+Autonomous visual movement requires active Piece playback. Views stay still before Start and while playback is stopped or interrupted; Tape additionally requires Tape On. This replaces the earlier silent-animation choice. The audio playback state must remain clear, and touching artwork must never unexpectedly start audio. Gestures made while stopped can prepare settings for the next playback and redraw the edited view.
 
 Every editor needs a Reset to defaults action. It restores that editor's sound and appearance settings from a fresh Hushfield session, regardless of the preset or saved Piece currently loaded. It preserves the Blend, selected Texture material, playback state and other editors' settings. Reset is one undoable action, requires no confirmation dialog and makes a gentle audible transition during playback.
 
@@ -37,7 +37,7 @@ The complete product direction was confirmed on 2026-10-27. Implementation detai
 1. Establish the implementation baseline. Record the source revision, preserve concurrent work and assess the current app against the agreed requirements. Identify behavior that already works, missing behavior and acceptance that still needs a real device.
 2. Investigate background playback early. Use a focused playback diagnostic to assess app switching, screen lock, calls and competing media on real phones and tablets. Keep the delivery approach provisional until those results establish what the browser can support.
 3. Deliver per-editor Reset to defaults as the first bounded feature. Use the actual fresh-session settings, preserve the agreed surrounding state, support one-step Undo and check audible transitions. Cover all five sound editors and review the result in the playable app.
-4. Use Tape as the first visual-interaction candidate. Preserve its evolving monochrome dithered character while making direct gestures produce understandable sound changes. Verify manual baselines, silent visual movement, matching controls, Undo and reset before extending the approach to other editors. Each editor retains its own visual identity.
+4. Use Tape as the first visual-interaction candidate. Preserve its evolving monochrome dithered character while making direct gestures produce understandable sound changes. Verify manual baselines, motion only during playback with Tape On, matching controls, Undo and reset before extending the approach to other editors. Each editor retains its own visual identity.
 5. Review calmness and sustained use. Assess default attacks, melodic activity, harmonic changes, loudness transitions and ordinary control ranges. Preserve older saved sounds and deliberate experiments. Complete at least a 60-minute focus session on the target devices, with separate listening, visual and touch approval.
 
 This sequence is a proposal for implementation planning. It does not establish that these features or acceptance checks are complete.

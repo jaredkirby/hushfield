@@ -2,7 +2,7 @@
 
 ## Objective and status
 
-Implement the [agreed product direction](../docs/PRODUCT-DIRECTION.md) in a reviewable candidate. The first candidate includes per-editor Reset to defaults, playable Tape artwork, silent Tape movement and playback-intent reliability. It remains subject to human visual/listening approval and physical-device acceptance.
+Implement the [agreed product direction](../docs/PRODUCT-DIRECTION.md) in a reviewable candidate. The candidate includes per-editor Reset to defaults, playable Tape artwork and playback-intent reliability. The revised animation rule requires active playback for visual motion and Tape On for tape motion. It remains subject to human visual/listening approval and physical-device acceptance.
 
 Branch `codex/focus-and-calm` starts from `f9311ef`, the remote main verified at implementation start. The separate `hushfield-focus` worktree preserves the original dirty checkout. Foundation Waves and stars work was carried across deliberately; newer merged Space and Tape implementations remain in the candidate.
 
@@ -17,9 +17,9 @@ Subagents owned separate goals: shared reset/default/transition code and tests; 
 
 ## Evidence
 
-The build and all 252 Node tests passed. Browser checks covered all five editors at 320×568, 390×844, 844×390 and 1024×768, with no outer horizontal overflow and live playback continuing through navigation. Reset/Undo, stopped Tape gestures, live reset, silent visual movement, reduced motion and explicit Stop were checked. Browser audio diagnostics passed five Piece, ten Tape and 36 Foundation checks.
+The initial build and all 252 Node tests passed. Browser checks covered all five editors at 320×568, 390×844, 844×390 and 1024×768, with no outer horizontal overflow and live playback continuing through navigation. Reset/Undo, stopped Tape gestures, live reset, reduced motion and explicit Stop were checked. The same historical run checked silent visual movement, which the user has since rejected. Browser audio diagnostics passed five Piece, ten Tape and 36 Foundation checks.
 
-[Browser receipt](../tests/focus-browser-results.json) records the build/source hashes, cases and limitations. [Tape screenshot](../docs/images/focus-tape-candidate.jpg) shows the candidate. Live UI checks used master volume zero and do not establish listening preference.
+[Browser receipt](../tests/focus-browser-results.json) records the original build/source hashes, cases and limitations; it does not verify the revised animation rule. [Tape screenshot](../docs/images/focus-tape-candidate.jpg) shows that candidate. Live UI checks used master volume zero and do not establish listening preference.
 
 On 2026-10-27, the user reported an apparent Sony headphone noise-cancellation/transparency switch in Helium on a MacBook Pro. They reported the switch gone in a comparison build that removed the new Media Session integration and early Audio Session access while preserving the sound engine and existing audio activation. The exact headphone model and OS/browser versions were not recorded; the combined comparison does not identify the individual cause.
 
@@ -27,4 +27,4 @@ The candidate therefore omits app-provided headset/lock-screen transport registr
 
 ## Next actions and open acceptance
 
-Review the playable Tape candidate for visual enjoyment, gesture mapping and audible changes. Extend editor-specific interactions after that feedback. A broader calm-range/default listening pass is still pending. Follow the [device checklist](../docs/PLAYBACK-DEVICE-CHECK.md) for a 60-minute session, screen lock, calls and competing media on real phones and tablets. The MacBook Pro/Sony/Helium comparison is a narrow human result; long-session reliability and call-versus-media behavior remain unverified. Reintroducing platform transport controls requires a separate headphone/device check.
+The revised animation gate builds and passes all 260 Node tests. [Fresh browser checks](../tests/visual-playback-browser-results.json) confirm still stopped canvases in all five editors, moving Tape during playback and frozen Tape while Off or after Stop. Stopped setting edits remain available without starting audio. Review the playable Tape candidate for visual enjoyment, gesture mapping and audible changes, then extend editor-specific interactions after feedback. A broader calm-range/default listening pass is still pending. Follow the [device checklist](../docs/PLAYBACK-DEVICE-CHECK.md) for a 60-minute session, screen lock, calls and competing media on real phones and tablets. The MacBook Pro/Sony/Helium comparison is a narrow human result; long-session reliability and call-versus-media behavior remain unverified. Reintroducing platform transport controls requires a separate headphone/device check.

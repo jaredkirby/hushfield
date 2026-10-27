@@ -8,7 +8,7 @@ Fresh sessions start with Chorus synth, the Stillwater Scene and Space Echo with
 
 Tap Start in the bottom bar to play the complete Piece, and Stop to pause. Enter or Space also activates the focused button. Opening another editor changes the controls and display, not the music. Drag a slider to change a continuous value; tap its underlined readout for exact entry with a range and formatted preview. Categories such as scene, scale, waveform and shape have direct menus. The common minus/plus pair still adjusts the selected control, and holding a button repeats. A zero blend level means that part is inaudible; Add texture sets Texture to 35%, and Add motion sets Motion to 25%. These actions set the level; they do not start a stopped Piece.
 
-Start/Stop is a separate button in the bottom bar beside the minus/plus controls. Tapping the visual does not toggle playback. The bottom-bar output waveform is hidden; Visual provides the output visualizations. Pausing keeps the normal black visual without an overlay.
+Start/Stop is a separate button in the bottom bar beside the minus/plus controls. Tapping the visual does not toggle playback. Autonomous visual movement waits for Start and stops when the Piece is stopped or audio is interrupted. You can still edit settings while stopped. The bottom-bar output waveform is hidden; Visual provides the output visualizations. Pausing keeps the normal black visual without an overlay.
 
 The visual viewport stays square and fixed while editing. It uses the screen height in landscape and the screen width in portrait, with a small outer margin. The header, navigation and adjustments sit beside it in landscape and below it in portrait. Scroll that control area without moving or resizing the visual; editor tabs stay pinned while scrolling, and Start/Stop and minus/plus remain at the bottom of the control area. The square resizes only when the available viewport changes. Nearly square windows reserve enough room to keep controls reachable.
 
@@ -121,7 +121,7 @@ New-session settings are Head 3 time 0.36 s, Feedback 28%, Echo level 16%, Drive
 
 The physical tape loop folds and slides while its lower run and heads respond to audio-processor telemetry during playback. Drag the artwork horizontally for echo time and vertically for feedback. Arrow keys adjust the same controls; Shift makes larger steps and Escape cancels a drag. Touching the artwork does not change settings until you move, and one drag is one Undo step. New artwork feedback adjustments stay within 65%; deliberately higher existing settings can be lowered without a touch-down jump. The full Feedback control remains available for experiments. The separate echo grid also edits time and feedback.
 
-The loop continues as a labelled visual preview while audio is stopped or Tape is bypassed. It does not start audio or invent a measured signal. Surface tension and Stiffness in Mechanics change the picture only. Reduced motion keeps the loop still.
+The tape loop moves only while the Piece is playing and Tape is On. It stays still before Start, while stopped or interrupted, and while Tape is Off. Artwork gestures can prepare settings while stopped without starting audio. Surface tension and Stiffness in Mechanics change the picture only. Reduced motion keeps the loop still.
 
 ## Visual and keyboard controls
 
