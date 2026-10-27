@@ -1,5 +1,23 @@
 # Verification
 
+## Chorus synth level correction
+
+Chorus synth's oscillator blend and cascaded filters left it too quiet when switching instruments. A fixed 2.5x voice gain adds 7.96 dB while retaining its oscillator, filter and chorus behavior. Shared Air and the other instruments are unchanged. The stereo output regression compares Chorus with Hushfield over seconds 6–12 at 44.1/48 kHz, seeds 719/731 and Color 0/38/100, requiring the difference to stay within 6 dB.
+
+The build and all 179 Node tests passed. Fresh browser verification passed all 36 Worklet checks. The regenerated 48 kHz dry comparison measures Chorus at -27.40 dBFS RMS versus Hushfield at -27.80 dBFS; the Chorus peak is 0.1851. The ten WAVs for other instruments retain their exact previous hashes. A separate 24-second, 48 kHz evolving-chord stress render with every layer, macro and Activity at 100 remained finite, with peak 0.2851. These signal checks do not replace listening on the user's device.
+
+## Foundation instrument candidate
+
+The isolated `codex/foundation-instruments` candidate adds five inspired instruments while keeping the original Foundation sound. Work started at `4be348a`. Local build and the full suite passed 177 results on 2026-10-26 Pacific. A subsequent shared-adjuster review fix added one test; 28 focused controls/history/instrument tests passed afterward. The final source/build consistency check passed. Frozen classic and expressive reference engines require exact same-runtime PCM at 8, 44.1 and 48 kHz.
+
+[Worklet evidence](tests/foundation-worklet-results.json) records 36 passing assertions at 44.1/48 kHz across all six choices, live Texture-only routing and instrument changes. The existing Piece diagnostic passed its five checks, including direct processor harmony. [Browser evidence](tests/foundation-browser-results.json) records selection, Undo/Redo, the shared adjustment rail, Scene/New piece retention, Whole piece reset, export/import and explicit paused recovery. Layout checks covered desktop, portrait/landscape phone, tablet and Split View dimensions with no outer overflow. The [screenshot](docs/images/foundation-instruments.jpg) shows the current controls.
+
+[Listening evidence](tests/foundation-listening-results.json) records twelve 12-second 48 kHz clips, each instrument dry and through identical Space Echo settings, with common gain and verified saved WAV hashes. Run `node ops/listening-server.mjs 4892`, then open `http://127.0.0.1:4892/qa-foundation.html?saved` for retained clips or render fresh examples. The saved WAVs are local ignored artifacts. The audio receipts were refreshed after the Chorus synth level correction; their recorded DSP source hashes match that build.
+
+[Performance evidence](tests/foundation-performance-results.json) records an Apple M4 Node diagnostic after optimization: all instruments' p99 blocks were below the 2.667 ms quantum, with the largest at 1.196 ms. These timings exclude the browser's full audio graph and do not establish device reliability. Ten seconds of live browser playback and instrument switching produced no observed warnings/errors.
+
+The independent Standards review found the missing shared-rail registration; its fix passed re-review with no outstanding findings. The independent Spec review found no missing requirements or incorrect behavior. Human listening approval, physical-device testing and measured hardware matching remain separate. This candidate has not replaced the live default.
+
 ## Tape physics and Space Echo integration
 
 The approved Tape mechanism is integrated with both audio models and the five Tape presets. Local checks on 2026-10-26 passed the build and all 143 Node results. Telemetry tests compare every output sample with the frozen pre-integration models at 44.1/48 kHz through presets, all twelve modes, bypass and rapid model reversals. Additional regressions cover motor glide, normalized head levels, transients between reporting blocks, subscription resets and invalid-telemetry fallback.

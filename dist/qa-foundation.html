@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hushfield Foundation listening</title>
+<style>body{max-width:900px;margin:32px auto;padding:0 20px;background:#101415;color:#eee;font:16px/1.6 system-ui}a{color:#e8ba8c}h1,h2,h3{font-weight:500}button{font:inherit;padding:10px 16px;margin:0 8px 12px 0;background:#d8b28c;color:#111;border:0;border-radius:4px}audio{display:block;width:100%;margin:10px 0}section{border-top:1px solid #526064;padding:16px 0}pre{white-space:pre-wrap;font-size:13px}button:disabled{opacity:.5}.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}</style>
+<h1>Foundation instruments</h1>
+<p>Five analog-inspired instruments alongside the original Hushfield voice. These are recordings of our synthesis models, not vintage hardware.</p>
+<p><a href="/#ambient">Open the instrument</a> and choose Foundation → Sound → Instrument. Color, Drift and Bloom shape each sound.</p>
+<button id="render">Render listening comparisons</button><button id="check">Run Worklet checks</button>
+<p id="status" role="status">Renders silently. Each comparison uses the same seed, harmony and common gain. Press Play on a clip to listen.</p>
+<div id="clips"></div><pre id="results"></pre>
+<details><summary>Verification receipt</summary><pre id="receipt"></pre></details>
+<p>Compare the dry sound with Space Echo. Bass synth uses one low chord voice and a separate melody layer. The other instruments voice the full chord. No clip receives individual loudness normalization. Passing checks establishes signal behavior, not hardware authenticity or listening preference.</p>
+<script type="module" src="qa-foundation.mjs"></script>
+</html>

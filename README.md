@@ -33,7 +33,7 @@ The Foundation, Texture and Motion blend controls set what you hear. Solo isolat
 
 | Editor | Controls |
 | --- | --- |
-| Foundation | Compose sets the scene, key, scale and evolution. Sound has Color, Drift and Bloom; Voices balances chords, melody and air. The dots set pitch and pan. Foundation also supplies live Texture audio and Motion harmony. |
+| Foundation | Compose sets the scene, key, scale and evolution. Sound selects an Instrument with Color, Drift and Bloom; Voices balances chords, melody and air. The dots set pitch and pan. Foundation also supplies live Texture audio and Motion harmony. |
 | Texture | Drag the grain position and length handles. Adjust density, pitch, scatter and scanning, even at zero blend. Freeze a phrase or use your own material. |
 | Motion | Turn the orientation handle and set spin speed in either direction. Select individual triggers or a whole bank, then edit their amplitude envelopes and independent brightness controls. |
 | Space | Drag horizontally for filter cutoff and vertically for resonance. Set stereo width, each part's room send, and the room's filters. |
@@ -61,7 +61,7 @@ The layout accounts for browser toolbars, safe areas and pinch zoom. [Verificati
 
 Save project downloads a `.hushfield.json` file containing Texture material, blend settings, source and harmony links, sound patches, Foundation settings and visual settings. Solo is temporary and is not saved.
 
-New files use schema version 5. Versions 1 through 4 load with their classic Foundation synthesis and shared-room routing, and keep those modes after re-export. A complete preset selects the current sound modes. Editing Foundation Sound switches its synthesis to the evolving voice. Editing any Space Depth control switches the whole Piece to independent room sends. These two changes are independent. The [saved-sound decision](docs/adr/0001-preserve-saved-sound-models.md) explains why.
+New files use schema version 6 and store the selected Foundation instrument. Versions 1 through 5 retain the original Hushfield instrument; version 5 also retains its saved expressive/classic mode. Versions 1 through 4 load with their classic Foundation synthesis and shared-room routing, and keep those modes after re-export. A complete preset selects the current sound modes. Editing Foundation Sound switches its synthesis to the evolving voice. Editing any Space Depth control switches the whole Piece to independent room sends. These two changes are independent. The [saved-sound decision](docs/adr/0001-preserve-saved-sound-models.md) explains why.
 
 Saved Pieces without an explicit Tape model retain Classic, including older schema-5 files. Worn memory also keeps Classic. Selecting Space Echo is a separate choice, saved with its head mode and spring level.
 

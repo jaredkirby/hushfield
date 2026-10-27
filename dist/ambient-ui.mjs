@@ -1,6 +1,7 @@
+import { INSTRUMENT_LABELS, INSTRUMENT_HELP } from './foundation-instruments.mjs';
 import { AMBIENT_FIELDS, AMBIENT_SCENES, AMBIENT_KEYS, AMBIENT_SCALES, applyAmbientScene } from "./ambient-settings.mjs?v=hushfield-1";
 import { attachStepper, panelNav } from "./phone-ui.mjs?v=hushfield-1";
-function setupAmbientUI({ getState, onChange, onNew }) {
+function setupAmbientUI({ getState, onChange, onNew, onInstrument }) {
   const page = document.getElementById("ambientPage"), fields = page.querySelector(".ambient-fields"), records = [];
   const nav = panelNav(page, [["compose", "Compose"], ["sound", "Sound"], ["layers", "Voices"]], (key) => {
     fields.querySelectorAll(".control").forEach((row) => row.hidden = row.dataset.group !== key);
@@ -8,9 +9,17 @@ function setupAmbientUI({ getState, onChange, onNew }) {
   }, { className: "ambient-panel-tabs", ariaLabel: "Ambient control pages" });
   function refreshHelp() {
     page.querySelector('.ambient-help').textContent = page.dataset.controlPanel === 'sound'
-      ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + 'Color shapes harmonics. Drift moves each voice gently. Bloom changes color over time.'
+      ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + INSTRUMENT_HELP[getState().instrument || 'current']
       : 'Voice dots: pitch ↑↓ · stereo ←→. Scene shapes Foundation; Whole piece replaces all parts and effects.';
   }
+  const instrumentRow=document.createElement('div');
+  instrumentRow.className='control direct-control';instrumentRow.dataset.group='sound';instrumentRow.hidden=true;
+  const instrumentLabel=document.createElement('label');instrumentLabel.htmlFor='ambient-instrument';instrumentLabel.textContent='Instrument';
+  const instrumentSelect=document.createElement('select');instrumentSelect.id='ambient-instrument';instrumentSelect.className='parameter-choice';
+  for(const [id,name] of Object.entries(INSTRUMENT_LABELS)){const option=document.createElement('option');option.value=id;option.textContent=name;instrumentSelect.append(option);}
+  instrumentRow.append(instrumentLabel,instrumentSelect);fields.append(instrumentRow);
+  const instrumentStepper=attachStepper(instrumentRow,instrumentSelect,{label:'Foundation Instrument',format:()=>INSTRUMENT_LABELS[instrumentSelect.value]});
+  instrumentSelect.addEventListener('change',()=>onInstrument(instrumentSelect.value));
   for (const field of AMBIENT_FIELDS.filter((f) => !["grains", "orbit", "space"].includes(f.id))) {
     const row = document.createElement("div");
     row.className = "control";
@@ -45,6 +54,8 @@ function setupAmbientUI({ getState, onChange, onNew }) {
   }
   function refresh() {
     const state = getState();
+    instrumentSelect.value=state.instrument || 'current';
+    instrumentStepper.render();
     for (const { field, input, stepper } of records) {
       input.value = state[field.id];
       stepper.render();

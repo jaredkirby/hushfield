@@ -22,6 +22,22 @@ Hold chord pauses harmonic changes while the Piece continues, including its slow
 
 The Whole piece menu is different from Scene. Stillwater, Slow cloud, Glass shards and Worn memory set Foundation, blend levels, live Texture source, linked Motion, sound patches and finishing controls together. Each complete preset has complementary trigger and ball instruments. The Scene card changes Foundation's scene without replacing the whole Piece. Existing optional source material remains available in Your sound / trim.
 
+### Foundation instruments
+
+In **Sound**, choose **Instrument**. Hushfield keeps the existing voice; String ensemble, Chorus synth, Complex synth, Morph synth and Bass synth add analog-inspired characters. These are designed approximations, not measured hardware recreations.
+
+| Instrument | Inspiration and controls |
+| --- | --- |
+| String ensemble | Solina-style strings and a shared stereo ensemble. Color adds upper harmonics, Drift deepens ensemble movement, and Bloom brings the ensemble forward. |
+| Chorus synth | Juno-style saw/pulse/sub voices, resonant filtering and stereo chorus. Color opens the filter, Drift adds pulse-width and chorus movement, and Bloom swells the filter. |
+| Complex synth | Buchla-inspired harmonic shaping and coupled brightness/amplitude gates. Color adds folded-spectrum character, Drift moves the timbre, and Bloom lengthens the gates. |
+| Morph synth | SEM-inspired two-source synthesis and a low-pass → notch → high-pass filter morph. Color selects that shape, Drift moves the oscillators, and Bloom moves the filter cutoff. |
+| Bass synth | Minimoog-inspired three-oscillator bass and four-pole filtering. The chord layer plays one low voice, gliding between harmonies; Melody remains a separate voice. Color opens the filter, Drift spreads oscillator tuning, and Bloom moves the contour. |
+
+Instrument changes fade briefly during playback. Scene and New piece keep the selected instrument. Whole piece presets restore Hushfield along with their documented settings. Selecting a new instrument is one Undo/Redo edit and opts classic Pieces into expressive composition. Instrument choice does not change Blend or voice-dot settings. Bass synth uses the lowest voice dot for its chord sound; all four notes still guide linked Motion. Every instrument supplies live Texture through the existing Foundation connection.
+
+Open [the listening comparison](../dist/qa-foundation.html) through the running preview server for dry and Space Echo examples. The page renders silently, then provides Play and Download WAV controls. See [model notes](FOUNDATION-MODELS.md) for approximations.
+
 ## Texture sources
 
 Texture starts with its adjustments visible. Hide adjust hides the Texture fields while keeping the blend and toolbar available; Adjust shows them again. The visual square keeps its size and position. Display contains Wave smoothing: 0 keeps the detailed trace, while higher values make it flow more smoothly; the default is 65%. This changes the picture only, is saved with Visual settings, and supports Undo/Redo. Escape also hides the Texture fields when focus is inside. Texture, Scan and Variation remain available as tabs in the dock.
@@ -106,7 +122,7 @@ History belongs to the current material and configuration. Loading a project or 
 
 ## Save, recover and record
 
-Save project downloads a version-5 `.hushfield.json` file. It contains the retained sample/frozen phrase, Texture source relationship, blend, harmony link, Foundation voices, patches, controls, volume and Visual settings. Versions 1–4 load through migration with retained material/blend and classic Foundation/shared-room behavior. Versions 1–3 keep independent Motion tuning. Re-exporting an older Piece retains its sound mode. Choosing a complete preset opts into new sounds and depth defaults; editing Foundation Sound opts into the evolving voice, and editing Depth opts into independent room sends. The file restores configuration and material, not an exact playback position, waveform history or Solo state. Project input is limited to 30 MiB, including encoded audio. The [saved-sound decision](adr/0001-preserve-saved-sound-models.md) explains the compatibility boundary.
+Save project downloads a version-6 `.hushfield.json` file. It contains the retained sample/frozen phrase, Texture source relationship, blend, harmony link, Foundation instrument and voices, patches, controls, volume and Visual settings. Versions 1–5 select the original Hushfield instrument; version 5 preserves its saved expressive/classic mode. Versions 1–4 load through migration with retained material/blend and classic Foundation/shared-room behavior. Versions 1–3 keep independent Motion tuning. Re-exporting an older Piece retains its sound mode. Choosing a complete preset opts into new sounds and depth defaults; editing Foundation Sound opts into the evolving voice, and editing Depth opts into independent room sends. The file restores configuration and material, not an exact playback position, waveform history or Solo state. Project input is limited to 30 MiB, including encoded audio. The [saved-sound decision](adr/0001-preserve-saved-sound-models.md) explains the compatibility boundary.
 
 Recovery stores one bounded draft per browser origin (scheme, host and port) in IndexedDB. Paths on the same origin share this draft. A previous draft is offered explicitly; edits do not overwrite it until you recover or discard it. Recovery replaces the current session and starts paused. Private browsing, storage clearing/quota, multiple tabs or eviction can affect availability; export a project for a separate copy.
 

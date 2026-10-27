@@ -32,7 +32,7 @@ function selectPiecePreset(key, { defaults, cancelPending }) {
   const preset = presets[key];
   if (!preset) return null;
   cancelPending();
-  return { label: preset.label, piece: restorePiece(preset), ambient: restoreAmbient({ scene: preset.scene, compositionVersion: 2 }), params: { ...defaults, ...SPACE_DEFAULTS, ...preset.params, freeze: false, scanOn: true }, soundState: restoreSoundState(motionPatches[key]), controls: { filterType: "lowpass", orbitShape: "0", orbitKey: "C", orbitScale: "minor", orbitInstrument: "pluck" } };
+  return { label: preset.label, piece: restorePiece(preset), ambient: restoreAmbient({ scene: preset.scene, compositionVersion: 2, instrument: "current" }), params: { ...defaults, ...SPACE_DEFAULTS, ...preset.params, freeze: false, scanOn: true }, soundState: restoreSoundState(motionPatches[key]), controls: { filterType: "lowpass", orbitShape: "0", orbitKey: "C", orbitScale: "minor", orbitInstrument: "pluck" } };
 }
 export {
   selectPiecePreset

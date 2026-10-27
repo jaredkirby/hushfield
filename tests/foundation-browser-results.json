@@ -1,0 +1,165 @@
+{
+  "verifiedAt": "2026-10-27T03:35:32.122072+00:00",
+  "baseline": "4be348a",
+  "implementation": "12dfea4 plus reviewed shared-adjuster fix",
+  "browser": "Codex in-app Chromium browser on macOS",
+  "origin": "http://127.0.0.1:4892",
+  "buildInputs": {
+    "dist/control-history.mjs": "b2b69ec3995dba2cca2fc9ec633cddd63d3c5e3ab8b89eb27ef1bbfe59095bea",
+    "dist/visual-editor-math.mjs": "ee26888a68d46490c21457a47c33886973cf2b14bca14b8c6e799526597e2f4a",
+    "dist/visual-editors.mjs": "9cc0955bdf9d40f89a5fb8f3e5f57710944dcabeacbce192596097d2b3dfe8bc",
+    "dist/motion-controls.mjs": "5a719afd184460b209242689b9368eab8a3f5fe9953cdbfca30bb5b3a45387e4",
+    "dist/tape-settings.mjs": "33dd94c968fecd4e4c3686440dfffe35598c35c6f435cb22f61ab5aa6ad77bc0",
+    "dist/tape-presets.mjs": "f8ad8a83983bc4e7210f9c6c69bce1d9f751bfd9e4b70e0a2d8df665008d7371",
+    "dist/piece-session.mjs": "c6a8497270186ec6d620bf1b8112394b5543520097a61bd10437d97f56ec4867",
+    "dist/ambient-points.mjs": "930c70317bcb7eae0c79a44662828b57229e3001b3b5f087758eb4397a7cddc4",
+    "dist/ambient-settings.mjs": "2de40f3657e0b6e532ba238ab76088019d8af861f5d07dc93dd3fe9c981865cc",
+    "dist/sound-patches.mjs": "4d1b380274d2ca6e3120a8b014a22393fed65c1875a8c4c1108ec261f51e9344",
+    "dist/space-settings.mjs": "47ae0230d974c4a97c07ef22b606045ef1465cbc02f00d4bf9fedabd78b60d88",
+    "dist/piece-presets.mjs": "df0459371ded978792777263b4abd435cfd2270a336ef77798450a4b2e5bd43e",
+    "dist/piece-harmony.mjs": "6dbfe3ae90e96429d3a7328a64006f67caba98d51b534172443cc06b7991cd8b",
+    "dist/piece-space.mjs": "d7aa499be8eb286731285c38a27ab86ee36d44b837a967830cd0b5b2c74edc4f",
+    "dist/render-clock.mjs": "7152ad7b91cc67243a1818ade831da792c95b48cca09c801bb60a98103b4a667",
+    "dist/audio-startup.mjs": "9d5e35c3998c0bcc6b80ad24327459bbd8a3b764be301044f22e7287a4a99042",
+    "dist/audio-lifecycle.mjs": "2a04214136d5d364754bcec7f202875d65a5d17bf2eeea1ac8b01d12c0a4100c",
+    "dist/phone-ui.mjs": "efbc12786c4f5982e680856731e1aa04f78d57bcf67e984b2388ad7bec65d362",
+    "dist/piece-blend.mjs": "8cc0321bbbb7d950b2ded4476f86a659870a05f5e9f8810b1b304dafb2f415c9",
+    "dist/session-recovery.mjs": "d6e03580929682c719c2b3932ebcc815f6336af76bad6dadd6a58d742de59dda",
+    "dist/recovery-ui.mjs": "a42b78e521f0190643a45963a18e0edaa7f4f57b0a5159b19cbbdf1fa0402b1c",
+    "dist/sample-selection.mjs": "dbccd56e8af62e325de4afd0972385f58db7a2cf731de5a10e09f099a24d3fca",
+    "dist/wave-file.mjs": "99bc68e12292c5e83d99071fba6d4aa22876c6a40501ff707f910a901af2cec4",
+    "dist/output-capture.mjs": "0fb89fd1fbe0a9d04169dcb49e9923868986c4d8daccfc4845d701851e07ec4d",
+    "dist/microphone-take.mjs": "1b139ec301bda1595b13a1c0ac8cd41d4e2fb879aeae79ae5b5de7564a1abda7",
+    "dist/visual-analysis.mjs": "becd80cfd5e5cb6e151495bc18e27229881fc73e25f1bb0c7eec4d10cddc3c26",
+    "dist/project-file.mjs": "ac13e0a852b58f06140eb1a84d02aa883b9ddd8096f2d1bde0b65dda920cfd4a",
+    "dist/space-echo-geometry.mjs": "b20b7ea77e7385f4fc970a600033de7bc8190491b9e0df3bd197b7c56c29fa86",
+    "dist/tape-motion.mjs": "44d041514202d2122d1584126d6e75656734bd5d1765f7c8abeb1943a01565b8",
+    "dist/tape-mechanism.mjs": "909dd0bd0ae14f58d979b5a44b00e770c9c17eb72f43abc91efeecdbaf84aa2f",
+    "dist/tape-physics.mjs": "7b00fe59e28c24f53378f64d1c97aa632803c3431100e55f81a2f3a59166a0a4",
+    "dist/tape-visual-state.mjs": "9bd7f4316442b9dd3fd309c86afe5c610559a378d0172f94b89b577de72bc56b",
+    "dist/tape-initial-state.mjs": "d9893c569c6218cf7c959ebd61ac71a49cd4d14d9300ad4c05c744c48bcd4487",
+    "dist/tape-physics-visual.mjs": "3e1c67a4ce76f137fd84999e4d081d6a07a1352671e9ef412421ebdc983144de",
+    "dist/space-echo-visual.mjs": "77ee002458806b65267abc0b9903c479cb984975cf0c9677e8b3429ebe7ddadb",
+    "dist/tape-transport.mjs": "62a862c842214887e015c4bfdb57a28bfe52403b410369f78f2d6f666c15947a",
+    "dist/oled-visuals.mjs": "7d3296827b0ca676a30ac5c76a81ea398428901b361aa2d863bcfe9d82629a7f",
+    "dist/audio-visuals.mjs": "5e20da4c6696574c269ef18d9300fc0843f5dff5346a000af3aa60f9c6a2ab51",
+    "dist/ambient-interaction.mjs": "b99b5cbd93958fc4d64450b72c829440e62418f820637a15ccaf123a9bd0cf06",
+    "dist/foundation-instruments/sem.mjs": "325c6317bf205409627969b36150e97bec32e98da1b5d1f4ba378f428bbf0921",
+    "dist/foundation-instruments/moog.mjs": "a605bd674c8791a7f2f463a81101e7cc03dae2110d741608fda63d6284422262",
+    "dist/foundation-instruments/juno.mjs": "b930e01c86a906b8cd0191b735a202583a24375a356fb1473f06333d1ea4e13d",
+    "dist/foundation-instruments/buchla.mjs": "6e58bb6dbd430494c0ce044f7710446eca784883073fc16cb0694a41392026b2",
+    "dist/foundation-instruments/solina.mjs": "a91dbb5f728a5d813a28a9851ea06c63a83ae862f0646dca6b7ddb25d836b35f",
+    "dist/foundation-instruments.mjs": "0f36d1980c8789d8cc063f2941ce85989367217bf78954ec5aad7b73fe8be711",
+    "dist/ambient-ui.mjs": "e342c2a581841e203cfe045f10cae56e0ef4175563f3491afc71b235a362fdef",
+    "dist/texture-wave.mjs": "96e33b053ab208839e6a8abfed6de3bd004301ec98dc08cb344eeafc1af65d68",
+    "dist/texture-adjustments.mjs": "21c1e43040d7ba3a5b84b64abe0ae202bc79049be105e652ac543f4a64ffaaef",
+    "dist/square-viewport.mjs": "31409a2381edebb3bbc520122f02595bd24d5a698d36aa68499d032024d4e7fe",
+    "dist/orbit-pads.mjs": "4cd9b1705aaa480d3608e2d8952dcfb684a5aa9d6f07d4de76fbd901754f3047",
+    "dist/orbit-audio.mjs": "119319ce25abc43712e2a95dd9b4f7c57ec2b5eadc3a701213399ebdd66c1eb5",
+    "dist/sound-editor-model.mjs": "bc6381e088747f451c0ecea0f65cedb75437069c1d2a57b600d7a3e3779e9548",
+    "dist/sound-envelope.mjs": "4dfd4558f5175ffb5ec520783007ea4b41c926d09628e336efa60c2148d92e12",
+    "dist/sound-editor.mjs": "7cdeeb515bb3bd11aad4c345b74aa9db569367c38a528f41a598d1adc5a3620f",
+    "dist/orbit-physics.mjs": "100f753121b627abb52d7aed6f2ed664966480924ac3cfa8376360d37c896dd9",
+    "dist/app.js": "0a5ed56ce9d18f7e4ce6eff0da945992c8d02f02d1f858c940ce782096d8e416",
+    "dist/ambient-dsp.mjs": "0939ee7c3ab9a2591fbf88dd0e2d0ac791330b775d3a64d3e36ab35701914eee",
+    "dist/ambient-worklet.js": "94f1d9a6378be09ac900fc0c34d69abb73ee843d14da80a56acaa3574adbb4a8",
+    "dist/grain-worklet.js": "c5d0bdd9d937b97190ff2243b4d9f5f02b9b9ce077e43fbdc15f9feeac8eab76",
+    "dist/space-echo-dsp.mjs": "66684d5d54a36047c496c7b0968714c45e970867a612e1c03a2654163a05026d",
+    "dist/tape-dsp.mjs": "11053fc9515e98ae423dcedf4e041aafc469980038e4fd44c1b0a9e1b771de4b",
+    "dist/tape-worklet.js": "be5bca49495ae074fdfc64635f0250b125248c1a6d9763056b0dd8c98e14d27c",
+    "dist/orbit-dsp.mjs": "c5ee7dec7ec7bea3ba94813dee604ba080ddca158f11edd00611e9a85fd48135",
+    "dist/orbit-worklet.js": "5d4cc13644b38248fe642c564ef171238c407cd9b9e57397137fd1623c519c9b"
+  },
+  "checks": [
+    {
+      "name": "Instrument selector exposes Hushfield and all five inspired choices",
+      "passed": true
+    },
+    {
+      "name": "Native instrument selection refreshes contextual help",
+      "passed": true
+    },
+    {
+      "name": "Instrument selection supports one-step Undo and Redo",
+      "passed": true
+    },
+    {
+      "name": "Focused instrument selection updates shared adjustment rail with readable label",
+      "passed": true
+    },
+    {
+      "name": "Shared rail plus changes String ensemble to Chorus synth; Undo restores String ensemble; Redo restores Chorus synth",
+      "passed": true
+    },
+    {
+      "name": "Scene change retains Chorus synth",
+      "passed": true
+    },
+    {
+      "name": "New piece retains Chorus synth",
+      "passed": true
+    },
+    {
+      "name": "Whole piece Slow cloud selects original Hushfield",
+      "passed": true
+    },
+    {
+      "name": "Browser export writes schema6, buchla instrument, compositionVersion2",
+      "passed": true
+    },
+    {
+      "name": "Loading exported project replaces Morph synth with Complex synth",
+      "passed": true
+    },
+    {
+      "name": "Explicit recovery restores Complex synth paused",
+      "passed": true
+    },
+    {
+      "name": "Five existing Piece checks pass including direct processor harmony and live Texture",
+      "passed": true
+    },
+    {
+      "name": "Ten-second live audio smoke and all six selections retain running transport; stop succeeds; no observed warnings/errors",
+      "passed": true
+    }
+  ],
+  "layouts": [
+    {
+      "width": 1280,
+      "height": 720,
+      "outerOverflow": false,
+      "instrumentReachable": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "outerOverflow": false,
+      "instrumentReachable": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "outerOverflow": false,
+      "instrumentReachable": true
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "outerOverflow": false,
+      "instrumentReachable": true
+    },
+    {
+      "width": 540,
+      "height": 720,
+      "outerOverflow": false,
+      "instrumentReachable": true
+    }
+  ],
+  "screenshot": "docs/images/foundation-instruments.jpg",
+  "limitations": [
+    "Responsive viewport emulation is not physical-device touch or battery acceptance.",
+    "Live smoke is not an underrun measurement or human listening review.",
+    "Worklet/listening receipts predate the UI-only shared-adjuster fix; DSP hashes remain identical."
+  ]
+}
