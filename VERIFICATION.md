@@ -1,5 +1,17 @@
 # Verification
 
+## Vintage Space candidate
+
+The isolated `codex/vintage-space` candidate centers Space on Original room, Plate, Spring and Chamber. Reverb exposes Amount, Decay, Pre-delay, Tone and Reverb width; Depth retains per-part sends and Filter retains whole-piece tone/width. The model illustrations respond to measured wet energy and respect reduced motion. Fresh startup keeps Chorus synth, Stillwater, Space Echo On and Original room.
+
+The build and full Node suite passed all 193 results. Schema 7 round trips all models and settings, accepts versions 1–7 and forces versions 1–6 to Original room while retaining their Foundation and Tape modes. The frozen original graph is compared against current output in the same browser runtime. The [research](docs/research/vintage-space.md) explains the plate diffusion tank, spring dispersion and chamber reflection design and separates these approximations from hardware evidence.
+
+[Browser evidence](tests/vintage-space-browser-results.json) records model selection, exact-entry Apply/Cancel, one-step Undo/Redo, model adjustment rail, Reverb/Depth/Filter navigation and explicit paused recovery of Spring with its settings. The new display reports wet activity and settles at zero Amount. Two live reduced-motion canvas captures were byte-identical. All five emulated viewport sizes retained a square display, reachable Start/Stop and no horizontal page overflow. The [screenshot](docs/images/vintage-space.png) shows the candidate.
+
+[Listening evidence](tests/vintage-space-listening-results.json) records ten 12-second, 48 kHz stereo WAVs: dry, Original room, Plate, Spring and Chamber, each with Tape off and Space Echo on. Every clip uses the same Stillwater Chorus synth seed, six seconds of excitation and six seconds of tail. The shared comparison mix emphasizes the reverb; files have no individual normalization. The largest saved peak is 0.1858. See [testing](docs/TESTING.md#vintage-space-checks-and-listening) for rendering and saved playback. The private preview app bundle and one retained Space Echo clip matched local SHA-256 hashes.
+
+Impulse regeneration is synchronous on selection/Decay edits, coalesced while a fade is active; native convolution handles runtime audio. An Apple M4 Node diagnostic at 48 kHz/8-second decay measured generation at approximately 33–90 ms per model, and each stereo impulse occupies about 3.1 MB. These are development-machine measurements, not browser timing or device acceptance. Human listening, actual touch/battery behavior and hardware authenticity remain separate. No automatic merge or change to the favorite default is included.
+
 ## Foundation defaults and starting presets
 
 Fresh startup and Stillwater Whole piece now select Chorus synth, the Stillwater Scene and Space Echo with Tape on. Compatibility fallback settings remain unchanged, and recovery stays explicit and paused. Sound offers 18 starting presets that replace only Foundation's instrument, expressive mode, tone macros and Chords/Melody/Air levels. Matching names come from saved values rather than a preset identifier.

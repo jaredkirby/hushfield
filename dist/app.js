@@ -8,6 +8,8 @@ import { selectPiecePreset } from "./piece-presets.mjs";
 import { restorePiece, piecePlayback } from "./piece-session.mjs";
 import { followChord } from "./piece-harmony.mjs";
 import { createPieceSpace } from "./piece-space.mjs";
+import { setupSpaceControls } from './space-controls.mjs';
+import { drawSpaceReverb } from './space-reverb-visual.mjs';
 import { SPACE_DEFAULTS, SPACE_FIELDS } from "./space-settings.mjs";
 import { createRenderClock } from "./render-clock.mjs";
 import { createProcessorGuard, releaseAudioGraph } from "./audio-lifecycle.mjs";
@@ -38,7 +40,8 @@ const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, ...SPACE_ECHO_DEFAULTS, ...SPACE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
 const freshPiece = selectPiecePreset("still", { defaults: initial, cancelPending() {} });
 let recovery, restoringSession = false, sampleDecoder;
-let visualEditors, motionControls, controlHistory, textureAdjustments;
+let visualEditors, motionControls, controlHistory, textureAdjustments, spaceControlsUI, spaceAnalyser;
+const spaceSamples = new Float32Array(512);
 let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel, texturePhraseChannel;
 let phraseRequest, nextPhraseId = 0, foundationReady = false, motionReady = false, textureReady = false;
 function markEdited() {
@@ -157,7 +160,7 @@ makeControl("filterControls", "resonance", "Resonance", 0.1, 12, 0.1, " Q");
 makeControl("delayControls", "delayTime", () => params.tapeModel === 2 ? "Head 3 time" : "Time", 0.05, 1.5, 0.01, " s");
 makeControl("delayControls", "feedback", "Feedback", 0, 80, 1, "%");
 makeControl("delayControls", "delayMix", "Echo level", 0, 70, 1, "%");
-makeControl("spaceControls", "reverb", "Reverb", 0, 85, 1, "%");
+makeControl("spaceControls", "reverb", "Amount", 0, 85, 1, "%");
 makeControl("spaceControls", "width", "Stereo width", 0, 100, 1, "%");
 const depthGroup = document.createElement("div");
 depthGroup.className = "control-group";
@@ -266,6 +269,7 @@ function refreshControls() {
 }
 function syncEngine() {
   refreshTapePreset();
+  spaceControlsUI?.refresh();
   renderClock.invalidate();
   visualEditors?.refresh();
   motionControls?.refresh();
@@ -274,6 +278,7 @@ function syncEngine() {
   engine.port.postMessage({ type: "params", params: send });
   spaceBus?.setTone($("filterType").value, params.cutoff, params.resonance);
   spaceBus?.setDepth(params);
+  spaceBus?.setReverb(params);
   tapeNode?.port.postMessage(params);
   spaceBus?.setWidth(params.width);
   reverbWet.gain.setTargetAtTime(params.reverb / 100, ctx.currentTime, 0.05);
@@ -314,6 +319,7 @@ function resetAudioGraph() {
   releaseAudioGraph({ context: ctx, processors: [engine, tapeNode, ambientNode, recordDestination], orbit: orbitAudio });
   foundationReady = motionReady = textureReady = false;
   foundationLayer = spaceBus = null;
+  spaceAnalyser = null;
   ctx = master = engine = orbitAudio = analyser = limiter = tapeNode = ambientNode = grainLayer = orbitLayer = recordDestination = void 0;
   lastMeter = 0;
   tapeVisualSnapshot = null;
@@ -415,6 +421,8 @@ async function initializeAudio() {
   spaceBus = createPieceSpace(ctx, tapeNode);
   filter = spaceBus.filter;
   reverbWet = spaceBus.wet;
+  spaceAnalyser = ctx.createAnalyser(); spaceAnalyser.fftSize = 512;
+  reverbWet.connect(spaceAnalyser);
   grainLayer = ctx.createGain();
   engine.connect(grainLayer);
   grainLayer.connect(spaceBus.parts.texture);
@@ -1312,6 +1320,19 @@ function frame(time) {
         });
         ditherCanvas($("tapeCanvas"));
       }
+    } else if (activeTab === 'fx' && document.body.dataset.spacePanel !== 'filter') {
+      const fit = fitCanvas($('spaceCanvas'));
+      if (fit) {
+        let level = 0;
+        if (spaceAnalyser && ctx?.state === 'running') {
+          spaceAnalyser.getFloatTimeDomainData(spaceSamples);
+          for (const value of spaceSamples) level += value * value;
+          level = Math.min(1, Math.sqrt(level / spaceSamples.length) * 16);
+        }
+        drawSpaceReverb(fit, params, { time: running ? ctx?.currentTime || 0 : 0, level, reducedMotion: reducedMotion.matches });
+        ditherCanvas($('spaceCanvas'));
+        $('spaceActivity').textContent = level > .002 ? 'REVERB ACTIVE' : 'REVERB QUIET';
+      }
     } else {
       drawWave(dt);
       ditherCanvas($("waveform"));
@@ -1815,6 +1836,14 @@ function setupControlHistory() {
 }
 
 showOrbitPanel = setupPhoneUI({ showPage: showTab, currentPage: () => activeTab });
+const spaceStage = document.createElement('div'); spaceStage.id = 'spaceReverbStage';
+spaceStage.innerHTML = '<canvas id="spaceCanvas" role="img" aria-label="Illustrated reverb mechanism. Motion follows the measured reverb return; geometry is illustrative."></canvas><div class="space-reverb-caption"><output id="spaceModelName"></output><span id="spaceActivity">REVERB QUIET</span></div><div class="space-reverb-readout"><span id="spaceModelReadout"></span><span>WET SIGNAL</span></div>';
+$('displayStage').append(spaceStage);
+spaceControlsUI = setupSpaceControls({ getParams: () => params, makeControl, invalidate: () => renderClock.invalidate(), onModel: model => {
+  controlHistory?.begin('Reverb model');
+  try { params.reverbModel = model; if (model !== 'original') params.spaceVersion = 2; markEdited(); syncEngine(); ensureVisibleSelection(); }
+  finally { controlHistory?.end(); }
+} });
 setupOrbitPads();
 setupSharedAdjuster();
 visualEditors = setupVisualEditors({ getParams: () => params, setParams: editParameters, getPage: () => activeTab, getDuration: () => buffer?.duration || 0, getSource: () => piece.source, getFilterType: () => $("filterType").value });

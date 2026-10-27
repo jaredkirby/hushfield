@@ -11,7 +11,7 @@ const instruments=['current','solina','juno','buchla','sem','moog'];
 for(const instrument of instruments)test(`${instrument} survives project export and import with its expressive settings`,async()=>{
  const ambient={...AMBIENT_DEFAULTS,instrument,compositionVersion:2,seed:451,color:71,drift:24,bloom:87,key:3,hold:true};
  const text=serializeProject({buffer,ambient,params:{},controls:{}});
- assert.equal(JSON.parse(text).version,6);
+ assert.equal(JSON.parse(text).version,7);
  assert.deepEqual((await decodeProject(text,options)).ambient,restoreAmbient(ambient));
 });
 test('older Pieces retain their original instrument and composition rules after re-export',async()=>{

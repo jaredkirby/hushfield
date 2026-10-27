@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hushfield Space listening</title>
+<style>
+body{max-width:900px;margin:32px auto;padding:0 20px;background:#101415;color:#eee;font:16px/1.6 system-ui}a{color:#e8ba8c}h1{font-weight:500}button{font:inherit;padding:10px 16px;margin:0 8px 12px 0;background:#d8b28c;color:#111;border:0;border-radius:4px}audio{display:block;width:100%;margin:10px 0}#clips p{border-top:1px solid #526064;padding:16px 0}pre{white-space:pre-wrap;font-size:13px}button:disabled{opacity:.5}
+</style>
+<h1>Vintage Space</h1>
+<p>Original room, Plate, Spring and Chamber around the same Stillwater Chorus synth. These are recordings of our inspired models, not vintage hardware.</p>
+<p><a href="./index.html#fx">Open Space</a> to play the models and shape their tails.</p>
+<button id="run">Run audio verification</button><button id="listen">Render Stillwater comparisons</button><label><input id="tape" type="checkbox">Tape</label>
+<pre id="output" role="status">Ready</pre><section id="clips"></section>
+<script type="module" src="./build/qa-space-reverb.js"></script>
+</html>

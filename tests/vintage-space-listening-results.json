@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-26",
+  "source": "Native browser OfflineAudioContext",
+  "description": "Stillwater Chorus synth, seed7201, six seconds excitation then six seconds tail; common gain, no per-clip normalization; Amount65 Foundation send100, decay4, pre-delay25ms, tone65, width100; optional Space Echo with hiss0.",
+  "files": [
+    {
+      "file": "vintage-space-chamber-tape.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.139556884765625,
+      "rms": 0.023202183547434443,
+      "sha256": "2451b31b73b301be857374fa34ae450929c7fe927d1c9298bb5ebc262d63ddd8"
+    },
+    {
+      "file": "vintage-space-chamber.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.185791015625,
+      "rms": 0.028363614778603663,
+      "sha256": "3c9fdc505202087b9aec04b516b74e7395008785c14d1b86923de7a58de435d1"
+    },
+    {
+      "file": "vintage-space-dry-tape.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.1131591796875,
+      "rms": 0.015674208755299415,
+      "sha256": "f282db86e1f250b03e4f20a6249b31c592f3d3e1de5cbe65c31ec658cbed3040"
+    },
+    {
+      "file": "vintage-space-dry.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.1380615234375,
+      "rms": 0.018944448740240438,
+      "sha256": "24fa090854462831a95b3fde0a7b0e4c6bbaf4afa3a5a308fe41eda8d08d9717"
+    },
+    {
+      "file": "vintage-space-original-tape.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.111663818359375,
+      "rms": 0.01619323506797362,
+      "sha256": "56655401d15d508ceb44e0297ef1979bd4d599b6c8d70c61fb62084cc6e18d68"
+    },
+    {
+      "file": "vintage-space-original.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.14312744140625,
+      "rms": 0.019471954120241906,
+      "sha256": "89a450a2195aeab10b858fe613801729fa3894cb902620960b732adbd5d0fe7b"
+    },
+    {
+      "file": "vintage-space-plate-tape.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.123077392578125,
+      "rms": 0.016786099932449228,
+      "sha256": "a0c2063181554c1f5ca745ebca83ef98cf90950ed59d552d5cf1ab42ae347ec3"
+    },
+    {
+      "file": "vintage-space-plate.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.15338134765625,
+      "rms": 0.02022190590899907,
+      "sha256": "15a7e6bd10ae3eaf6618da8f5b3df1f3d7f77a18aa02f4f768e42d34bbc4bec8"
+    },
+    {
+      "file": "vintage-space-spring-tape.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.11602783203125,
+      "rms": 0.016842267839337368,
+      "sha256": "80c8c67499a728ef469c7354cf1d1edcb3d84b16b94417284f69777c26b46f55"
+    },
+    {
+      "file": "vintage-space-spring.wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "seconds": 12.0,
+      "peak": 0.143310546875,
+      "rms": 0.020569613949887305,
+      "sha256": "d2f80eb93d6177005a8c682a00128ac806a71dde9613da56134f6be9696174d2"
+    }
+  ],
+  "sourceHashes": {
+    "dist/vintage-reverb.mjs": "e0a187afb4e81e751696c94ab1da0397c158e16daca8ecf030f1b2f8de72f6bf",
+    "dist/piece-space.mjs": "0dd6af8b12d3cddd7357d504108c73e5587d122012eb987af66d0c7284416b75",
+    "dist/ambient-worklet.js": "94f1d9a6378be09ac900fc0c34d69abb73ee843d14da80a56acaa3574adbb4a8",
+    "dist/tape-worklet.js": "be5bca49495ae074fdfc64635f0250b125248c1a6d9763056b0dd8c98e14d27c"
+  }
+}
