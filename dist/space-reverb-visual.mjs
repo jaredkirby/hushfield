@@ -171,6 +171,13 @@ function spring(c,s,time,width,tone,decay) {
 function chamber(c,s,time,width,tone,decay,original,viewport) {
   const project = (x,y,z) => { const p=1/(1+z*2.8); return [500+x*(.65+width*.35)*p,445+y*p]; };
   const reboundsOnly=!original && CHAMBER_REBOUNDS_ONLY;
+  const lifetime=Math.min(5,.8+decay*.55);
+  // Keep the outer travel intact, then carry the same folded contour into
+  // the center before its measured-activity trace expires.
+  const completion=age=>{
+    const u=clamp((age/lifetime-.6)/.38);
+    return [1-u*u*(3-2*u),-6*u*(1-u)/(lifetime*.38)];
+  };
   // Visible boundaries make the depth legible even before playback.
   if(!reboundsOnly) {
   for(let i=0;i<9;i++) {
@@ -191,12 +198,13 @@ function chamber(c,s,time,width,tone,decay,original,viewport) {
     for(const pulse of s.pulses) for(let echo=0;echo<4;echo++) for(let i=0;i<=128;i++) {
       const age=time-pulse.at, a=i/128*TAU, modulation=1+.025*tone*Math.sin(a*8+pulse.seed);
       const r=(160+age*230)*modulation, p=1/(1+(age*.48+echo*.13)*2.8), aspect=.65+width*.35;
+      const [gain,gainRate]=completion(age);
       const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
-      const dx=Math.cos(r*Math.cos(a)/455)*Math.cos(a)*230*modulation;
-      const dy=Math.cos(r*Math.sin(a)/365)*Math.sin(a)*230*modulation;
+      const dx=Math.cos(r*Math.cos(a)/455)*Math.cos(a)*230*modulation*gain+x*gainRate;
+      const dy=Math.cos(r*Math.sin(a)/365)*Math.sin(a)*230*modulation*gain+y*gainRate;
       for(const [position,velocity,low,high] of [
-        [x*aspect*p,aspect*p*(dx-x*2.8*.48*p),500-viewport.left,viewport.right-500],
-        [y*p,p*(dy-y*2.8*.48*p),445-viewport.top,viewport.bottom-445]
+        [x*gain*aspect*p,aspect*p*(dx-x*gain*2.8*.48*p),500-viewport.left,viewport.right-500],
+        [y*gain*p,p*(dy-y*gain*2.8*.48*p),445-viewport.top,viewport.bottom-445]
       ]) {
         const extent=Math.abs(position)+(1.7-echo*.2)/2, margin=position<0?low:high, fit=margin/extent;
         if(fit<size) { size=fit; growthRate=-fit*Math.sign(position)*velocity/extent; }
@@ -209,6 +217,7 @@ function chamber(c,s,time,width,tone,decay,original,viewport) {
     const age=time-p.at, z=age*.48, strength=p.strength*Math.exp(-age/(.4+decay*.3));
     for(let echo=0;echo<(original?2:4);echo++) {
       const points=[], depth=z+echo*.13, radius=160+age*230;
+      const [gain,gainRate]=original?[1,0]:completion(age);
       for(let i=0;i<=128;i++) {
         const a=i/128*TAU, r=radius*(1+.025*tone*Math.sin(a*8+p.seed));
         const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
@@ -216,16 +225,16 @@ function chamber(c,s,time,width,tone,decay,original,viewport) {
           // Radial velocity in the existing projection selects returning
           // segments. Echo depth alone does not identify a rebound.
           const dr=230*(1+.025*tone*Math.sin(a*8+p.seed));
-          const dx=Math.cos(r*Math.cos(a)/455)*Math.cos(a)*dr;
-          const dy=Math.cos(r*Math.sin(a)/365)*Math.sin(a)*dr;
+          const dx=Math.cos(r*Math.cos(a)/455)*Math.cos(a)*dr*gain+x*gainRate;
+          const dy=Math.cos(r*Math.sin(a)/365)*Math.sin(a)*dr*gain+y*gainRate;
           const retreat=2.8*.48/(1+depth*2.8)-growthRate/size, aspect=.65+width*.35;
-          if(x*aspect*aspect*(dx-x*retreat)+y*(dy-y*retreat)>=0) {
+          if(x*gain*aspect*aspect*(dx-x*gain*retreat)+y*gain*(dy-y*gain*retreat)>=0) {
             if(points.length>1) line(c,points,strength*(210-echo*38),1.7-echo*.2);
             points.length=0;
             continue;
           }
         }
-        points.push(project(x,y,depth));
+        points.push(project(x*gain,y*gain,depth));
       }
       line(c,points,strength*(210-echo*38),1.7-echo*.2);
     }
