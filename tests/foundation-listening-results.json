@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-10-27T03:29:46.171Z",
+  "createdAt": "2026-10-27T04:13:44.179Z",
   "kind": "Foundation listening comparisons",
   "buildInputs": {
     "dist/control-history.mjs": "b2b69ec3995dba2cca2fc9ec633cddd63d3c5e3ab8b89eb27ef1bbfe59095bea",
@@ -43,11 +43,11 @@
     "dist/ambient-interaction.mjs": "b99b5cbd93958fc4d64450b72c829440e62418f820637a15ccaf123a9bd0cf06",
     "dist/foundation-instruments/sem.mjs": "325c6317bf205409627969b36150e97bec32e98da1b5d1f4ba378f428bbf0921",
     "dist/foundation-instruments/moog.mjs": "a605bd674c8791a7f2f463a81101e7cc03dae2110d741608fda63d6284422262",
-    "dist/foundation-instruments/juno.mjs": "b930e01c86a906b8cd0191b735a202583a24375a356fb1473f06333d1ea4e13d",
+    "dist/foundation-instruments/juno.mjs": "7ba84f1213d00b976e15dc3d72fb804cd4c71f31b7255b640b1ac21abc624ec0",
     "dist/foundation-instruments/buchla.mjs": "6e58bb6dbd430494c0ce044f7710446eca784883073fc16cb0694a41392026b2",
     "dist/foundation-instruments/solina.mjs": "a91dbb5f728a5d813a28a9851ea06c63a83ae862f0646dca6b7ddb25d836b35f",
     "dist/foundation-instruments.mjs": "0f36d1980c8789d8cc063f2941ce85989367217bf78954ec5aad7b73fe8be711",
-    "dist/ambient-ui.mjs": "e5e92c069577faebb802bff05356ad2ac47e0e6b5bc949604e2e3f73d3bc2fac",
+    "dist/ambient-ui.mjs": "e342c2a581841e203cfe045f10cae56e0ef4175563f3491afc71b235a362fdef",
     "dist/texture-wave.mjs": "96e33b053ab208839e6a8abfed6de3bd004301ec98dc08cb344eeafc1af65d68",
     "dist/texture-adjustments.mjs": "21c1e43040d7ba3a5b84b64abe0ae202bc79049be105e652ac543f4a64ffaaef",
     "dist/square-viewport.mjs": "31409a2381edebb3bbc520122f02595bd24d5a698d36aa68499d032024d4e7fe",
@@ -175,9 +175,9 @@
       "instrument": "juno",
       "echo": false,
       "finite": true,
-      "peak": 0.0740489810705185,
-      "rms": 0.017068638746614663,
-      "sha256": "ec03a10feb69e184811e7e68c9d0e7417c64cbfff7274ac4548a1c02386bca5a",
+      "peak": 0.18512244522571564,
+      "rms": 0.042671596872568086,
+      "sha256": "ad8dfd2f1401214f6456fcfc6f31f5473d5a4906bedd59b1439a9288a1f3d624",
       "saved": true
     },
     {
@@ -185,9 +185,9 @@
       "instrument": "juno",
       "echo": true,
       "finite": true,
-      "peak": 0.0620584562420845,
-      "rms": 0.014357209909996829,
-      "sha256": "8264a70d87914f82eee51a84f4e35924b3da80225c64b6a7e4879519cc5d039e",
+      "peak": 0.1457614153623581,
+      "rms": 0.03531533353138597,
+      "sha256": "79663a459c17ed408eef03bfe80ee18d25dd90857837277846ab9752f3d4330b",
       "saved": true
     },
     {

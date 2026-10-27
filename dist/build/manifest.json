@@ -41,7 +41,7 @@
     "dist/ambient-interaction.mjs": "b99b5cbd93958fc4d64450b72c829440e62418f820637a15ccaf123a9bd0cf06",
     "dist/foundation-instruments/sem.mjs": "325c6317bf205409627969b36150e97bec32e98da1b5d1f4ba378f428bbf0921",
     "dist/foundation-instruments/moog.mjs": "a605bd674c8791a7f2f463a81101e7cc03dae2110d741608fda63d6284422262",
-    "dist/foundation-instruments/juno.mjs": "b930e01c86a906b8cd0191b735a202583a24375a356fb1473f06333d1ea4e13d",
+    "dist/foundation-instruments/juno.mjs": "7ba84f1213d00b976e15dc3d72fb804cd4c71f31b7255b640b1ac21abc624ec0",
     "dist/foundation-instruments/buchla.mjs": "6e58bb6dbd430494c0ce044f7710446eca784883073fc16cb0694a41392026b2",
     "dist/foundation-instruments/solina.mjs": "a91dbb5f728a5d813a28a9851ea06c63a83ae862f0646dca6b7ddb25d836b35f",
     "dist/foundation-instruments.mjs": "0f36d1980c8789d8cc063f2941ce85989367217bf78954ec5aad7b73fe8be711",

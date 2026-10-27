@@ -54,3 +54,30 @@ test('Chorus synth produces moving stereo output even with centered Foundation v
  let sides=0,mid=0;for(let block=0;block<250;block++){const channels=[new Float32Array(128),new Float32Array(128)];engine.process(channels);if(block>125)for(let i=0;i<128;i++){sides+=(channels[0][i]-channels[1][i])**2;mid+=(channels[0][i]+channels[1][i])**2;}}
  assert.ok(sides/mid>.0001,'Chorus gives a centered dry Foundation stereo movement');
 });
+
+function settledStereoLevel(instrument, settings, rate){
+ const engine=new AmbientEngine(rate);engine.set({instrument,compositionVersion:2,hold:true,activity:0,melody:0,air:0,...settings});engine.play(true);
+ let energy=0,count=0,peak=0;
+ for(let at=0;at<rate*12;at+=128){
+  const channels=[new Float32Array(128),new Float32Array(128)];engine.process(channels);
+  for(const channel of channels)for(const value of channel){
+   assert.ok(Number.isFinite(value),'Foundation output stays finite');
+   peak=Math.max(peak,Math.abs(value));
+   if(at>=rate*6){energy+=value*value;count++;}
+  }
+ }
+ return {rms:Math.sqrt(energy/count),peak};
+}
+
+test('Chorus synth stays within 6 dB of Hushfield across dark, default and bright held chords',()=>{
+ // Compare settled stereo output at the same Blend, after the shared attack.
+ // This bounds switching volume without normalizing away instrument dynamics.
+ for(const rate of [44100,48000])for(const seed of [719,731])for(const color of [0,38,100]){
+  const settings={seed,color};
+  const reference=settledStereoLevel('current',settings,rate);
+  const chorus=settledStereoLevel('juno',settings,rate);
+  const differenceDb=20*Math.log10(chorus.rms/reference.rms);
+  assert.ok(Math.abs(differenceDb)<=6,`${rate} Hz seed ${seed} Color ${color}: Chorus level differs by ${differenceDb.toFixed(2)} dB`);
+  assert.ok(chorus.peak<.8,'Chorus retains output headroom');
+ }
+});

@@ -23,7 +23,9 @@ function voice(v,p,rate,time){
  v.junoBand1=2*b-v.junoBand1;v.junoLow1=2*l-v.junoLow1;
  b=(v.junoBand2+g*(l-v.junoLow2))*a;l=v.junoLow2+g*b;
  v.junoBand2=2*b-v.junoBand2;v.junoLow2=2*l-v.junoLow2;
- return l*1.45;
+ // Fixed voice makeup offsets the quiet oscillator blend and cascaded filters.
+ // Keep the filter response and chorus mix intact; Air uses its shared level.
+ return l*3.625;
 }
 export function renderPad(v,p,rate,time){return voice(v,p,rate,time);}
 export function renderMelody(v,p,rate,time){return voice(v,p,rate,time);}

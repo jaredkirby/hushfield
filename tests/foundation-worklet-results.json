@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-10-27T03:28:16.432Z",
+  "createdAt": "2026-10-27T04:14:13.171Z",
   "kind": "Foundation worklet checks",
   "buildInputs": {
     "dist/control-history.mjs": "b2b69ec3995dba2cca2fc9ec633cddd63d3c5e3ab8b89eb27ef1bbfe59095bea",
@@ -43,11 +43,11 @@
     "dist/ambient-interaction.mjs": "b99b5cbd93958fc4d64450b72c829440e62418f820637a15ccaf123a9bd0cf06",
     "dist/foundation-instruments/sem.mjs": "325c6317bf205409627969b36150e97bec32e98da1b5d1f4ba378f428bbf0921",
     "dist/foundation-instruments/moog.mjs": "a605bd674c8791a7f2f463a81101e7cc03dae2110d741608fda63d6284422262",
-    "dist/foundation-instruments/juno.mjs": "b930e01c86a906b8cd0191b735a202583a24375a356fb1473f06333d1ea4e13d",
+    "dist/foundation-instruments/juno.mjs": "7ba84f1213d00b976e15dc3d72fb804cd4c71f31b7255b640b1ac21abc624ec0",
     "dist/foundation-instruments/buchla.mjs": "6e58bb6dbd430494c0ce044f7710446eca784883073fc16cb0694a41392026b2",
     "dist/foundation-instruments/solina.mjs": "a91dbb5f728a5d813a28a9851ea06c63a83ae862f0646dca6b7ddb25d836b35f",
     "dist/foundation-instruments.mjs": "0f36d1980c8789d8cc063f2941ce85989367217bf78954ec5aad7b73fe8be711",
-    "dist/ambient-ui.mjs": "e5e92c069577faebb802bff05356ad2ac47e0e6b5bc949604e2e3f73d3bc2fac",
+    "dist/ambient-ui.mjs": "e342c2a581841e203cfe045f10cae56e0ef4175563f3491afc71b235a362fdef",
     "dist/texture-wave.mjs": "96e33b053ab208839e6a8abfed6de3bd004301ec98dc08cb344eeafc1af65d68",
     "dist/texture-adjustments.mjs": "21c1e43040d7ba3a5b84b64abe0ae202bc79049be105e652ac543f4a64ffaaef",
     "dist/square-viewport.mjs": "31409a2381edebb3bbc520122f02595bd24d5a698d36aa68499d032024d4e7fe",
@@ -272,8 +272,8 @@
       "rate": 44100,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.04326752945780754,
-      "rms": 0.010056044743153763
+      "peak": 0.043642062693834305,
+      "rms": 0.010898635503600786
     },
     {
       "instrument": "solina",
@@ -288,24 +288,24 @@
       "rate": 44100,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.026594512164592743,
-      "rms": 0.00626230405044825
+      "peak": 0.03285927698016167,
+      "rms": 0.007031454445801756
     },
     {
       "instrument": "juno",
       "rate": 44100,
       "route": "dry",
       "finite": true,
-      "peak": 0.053144849836826324,
-      "rms": 0.013534452777246795
+      "peak": 0.1328621208667755,
+      "rms": 0.03383613194663582
     },
     {
       "instrument": "juno",
       "rate": 44100,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.02138518914580345,
-      "rms": 0.005254150563339023
+      "peak": 0.05165490880608559,
+      "rms": 0.013232839100863961
     },
     {
       "instrument": "buchla",
@@ -320,8 +320,8 @@
       "rate": 44100,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.03330191969871521,
-      "rms": 0.007158502340157633
+      "peak": 0.049000006169080734,
+      "rms": 0.008627078617140614
     },
     {
       "instrument": "sem",
@@ -336,8 +336,8 @@
       "rate": 44100,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.06130954995751381,
-      "rms": 0.014914586139161287
+      "peak": 0.05220280960202217,
+      "rms": 0.014037442729152578
     },
     {
       "instrument": "moog",
@@ -352,8 +352,8 @@
       "rate": 44100,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.09655634313821793,
-      "rms": 0.02961326511883677
+      "peak": 0.1740054488182068,
+      "rms": 0.033630723708790236
     },
     {
       "instrument": "current",
@@ -368,8 +368,8 @@
       "rate": 48000,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.03972168266773224,
-      "rms": 0.009679263721939413
+      "peak": 0.04164353013038635,
+      "rms": 0.008962736158601058
     },
     {
       "instrument": "solina",
@@ -384,24 +384,24 @@
       "rate": 48000,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.027826236560940742,
-      "rms": 0.007286472977394694
+      "peak": 0.03177510201931,
+      "rms": 0.007849605154171001
     },
     {
       "instrument": "juno",
       "rate": 48000,
       "route": "dry",
       "finite": true,
-      "peak": 0.0531887486577034,
-      "rms": 0.013544770720924344
+      "peak": 0.1329718679189682,
+      "rms": 0.033861926802519975
     },
     {
       "instrument": "juno",
       "rate": 48000,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.021204259246587753,
-      "rms": 0.005262361638674727
+      "peak": 0.06703296303749084,
+      "rms": 0.013448340476901808
     },
     {
       "instrument": "buchla",
@@ -416,8 +416,8 @@
       "rate": 48000,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.038225363940000534,
-      "rms": 0.007393413639305382
+      "peak": 0.044231195002794266,
+      "rms": 0.008345464757229965
     },
     {
       "instrument": "sem",
@@ -432,8 +432,8 @@
       "rate": 48000,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.062032751739025116,
-      "rms": 0.01632531046644759
+      "peak": 0.07052953541278839,
+      "rms": 0.015323702229062791
     },
     {
       "instrument": "moog",
@@ -448,8 +448,8 @@
       "rate": 48000,
       "route": "live Texture only",
       "finite": true,
-      "peak": 0.13526451587677002,
-      "rms": 0.034956535427341076
+      "peak": 0.11854217201471329,
+      "rms": 0.02933383702323802
     }
   ]
 }
