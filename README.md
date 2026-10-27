@@ -3,7 +3,7 @@
 [![CI](https://github.com/jaredkirby/hushfield/actions/workflows/ci.yml/badge.svg)](https://github.com/jaredkirby/hushfield/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-white.svg)](LICENSE)
 
-Hushfield is a browser instrument for ambient music. Move four voice dots to change a chord, turn that sound into grains, and add notes with rotating shapes and bouncing balls. Space and Tape process the mix. The display is black and white, with ordered dithering.
+Hushfield is a browser instrument for making evolving ambient music for focus and calm. It is designed for phone, iPad and desktop, and you can start playing without knowing synthesis. Move four voice dots to change a chord, turn that sound into grains, and add notes with rotating shapes and bouncing balls. Space and Tape process the mix. The display is black and white, with ordered dithering.
 
 ## Play locally
 
@@ -29,6 +29,8 @@ AudioWorklet and microphone access need localhost or HTTPS. Opening `index.html`
 
 Drag sliders, tap underlined values for exact entry, or choose categories from their menus. The shared minus and plus buttons adjust the selected control. Hold either button to repeat. Undo and Redo restore settings, with each drag counted as one edit.
 
+Each sound editor has Reset to defaults. It restores that editor's fresh-session sound and appearance, keeps your blend, material and playback state, and takes one Undo to reverse. During playback it uses a short fade around the change.
+
 The Foundation, Texture and Motion blend controls set what you hear. Solo isolates one part; Full mix restores the saved blend. You can change editors without changing the mix or restarting the music.
 
 | Editor | Controls |
@@ -46,6 +48,8 @@ Stillwater, Slow cloud, Glass shards and Worn memory are complete presets. They 
 The [playing guide](docs/PLAYING.md) covers Texture sources, harmony, Tape controls and recording.
 
 Tape preset offers Gentle echo, Slapback, Three-head drift, Dub trails and Spring chamber. A selection changes only the Tape sound, keeps its On/Off state and can be undone. Editing a value shows Custom settings.
+
+Drag the Tape artwork horizontally for echo time and vertically for feedback, or focus it and use the arrow keys. Each drag is one Undo step; Escape cancels it. The artwork keeps moving silently while stopped or bypassed, with a Visual preview label. Touching it never starts audio. Reduced motion keeps it still.
 
 Fresh sessions start paused with Chorus synth, Stillwater and Space Echo with Tape On. Stillwater in Whole piece restores this combination. Foundation's Sound panel also offers 18 starting presets, three per instrument, with one-step Undo and names that follow the actual sound settings. These change Foundation tone and voice levels while retaining your Scene, harmony and shared effects.
 

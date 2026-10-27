@@ -1,0 +1,3 @@
+# Preserve playback intent through browser interruptions
+
+The player's Start or Stop choice is separate from the browser's ability to run audio. An interrupted context retains earlier playback intent, while explicit app or system Pause, Stop, project restoration and failed activation cancel it. Activation attempts use revisions so a late result cannot undo a newer Stop. The browser may restore a still-requested session; the app does not use forced-resume timers or silent-media workarounds. Browser events do not reliably identify a call versus competing media, so that product distinction remains subject to real-device verification rather than an inferred interruption cause.

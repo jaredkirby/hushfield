@@ -105,7 +105,7 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
   let transport = transports.get(c);
   if (!transport) { transport = new TapeVisualTransport(); transports.set(c, transport); }
   const motion = tapeVisualState(params, runtime.running === false ? null : runtime.telemetry, runtime.audioTime ?? seconds, seconds);
-  const moving = (runtime.running ?? (angle !== transport.lastAngle)) && params.tapeOn && !runtime.reducedMotion;
+  const moving = (runtime.animate ?? ((runtime.running ?? (angle !== transport.lastAngle)) && params.tapeOn)) && !runtime.reducedMotion;
   const dt = runtime.dt ?? (transport.lastSeconds === undefined ? 0 : seconds - transport.lastSeconds);
   transport.advance(dt, moving, motion, params);
   transport.lastAngle = angle; transport.lastSeconds = seconds;

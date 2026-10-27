@@ -16,6 +16,8 @@ Solo makes one part audible even if its saved blend level is zero, while tempora
 
 ## Foundation
 
+Each of the five sound editors has Reset to defaults. It restores its sound and appearance from a fresh Stillwater session: Chorus synth for Foundation, Plate for Space and enabled Space Echo for Tape. The Piece's seed, Blend, source selection, retained material, trim, master volume and playback state stay as set, along with other editors' settings. Foundation's new harmony still reaches linked Motion and live Texture. Reset is one Undo step, has no confirmation dialog and fades briefly around the change during playback. An explicit reset can select the current sound model for that editor; loading an older Piece alone still preserves its saved sound.
+
 Compose controls the scene, key, scale, chord length, activity and evolution. Voices adjusts the chord bed, melodic notes and airy noise. The four dots are sustained chord voices: drag vertically for scale steps and horizontally for pan. The pitches glide to their new values. Each dot shows its voice number and note, with pitch/stereo guides during a drag. Reset dots returns all four to their default positions.
 
 Sound adds **Color**, **Drift** and **Bloom**. Color changes harmonic richness, Drift gently moves the voices independently, and Bloom changes their color over time. Fresh sessions and complete presets use recurring motifs with deliberate rests and nearby chord voicings. Evolution also controls a repeating two-minute phrase: Texture grows in level and grain density as Motion becomes quieter and sparser, then the balance returns. Foundation breathes more subtly. The saved Blend stays unchanged; a part at zero stays silent, and Solo still isolates the requested part. Older projects retain their classic Foundation until you edit Sound or choose a complete preset.
@@ -117,7 +119,9 @@ Classic retains the earlier single echo and short modulated direct tape path. In
 
 New-session settings are Head 3 time 0.36 s, Feedback 28%, Echo level 16%, Drive 16%, Wow 10%, Flutter 6%, Hiss 4%, Tone 42%, Head mode 4 and Spring level 12%. Mode 4 disables spring despite that stored level. The [RE-201 research](research/re201-space-echo.md) explains the source behavior and the limits of this approximation.
 
-The cassette illustrates the settings and signal level: Wow sways the path, Flutter adds ripples, Drive brightens the head and Echo level/Feedback shape fading repeats. The echo grid makes time and feedback directly editable. Both displays illustrate settings rather than measured tape telemetry. Movement settles in bypass, freezes while stopped and respects reduced motion.
+The physical tape loop folds and slides while its lower run and heads respond to audio-processor telemetry during playback. Drag the artwork horizontally for echo time and vertically for feedback. Arrow keys adjust the same controls; Shift makes larger steps and Escape cancels a drag. Touching the artwork does not change settings until you move, and one drag is one Undo step. New artwork feedback adjustments stay within 65%; deliberately higher existing settings can be lowered without a touch-down jump. The full Feedback control remains available for experiments. The separate echo grid also edits time and feedback.
+
+The loop continues as a labelled visual preview while audio is stopped or Tape is bypassed. It does not start audio or invent a measured signal. Surface tension and Stiffness in Mechanics change the picture only. Reduced motion keeps the loop still.
 
 ## Visual and keyboard controls
 

@@ -1,5 +1,15 @@
 # Verification
 
+## Focus and calm candidate
+
+The isolated `codex/focus-and-calm` candidate starts from `f9311ef` and preserves concurrent Foundation Waves/stars work alongside the newer merged Space and Tape implementations. It adds Reset to defaults in all five sound editors, one-step Undo, a short reset fade and direct Tape-artwork gestures. Tape can evolve silently while stopped or bypassed, with labelled preview and reduced-motion handling. Playback intent now survives browser interruptions while explicit Stop, system pause and paused project loading take precedence over stale activation or source-audition results.
+
+The build and all 252 Node tests passed on 2026-10-27. Regression coverage includes actual app functions for reset isolation/history locks and asynchronous playback/source-loading races. Independent reviews found those races before final validation; the fixes passed the added regressions.
+
+[Browser evidence](tests/focus-browser-results.json) records all five editors at four viewport sizes, Reset/Undo, Tape keyboard and drag edits while stopped, silent animation, reduced motion, live reset and explicit Stop. Browser audio diagnostics passed five Piece, ten Tape and 36 Foundation checks. No warnings or errors were observed during the main UI checks. The [screenshot](docs/images/focus-tape-candidate.jpg) shows Tape's interactive artwork and reset control.
+
+Viewport checks are emulation and live UI playback used master volume zero. Human visual/listening approval, real touch and 60-minute physical-device playback remain open. Browser APIs cannot reliably identify interruption cause, so locked-screen continuation, call resumption and competing-media behavior require the [device checklist](docs/PLAYBACK-DEVICE-CHECK.md). A broader calm-default/range pass remains pending. This candidate is not evidence that the full product direction is complete.
+
 ## Space release verification
 
 The final Space revision passed the build and all 194 Node test results on 2026-10-27. Fresh sessions and Whole piece presets select Plate; saved models, malformed-file fallback and versions 1–6 retain their compatibility behavior. Fresh browser startup showed Plate selected with its controls enabled and no console warnings or errors.

@@ -288,6 +288,8 @@ function setupAudioVisuals({ onChange = () => {
     updateProbe();
   }, setWaveformSmoothing(value) {
     state.waveformSmoothing = Math.round(clamp(value, 0, 100)); onChange();
+  }, setFoundationWaves(patch) {
+    state = restoreVisual({...state,...patch}); onChange();
   }, settings: () => ({ ...state }), restore(saved) {
     state = restoreVisual(saved);
     held = false;

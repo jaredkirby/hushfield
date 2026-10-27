@@ -1,8 +1,16 @@
 import { createControlHistory } from "./control-history.mjs";
+import { INITIAL_PARAMS } from './session-defaults.mjs';
+import { resetEditorSettings } from './editor-reset.mjs';
+import { createResetTransition } from './reset-transition.mjs';
+import { setupTapeLoopInteraction } from './tape-loop-interaction.mjs';
+import { createPlaybackIntent } from './playback-intent.mjs';
+import { createPlaybackDiagnostics } from './playback-diagnostics.mjs';
+import { FOUNDATION_WAVE_DEFAULTS } from './foundation-wave-settings.mjs';
+import { drawFoundationStars } from './foundation-stars.mjs';
 import { setupVisualEditors } from "./visual-editors.mjs";
 import { setupMotionControls } from "./motion-controls.mjs";
 import { TAPE_PRESETS, applyTapePreset, matchingTapePreset } from "./tape-presets.mjs";
-import { TAPE_DEFAULTS, SPACE_ECHO_DEFAULTS, SPACE_ECHO_MODES } from "./tape-settings.mjs";
+import { SPACE_ECHO_MODES } from "./tape-settings.mjs";
 import { TAPE_PHYSICS_DEFAULTS } from "./tape-physics-settings.mjs";
 import { applyFoundationPreset } from "./foundation-presets.mjs";
 import { selectPiecePreset } from "./piece-presets.mjs";
@@ -12,7 +20,7 @@ import { createPieceSpace } from "./piece-space.mjs";
 import { setupSpaceControls } from './space-controls.mjs';
 import { drawSpaceReverb } from './space-reverb-visual.mjs';
 import { setupSpacePlateControls } from './space-plate-controls.mjs';
-import { SPACE_DEFAULTS, SPACE_FIELDS } from "./space-settings.mjs";
+import { SPACE_FIELDS } from "./space-settings.mjs";
 import { createRenderClock } from "./render-clock.mjs";
 import { createProcessorGuard, releaseAudioGraph } from "./audio-lifecycle.mjs";
 import { setupPieceBlend } from "./piece-blend.mjs";
@@ -39,10 +47,10 @@ import { requestPlaybackSession, resumeFromTap, verifyAudioClock, playTestNotes 
 import { boundary, containBalls, makeOrbitState, shapePoints } from "./orbit-physics.mjs?v=hushfield-1";
 const $ = (id) => document.getElementById(id);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
-const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, ...SPACE_ECHO_DEFAULTS, ...TAPE_PHYSICS_DEFAULTS, ...SPACE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
+const initial = INITIAL_PARAMS;
 const freshPiece = selectPiecePreset("still", { defaults: initial, cancelPending() {} });
 let recovery, restoringSession = false, sampleDecoder;
-let visualEditors, motionControls, controlHistory, textureAdjustments, spaceControlsUI, spacePlateUI, spaceAnalyser;
+let visualEditors, motionControls, controlHistory, textureAdjustments, spaceControlsUI, spacePlateUI, spaceAnalyser, tapeInteraction;
 const spaceSamples = new Float32Array(512);
 let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel, texturePhraseChannel;
 let phraseRequest, nextPhraseId = 0, foundationReady = false, motionReady = false, textureReady = false;
@@ -73,6 +81,19 @@ function syncTapeVisualSubscription() {
 document.addEventListener("visibilitychange", syncTapeVisualSubscription);
 let ambientState = freshPiece.ambient, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
 let audioGeneration = 0, restartPending = false, clockSnapshot;
+let activeStartToken, auditionRevision = 0;
+const playbackIntent = createPlaybackIntent();
+const playbackDiagnostics = createPlaybackDiagnostics({ readState: () => {
+  let audioSession;
+  try { audioSession = navigator.audioSession; } catch {}
+  return { ...playbackIntent.status(), visibility: document.visibilityState, contextState: ctx?.state || 'off',
+    audioTime: ctx?.currentTime, audioSessionState: audioSession?.state,
+    audioSessionType: audioSession?.type };
+} });
+const resetTransition = createResetTransition({
+  getAudio: () => ({ context: ctx, gain: master?.gain, playing: running }),
+  getVolume: () => +$('volume').value
+});
 let soundState = freshPiece.soundState;
 const orbitState = makeOrbitState();
 const padButtons = [], padFlashes = Array(MAX_PADS).fill(-Infinity);
@@ -251,7 +272,7 @@ function refreshTapeControls() {
   $("delayTime").title = spaceEcho ? "Longest head time. Heads 1, 2 and 3 are at one third, two thirds and this time. Up to 1.5 seconds extends the original hardware range." : "Time between echoes.";
   const note = $("tapePage").querySelector(".tape-note");
   note.textContent = activeTapePanel === "mechanics"
-    ? "Surface tension controls how freely the loose tape slides across the tray. Tape stiffness controls how easily it bends. Start the piece with Tape on to see the changes. These controls shape the animation only."
+    ? "Picture only. Surface tension changes how freely the tape slides; Stiffness changes how easily it bends. The artwork keeps moving with audio stopped. Drag the artwork to change echo time and feedback."
     : spaceEcho
     ? "Space Echo uses three tape heads and a parallel spring. Head 3 time sets the longest delay; heads 1 and 2 play at one third and two thirds. Modes 5 through 12 add spring; mode 12 is spring only. Echo level and Spring level are independent. Time extends to 1.5 s beyond the original hardware range. Drive colors the direct sound too. Off bypasses the whole effect."
     : "Warm vintage color for the whole piece. Wow sways the tape; Flutter adds fine ripples. Echo level controls only the repeats. Character colors the direct sound too. Off bypasses the whole effect.";
@@ -311,6 +332,8 @@ function syncEngine() {
 }
 const processorGuard = createProcessorGuard((error) => {
   audioGeneration++;
+  playbackIntent.stop('processor-error');
+  activeStartToken = undefined;
   running = false;
   playPending = false;
   if (outputCapture.busy) outputCapture.fail(error);
@@ -361,7 +384,12 @@ function ensureOutput() {
     if (!Audio) throw new Error("This browser does not support Web Audio.");
     requestPlaybackSession();
     ctx = new Audio({ latencyHint: "interactive" });
-    ctx.onstatechange = () => updateAudioState();
+    const context = ctx;
+    ctx.onstatechange = () => {
+      if (ctx !== context) return;
+      updateAudioState();
+      playbackDiagnostics.record('context-state');
+    };
     master = ctx.createGain();
     master.gain.value = +$("volume").value;
     analyser = ctx.createAnalyser();
@@ -736,6 +764,7 @@ function sendBuffer() {
   if (engine && buffer) engine.port.postMessage({ type: "sample", channels: Array.from({ length: buffer.numberOfChannels }, (_, c) => buffer.getChannelData(c).slice()), sampleRate: buffer.sampleRate, position: params.position / 100 });
 }
 function setSample(b, name, type = "IMPORTED AUDIO", keepOriginal = false) {
+  cancelSourceAudition();
   controlHistory?.clear();
   markEdited();
   if (previewNode) {
@@ -825,6 +854,7 @@ const pageNames = ["ambient", "sample", "grain", "fx", "tape", "orbit", "visual"
 function showTab(name) {
   if (!pageNames.includes(name)) return;
   activeTab = name;
+  tapeInteraction?.refresh();
   syncTapeVisualSubscription();
   window.HushfieldNavigation?.select(name, { notify: false });
   document.body.dataset.page = name;
@@ -841,61 +871,91 @@ function showTab(name) {
   ensureVisibleSelection();
 }
 function updateTransport() {
-  $("playLabel").textContent = running ? "STOP" : ctx && audioReady && ctx.state !== "running" ? "RESUME" : "START";
-  $("playBtn").setAttribute("aria-label", running ? "Stop instrument" : "Start instrument");
+  const requested = playbackIntent.status().desired;
+  $("playLabel").textContent = requested ? "STOP" : ctx && audioReady && ctx.state !== "running" ? "RESUME" : "START";
+  $("playBtn").setAttribute("aria-label", requested ? "Stop instrument" : "Start instrument");
+  document.body.dataset.playbackDesired = String(requested);
+  document.body.dataset.playbackPending = String(playbackIntent.status().pending);
   const held = ambientState.hold;
   $("freezeBtn").textContent = "Hold chord";
   $("freezeBtn").setAttribute("aria-label", "Hold current chord");
   $("freezeBtn").classList.toggle("active", held);
   $("freezeBtn").setAttribute("aria-pressed", String(held));
-  $("transportStatus").textContent = solo ? "SOLO \xB7 " + solo.toUpperCase() : running ? "PLAYING THE PIECE" : "READY TO PLAY THE PIECE";
+  $("transportStatus").textContent = solo ? "SOLO · " + solo.toUpperCase() : running ? "PLAYING THE PIECE" : requested ? "PLAYBACK INTERRUPTED · STOP TO CANCEL" : "READY TO PLAY THE PIECE";
   refreshPieceUI();
   document.body.classList.toggle("playing", running);
+  try { if (navigator.mediaSession) navigator.mediaSession.playbackState = running ? 'playing' : 'paused'; } catch {}
 }
 function updateAudioState(message) {
   const state = ctx?.state || "off", active = state === "running";
+  const effective = audioReady && playbackIntent.reconcileContext(state).shouldRun;
+  if (running !== effective) {
+    running = effective;
+    syncPlayback();
+    if (!running) silenceOrbit();
+    clockSnapshot = undefined;
+  }
   $("audioLED").classList.toggle("on", active);
   $("audioStatus").textContent = active ? running ? "PLAYING" : "AUDIO READY" : state === "off" ? "AUDIO OFF" : "AUDIO " + state.toUpperCase();
   if (message) $("audioDetail").textContent = message;
-  else $("audioDetail").textContent = active ? running ? "Playing. Tap Stop to pause." : "Audio ready. Tap Start to play." : state === "off" ? "Tap Start sound to enable audio." : "Audio paused by the browser. Tap Resume audio.";
-  if (!active && running) {
-    running = false;
-    syncPlayback();
-    silenceOrbit();
-    updateTransport();
-  }
+  else $("audioDetail").textContent = active ? running ? "Playing. Tap Stop to pause." : "Audio ready. Tap Start to play." : playbackIntent.status().desired ? "Playback interrupted. It can resume when audio returns; Stop cancels it." : state === "off" ? "Tap Start to enable audio." : "Audio paused by the browser. Tap Start to resume.";
+  updateTransport();
 }
-async function togglePlay() {
-  if (playPending || restartPending) return;
-  if (previewNode) {
-    previewNode.stop();
-    previewNode = null;
-    $("previewSource").textContent = "\u25B7 Listen to source";
-  }
-  const generation = audioGeneration;
+function cancelSourceAudition() {
+  auditionRevision++;
+  if (!previewNode) return;
+  try { previewNode.stop(); } catch {}
+  previewNode = null;
+  $('previewSource').textContent = 'Listen to source';
+}
+function stopPlayback(reason = 'user') {
+  cancelSourceAudition();
+  playbackIntent.stop(reason);
+  activeStartToken = undefined;
+  playPending = false;
+  running = false;
+  syncPlayback();
+  silenceOrbit();
+  clockSnapshot = undefined;
+  $("playBtn").disabled = false;
+  playbackDiagnostics.record('stop', reason);
+  updateAudioState();
+}
+async function startPlayback() {
+  if (restartPending) return;
+  cancelSourceAudition();
+  const generation = audioGeneration, token = playbackIntent.requestStart();
+  activeStartToken = token;
   playPending = true;
-  $("playBtn").disabled = true;
+  // Keep Stop available while activation is pending.
+  $("playBtn").disabled = false;
+  updateTransport();
+  playbackDiagnostics.record('start-request');
   try {
     await ensureAudio();
     if (generation !== audioGeneration) return;
-    running = !running;
-    syncPlayback();
-    if (!running) silenceOrbit();
-    clockSnapshot = void 0;
-    updateTransport();
+    playbackIntent.reconcileContext(ctx?.state || 'off');
+    if (!playbackIntent.finishStart(token).accepted) return;
+    playbackDiagnostics.record('start-complete');
     updateAudioState();
-  } catch (e) {
-    if (generation !== audioGeneration) return;
+  } catch (error) {
+    if (generation !== audioGeneration || !playbackIntent.failStart(token).accepted) return;
     running = false;
-    updateTransport();
-    updateAudioState(e.message);
-    toast("Audio could not start: " + e.message);
+    syncPlayback();
+    playbackDiagnostics.record('start-failed', error.name);
+    updateAudioState(error.message);
+    toast("Audio could not start: " + error.message);
   } finally {
-    if (generation === audioGeneration) {
+    if (generation === audioGeneration && token === activeStartToken) {
       playPending = false;
       $("playBtn").disabled = false;
+      updateTransport();
     }
   }
+}
+function togglePlay() {
+  if (playbackIntent.status().desired || playPending) stopPlayback();
+  else return startPlayback();
 }
 async function testSound() {
   let context;
@@ -925,9 +985,12 @@ async function restartAudio() {
     toast("Finish the recording before restarting audio.");
     return;
   }
+  cancelSourceAudition();
   restartPending = true;
   $("restartAudio").disabled = true;
   const generation = ++audioGeneration;
+  const token = playbackIntent.requestStart();
+  activeStartToken = token;
   try {
     running = false;
     playPending = false;
@@ -951,11 +1014,12 @@ async function restartAudio() {
     await ensureAudio();
     await verifyAudioClock(context);
     if (generation !== audioGeneration) return;
-    running = true;
-    syncPlayback();
-    updateTransport();
+    playbackIntent.reconcileContext(ctx?.state || 'off');
+    if (!playbackIntent.finishStart(token).accepted) return;
+    updateAudioState();
     $("audioDetail").textContent = +$("volume").value === 0 ? "VOL is 0%. Raise the volume slider." : "Audio restarted \xB7 instrument running \xB7 VOL " + Math.round(+$("volume").value * 100) + "%.";
   } catch (e) {
+    if (generation !== audioGeneration || !playbackIntent.failStart(token).accepted) return;
     running = false;
     updateTransport();
     updateAudioState(e.message);
@@ -977,10 +1041,7 @@ function inspectAudioClock(time) {
   }
   if (time - clockSnapshot.wall < 1e3) return;
   if (ctx.currentTime <= clockSnapshot.audio + 1e-3) {
-    running = false;
-    syncPlayback();
-    silenceOrbit();
-    updateTransport();
+    stopPlayback('clock-stalled');
     updateAudioState("Audio clock stopped. Tap Restart audio.");
   }
   clockSnapshot = { wall: time, audio: ctx.currentTime };
@@ -1289,9 +1350,10 @@ function drawOrbit(verts) {
   $("orbitAngle").textContent = `${Math.round((orbitState.phase * 180 / Math.PI + params.orbitRotation + 360) % 360)}\xB0`;
 }
 const tapeLayout = new URLSearchParams(location.search).get("tapeLayout") || "space-echo";
-let frequencyData = new Uint8Array(512), tapeAngle = 0, tapeSeconds = 0;
+let frequencyData = new Uint8Array(512), tapeAngle = 0, tapeSeconds = 0, artSeconds = 0;
 const renderClock = createRenderClock(30);
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+reducedMotion.addEventListener('change', () => renderClock.invalidate());
 function updateAmbientDisplay() {
   $("ambientHarmony").textContent = AMBIENT_KEYS[ambientState.key] + " " + AMBIENT_SCALES[ambientState.scale] + " / " + ambientStats.chord;
   $("ambientElapsed").textContent = String(Math.floor(ambientStats.elapsed / 60)).padStart(2, "0") + ":" + String(Math.floor(ambientStats.elapsed % 60)).padStart(2, "0");
@@ -1304,14 +1366,17 @@ function frame(time) {
     ambientPointsDirty = false;
     ambientNode?.port.postMessage({ type: "points", value: ambientState.points });
   }
-  if (!renderClock.shouldDraw(time, running || !!previewNode || lastMeter > 1e-3)) {
+  const foundationVisual = visuals.settings();
+  const watching = !document.hidden && !reducedMotion.matches && ['ambient', 'tape', 'fx'].includes(activeTab);
+  if (!renderClock.shouldDraw(time, running || !!previewNode || lastMeter > 1e-3 || watching)) {
     requestAnimationFrame(frame);
     return;
   }
   const dt = Math.min(0.1, (time - lastFrame) / 1e3 || 0.033);
   lastFrame = time;
+  if (watching) artSeconds += dt;
   const verts = boundary(shapePoints($("orbitShape").value), orbitState.phase + params.orbitRotation * Math.PI / 180);
-  if (running && params.tapeOn && !reducedMotion.matches) {
+  if (activeTab === 'tape' && watching) {
     tapeAngle += dt * (1.2 + 0.4 / params.delayTime);
     tapeSeconds += dt;
   }
@@ -1323,8 +1388,9 @@ function frame(time) {
     const fit = fitCanvas($("ambientCanvas"));
     if (fit) {
       const seconds = ambientVisualSeconds(ambientStats, outputAudioTime(ctx, time), running && ambientState.enabled && ctx?.state === "running"), motionTime = reducedMotion.matches ? 0 : seconds, points = ambientPoints.render(fit.w, fit.h, motionTime, lastMeter, reducedMotion.matches);
-      drawAmbient(fit, ambientState, ambientStats, motionTime * 1e3, lastMeter, points);
+      drawAmbient(fit, ambientState, ambientStats, (reducedMotion.matches ? 0 : artSeconds) * 1e3, lastMeter, points, foundationVisual);
       ditherCanvas($("ambientCanvas"));
+      drawFoundationStars(fit, foundationVisual, time / 1000, reducedMotion.matches);
     }
     updateAmbientDisplay();
   } else if (activeTab === "visual") {
@@ -1340,9 +1406,11 @@ function frame(time) {
         drawTape(fit, params, tapeAngle, lastMeter, tapeSeconds, tapeLayout, {
           dt, telemetry: tapeVisualSnapshot, audioTime: outputAudioTime(ctx, time),
           running: running && ctx?.state === "running" && !document.hidden,
+          animate: watching,
           reducedMotion: reducedMotion.matches, trail: visuals.settings().trail
         });
         ditherCanvas($("tapeCanvas"));
+        $('tapeVisualStatus').textContent = running && params.tapeOn ? 'LIVE TAPE · DRAG TO SHAPE ECHO' : 'VISUAL PREVIEW · AUDIO ' + (running ? 'BYPASSED' : 'STOPPED');
       }
     } else if (activeTab === 'fx' && document.body.dataset.spacePanel !== 'filter') {
       const fit = fitCanvas($('spaceCanvas'));
@@ -1353,7 +1421,7 @@ function frame(time) {
           for (const value of spaceSamples) level += value * value;
           level = Math.min(1, Math.sqrt(level / spaceSamples.length) * 16);
         }
-        drawSpaceReverb(fit, params, { time: running ? ctx?.currentTime || 0 : 0, level, reducedMotion: reducedMotion.matches });
+        drawSpaceReverb(fit, params, { time: artSeconds, level, reducedMotion: reducedMotion.matches });
         ditherCanvas($('spaceCanvas'));
         $('spaceActivity').textContent = level > .002 ? 'REVERB ACTIVE' : 'REVERB QUIET';
       }
@@ -1402,6 +1470,8 @@ function projectDecodeOptions(context) {
   };
 }
 function applyProject(project) {
+  tapeInteraction?.cancel();
+  stopPlayback('project-load');
   solo = null;
   piece = project.piece;
   setSample(project.buffer, project.name, "PROJECT AUDIO");
@@ -1420,6 +1490,7 @@ function applyProject(project) {
   syncTextureSource();
 }
 async function loadProject(file) {
+  stopPlayback('project-load');
   try {
     await sampleSelection.run(async () => {
       if (file.size > 30 * 1024 * 1024) throw new Error("Project exceeds the 30 MB limit.");
@@ -1483,12 +1554,7 @@ const microphone = createMicrophoneTake({
     micRecording = state !== "idle";
     $("micBtn").disabled = state === "finishing";
     $("micBtn").textContent = { idle: "Record microphone", requesting: "Cancel microphone request", recording: "Stop recording", finishing: "Finishing take\u2026" }[state];
-    if (state === "recording" && running) {
-      running = false;
-      syncPlayback();
-      silenceOrbit();
-      updateTransport();
-    }
+    if (state === "recording") stopPlayback('microphone');
   },
   async onComplete(blob) {
     await microphoneSelection.run(async () => decodeContext().decodeAudioData(await blob.arrayBuffer()), (decoded) => {
@@ -1509,6 +1575,7 @@ function toggleMic() {
   else microphone.start();
 }
 function applyPreset(key) {
+  tapeInteraction?.cancel();
   controlHistory?.clear();
   const selected = selectPiecePreset(key, { defaults: initial, cancelPending: sampleSelection.cancel });
   if (!selected) return;
@@ -1573,18 +1640,14 @@ $("resetSample").onclick = () => {
     toast("Full original sample restored.");
   }
 };
-$("previewSource").onclick = async () => {
+async function previewSource() {
+  const wasPreviewing = !!previewNode;
+  stopPlayback('source-audition');
+  if (wasPreviewing) return;
+  const audition = ++auditionRevision, generation = audioGeneration;
   try {
     await ensureAudio();
-    if (previewNode) {
-      previewNode.stop();
-      previewNode = null;
-      $("previewSource").textContent = "\u25B7 Listen to source";
-      return;
-    }
-    running = false;
-    syncPlayback();
-    updateTransport();
+    if (audition !== auditionRevision || generation !== audioGeneration || playbackIntent.status().desired) return;
     updateAudioState("Listening to original material; the piece is paused.");
     previewNode = ctx.createBufferSource();
     previewNode.buffer = buffer;
@@ -1599,9 +1662,11 @@ $("previewSource").onclick = async () => {
     previewNode.start();
     $("previewSource").textContent = "\u25A0 Stop source";
   } catch (e) {
+    if (audition !== auditionRevision || generation !== audioGeneration) return;
     toast(e.message);
   }
-};
+}
+$("previewSource").onclick = previewSource;
 $("saveProject").onclick = saveProject;
 $("loadProject").onclick = () => $("projectFile").click();
 $("projectFile").onchange = (e) => {
@@ -1691,7 +1756,7 @@ function setupDisplay() {
   stage.append($("waveWrap"), document.querySelector(".orbit-stage"));
   const deck = document.createElement("div");
   deck.id = "tapeDeck";
-  deck.innerHTML = '<canvas id="tapeCanvas" aria-label="A physical tape loop folds and slides without crossing itself. The lower tape follows the audible Wow and Flutter; the head responds to sound and echo energy."></canvas>';
+  deck.innerHTML = '<canvas id="tapeCanvas" tabindex="0" role="group" aria-label="Tape loop. Drag left or right for echo time, up or down for feedback. Arrow keys adjust; Escape cancels." title="Drag horizontally for echo time, vertically for feedback. Arrow keys adjust. Escape cancels."></canvas><span id="tapeVisualStatus">VISUAL PREVIEW · AUDIO STOPPED</span>';
   stage.append(deck);
   const ambient = document.createElement("div");
   ambient.id = "ambientStage";
@@ -1770,7 +1835,13 @@ ambientPoints = setupAmbientPoints({ getState: () => ambientState, getStatus: ()
   ambientPointsDirty = true;
   markEdited();
 } });
-ambientUI = setupAmbientUI({ getState: () => ambientState, onChange: () => {
+ambientUI = setupAmbientUI({ getState: () => ambientState, getVisual: () => visuals.settings(), onVisualChange: patch => {
+  visuals.setFoundationWaves(patch); renderClock.invalidate();
+}, onVisualReset: () => {
+  controlHistory?.begin('Foundation waves');
+  try { visuals.setFoundationWaves(FOUNDATION_WAVE_DEFAULTS); renderClock.invalidate(); }
+  finally { controlHistory?.end(); }
+}, onChange: () => {
   markEdited();
   syncAmbient();
   ensureVisibleSelection();
@@ -1819,6 +1890,107 @@ function editParameters(patch) {
   if ('orbitRotation' in patch) containBalls(orbitState, orbitOptions());
   trimInfo(); updateOrbitReadout(); syncEngine();
 }
+function captureControlSettings() {
+  return { params, piece, ambient: ambientState, sound: soundState, visual: visuals.settings(), volume: +$('volume').value,
+    controls: Object.fromEntries(projectControls.map(id => [id, $(id).value])) };
+}
+function restoreControlSettings(snapshot, { restoreVolume = true } = {}) {
+  const reshapeMotion = params.orbitBalls !== snapshot.params.orbitBalls || params.orbitRotation !== snapshot.params.orbitRotation || $('orbitShape').value !== snapshot.controls.orbitShape;
+  const beforeVisual = visuals.settings();
+  params = snapshot.params; piece = snapshot.piece; ambientState = snapshot.ambient; soundState = snapshot.sound;
+  for (const [id, value] of Object.entries(snapshot.controls)) $(id).value = value;
+  if (restoreVolume) {
+    $('volume').value = snapshot.volume;
+    master?.gain.setTargetAtTime(snapshot.volume, ctx.currentTime, .03);
+  }
+  const localKeys = [...Object.keys(FOUNDATION_WAVE_DEFAULTS), 'waveformSmoothing'];
+  const otherVisualChanged = Object.keys(snapshot.visual).some(key => !localKeys.includes(key) && beforeVisual[key] !== snapshot.visual[key]);
+  if (otherVisualChanged) visuals.restore(snapshot.visual);
+  else {
+    if (Object.keys(FOUNDATION_WAVE_DEFAULTS).some(key => beforeVisual[key] !== snapshot.visual[key])) {
+      visuals.setFoundationWaves(Object.fromEntries(Object.keys(FOUNDATION_WAVE_DEFAULTS).map(key => [key, snapshot.visual[key]])));
+    }
+    if (beforeVisual.waveformSmoothing !== snapshot.visual.waveformSmoothing) visuals.setWaveformSmoothing(snapshot.visual.waveformSmoothing);
+  }
+  if (reshapeMotion) resizeBalls();
+  refreshControls(); syncTextureSource(); syncAmbient(); markEdited();
+}
+function setupEditorResets() {
+  for (const [editor, page, label] of [
+    ['foundation', 'ambientPage', 'Foundation'], ['texture', 'grainPage', 'Texture'],
+    ['motion', 'orbitPage', 'Motion'], ['space', 'fxPage', 'Space'], ['tape', 'tapePage', 'Tape']
+  ]) {
+    const row = document.createElement('div'), button = document.createElement('button');
+    row.className = 'editor-reset-row'; button.className = 'editor-reset-button';
+    button.id = 'reset-' + editor; button.type = 'button'; button.textContent = 'Reset to defaults';
+    button.setAttribute('aria-label', 'Reset ' + label + ' to defaults');
+    button.title = 'Restore ' + label + ' sound and appearance. Undo restores your settings.';
+    row.append(button); $(page).prepend(row);
+    button.onclick = async () => {
+      tapeInteraction?.cancel();
+      visualEditors?.cancel();
+      if (controlHistory.pending) return toast('Finish the current adjustment before resetting.');
+      // Stop remains outside these surfaces. Block new edits during the fade
+      // so reset always contributes its own history entry.
+      const surfaces = [$('displayStage'), $('controlsScroll')].filter(Boolean);
+      const previousInert = surfaces.map(surface => surface.inert);
+      surfaces.forEach(surface => surface.inert = true);
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      try {
+        await resetTransition.run(() => {
+          if (controlHistory.pending) throw new Error('An adjustment is still active.');
+          controlHistory.begin('Reset ' + label);
+          try { restoreControlSettings(resetEditorSettings(editor, captureControlSettings()), { restoreVolume: false }); }
+          finally { controlHistory.end(); }
+        });
+        toast(label + ' defaults restored. Undo brings back your settings.');
+      } catch (error) { toast('Could not reset ' + label + ': ' + error.message); }
+      finally {
+        surfaces.forEach((surface, index) => surface.inert = previousInert[index]);
+        button.disabled = false; button.removeAttribute('aria-busy');
+        if (document.activeElement === document.body) button.focus({ preventScroll: true });
+      }
+    };
+  }
+}
+function setupPlaybackSession() {
+  try {
+    const session = navigator.mediaSession;
+    if (session) {
+      for (const action of ['play', 'pause', 'stop']) {
+        try {
+          session.setActionHandler(action, () => {
+            playbackDiagnostics.record('media-action', action);
+            if (action === 'play') void startPlayback();
+            else stopPlayback('system-' + action);
+          });
+        } catch {}
+      }
+      try { if (window.MediaMetadata) session.metadata = new MediaMetadata({ title: 'Hushfield', artist: 'An evolving ambient Piece' }); } catch {}
+    }
+    navigator.audioSession?.addEventListener('statechange', () => {
+      playbackDiagnostics.record('audio-session-state');
+      updateAudioState();
+    });
+  } catch {}
+  document.addEventListener('visibilitychange', () => playbackDiagnostics.record('visibility'));
+  if (!new URLSearchParams(location.search).has('playbackCheck')) return;
+  const panel = document.createElement('details'); panel.className = 'playback-check';
+  const summary = document.createElement('summary'); summary.textContent = 'Playback check';
+  const actions = document.createElement('div');
+  for (const label of ['Call started', 'Call ended', 'Other media started', 'Other media ended']) {
+    const button = document.createElement('button'); button.type = 'button'; button.textContent = 'Mark ' + label.toLowerCase();
+    button.onclick = () => { playbackDiagnostics.mark(label); toast(label + ' marked in the local playback log.'); };
+    actions.append(button);
+  }
+  const save = document.createElement('button'); save.type = 'button'; save.textContent = 'Export playback log';
+  save.onclick = () => {
+    playbackDiagnostics.record('export');
+    download(new Blob([JSON.stringify(playbackDiagnostics.entries(), null, 2)], { type: 'application/json' }), 'hushfield-playback-log.json');
+  };
+  actions.append(save); panel.append(summary, actions); document.querySelector('.audio-check').after(panel);
+}
 function setupControlHistory() {
   const undo = document.createElement('button'), redo = document.createElement('button');
   undo.type = redo.type = 'button'; undo.id = 'undoControl'; redo.id = 'redoControl';
@@ -1826,15 +1998,8 @@ function setupControlHistory() {
   undo.disabled = redo.disabled = true;
   document.querySelector('.utility-strip').prepend(undo, redo);
   controlHistory = createControlHistory({
-    capture: () => ({ params, piece, ambient: ambientState, sound: soundState, visual: visuals.settings(), volume: +$('volume').value,
-      controls: Object.fromEntries(projectControls.map(id => [id, $(id).value])) }),
-    restore(snapshot) {
-      params = snapshot.params; piece = snapshot.piece; ambientState = snapshot.ambient; soundState = snapshot.sound;
-      for (const [id, value] of Object.entries(snapshot.controls)) $(id).value = value;
-      $('volume').value = snapshot.volume;
-      master?.gain.setTargetAtTime(snapshot.volume, ctx.currentTime, .03);
-      visuals.restore(snapshot.visual); resizeBalls(); refreshControls(); syncTextureSource(); syncAmbient(); markEdited();
-    },
+    capture: captureControlSettings,
+    restore: restoreControlSettings,
     onChange({canUndo,canRedo,label}) { undo.disabled = !canUndo; redo.disabled = !canRedo; undo.setAttribute('aria-label',label ? 'Undo '+label : 'Undo control change'); }
   });
   document.addEventListener('hushfield:editstart', e => controlHistory.begin(e.detail?.label || 'control change'));
@@ -1880,6 +2045,11 @@ const tapePanels = panelNav($("tapePage"), [["echo", "Echo"], ["character", "Cha
 }, { ariaLabel: "Tape controls" });
 setupSquareViewport();
 setupControlHistory();
+setupEditorResets();
+setupPlaybackSession();
+tapeInteraction = setupTapeLoopInteraction({ canvas: $('tapeCanvas'), getParams: () => params, setParams: editParameters,
+  isActive: () => activeTab === 'tape', onBegin: detail => controlHistory.begin(detail.label),
+  onEnd: detail => controlHistory.end({ cancelled: detail.cancelled }) });
 loadDemo("glass");
 resetBalls();
 updateOrbitReadout();
@@ -1891,18 +2061,18 @@ requestAnimationFrame(frame);
 window.addEventListener("pagehide", () => microphone.cancel());
 recovery = setupRecoveryUI({
   snapshot: () => serializeProject(sessionSnapshot()),
-  restore: (project, canApply) => sampleSelection.run(() => decodeProject(project, projectDecodeOptions(decodeContext())), (value) => {
+  restore: (project, canApply) => {
+    stopPlayback('recovery');
+    return sampleSelection.run(() => decodeProject(project, projectDecodeOptions(decodeContext())), (value) => {
     if (!canApply()) return false;
     restoringSession = true;
     try {
-      running = false;
-      syncPlayback();
-      silenceOrbit();
       applyProject(value);
     } finally {
       restoringSession = false;
     }
-  }),
+    });
+  },
   onError: (error) => toast("Recovery: " + error.message)
 });
 document.addEventListener("input", (event) => {

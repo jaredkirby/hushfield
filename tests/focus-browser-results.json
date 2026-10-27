@@ -1,0 +1,246 @@
+{
+  "kind": "hushfield-focus-browser-receipt",
+  "layouts": [
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "ambient",
+      "playing": true,
+      "resetDisabled": false,
+      "resetExists": true,
+      "scrolls": true,
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "grain",
+      "playing": true,
+      "resetDisabled": false,
+      "resetExists": true,
+      "scrolls": true,
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "orbit",
+      "playing": true,
+      "resetDisabled": false,
+      "resetExists": true,
+      "scrolls": true,
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "fx",
+      "playing": true,
+      "resetDisabled": false,
+      "resetExists": true,
+      "scrolls": true,
+      "width": 320
+    },
+    {
+      "height": 568,
+      "overflow": false,
+      "page": "tape",
+      "playing": true,
+      "resetDisabled": false,
+      "resetExists": true,
+      "scrolls": true,
+      "width": 320
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "ambient",
+      "playing": true,
+      "resetExists": true,
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "grain",
+      "playing": true,
+      "resetExists": true,
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "orbit",
+      "playing": true,
+      "resetExists": true,
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "fx",
+      "playing": true,
+      "resetExists": true,
+      "width": 390
+    },
+    {
+      "height": 844,
+      "overflow": false,
+      "page": "tape",
+      "playing": true,
+      "resetExists": true,
+      "width": 390
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "ambient",
+      "playing": true,
+      "resetExists": true,
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "grain",
+      "playing": true,
+      "resetExists": true,
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "orbit",
+      "playing": true,
+      "resetExists": true,
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "fx",
+      "playing": true,
+      "resetExists": true,
+      "width": 844
+    },
+    {
+      "height": 390,
+      "overflow": false,
+      "page": "tape",
+      "playing": true,
+      "resetExists": true,
+      "width": 844
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "ambient",
+      "playing": true,
+      "resetExists": true,
+      "width": 1024
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "grain",
+      "playing": true,
+      "resetExists": true,
+      "width": 1024
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "orbit",
+      "playing": true,
+      "resetExists": true,
+      "width": 1024
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "fx",
+      "playing": true,
+      "resetExists": true,
+      "width": 1024
+    },
+    {
+      "height": 768,
+      "overflow": false,
+      "page": "tape",
+      "playing": true,
+      "resetExists": true,
+      "width": 1024
+    }
+  ],
+  "checks": {
+    "foundationReset": {
+      "reset": 45,
+      "undo": 100,
+      "redo": 45,
+      "seedPreserved": true
+    },
+    "textureReset": {
+      "smoothing": 65,
+      "undo": 100,
+      "source": "foundation",
+      "blendPreserved": true,
+      "tapePreserved": true
+    },
+    "spaceReset": {
+      "model": "plate",
+      "decay": 3,
+      "undo": 8
+    },
+    "motionReset": {
+      "spin": 12,
+      "undo": 60,
+      "blendPreserved": true
+    },
+    "tapeReset": {
+      "time": 0.36,
+      "feedback": 28,
+      "on": true,
+      "undo": {
+        "time": 0.37,
+        "feedback": 29
+      }
+    },
+    "tapePointer": {
+      "changed": {
+        "time": 0.56,
+        "feedback": 34
+      },
+      "undo": {
+        "time": 0.37,
+        "feedback": 29
+      },
+      "startedAudio": false
+    },
+    "tapeSilentPreview": true,
+    "reducedMotion": {
+      "frozen": true,
+      "moving": false
+    },
+    "liveResetKeptPlayback": true,
+    "explicitStopKeptStopped": true
+  },
+  "browserAudioChecks": {
+    "piece": 5,
+    "tape": 10,
+    "foundation": 36
+  },
+  "limitations": [
+    "Viewport checks are browser emulation, not physical devices.",
+    "Live UI playback was tested at master volume zero.",
+    "No 60-minute physical-device, screen-lock, call or competing-media acceptance."
+  ],
+  "date": "2026-10-27",
+  "baseCommit": "f9311ef3b3c79a538a4c8f0585babc40a790bb55",
+  "nodeVersion": "v22.22.0",
+  "sha256": {
+    "dist/app.js": "023aacc097bce4e9943767f8a49d8d9137312e1942f232c8ce94b5482ae7579e",
+    "dist/build/app.js": "ec078a07ef2da1499fc999442926be3fe6da1115534cadc64b5a9d0736b5062d",
+    "dist/build/manifest.json": "359f64dacfcfd249bb476daf96c13eba24e14b9bb2db8566abc272cc8d2ee5f5",
+    "docs/images/focus-tape-candidate.jpg": "6010b1614aec236c3ae2e9a8f9198f7ba61b2ba63578cd1178848eee0b793b28"
+  }
+}
