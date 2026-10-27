@@ -171,13 +171,6 @@ function spring(c,s,time,width,tone,decay) {
 function chamber(c,s,time,width,tone,decay,original) {
   const project = (x,y,z) => { const p=1/(1+z*2.8); return [500+x*(.65+width*.35)*p,445+y*p]; };
   const reboundsOnly=!original && CHAMBER_REBOUNDS_ONLY;
-  const roundCore=point=>{
-    const x=point[0]-500, y=point[1]-445, radius=Math.hypot(x,y);
-    if(original || radius===0 || radius>=150) return point;
-    const blend=clamp((150-radius)/40), weight=blend*blend*(3-2*blend);
-    const scale=1-weight*(1-Math.max(Math.abs(x),Math.abs(y))/radius);
-    return [500+x*scale,445+y*scale];
-  };
   // Visible boundaries make the depth legible even before playback.
   if(!reboundsOnly) {
   for(let i=0;i<9;i++) {
@@ -203,20 +196,20 @@ function chamber(c,s,time,width,tone,decay,original) {
       for(let i=0;i<=128;i++) {
         const a=i/128*TAU, r=radius*(1+.025*tone*Math.sin(a*8+p.seed));
         const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
-        const point=roundCore(project(x,y,depth));
         if(reboundsOnly) {
-          // Sample the rounded contour a millisecond ahead, including shared
-          // growth, so only its actual returning segments remain visible.
-          const nextR=r+.001*230*(1+.025*tone*Math.sin(a*8+p.seed));
-          const next=roundCore(project(Math.sin(nextR*Math.cos(a)/455)*455,Math.sin(nextR*Math.sin(a)/365)*365,depth+.001*.48));
-          const size=1+s.chamberAge*.1, nextSize=size+.001*s.chamberGrowthRate;
-          if(Math.hypot(next[0]-500,next[1]-445)*nextSize>=Math.hypot(point[0]-500,point[1]-445)*size) {
+          // Radial velocity in the existing projection selects returning
+          // segments. Echo depth alone does not identify a rebound.
+          const dr=230*(1+.025*tone*Math.sin(a*8+p.seed));
+          const dx=Math.cos(r*Math.cos(a)/455)*Math.cos(a)*dr;
+          const dy=Math.cos(r*Math.sin(a)/365)*Math.sin(a)*dr;
+          const retreat=2.8*.48/(1+depth*2.8)-s.chamberGrowthRate/(1+s.chamberAge*.1), aspect=.65+width*.35;
+          if(x*aspect*aspect*(dx-x*retreat)+y*(dy-y*retreat)>=0) {
             if(points.length>1) line(c,points,strength*(210-echo*38),1.7-echo*.2);
             points.length=0;
             continue;
           }
         }
-        points.push(point);
+        points.push(project(x,y,depth));
       }
       line(c,points,strength*(210-echo*38),1.7-echo*.2);
     }
