@@ -1,5 +1,11 @@
 # Verification
 
+## Interactive Space visual candidate
+
+The 2026-10-27 visual revision adds two draggable Plate surfaces. Separation adjusts Decay and Pre-delay together, with a single Undo/Redo entry. Measured wet activity launches travelling reflections and surface ripples; Spring and Chamber also gain trails and depth. Existing DSP and saved parameter formats are unchanged. The individual controls remain available.
+
+The full existing suite passed 193 results, followed by the final build and consistency checks. [Browser observations](tests/space-plates-browser-results.json) cover native dragging, grouped Undo/Redo, keyboard bounds, five viewport sizes and static reduced-motion frames. GPT-6.1 Sol review found keyboard-direction and cancellation-refresh issues, both fixed. Interrupted physical touch and visual preference still require user testing. This remains a separate candidate.
+
 ## Vintage Space candidate
 
 The isolated `codex/vintage-space` candidate centers Space on Original room, Plate, Spring and Chamber. Reverb exposes Amount, Decay, Pre-delay, Tone and Reverb width; Depth retains per-part sends and Filter retains whole-piece tone/width. The model illustrations respond to measured wet energy and respect reduced motion. Fresh startup keeps Chorus synth, Stillwater, Space Echo On and Original room.
