@@ -1727,6 +1727,10 @@ ambientUI = setupAmbientUI({ getState: () => ambientState, onChange: () => {
   markEdited();
   syncAmbient();
   ensureVisibleSelection();
+}, onInstrument: instrument => {
+  controlHistory?.begin('Foundation instrument');
+  try { ambientState.instrument=instrument; if(instrument!=='current')ambientState.compositionVersion=2; markEdited();syncAmbient();ensureVisibleSelection(); }
+  finally { controlHistory?.end(); }
 }, onNew: newAmbientPiece });
 volumeStepper = attachStepper(document.querySelector(".volume-label"), $("volume"), { label: "Master volume", step: 0.05, format: (v) => Math.round(v * 100) + "%" });
 const shape = document.querySelector(".orbit-shape-tools");

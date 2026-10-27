@@ -23,7 +23,7 @@ test('a project roundtrip retains stereo sample, overrides, voices, visuals, con
   const restored=await decodeProject(serialized,{decodeAudio:decode,defaults:{position:50,orbitBalls:5,scanMode:'forward',freeze:false},ranges:{position:{min:0,max:100,step:.1},orbitBalls:{min:1,max:12,step:1}},controls:{filterType:['lowpass','highpass'],orbitShape:['0','6']}});
   assert.equal(restored.name,'My take');
   assert.deepEqual(restored.piece,session.piece);
-  assert.equal(JSON.parse(serialized).version,5);
+  assert.equal(JSON.parse(serialized).version,6);
   assert.deepEqual(restored.params,{...session.params,tapeModel:1,echoMode:4,springMix:12});
   assert.deepEqual(restored.ambient,ambient);
   assert.deepEqual(restored.orbitSound,sounds);

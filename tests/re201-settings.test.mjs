@@ -22,7 +22,7 @@ test('saved projects require an explicit valid Tape model even when fresh defaul
       const project = await decodeProject(JSON.stringify(saved), decodeOptions);
       assert.equal(project.params.tapeModel, 1, `schema ${version}, model ${String(tapeModel)} remains Classic`);
       const exported = JSON.parse(serializeProject(project));
-      assert.equal(exported.version, 5);
+      assert.equal(exported.version, 6);
       assert.equal(exported.params.tapeModel, 1, 're-export does not silently promote Classic');
     }
   }

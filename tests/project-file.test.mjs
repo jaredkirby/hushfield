@@ -11,7 +11,7 @@ for(const version of [1,2,3]){
  assert.deepEqual(restored.ambient,{orbit:35,pads:70});assert.equal(restored.visual.mode,'vector');
  assert.equal(older.params.olderBalls,7,'Loading does not mutate the input');assert(!('olderSound'in restored));
 }
-for(const saved of [null,[],{}, {...current,version:6},{...current,format:'unrelated'},{...current,sample:5},{...current,params:null},{...current,controls:[]}])assert.throws(()=>restoreProjectFile(saved),/Hushfield project/);
+for(const saved of [null,[],{}, {...current,version:7},{...current,format:'unrelated'},{...current,sample:5},{...current,params:null},{...current,controls:[]}])assert.throws(()=>restoreProjectFile(saved),/Hushfield project/);
 const mixed={...current,format:'earlier-browser-lab',params:{olderBalls:7,orbitBalls:3}};
 assert.equal(restoreProjectFile(mixed).params.orbitBalls,3,'Current fields take precedence');
 console.log('PASS: Hushfield saves, version 1–3 schema migration, sound banks, ambient layers, validation and input preservation.');

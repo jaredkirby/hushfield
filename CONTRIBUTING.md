@@ -39,6 +39,6 @@ Describe the concrete problem, resulting behavior and checks performed. Include 
 
 Engineering specifications and implementation tickets are tracked in [GitHub Issues](https://github.com/jaredkirby/hushfield/issues); repository agent routing is documented in [AGENTS.md](AGENTS.md). A pull request should explain the change for a reviewer, with links to the relevant issue when one exists.
 
-For changes to project files or synthesis defaults, preserve version-1–4 classic sound modes and their re-export as schema 5. Follow the [compatibility decision](docs/adr/0001-preserve-saved-sound-models.md); add meaningful migration coverage when that contract changes.
+For changes to project files or synthesis defaults, preserve version-1–4 classic sound modes and version-5 expressive settings when re-exporting as schema 6. Versions 1–5 retain the original Foundation instrument. Follow the [compatibility decision](docs/adr/0001-preserve-saved-sound-models.md); add meaningful migration coverage when that contract changes.
 
 Contributions use the project's MIT license. Please communicate respectfully and make reviews easy to follow.
