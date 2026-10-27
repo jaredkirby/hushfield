@@ -174,14 +174,14 @@ function chamber(c,s,time,width,tone,decay,original) {
   // Repeated arcs travel away from the listener and rebound on the walls.
   for(const p of s.pulses) {
     const age=time-p.at, z=age*.48, strength=p.strength*Math.exp(-age/(.4+decay*.3));
-    for(let echo=0;echo<(original?2:4);echo++) {
-      const points=[], depth=z+echo*.13, radius=160+age*230;
+    for(let echo=0;echo<(original?2:8);echo++) {
+      const points=[], depth=z+echo*.13, radius=160+age*230, growth=original?1:1+age*1.25;
       for(let i=0;i<=128;i++) {
         const a=i/128*TAU, r=radius*(1+.025*tone*Math.sin(a*8+p.seed));
         const x=Math.sin(r*Math.cos(a)/455)*455, y=Math.sin(r*Math.sin(a)/365)*365;
-        points.push(project(x,y,depth));
+        points.push(project(x*growth,y*growth,depth));
       }
-      line(c,points,strength*(210-echo*38),1.7-echo*.2);
+      line(c,points,strength*(210-echo*(original?38:20)),1.7-echo*(original?.2:.1));
     }
   }
   glow(c,500,445,35+s.energy*55,35+s.energy*160);
