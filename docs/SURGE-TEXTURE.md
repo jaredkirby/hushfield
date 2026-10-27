@@ -8,7 +8,7 @@ Open **Your sound / trim** and choose a source under **Surge textures · origina
 
 All three recordings contain one known pitch: **C4, MIDI 60, 261.625565 Hz**, in 12-TET with A4 = 440 Hz. The pad holds C4; the pluck and bell repeat C4 with space between strikes. Imported material retains that pitch while Foundation changes harmony. Texture's Pitch control transposes the whole recording; it does not automatically reharmonize imported sound. For an initial audition, hold a compatible Foundation chord, keep Texture pitch at zero, and use restrained Tape and room settings.
 
-The pad suits longer grains. The pluck and bell offer attacks and decaying material for shorter grains. These are listening candidates, with human preference still open.
+The pad suits longer grains. The pluck and bell offer attacks and decaying material for shorter grains. These sources are shipped in `main`; human preference remains open.
 
 ## Delivered source files
 
@@ -60,6 +60,8 @@ The patches, note schedule, automation, tuning and source revisions are reproduc
 
 ## Compare the browser instrument
 
+Use a Git checkout containing baseline commit `6e5c607a76f53021ed4bb016fdd5a42a43edd817` and install dependencies with `npm ci` first. Preparation reads that commit with `git archive`; a ZIP download or a shallow checkout missing the commit cannot prepare the fixture.
+
 ```sh
 npm run listening:prepare
 npm run listening:serve
@@ -79,10 +81,10 @@ The fixture uses real browser AudioWorklets, Motion bank effects, the shared Spa
 
 Playback levels are attenuated to the quietest example's stereo RMS. No version is boosted into clipping. This matches measured signal energy, not perceived loudness or LUFS. Listen at a comfortable level and compare note clarity, evolving color, recognizable phrases, transitions, silence and long-term fatigue.
 
-WAVs and JSON receipts are saved under `.scratch/listening/artifacts/` and remain playable from the comparison page. Receipts contain source/fixture hashes, seeds, exact settings, raw metrics, playback gain and resulting WAV hashes. Repeated baseline/full renders must retain identical actual-engine control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Native WebAudio convolution may differ in its last floating-point bits, so both raw WAV hashes and measured differences are retained rather than claiming byte identity. Seeded core-engine compatibility tests separately require exact PCM. The native Surge recordings are separate optional material; they are not automatically inserted into these live-Foundation comparisons.
+WAVs and JSON receipts are saved under `.scratch/listening/artifacts/` and remain playable from the comparison page. Every run replaces the selected preset's receipt, even a short check; matching WAV names are overwritten. Preserve a long set before rerendering, or use an isolated checkout and unused port (`npm run listening:serve -- 4888`). A new port alone still writes the same checkout's artifact directory. Receipts contain source/fixture hashes, seeds, exact settings, raw metrics, playback gain and resulting WAV hashes. Repeated baseline/full renders must retain identical actual-engine control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Native WebAudio convolution may differ in its last floating-point bits, so both raw WAV hashes and measured differences are retained rather than claiming byte identity. Core-engine compatibility tests separately require exact PCM against frozen original-engine sources rendered in the same runtime, avoiding a runtime-specific mathematical hash oracle. The native Surge recordings are separate optional material; they are not automatically inserted into these live-Foundation comparisons.
 
 ## Provenance and acceptance
 
 [Surge's official FAQ](https://surge-synthesizer.github.io/faq/) permits use and distribution of sounds made with the synthesizer. Its GPL software license is a separate matter from generated output. The original application code does not incorporate Surge DSP source; the isolated native development build and its exact patch are documented separately. See the [official source](https://github.com/surge-synthesizer/surge) and [native binding documentation](https://github.com/surge-synthesizer/surge/tree/release_xt_1.3.4/src/surge-python).
 
-Native source generation and artifact QA succeeded. Automated browser renders and PCM checks do not establish user preference, iPhone/iPad CPU behavior, speaker quality, touch latency, battery cost or background continuity. Record those separately before claiming the candidate is musically better on the intended devices.
+Native source generation and artifact QA succeeded. Automated browser renders and PCM checks do not establish user preference, iPhone/iPad CPU behavior, speaker quality, touch latency, battery cost or background continuity. Record those separately before claiming the shipped changes are musically better on the intended devices.

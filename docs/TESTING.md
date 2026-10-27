@@ -2,7 +2,7 @@
 
 ## Build and Node checks
 
-From the repository root, use Node.js 22 or newer:
+From the repository root, use Node.js 22 or newer; CI exercises Node 22 and 24:
 
 ```sh
 npm ci
@@ -20,6 +20,8 @@ For one area, run its existing file, for example:
 node --test tests/piece-session.test.mjs tests/piece-presets.test.mjs
 node --test tests/session-recovery.test.mjs tests/project-roundtrip.test.mjs
 node --test tests/tape-impact.test.mjs tests/tape-dsp.test.mjs
+node --test tests/re201-dsp.test.mjs tests/re201-settings.test.mjs tests/tape-presets.test.mjs
+node --test tests/tape-physics.test.mjs tests/tape-initial-state.test.mjs tests/tape-model-telemetry.test.mjs tests/tape-telemetry.test.mjs
 ```
 
 Source files live in `dist/`. The build emits the main bundle and four standalone worklets under `dist/build/`, embeds the three early shell scripts into HTML and updates source hashes. Include those generated changes with a source change. After committing a synchronized source/build, rebuilding should leave `dist/` unchanged:
@@ -30,6 +32,8 @@ git diff --exit-code -- dist/
 ```
 
 CI runs install, build, full Node tests and this generated-file check on Node 22 and 24. It does not launch a browser, request a microphone, validate physical-device behavior or judge sound quality.
+
+Tape integration checks exercise finite telemetry, all twelve modes, all five presets, bypass, motor glides and rapid model reversals at 44.1/48 kHz. They compare every PCM sample against the frozen pre-telemetry models in `tests/fixtures/tape-models-v1`. Physics checks cover contact separation, the saved initial arrangement, return curvature, fixed head contacts and bounded waveform motion. For browser verification, run `/qa-space-echo.html`, then check live Tape model/preset switches, Undo/Redo, pause/restart and reduced motion. The canvas `data-tape-motion` receipt exposes source, transport speed, head weights and separate spring level for those checks.
 
 ## Browser diagnostics
 
@@ -42,6 +46,7 @@ Serve `dist/` from localhost or HTTPS, then open the route below on that server.
 | `/qa-piece.html` | Run offline checks | Foundation-fed live Texture, shared tone/width, direct processor harmony and finite stereo output. |
 | `/qa-synth.html` | Automatic | Orbit Worklet PCM, separate bank/item patches, effects, auditions, voice limits and stop behavior. |
 | `/qa-tape.html` | Run offline Tape checks | 44.1/48 kHz Worklet startup, bypass, coloration, repeats and delivered toggles. |
+| `/qa-space-echo.html` | Render audio comparisons / Run Worklet checks | Five 16-second, 48 kHz comparisons and ten offline assertions across 44.1/48 kHz for finite output, echo/spring tails, bypass and an audible difference. Static hosting can render and download clips; the listening server is needed only to save them for `?saved`. |
 | `/qa-ambient.html` | Automatic | Component-level Foundation/scene/voice rendering, stereo gesture changes and layer/audition routing. |
 | `/qa-visuals.html` | Run analysis checks | Real stereo analyser input and the three dithered renderers; plays a short, quiet test signal. |
 | `/qa-ambient-visual.html` | Automatic | Renderer-only timing samples at several canvas sizes. |
@@ -52,13 +57,25 @@ Offline rendering can outrun MessagePort delivery. Diagnostic code must connect 
 
 ## UI and device checks
 
-For layout/interaction changes, verify the five editors plus Your sound / trim and Visual, including their secondary control sections and both Motion sound banks. Check portrait/landscape phones, iPad, narrow Split View and short desktop windows for scroll range, clipped controls, stable display bounds and overlap with Orbit triggers.
+For layout/interaction changes, verify direct sliders, exact-entry Apply/Cancel, categorical menus, visual handles, keyboard controls and settings Undo/Redo. Check individual and All targets, including mixed values, and selection without audition. Confirm the separate Start/Stop button stays available. Verify the five editors plus Your sound / trim and Visual, including their secondary control sections and both Motion sound banks. Check portrait/landscape phones, iPad, narrow Split View and short desktop windows for scroll range, clipped controls, stable display bounds and overlap with Orbit triggers.
 
 Play while navigating and rotating. Confirm that blend, selected settings, frozen material and voice-dot positions survive, with temporary Solo restored by Full mix. For persistence changes, test explicit recovery into a paused session, failed storage, newer edits during asynchronous work, and export/load with retained stereo material.
 
 Use an isolated browser origin/unused port for generated recovery tests so you do not replace an existing draft. Recovery uses one database per origin, including the port; it is shared across paths on that origin.
 
 For audio changes, listen on the affected devices as well as checking PCM. Browser emulation and offline samples do not establish touch feel, latency, frame delivery, battery use, actual microphone operation or background continuity.
+
+## Space Echo checks and listening
+
+`tests/re201-dsp.test.mjs` checks all twelve head modes, constant-speed head timing, transient motor pitch changes and settling, per-pass frequency loss, independent spring timing, bounded sustained feedback, release after Feedback/Off, stereo bypass and model changes. Its frozen [Classic Tape fixture](../tests/fixtures/tape-classic-v1/README.md) requires exact same-runtime stereo Float32 PCM at 8, 44.1 and 48 kHz. Do not refresh the fixture when changing the current effect. `tests/re201-settings.test.mjs` covers explicit model selection, validation, project round trips, recovery and Worn memory compatibility.
+
+`tests/tape-presets.test.mjs` checks isolated preset application, derived names, settings Undo, project round trips and distinct PCM with bounded decaying tails. In the browser, check selection on both Tape panels, Custom settings after manual edits, On/Off preservation and named recovery into a paused session.
+
+Open `/qa-space-echo.html` on any localhost or HTTPS static server. Render audio comparisons produces dry, Classic, all-heads-plus-spring, motor-glide and spring-only examples from the same synthesized phrase. They use a common source gain with no per-clip normalization, so compare level as well as character. These clips are recordings of our processor, not Roland hardware. Run Worklet checks exercises the built worklet separately from the Node engine tests.
+
+To retain the WAVs and receipt, run `npm run listening:serve` and render on that server. It saves `re201-*.wav` and `re201-receipt.json` under `.scratch/listening/artifacts/`. The `?saved` URL loads those files without rendering again. This comparison does not need `listening:prepare`; that preparation is for the separate full-Piece musicality comparison. See [listening-server prerequisites](../ops/README.md#listening-development-server) before hosting it. New renders replace files with the same names.
+
+Listen for distinct head rhythms, darker repeat tails, a pitch bend that settles after changing time and a spring response whose timing stays independent of tape speed. The [research note](research/re201-space-echo.md) identifies which behaviors come from manufacturer sources and which parameters are our approximations. Passing DSP checks does not establish a hardware match or a listening preference.
 
 ## Evidence
 
@@ -77,6 +94,6 @@ npm run listening:prepare
 npm run listening:serve
 ```
 
-The dedicated server is loopback-only and stores WAVs/receipts under ignored `.scratch/listening/artifacts/`. Its fixture pins the original commit, generated module hashes and Grain randomness, and instruments deterministic control delivery. The main production worklets keep asynchronous direct ports and are checked separately. The full comparison includes four 75-second examples and a 180-second full arc; repeat rendering must retain exact control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Both WAV hashes are recorded; native WebAudio convolution can differ in its last floating-point bits. Playback attenuation equalizes stereo RMS without boosting/clipping, which is not a perceptual LUFS comparison. See [native authoring and listening details](SURGE-TEXTURE.md).
+Preparation needs npm dependencies and a Git checkout containing the original baseline commit; see [server prerequisites](../ops/README.md#listening-development-server). The dedicated server is loopback-only and stores WAVs/receipts under ignored `.scratch/listening/artifacts/`. Each run replaces the selected preset's receipt, including short checks. Use another checkout for fresh experiments when preserving a long listening set. Its fixture pins the original commit, generated module hashes and Grain randomness, and instruments deterministic control delivery. The main production worklets keep asynchronous direct ports and are checked separately. The full comparison includes four 75-second examples and a 180-second full arc; repeat rendering must retain exact control snapshots and stay within 1e-6 Float32 amplitude (0.033 PCM16 steps). Both WAV hashes are recorded; native WebAudio convolution can differ in its last floating-point bits. Playback attenuation equalizes stereo RMS without boosting/clipping, which is not a perceptual LUFS comparison. See [native authoring and listening details](SURGE-TEXTURE.md).
 
-New save files use schema 5. Compatibility tests load versions 1–4 through decode, retain classic sound/depth modes, and preserve those modes after re-export. The current browser receipt records explicit paused recovery of Color/Drift/Bloom, depth, brightness and native material. Existing golden Foundation PCM and neutral Motion energy checks protect classic behavior. Physical-device performance and human listening preference remain separate acceptance checks.
+New save files use schema 5. Compatibility tests load versions 1–4 through decode, retain classic sound/depth modes, and preserve those modes after re-export. The [integration browser receipt](../tests/ui-music-integration-results.json) records explicit paused recovery of Color, Foundation room send, Wave smoothing, master volume and native material, with settings history cleared. Classic Foundation checks render frozen pre-change sources and the current classic engine in the same runtime, requiring byte-identical Float32 PCM at 8, 44.1 and 48 kHz. The [fixture README](../tests/fixtures/foundation-classic-v1/README.md) records source provenance; never update those reference sources alongside the current engine. A single Node-22 PCM hash is not a portable Node-24 oracle because JavaScript math implementations can differ. Neutral Motion energy/PCM checks protect its classic behavior. Physical-device performance and human listening preference remain separate acceptance checks.

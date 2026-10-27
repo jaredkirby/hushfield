@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>HUSHFIELD_LISTENING_ORIGIN</key>
+		<string>https://kirbys-mac-mini.tailac5a2a.ts.net:8450</string>
+	</dict>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>chat.kirby.hushfield-space-echo</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/homebrew/bin/node</string>
+		<string>/Users/kirbybot/sound-music/hushfield-docs/ops/listening-server.mjs</string>
+		<string>4893</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/tmp/hushfield-space-echo-preview.err.log</string>
+	<key>StandardOutPath</key>
+	<string>/tmp/hushfield-space-echo-preview.out.log</string>
+	<key>ThrottleInterval</key>
+	<integer>5</integer>
+	<key>WorkingDirectory</key>
+	<string>/Users/kirbybot/sound-music/hushfield-docs</string>
+</dict>
+</plist>

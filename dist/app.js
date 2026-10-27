@@ -1,7 +1,8 @@
 import { createControlHistory } from "./control-history.mjs";
 import { setupVisualEditors } from "./visual-editors.mjs";
 import { setupMotionControls } from "./motion-controls.mjs";
-import { TAPE_DEFAULTS } from "./tape-settings.mjs";
+import { TAPE_PRESETS, applyTapePreset, matchingTapePreset } from "./tape-presets.mjs";
+import { TAPE_DEFAULTS, SPACE_ECHO_DEFAULTS, SPACE_ECHO_MODES } from "./tape-settings.mjs";
 import { selectPiecePreset } from "./piece-presets.mjs";
 import { restorePiece, piecePlayback } from "./piece-session.mjs";
 import { followChord } from "./piece-harmony.mjs";
@@ -33,7 +34,7 @@ import { requestPlaybackSession, resumeFromTap, verifyAudioClock, playTestNotes 
 import { boundary, containBalls, makeOrbitState, shapePoints } from "./orbit-physics.mjs?v=hushfield-1";
 const $ = (id) => document.getElementById(id);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
-const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, ...SPACE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
+const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, ...SPACE_ECHO_DEFAULTS, ...SPACE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
 let recovery, restoringSession = false, sampleDecoder;
 let visualEditors, motionControls, controlHistory, textureAdjustments;
 let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel, texturePhraseChannel;
@@ -75,7 +76,7 @@ function toast(message) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => $("toast").classList.remove("visible"), 4500);
 }
-function makeControl(parent, id, label, min, max, step, unit = "", display) {
+function makeControl(parent, id, label, min, max, step, unit = "", display, choices) {
   const row = document.createElement("div");
   row.className = "control";
   row.dataset.control = id;
@@ -83,7 +84,7 @@ function makeControl(parent, id, label, min, max, step, unit = "", display) {
   top.className = "control-top";
   const lab = document.createElement("label");
   lab.htmlFor = id;
-  lab.textContent = label;
+  lab.textContent = typeof label === "function" ? label() : label;
   const out = document.createElement("output");
   out.htmlFor = id;
   const input = document.createElement("input");
@@ -93,7 +94,7 @@ function makeControl(parent, id, label, min, max, step, unit = "", display) {
   input.max = max;
   input.step = step;
   input.value = params[id];
-  input.setAttribute("aria-label", label);
+  input.setAttribute("aria-label", lab.textContent);
   top.append(lab, out);
   row.append(top, input);
   $(parent).append(row);
@@ -104,11 +105,13 @@ function makeControl(parent, id, label, min, max, step, unit = "", display) {
     $("pieceHint").textContent = descriptions[id];
   });
   const render = () => {
+    lab.textContent = typeof label === "function" ? label() : label;
+    input.setAttribute("aria-label", lab.textContent);
     out.value = format(+input.value);
     input.style.background = `linear-gradient(to right, #a17956 0%, #a17956 ${(input.value - min) / (max - min) * 100}%, #384548 ${(input.value - min) / (max - min) * 100}%, #384548 100%)`;
     stepper?.render();
   };
-  stepper = attachStepper(row, input, { label, step: phoneStepFor(id, step), format });
+  stepper = attachStepper(row, input, { label, step: phoneStepFor(id, step), format, choices });
   ranges[id] = { input, render };
   input.addEventListener("input", () => {
     params[id] = +input.value;
@@ -117,6 +120,7 @@ function makeControl(parent, id, label, min, max, step, unit = "", display) {
     if (id === "trimEnd") params.trimEnd = Math.max(params.trimEnd, params.trimStart + .1);
     input.value = params[id];
     render();
+    if (["tapeModel", "echoMode"].includes(id)) refreshTapeControls();
     syncEngine();
     if (id === "orbitBalls") {
       resizeBalls();
@@ -148,7 +152,7 @@ makeControl("trimControls", "trimEnd", "End", 0.1, 100, 0.1, "%");
 makeControl("trimControls", "denoise", "Denoise gate", 0, 80, 1, "%", (v) => v === 0 ? "Off" : v + "%");
 makeControl("filterControls", "cutoff", "Cutoff", 100, 2e4, 1, " Hz", (v) => v >= 1e3 ? (v / 1e3).toFixed(1) + " kHz" : v + " Hz");
 makeControl("filterControls", "resonance", "Resonance", 0.1, 12, 0.1, " Q");
-makeControl("delayControls", "delayTime", "Time", 0.05, 1.5, 0.01, " s");
+makeControl("delayControls", "delayTime", () => params.tapeModel === 2 ? "Head 3 time" : "Time", 0.05, 1.5, 0.01, " s");
 makeControl("delayControls", "feedback", "Feedback", 0, 80, 1, "%");
 makeControl("delayControls", "delayMix", "Echo level", 0, 70, 1, "%");
 makeControl("spaceControls", "reverb", "Reverb", 0, 85, 1, "%");
@@ -159,6 +163,71 @@ depthGroup.innerHTML = '<div class="group-title"><h3>Depth</h3><span>PART ROOM</
 $("fxPage").querySelector(".control-grid").append(depthGroup);
 for (const field of SPACE_FIELDS) makeControl("depthControls", field.id, field.label, field.min, field.max, field.step, field.unit);
 for (const [id, label] of [["drive", "Drive"], ["wow", "Wow"], ["flutter", "Flutter"], ["hiss", "Hiss"], ["tapeTone", "Tone"]]) makeControl("tapeControls", id, label, 0, 100, 1, "%");
+makeControl("tapeControls", "tapeModel", "Tape model", 1, 2, 1, "", value => value === 2 ? "Space Echo" : "Classic", [{ value: 1, label: "Classic" }, { value: 2, label: "Space Echo" }]);
+makeControl("tapeControls", "echoMode", "Head mode", 1, 12, 1, "", value => SPACE_ECHO_MODES[value - 1].label, SPACE_ECHO_MODES);
+makeControl("tapeControls", "springMix", "Spring level", 0, 70, 1, "%");
+const tapePresetRow = document.createElement("div");
+tapePresetRow.className = "control direct-control";
+tapePresetRow.id = "tapePresetControl";
+tapePresetRow.dataset.control = "tapePreset";
+const tapePresetLabel = document.createElement("label");
+tapePresetLabel.htmlFor = "tapePreset";
+tapePresetLabel.textContent = "Tape preset";
+const tapePresetMenu = document.createElement("select");
+tapePresetMenu.id = "tapePreset";
+tapePresetMenu.className = "parameter-choice";
+tapePresetMenu.setAttribute("aria-describedby", "tapePresetDescription");
+const customTapePreset = document.createElement("option");
+customTapePreset.value = "";
+customTapePreset.textContent = "Custom settings";
+customTapePreset.disabled = true;
+tapePresetMenu.append(customTapePreset);
+for (const preset of TAPE_PRESETS) {
+  const option = document.createElement("option");
+  option.value = preset.id;
+  option.textContent = preset.label;
+  tapePresetMenu.append(option);
+}
+const tapePresetDescription = document.createElement("p");
+tapePresetDescription.id = "tapePresetDescription";
+tapePresetDescription.className = "muted";
+const tapePresetEditor = document.createElement("div");
+tapePresetEditor.className = "parameter-editor";
+tapePresetEditor.append(tapePresetMenu);
+tapePresetRow.append(tapePresetLabel, tapePresetEditor, tapePresetDescription);
+$("tapeControls").prepend(tapePresetRow);
+tapePresetMenu.addEventListener("change", () => {
+  const selected = TAPE_PRESETS.find(preset => preset.id === tapePresetMenu.value);
+  if (!selected) return;
+  controlHistory?.begin("Tape preset: " + selected.label);
+  try {
+    params = applyTapePreset(params, selected.id);
+    refreshControls();
+    markEdited();
+  } finally { controlHistory?.end(); }
+});
+function refreshTapePreset() {
+  const preset = matchingTapePreset(params);
+  tapePresetMenu.value = preset?.id || "";
+  tapePresetDescription.textContent = preset?.description || "Your current Tape settings. Choosing a preset keeps Tape On or Off as you set it.";
+}
+let activeTapePanel = "echo";
+function refreshTapeControls() {
+  const spaceEcho = params.tapeModel === 2;
+  const echoFields = ["delayTime", "feedback", "delayMix", "echoMode", "springMix"];
+  for (const row of $("tapeControls").children) {
+    const id = row.dataset.control;
+    row.hidden = ["tapeModel", "tapePreset"].includes(id) ? false : activeTapePanel === "echo" ? !echoFields.includes(id) : echoFields.includes(id);
+    if (["echoMode", "springMix"].includes(id) && !spaceEcho) row.hidden = true;
+  }
+  refreshTapePreset();
+  ranges.delayTime.render();
+  $("delayTime").title = spaceEcho ? "Longest head time. Heads 1, 2 and 3 are at one third, two thirds and this time. Up to 1.5 seconds extends the original hardware range." : "Time between echoes.";
+  const note = $("tapePage").querySelector(".tape-note");
+  note.textContent = spaceEcho
+    ? "Space Echo uses three tape heads and a parallel spring. Head 3 time sets the longest delay; heads 1 and 2 play at one third and two thirds. Modes 5 through 12 add spring; mode 12 is spring only. Echo level and Spring level are independent. Time extends to 1.5 s beyond the original hardware range. Drive colors the direct sound too. Off bypasses the whole effect."
+    : "Warm vintage color for the whole piece. Wow sways the tape; Flutter adds fine ripples. Echo level controls only the repeats. Character colors the direct sound too. Off bypasses the whole effect.";
+}
 makeControl("orbitControls", "orbitTriggers", "Triggers", 1, 24, 1);
 makeControl("orbitControls", "orbitBalls", "Balls", 1, 12, 1);
 makeControl("orbitControls", "orbitGravity", "Gravity", 0, 100, 1, "%");
@@ -171,6 +240,7 @@ function refreshControls() {
     input.value = params[id];
     render();
   }
+  refreshTapeControls();
   $("scanToggle").textContent = params.scanOn ? "ON" : "OFF";
   $("scanToggle").classList.toggle("active", params.scanOn);
   $("scanToggle").setAttribute("aria-pressed", params.scanOn);
@@ -193,6 +263,7 @@ function refreshControls() {
   updateTransport();
 }
 function syncEngine() {
+  refreshTapePreset();
   renderClock.invalidate();
   visualEditors?.refresh();
   motionControls?.refresh();
@@ -301,7 +372,7 @@ async function initializeAudio() {
   if (!ctx.audioWorklet) throw new Error("The sound engine is unavailable. Test sound still checks device output.");
   await ctx.audioWorklet.addModule("./build/grain-worklet.js?v=texture-source-scope-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
-  await context.audioWorklet.addModule("./build/tape-worklet.js?v=tape-waveform-2");
+  await context.audioWorklet.addModule("./build/tape-worklet.js?v=tape-space-echo-integration-3");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
   await context.audioWorklet.addModule("./build/ambient-worklet.js?v=vintage-tape-1");
   if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
@@ -1592,6 +1663,8 @@ function setupDisplay() {
   document.querySelector(".main-panel").after(utility);
   utility.append($("freezeBtn"), $("recordOut"), document.querySelector(".volume-label"), document.querySelector(".meter"));
   for (const id of ["delayMix", "feedback", "delayTime"]) $("tapeControls").prepend(document.querySelector(`[data-control="${id}"]`));
+  $("tapeControls").prepend(document.querySelector('[data-control="tapeModel"]'));
+  $("tapeControls").prepend(tapePresetRow);
   $("delayControls").closest(".control-group").remove();
 }
 setupDisplay();
@@ -1738,7 +1811,8 @@ visualEditors = setupVisualEditors({ getParams: () => params, setParams: editPar
 motionControls = setupMotionControls({ getParams: () => params, setParams: editParameters });
 const tapePanels = panelNav($("tapePage"), [["echo", "Echo"], ["character", "Character"]], key => {
   $("tapePage").dataset.tapePanel = key;
-  for (const row of $("tapeControls").children) row.hidden = key === "echo" ? !["delayTime","feedback","delayMix"].includes(row.dataset.control) : ["delayTime","feedback","delayMix"].includes(row.dataset.control);
+  activeTapePanel = key;
+  refreshTapeControls();
 }, { ariaLabel: "Tape controls" });
 setupSquareViewport();
 setupControlHistory();

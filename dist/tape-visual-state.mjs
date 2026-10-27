@@ -1,5 +1,6 @@
 import { tapeWow, tapeFlutter } from './tape-motion.mjs';
 import { TAPE_HEAD_POSES, TAPE_SUPPORT_X } from './tape-mechanism.mjs';
+import { SPACE_ECHO_MODES } from './tape-settings.mjs';
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const TAPE_HEADS = TAPE_HEAD_POSES.map(head => head.x);
@@ -8,12 +9,19 @@ export const TAPE_HEADS = TAPE_HEAD_POSES.map(head => head.x);
 // that phase to the output clock, including the device's output latency.
 export function tapeVisualState(params, snapshot, audioTime, fallbackSeconds = 0) {
   const p = snapshot?.params;
-  const live = p && Number.isFinite(snapshot.phase) && Number.isFinite(snapshot.audioTime);
+  const live = !!p && [snapshot.phase, snapshot.audioTime, p.on, p.delayTime, p.wow, p.flutter].every(Number.isFinite);
   const seconds = live ? Math.max(0, snapshot.phase + clamp(audioTime - snapshot.audioTime, -.2, .2)) : fallbackSeconds;
   const on = params.tapeOn ? (live ? p.on : 1) : 0;
+  const phaseOffset = live ? clamp(audioTime - snapshot.audioTime, -.2, .2) : 0;
+  const selected = params.tapeModel === 2 ? SPACE_ECHO_MODES[(params.echoMode || 4) - 1].heads : [2];
   return {
-    seconds, on,
+    seconds, on, live,
     waveform: live ? snapshot.waveform : null,
+    modulation: live && snapshot.modulation ? snapshot.modulation.map(model => ({...model, phase: Math.max(0, model.phase + phaseOffset), on: params.tapeOn ? model.on : 0})) : null,
+    speed: live && Number.isFinite(snapshot.speed) ? snapshot.speed : undefined,
+    headWeights: live && snapshot.headWeights ? snapshot.headWeights : [1, 2, 3].map(head => Number(selected.includes(head))),
+    headSignal: live && snapshot.headRms ? snapshot.headRms.map(value => clamp(value * 12, 0, 1)) : [0, 0, 0],
+    spring: live ? clamp((snapshot.springRms || 0) * 12, 0, 1) : 0,
     delayTime: live ? p.delayTime : params.delayTime,
     wow: on * (live ? p.wow : params.wow / 100),
     flutter: on * (live ? p.flutter : params.flutter / 100),
@@ -44,7 +52,9 @@ export function tapeHeadOffset(x, state) {
     const sample = state.waveform[index] * (1 - smooth) + state.waveform[Math.min(index + 1, state.waveform.length - 1)] * smooth;
     detail = 6.75 * state.on * Math.tanh(sample * 12);
   }
-  const displacement = tapeWow(state.seconds, state.wow) * 3000 +
-    tapeFlutter(state.seconds, state.flutter) * 11000 + detail;
+  const sway = state.modulation ? state.modulation.reduce((sum, model) => sum + model.weight * model.on *
+    (tapeWow(model.phase, model.wow) * 3000 + tapeFlutter(model.phase, model.flutter) * 11000), 0)
+    : tapeWow(state.seconds, state.wow) * 3000 + tapeFlutter(state.seconds, state.flutter) * 11000;
+  const displacement = sway + detail;
   return support * 20 * Math.tanh(displacement / 20);
 }

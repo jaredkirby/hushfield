@@ -1,8 +1,9 @@
 import { TAPE_DEFAULTS } from "./tape-settings.mjs";
+import { SpaceEcho } from "./space-echo-dsp.mjs";
 import { tapeWow, tapeFlutter } from "./tape-motion.mjs";
 const smoothKeys = ["delayTime", "feedback", "mix", "drive", "wow", "flutter", "hiss", "tone", "on"];
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-class TapeDelay {
+class ClassicTapeDelay {
   constructor(rate) {
     this.rate = rate;
     this.length = Math.ceil(rate * 2) + 4;
@@ -13,6 +14,7 @@ class TapeDelay {
     this.directLow = [0, 0];
     this.head = 0;
     this.clock = 0;
+    this.echoRms = 0;
     this.low = [0, 0];
     this.high = [0, 0];
     this.last = [0, 0];
@@ -72,6 +74,82 @@ class TapeDelay {
     this.echoRms = Math.sqrt(echoEnergy / (2 * output[0].length));
   }
 }
-export {
-  TapeDelay
-};
+
+
+// Keep the saved classic algorithm intact. Run both machines only during a
+// model crossfade; a newly selected machine starts with empty tape history.
+class TapeDelay {
+  constructor(rate) {
+    this.rate = rate;
+    this.classic = new ClassicTapeDelay(rate);
+    this.spaceEcho = null;
+    this.values = { ...TAPE_DEFAULTS };
+    this.model = 0;
+    this.targetModel = 0;
+    this.modelSlew = 1 - Math.exp(-1 / (rate * .035));
+    this.scratch = [new Float32Array(128), new Float32Array(128)];
+  }
+  set(values) {
+    Object.assign(this.values, values);
+    const next = values.tapeModel === 2 ? 1 : values.tapeModel === 1 ? 0 : this.targetModel;
+    if (next !== this.targetModel) {
+      // A reversal during the fade must retain the audible destination.
+      if (next && this.model === 0) this.spaceEcho = new SpaceEcho(this.rate);
+      else if (!next && this.model === 1) this.classic = new ClassicTapeDelay(this.rate);
+      this.targetModel = next;
+    }
+    this.classic.set(this.values);
+    this.spaceEcho?.set(this.values);
+  }
+  accumulateVisualEnergy(meter, count) {
+    const blend = this.model, classic = this.classic, space = this.spaceEcho;
+    // RMS interpolation is an activity estimate during a model crossfade.
+    const echo = classic.echoRms * (1 - blend) + (space?.echoRms || 0) * blend;
+    meter.echo += echo * echo * count;
+    meter.spring += ((space?.springRms || 0) * blend) ** 2 * count;
+    for (let head = 0; head < 3; head++) {
+      const level = (head === 1 ? classic.echoRms * (1 - blend) : 0) + (space?.headRms[head] || 0) * blend;
+      meter.heads[head] += level * level * count;
+    }
+  }
+  visualState() {
+    const blend = this.model, classic = this.classic, space = this.spaceEcho;
+    const mix = (a, b = 0) => a * (1 - blend) + b * blend;
+    const params = Object.fromEntries(smoothKeys.map(key => [key, mix(classic.p[key], space?.p[key])]));
+    const phase = classic.clock / this.rate, spacePhase = (space?.frame || 0) / this.rate;
+    const modulation = [{weight: 1 - blend, phase, wow: classic.p.wow, flutter: classic.p.flutter, on: classic.p.on}];
+    if (space) modulation.push({weight: blend, phase: spacePhase, wow: space.p.wow, flutter: space.p.flutter, on: space.p.on});
+    const delay = t => tapeWow(t, classic.p.wow) + tapeFlutter(t, classic.p.flutter);
+    const classicSpeed = .36 / classic.p.delayTime * clamp(1 - (delay(phase + .001) - delay(phase - .001)) / .002, .75, 1.25);
+    return {
+      phase: blend >= .5 ? spacePhase : phase, params, modulation, modelBlend: blend,
+      spaceTravel: space?.travel || 0, motor: space?.motor || 0,
+      speed: mix(classicSpeed, space?.visualSpeed),
+      echoRms: mix(classic.echoRms, space?.echoRms),
+      springRms: (space?.springRms || 0) * blend,
+      headWeights: [0, 1, 0].map((value, i) => mix(value, space?.headWeights[i])),
+      headRms: [0, classic.echoRms, 0].map((value, i) => mix(value, space?.headRms[i]))
+    };
+  }
+  process(input, output) {
+    if (!this.targetModel && this.model < 1e-7) {
+      this.model = 0;
+      this.classic.process(input, output);
+      return;
+    }
+    if (this.targetModel && this.model > 1 - 1e-7) {
+      this.model = 1;
+      this.spaceEcho.process(input, output);
+      return;
+    }
+    const count = output[0].length;
+    if (this.scratch[0].length !== count) this.scratch = [new Float32Array(count), new Float32Array(count)];
+    this.classic.process(input, output);
+    this.spaceEcho.process(input, this.scratch);
+    for (let i = 0; i < count; i++) {
+      this.model += (this.targetModel - this.model) * this.modelSlew;
+      for (let c = 0; c < 2; c++) output[c][i] += (this.scratch[c][i] - output[c][i]) * this.model;
+    }
+  }
+}
+export { TapeDelay };

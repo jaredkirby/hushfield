@@ -1,8 +1,11 @@
 # Surge-inspired musical expression for Hushfield
 
-Status: approved by the user on 2026-10-25; implemented locally; technical evidence in VERIFICATION.md.
+Status: approved by the user on 2026-10-25; implemented and merged with the direct-control UI through [PR #22](https://github.com/jaredkirby/hushfield/pull/22), as `17794182f53d3175f88230200d83a734a58051e6`. Implementation tickets #16–21 are closed; [parent #15](https://github.com/jaredkirby/hushfield/issues/15) remains open. See [current verification](../../VERIFICATION.md) for technical evidence and outstanding musical-preference/device acceptance.
+
+The approved scope below is retained as a historical record. Publication and UI integration were authorized separately; the original out-of-scope statement describes this specification's implementation stage.
+
 Baseline: 6e5c607a76f53021ed4bb016fdd5a42a43edd817.
-Branch: codex/surge-inspired-music, isolated from current interface work.
+Implementation branch: `codex/surge-inspired-music`, originally isolated from concurrent interface work. See the [integration record](../UI-MUSIC-INTEGRATION.md) for the later combination.
 
 ## Problem Statement
 

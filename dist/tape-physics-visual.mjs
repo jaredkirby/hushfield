@@ -46,10 +46,12 @@ export class TapeVisualTransport {
     this.accumulator = 0;
     this.seconds = 0;
     this.waveform = new Float32Array(32);
+    this.modulation = null;
   }
   advance(dt, moving, motion) {
     if (!moving) { this.accumulator = 0; return; }
     this.seconds = motion.seconds;
+    this.modulation = motion.modulation;
     const follow = 1 - Math.exp(-clamp(dt, 0, .05) / .06);
     for (let i = 0; i < this.waveform.length; i++) {
       this.waveform[i] += ((motion.waveform?.[i] || 0) - this.waveform[i]) * follow;
@@ -58,7 +60,7 @@ export class TapeVisualTransport {
     // DSP's delay modulation gives the corresponding speed fluctuation.
     const modulation = t => tapeWow(t, motion.wow) + tapeFlutter(t, motion.flutter);
     const pitch = clamp(1 - (modulation(motion.seconds + .001) - modulation(motion.seconds - .001)) / .002, .75, 1.25);
-    const speed = clamp(.36 / motion.delayTime * pitch, .25, 2);
+    const speed = clamp(motion.speed ?? .36 / motion.delayTime * pitch, .25, 2);
     this.accumulator += clamp(dt, 0, .05);
     while (this.accumulator >= 1 / 120) {
       this.tape.step(1 / 120, speed, .8);
@@ -100,14 +102,15 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
   if (w <= 20 || h <= 20) return;
   let transport = transports.get(c);
   if (!transport) { transport = new TapeVisualTransport(); transports.set(c, transport); }
-  const motion = tapeVisualState(params, runtime.telemetry, runtime.audioTime ?? seconds, seconds);
+  const motion = tapeVisualState(params, runtime.running === false ? null : runtime.telemetry, runtime.audioTime ?? seconds, seconds);
   const moving = (runtime.running ?? (angle !== transport.lastAngle)) && params.tapeOn && !runtime.reducedMotion;
   const dt = runtime.dt ?? (transport.lastSeconds === undefined ? 0 : seconds - transport.lastSeconds);
   transport.advance(dt, moving, motion);
   transport.lastAngle = angle; transport.lastSeconds = seconds;
   motion.seconds = transport.seconds;
   motion.waveform = transport.waveform;
-  if (runtime.reducedMotion) { motion.wow = motion.flutter = 0; motion.waveform = null; }
+  motion.modulation = params.tapeOn ? transport.modulation : null;
+  if (runtime.reducedMotion) { motion.wow = motion.flutter = 0; motion.waveform = null; motion.modulation = null; }
   const tape = transport.tape;
   const points = [];
   for (let i = 0; i < tape.n; i++) {
@@ -152,8 +155,9 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
   // Three playback heads support the tape. Their dither density follows
   // measured audio energy and the wet signal, including its decay.
   const warmth = motion.drive * motion.signal;
-  const shades = [warmth, motion.signal, motion.echo];
-  for (const head of TAPE_HEAD_POSES) {
+  for (const [headIndex, head] of TAPE_HEAD_POSES.entries()) {
+    const active = motion.headWeights[headIndex];
+    const shades = [warmth * active, motion.signal * active, motion.headSignal[headIndex]];
     c.save(); c.translate(head.x,head.y); c.rotate(head.angle);
     c.fillStyle = '#000'; c.strokeStyle = on ? '#bbb' : '#555'; c.lineWidth = 1.3;
     // Chamfered casing and a narrow top face echo the outlined wheel walls.
@@ -164,7 +168,8 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
     c.strokeStyle = on ? '#777' : '#444';
     c.beginPath(); c.roundRect(-21, 15, 42, 16, 3); c.stroke();
     // Rounded tape shoe, with the fine central magnetic gap left visible.
-    c.strokeStyle = on ? '#eee' : '#777';
+    const contactShade = Math.round(on ? 80 + 158 * active : 80);
+    c.strokeStyle = `rgb(${contactShade},${contactShade},${contactShade})`;
     c.beginPath(); c.roundRect(-16, -3, 32, 11, 5); c.fill(); c.stroke();
     c.beginPath(); c.moveTo(0, -2); c.lineTo(0, 7); c.stroke();
     // Slotted fasteners make the front plate read as a mechanical part.
@@ -186,8 +191,9 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
   // Read-only render receipts used by browser QA; no audio or saved state.
   if (c.canvas?.dataset) c.canvas.dataset.tapeMotion = JSON.stringify({
     travel: tape.travel, phase: motion.seconds, moving: !!moving,
-    source: runtime.telemetry ? 'audio-processor' : 'preview',
+    source: motion.live ? 'audio-processor' : 'preview',
     headOffset: tapeHeadOffset(297, motion), signal: motion.signal, echo: motion.echo,
-    waveformPeak: motion.waveform ? Math.max(...motion.waveform.map(Math.abs)) : 0
+    waveformPeak: motion.waveform ? Math.max(...motion.waveform.map(Math.abs)) : 0,
+    speed: motion.speed, headWeights: motion.headWeights, headSignal: motion.headSignal, spring: motion.spring
   });
 }
