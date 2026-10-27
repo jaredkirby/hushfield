@@ -1,0 +1,196 @@
+{
+  "date": "2026-10-26",
+  "browser": "Codex in-app browser",
+  "baseline": "af4c34659aaf1858f87c66d4efd52da3bf07d2c9",
+  "pass": true,
+  "checks": [
+    {
+      "pass": true,
+      "label": "Original legacy graph retains exact PCM at 12000Hz"
+    },
+    {
+      "pass": true,
+      "label": "Original Depth graph retains exact PCM at 12000Hz"
+    },
+    {
+      "pass": true,
+      "label": "Original legacy graph retains exact PCM at 44100Hz"
+    },
+    {
+      "pass": true,
+      "label": "Original Depth graph retains exact PCM at 44100Hz"
+    },
+    {
+      "pass": true,
+      "label": "Original legacy graph retains exact PCM at 48000Hz"
+    },
+    {
+      "pass": true,
+      "label": "Original Depth graph retains exact PCM at 48000Hz"
+    },
+    {
+      "pass": true,
+      "label": "Rapid selection reversal retains latest original selection"
+    },
+    {
+      "pass": true,
+      "label": "plate amount zero retains dry PCM"
+    },
+    {
+      "pass": true,
+      "label": "spring amount zero retains dry PCM"
+    },
+    {
+      "pass": true,
+      "label": "chamber amount zero retains dry PCM"
+    },
+    {
+      "pass": true,
+      "label": "plate finite stereo render"
+    },
+    {
+      "pass": true,
+      "label": "plate audible late tail"
+    },
+    {
+      "pass": true,
+      "label": "plate independent width changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "plate tone changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "plate pre-delay changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "spring finite stereo render"
+    },
+    {
+      "pass": true,
+      "label": "spring audible late tail"
+    },
+    {
+      "pass": true,
+      "label": "spring independent width changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "spring tone changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "spring pre-delay changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "chamber finite stereo render"
+    },
+    {
+      "pass": true,
+      "label": "chamber audible late tail"
+    },
+    {
+      "pass": true,
+      "label": "chamber independent width changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "chamber tone changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "chamber pre-delay changes wet response"
+    },
+    {
+      "pass": true,
+      "label": "Plate and spring are distinct"
+    },
+    {
+      "pass": true,
+      "label": "Chamber and spring are distinct"
+    },
+    {
+      "pass": true,
+      "label": "plate retains headroom at 44100Hz"
+    },
+    {
+      "pass": true,
+      "label": "spring retains headroom at 44100Hz"
+    },
+    {
+      "pass": true,
+      "label": "chamber retains headroom at 44100Hz"
+    },
+    {
+      "pass": true,
+      "label": "plate retains headroom at 48000Hz"
+    },
+    {
+      "pass": true,
+      "label": "spring retains headroom at 48000Hz"
+    },
+    {
+      "pass": true,
+      "label": "chamber retains headroom at 48000Hz"
+    },
+    {
+      "pass": true,
+      "label": "Eight second decay retains late energy"
+    },
+    {
+      "pass": true,
+      "label": "Repeated live model changes stay finite at 12000Hz"
+    },
+    {
+      "pass": true,
+      "label": "Repeated model selection boundaries remain continuous at 12000Hz: boundary/reference=0.9973591709016445, boundaryStep=0.0759195126593113, neighboringStep=0.07612053398042917, boundaryAt=0.30933333333333335s; global maxStep=0.1755477413535118, at=1.35375s, channel=0, peak=1.8298444747924805"
+    },
+    {
+      "pass": true,
+      "label": "Boundary diagnostic rejects observed pre-fix0.9066667s jump: oldJump/reference=4.813551903628418"
+    },
+    {
+      "pass": true,
+      "label": "Repeated live model changes stay finite at 44100Hz"
+    },
+    {
+      "pass": true,
+      "label": "Repeated model selection boundaries remain continuous at 44100Hz: boundary/reference=0.9720558847159828, boundaryStep=0.04121328890323639, neighboringStep=0.04239806532859802, boundaryAt=1.5005895691609978s; global maxStep=0.08632981777191162, at=0.7489795918367347s, channel=0, peak=3.187054395675659"
+    },
+    {
+      "pass": true,
+      "label": "Repeated live model changes stay finite at 48000Hz"
+    },
+    {
+      "pass": true,
+      "label": "Repeated model selection boundaries remain continuous at 48000Hz: boundary/reference=0.9163150074519087, boundaryStep=0.036087214946746826, neighboringStep=0.03938297927379608, boundaryAt=0.6s; global maxStep=0.056602805852890015, at=0.40458333333333335s, channel=0, peak=2.288900375366211"
+    },
+    {
+      "pass": true,
+      "label": "Rapid plate\u2192spring\u2192original\u2192chamber retains exact final chamber response after settling"
+    },
+    {
+      "pass": true,
+      "label": "plate Foundation\u2192Space\u2192Space Echo retains headroom at 48000Hz"
+    },
+    {
+      "pass": true,
+      "label": "spring Foundation\u2192Space\u2192Space Echo retains headroom at 48000Hz"
+    },
+    {
+      "pass": true,
+      "label": "chamber Foundation\u2192Space\u2192Space Echo retains headroom at 48000Hz"
+    }
+  ],
+  "limitations": "Same-runtime WebAudio output checks; no hardware or physical-device authenticity claim. Fullscale177Hz continuity stimulus can exceed unity; musical headroom is checked separately.",
+  "sourceCommit": "df9b587",
+  "sourceHashes": {
+    "dist/piece-space.mjs": "0dd6af8b12d3cddd7357d504108c73e5587d122012eb987af66d0c7284416b75",
+    "dist/vintage-reverb.mjs": "e0a187afb4e81e751696c94ab1da0397c158e16daca8ecf030f1b2f8de72f6bf",
+    "dist/qa-space-reverb.mjs": "216d04137e15aa6876b1aefd2852a61e685fe6a8ce0ef99cbd9c3b1f8a5ace77",
+    "dist/build/qa-space-reverb.js": "4360baf0104595858e208fa694548995b14b1ac70818e106f4f63c3fa0197ff4"
+  }
+}

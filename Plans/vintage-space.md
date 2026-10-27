@@ -67,8 +67,8 @@ Deliver a committed isolated candidate with private preview and playable compari
 - [x] Approved boundaries and fixed baseline
 - [x] Primary-source research
 - [x] Persistence implementation and focused regression checks
-- [ ] Model audio and original-sound verification
+- [x] Model audio and original-sound verification
 - [x] Controls and measured-activity visuals
-- [ ] Full suite, browser and listening comparisons
-- [ ] Independent Standards and Spec reviews
-- [ ] Committed private candidate and handoff
+- [x] Full suite, browser and listening comparisons
+- [x] Independent Standards and Spec reviews
+- [x] Committed private candidate and handoff
