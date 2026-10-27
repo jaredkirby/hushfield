@@ -1,5 +1,11 @@
 # Verification
 
+## Space release verification
+
+The final Space revision passed the build and all 194 Node test results on 2026-10-27. Fresh sessions and Whole piece presets select Plate; saved models, malformed-file fallback and versions 1–6 retain their compatibility behavior. Fresh browser startup showed Plate selected with its controls enabled and no console warnings or errors.
+
+The approved Plate display uses a movable absorber above one vibrating sheet. Separation changes Decay only. Chamber keeps the rippling rebound tube, expands it to the square viewing bounds and carries waves into the center with a slower final drift. Earlier receipts below describe their recorded revisions and are historical evidence. Physical-device performance and hardware authenticity remain separate from automated verification.
+
 ## Interactive Space visual candidate
 
 The 2026-10-27 visual revision adds two draggable Plate surfaces. Separation adjusts Decay and Pre-delay together, with a single Undo/Redo entry. Measured wet activity launches travelling reflections and surface ripples; Spring and Chamber also gain trails and depth. Existing DSP and saved parameter formats are unchanged. The individual controls remain available.

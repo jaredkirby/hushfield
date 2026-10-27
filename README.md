@@ -51,7 +51,7 @@ Fresh sessions start paused with Chorus synth, Stillwater and Space Echo with Ta
 
 Space Echo starts with Gentle echo settings. Try Head mode 11 for three rhythmic echoes and a parallel spring, or mode 12 for spring alone. Head 3 time sets the longest delay; the other heads play at one third and two thirds of that time. Moving it bends the recorded echoes' pitch before they settle. This is a researched approximation with a synthetic spring, not a measured hardware clone. [Research and design limits](docs/research/re201-space-echo.md) describe the sources.
 
-Vintage Space is a private candidate for audition and has not been merged. Plate is the default for fresh sessions and Whole piece presets. Saved Pieces retain their reverb choice, and older files retain Original room. Plate adds a dense tail, Spring adds dispersive echoes and Chamber adds early reflections. Space's Spring is independent of Tape's spring. The [playing guide](docs/PLAYING.md#shared-finishing), [model research](docs/research/vintage-space.md) and [listening comparison](dist/qa-space-reverb.html) describe the controls and limits.
+Plate is the default for fresh sessions and Whole piece presets. Saved Pieces retain their reverb choice, and older files retain Original room. Plate adds a dense tail, Spring adds dispersive echoes and Chamber adds early reflections. Space's Spring is independent of Tape's spring. The [playing guide](docs/PLAYING.md#shared-finishing), [model research](docs/research/vintage-space.md) and [listening comparison](dist/qa-space-reverb.html) describe the controls and limits.
 
 ## Phone, iPad and desktop
 
