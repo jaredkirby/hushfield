@@ -11,7 +11,7 @@
     "dist/ambient-points.mjs": "930c70317bcb7eae0c79a44662828b57229e3001b3b5f087758eb4397a7cddc4",
     "dist/ambient-settings.mjs": "2de40f3657e0b6e532ba238ab76088019d8af861f5d07dc93dd3fe9c981865cc",
     "dist/sound-patches.mjs": "4d1b380274d2ca6e3120a8b014a22393fed65c1875a8c4c1108ec261f51e9344",
-    "dist/space-settings.mjs": "6c66420538230d3f0e54634bbbe4e53781c683d9dced7e582e565819257aded6",
+    "dist/space-settings.mjs": "a8d28d6963ed72ecd8bfa0feb0c06efe97558545659b540d21b1a89978fab317",
     "dist/piece-presets.mjs": "81702dd99102841e8c7edac96a3cfce874eca37e8ae0540933de0e4849f96406",
     "dist/piece-harmony.mjs": "6dbfe3ae90e96429d3a7328a64006f67caba98d51b534172443cc06b7991cd8b",
     "dist/vintage-reverb.mjs": "e0a187afb4e81e751696c94ab1da0397c158e16daca8ecf030f1b2f8de72f6bf",

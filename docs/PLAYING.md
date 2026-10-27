@@ -91,7 +91,7 @@ Listen auditions the selected patch through shared finishing without raising the
 
 ## Shared finishing
 
-Space finishes the normal Foundation, Texture and Motion blend. Reverb is its first panel. Choose Original room, Plate, Spring or Chamber, then set Amount from 0 to 85%. Original room remains the default with its fixed response; Decay, Pre-delay, Tone and Reverb width are disabled for that model. Plate builds a dense tail, Spring adds dispersive echoes, and Chamber brings out early wall reflections. Space's Spring is independent of Tape's spring.
+Space finishes the normal Foundation, Texture and Motion blend. Reverb is its first panel. Choose Original room, Plate, Spring or Chamber, then set Amount from 0 to 85%. Plate is the default for fresh sessions and Whole piece presets. Saved Pieces retain their reverb choice, and older files retain Original room. Original room has a fixed response; Decay, Pre-delay, Tone and Reverb width are disabled for that model. Plate builds a dense tail, Spring adds dispersive echoes, and Chamber brings out early wall reflections. Space's Spring is independent of Tape's spring.
 
 The vintage models offer Decay from 0.5 to 8 seconds, Pre-delay from 0 to 150 ms, Tone from 0 to 100% and Reverb width from 0 to 100%. Tone filters new sound entering the reverb, so a tail already ringing decays naturally when Tone changes. Reverb width changes only the wet return; overall Width lives in Filter. Sliders, exact entry and minus/plus edit the same settings. Selecting a model is one Undo step, and a continuous drag is one step.
 

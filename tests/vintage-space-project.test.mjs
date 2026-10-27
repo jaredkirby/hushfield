@@ -2,12 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { serializeProject, decodeProject } from '../dist/project-file.mjs';
 import { createSessionRecovery } from '../dist/session-recovery.mjs';
+import { SPACE_DEFAULTS } from '../dist/space-settings.mjs';
+import { selectPiecePreset } from '../dist/piece-presets.mjs';
 const buffer = { numberOfChannels: 1, length: 4, sampleRate: 48000, duration: 4 / 48000, getChannelData: () => Float32Array.of(0, .25, -.25, 0) };
-const decode = text => decodeProject(text, { decodeAudio: async () => buffer, defaults: {}, ranges: {}, controls: {} });
+const decode = text => decodeProject(text, { decodeAudio: async () => buffer, defaults: SPACE_DEFAULTS, ranges: {}, controls: {} });
 const vintage = { reverbModel: 'plate', reverbDecay: 5.7, reverbPredelay: 83, reverbTone: 29, reverbWidth: 91 };
 const original = { reverbModel: 'original', reverbDecay: 3, reverbPredelay: 20, reverbTone: 50, reverbWidth: 75 };
 const selected = params => Object.fromEntries(Object.keys(original).map(id => [id, params[id]]));
 const save = params => serializeProject({ buffer, params, controls: {} });
+test('fresh Stillwater starts with Plate and preserves it through save and restore', async () => {
+  assert.equal(SPACE_DEFAULTS.reverbModel, 'plate');
+  const fresh = selectPiecePreset('still', { defaults: SPACE_DEFAULTS, cancelPending() {} });
+  assert.equal(fresh.params.reverbModel, 'plate');
+  const restored = await decode(save(fresh.params));
+  assert.equal(restored.params.reverbModel, 'plate');
+});
 test('schema seven preserves each selected room and its controls without app range registration', async () => {
   for (const reverbModel of ['original', 'plate', 'spring', 'chamber']) {
     const params = { ...vintage, reverbModel, spaceVersion: 1 };

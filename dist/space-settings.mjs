@@ -13,7 +13,7 @@ export const VINTAGE_REVERB_FIELDS = [
 ];
 export const REVERB_MODELS = ['original', 'plate', 'spring', 'chamber'];
 const REVERB_DEFAULTS = { reverbModel: 'original', ...Object.fromEntries(VINTAGE_REVERB_FIELDS.map(field => [field.id, field.value])) };
-export const SPACE_DEFAULTS = { spaceVersion: 2, ...REVERB_DEFAULTS, ...Object.fromEntries(SPACE_FIELDS.map(field => [field.id, field.value])) };
+export const SPACE_DEFAULTS = { spaceVersion: 2, ...REVERB_DEFAULTS, reverbModel: 'plate', ...Object.fromEntries(SPACE_FIELDS.map(field => [field.id, field.value])) };
 export function restoreSpace(saved, legacy = false, originalReverb = false) {
   const defaults = legacy ? { spaceVersion: 1, foundationRoom: 100, textureRoom: 100, motionRoom: 100, roomLow: 20, roomHigh: 20000 } : SPACE_DEFAULTS;
   const result = { ...REVERB_DEFAULTS, ...defaults };
