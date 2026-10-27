@@ -3,6 +3,7 @@ import { tapeVisualState, tapeHeadOffset } from './tape-visual-state.mjs';
 import { TAPE_HEAD_POSES, tapeHeadPath } from './tape-mechanism.mjs';
 import { tapeWow, tapeFlutter } from './tape-motion.mjs';
 import { TAPE_INITIAL_STATE } from './tape-initial-state.mjs';
+import { tapePhysicsSettings } from './tape-physics-settings.mjs';
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const transports = new WeakMap();
@@ -48,7 +49,7 @@ export class TapeVisualTransport {
     this.waveform = new Float32Array(32);
     this.modulation = null;
   }
-  advance(dt, moving, motion) {
+  advance(dt, moving, motion, params = {}) {
     if (!moving) { this.accumulator = 0; return; }
     this.seconds = motion.seconds;
     this.modulation = motion.modulation;
@@ -61,9 +62,10 @@ export class TapeVisualTransport {
     const modulation = t => tapeWow(t, motion.wow) + tapeFlutter(t, motion.flutter);
     const pitch = clamp(1 - (modulation(motion.seconds + .001) - modulation(motion.seconds - .001)) / .002, .75, 1.25);
     const speed = clamp(motion.speed ?? .36 / motion.delayTime * pitch, .25, 2);
+    const { stiffness, drag } = tapePhysicsSettings(params);
     this.accumulator += clamp(dt, 0, .05);
     while (this.accumulator >= 1 / 120) {
-      this.tape.step(1 / 120, speed, .8);
+      this.tape.step(1 / 120, speed, stiffness, drag);
       this.accumulator -= 1 / 120;
     }
   }
@@ -105,7 +107,7 @@ export function drawPhysicsTape({ c, w, h }, params, angle, level, seconds = 0, 
   const motion = tapeVisualState(params, runtime.running === false ? null : runtime.telemetry, runtime.audioTime ?? seconds, seconds);
   const moving = (runtime.running ?? (angle !== transport.lastAngle)) && params.tapeOn && !runtime.reducedMotion;
   const dt = runtime.dt ?? (transport.lastSeconds === undefined ? 0 : seconds - transport.lastSeconds);
-  transport.advance(dt, moving, motion);
+  transport.advance(dt, moving, motion, params);
   transport.lastAngle = angle; transport.lastSeconds = seconds;
   motion.seconds = transport.seconds;
   motion.waveform = transport.waveform;

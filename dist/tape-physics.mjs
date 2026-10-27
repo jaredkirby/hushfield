@@ -185,25 +185,25 @@ export class TapeLoop {
       }
       return false;
     }
-    step(dt,speed,bend,depth=0) {
+    step(dt,speed,bend,drag=.5,depth=0) {
       const old={x:this.x.slice(),y:this.y.slice(),px:this.px.slice(),py:this.py.slice(),travel:this.travel,velocity:this.velocity,time:this.time,lastDt:this.lastDt};
       this.sx=old.x;this.sy=old.y;
-      this.integrate(dt,speed,bend);
+      this.integrate(dt,speed,bend,drag);
       if(!this.crossesDuringStep())return;
       this.x.set(old.x);this.y.set(old.y);this.px.set(old.px);this.py.set(old.py);
       this.travel=old.travel;this.velocity=old.velocity;this.time=old.time;this.lastDt=old.lastDt;
       for(let i=0;i<this.n;i++){this.s[i]=(i*this.rest+this.travel)%this.length;this.weight[i]=this.s[i]<this.transportLength?0:1;}
       this.rejectedSteps++;
-      if(depth<3) {this.step(dt/2,speed,bend,depth+1);this.step(dt/2,speed,bend,depth+1);}
+      if(depth<3) {this.step(dt/2,speed,bend,drag,depth+1);this.step(dt/2,speed,bend,drag,depth+1);}
       else {this.px.set(this.x);this.py.set(this.y);this.velocity=0;}
     }
-    integrate(dt,speed,bend) {
+    integrate(dt,speed,bend,drag=.5) {
       this.time+=dt;
       this.velocity+=(65*speed-this.velocity)*(1-Math.exp(-dt*5));
       this.travel+=this.velocity*dt;
       // Low tray drag lets the driven strand move the loose bunch, while
       // contact constraints still keep neighbouring strips separated.
-      const n=this.n, r=this.rest, damp=Math.exp(-dt*.5);
+      const n=this.n, r=this.rest, damp=Math.exp(-dt*drag);
       for(let i=0;i<n;i++) {
         const s=(i*r+this.travel)%this.length;this.s[i]=s;
         if(s<this.transportLength) {
