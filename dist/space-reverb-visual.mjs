@@ -2,6 +2,10 @@
 // activity launches wave fronts; these drawings are not a physical simulation.
 const TAU = Math.PI * 2;
 const CHAMBER_REBOUNDS_ONLY = true;
+const CHAMBER_CENTER_RATE = .1;
+// Integrate the unchanged 60% to 70% transition before the final drift.
+const CHAMBER_TRACE_STRETCH = .65 + .35 / CHAMBER_CENTER_RATE;
+const CHAMBER_PULSE_LIMIT = Math.ceil(5 * CHAMBER_TRACE_STRETCH / .27) + 1;
 const clamp = (x, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, Number(x) || 0));
 const states = new WeakMap();
 const grey = value => `rgb(${value},${value},${value})`;
@@ -32,7 +36,7 @@ function field(c, model, time, level, decay, reducedMotion) {
     // Quiet returns shed their visible traces promptly. Decay controls trail
     // persistence while the audible tail is present, not an invented tail.
     if (level <= .002) for (const pulse of s.pulses) pulse.strength *= Math.exp(-dt * 12);
-    s.pulses = s.pulses.filter(p => time - p.at < Math.min(5, .8 + decay * .55) * (model === 'chamber' ? 1.35 : 1) && p.strength > .005).slice(model === 'chamber' ? -26 : -20);
+    s.pulses = s.pulses.filter(p => time - p.at < Math.min(5, .8 + decay * .55) * (model === 'chamber' ? CHAMBER_TRACE_STRETCH : 1) && p.strength > .005).slice(model === 'chamber' ? -CHAMBER_PULSE_LIMIT : -20);
     if (model === 'chamber') {
       if (level > .002) {
         s.chamberAge = Math.min(30, s.chamberAge + dt);
@@ -172,11 +176,11 @@ function chamber(c,s,time,width,tone,decay,original,viewport) {
   const project = (x,y,z) => { const p=1/(1+z*2.8); return [500+x*(.65+width*.35)*p,445+y*p]; };
   const reboundsOnly=!original && CHAMBER_REBOUNDS_ONLY;
   const lifetime=Math.min(5,.8+decay*.55);
-  // Ease the final travel to half speed without changing its trajectory.
+  // Ease the final travel to one tenth speed without changing its trajectory.
   const trajectory=age=>{
     const late=Math.max(0,age-lifetime*.6), duration=lifetime*.1, u=clamp(late/duration);
     const lag=late>duration?late-duration*.5:duration*(u*u*u-u*u*u*u*.5);
-    return [age-lag*.5,1-.5*u*u*(3-2*u)];
+    return [age-lag*(1-CHAMBER_CENTER_RATE),1-(1-CHAMBER_CENTER_RATE)*u*u*(3-2*u)];
   };
   // Keep the outer travel intact, then carry the same folded contour into
   // the center before its measured-activity trace expires.
