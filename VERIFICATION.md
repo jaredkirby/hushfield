@@ -1,5 +1,13 @@
 # Verification
 
+## Foundation defaults and starting presets
+
+Fresh startup and Stillwater Whole piece now select Chorus synth, the Stillwater Scene and Space Echo with Tape on. Compatibility fallback settings remain unchanged, and recovery stays explicit and paused. Sound offers 18 starting presets that replace only Foundation's instrument, expressive mode, tone macros and Chords/Melody/Air levels. Matching names come from saved values rather than a preset identifier.
+
+The build and all 185 Node test results passed. New coverage exercises all presets through actual project save/load, explicit recovery and 36 stereo renders at 44.1/48 kHz. Three-second renders remained finite, with a largest peak of 0.1458 and RMS levels from 0.0070 to 0.0499; the smallest within-instrument PCM RMS difference was 0.0064. These measurements establish signal differences and headroom, not subjective loudness matching.
+
+[Browser evidence](tests/foundation-presets-browser-results.json) records fresh defaults, all 18 selections during live playback, one-step Undo/Redo, Custom matching, the shared adjustment rail, preservation of harmony and Tape, and explicit paused recovery. Five viewport sizes had no outer-page overflow; shorter editor bays scroll internally to the menu. The [screenshot](docs/images/foundation-starting-presets.png) shows the Sound controls. The existing private preview's app bundle matches the local build hash, and its HTTPS page shows the new defaults. Independent Standards and Spec review found no blocking findings. Physical-device performance and listening acceptance remain separate.
+
 ## Chorus synth level correction
 
 Chorus synth's oscillator blend and cascaded filters left it too quiet when switching instruments. A fixed 2.5x voice gain adds 7.96 dB while retaining its oscillator, filter and chorus behavior. Shared Air and the other instruments are unchanged. The stereo output regression compares Chorus with Hushfield over seconds 6–12 at 44.1/48 kHz, seeds 719/731 and Color 0/38/100, requiring the difference to stay within 6 dB.

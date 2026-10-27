@@ -3,6 +3,7 @@ import { setupVisualEditors } from "./visual-editors.mjs";
 import { setupMotionControls } from "./motion-controls.mjs";
 import { TAPE_PRESETS, applyTapePreset, matchingTapePreset } from "./tape-presets.mjs";
 import { TAPE_DEFAULTS, SPACE_ECHO_DEFAULTS, SPACE_ECHO_MODES } from "./tape-settings.mjs";
+import { applyFoundationPreset } from "./foundation-presets.mjs";
 import { selectPiecePreset } from "./piece-presets.mjs";
 import { restorePiece, piecePlayback } from "./piece-session.mjs";
 import { followChord } from "./piece-harmony.mjs";
@@ -35,6 +36,7 @@ import { boundary, containBalls, makeOrbitState, shapePoints } from "./orbit-phy
 const $ = (id) => document.getElementById(id);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, ...SPACE_ECHO_DEFAULTS, ...SPACE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
+const freshPiece = selectPiecePreset("still", { defaults: initial, cancelPending() {} });
 let recovery, restoringSession = false, sampleDecoder;
 let visualEditors, motionControls, controlHistory, textureAdjustments;
 let piece = restorePiece(), solo = null, foundationLayer, spaceBus, harmonyChannel, texturePhraseChannel;
@@ -49,7 +51,7 @@ function decodeContext() {
   if (!Offline) throw new Error("Tap Start once before loading audio on this browser.");
   return sampleDecoder ||= new Offline(2, 1, 48e3);
 }
-let params = { ...initial }, ctx, engine, master, filter, reverbWet, analyser, recordDestination, buffer, originalBuffer, sourceName = "Glass garden", demoKey = "glass", running = false, activeTab = "ambient", stats = { scan: 0.5, count: 0, peak: 0, grains: [] }, outputRecording = false, micRecording = false, previewNode, toastTimer, balls = [], lastFrame = 0, lastMeter = 0, orbitVoices = /* @__PURE__ */ new Set(), audioReady = false, playPending = false;
+let params = freshPiece.params, ctx, engine, master, filter, reverbWet, analyser, recordDestination, buffer, originalBuffer, sourceName = "Glass garden", demoKey = "glass", running = false, activeTab = "ambient", stats = { scan: 0.5, count: 0, peak: 0, grains: [] }, outputRecording = false, micRecording = false, previewNode, toastTimer, balls = [], lastFrame = 0, lastMeter = 0, orbitVoices = /* @__PURE__ */ new Set(), audioReady = false, playPending = false;
 const ranges = {};
 const textureScopeRenderer = createVisualRenderer();
 let textureScopeContext;
@@ -64,9 +66,9 @@ function syncTapeVisualSubscription() {
   }
 }
 document.addEventListener("visibilitychange", syncTapeVisualSubscription);
-let ambientState = { ...AMBIENT_DEFAULTS }, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
+let ambientState = freshPiece.ambient, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
 let audioGeneration = 0, restartPending = false, clockSnapshot;
-let soundState = selectPiecePreset("still", { defaults: initial, cancelPending() {} }).soundState;
+let soundState = freshPiece.soundState;
 const orbitState = makeOrbitState();
 const padButtons = [], padFlashes = Array(MAX_PADS).fill(-Infinity);
 let paddleFlash = -Infinity;
@@ -1730,6 +1732,10 @@ ambientUI = setupAmbientUI({ getState: () => ambientState, onChange: () => {
 }, onInstrument: instrument => {
   controlHistory?.begin('Foundation instrument');
   try { ambientState.instrument=instrument; if(instrument!=='current')ambientState.compositionVersion=2; markEdited();syncAmbient();ensureVisibleSelection(); }
+  finally { controlHistory?.end(); }
+}, onPreset: id => {
+  controlHistory?.begin("Foundation preset");
+  try { ambientState = applyFoundationPreset(ambientState, id); markEdited(); syncAmbient(); ensureVisibleSelection(); }
   finally { controlHistory?.end(); }
 }, onNew: newAmbientPiece });
 volumeStepper = attachStepper(document.querySelector(".volume-label"), $("volume"), { label: "Master volume", step: 0.05, format: (v) => Math.round(v * 100) + "%" });

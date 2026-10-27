@@ -47,7 +47,9 @@ The [playing guide](docs/PLAYING.md) covers Texture sources, harmony, Tape contr
 
 Tape preset offers Gentle echo, Slapback, Three-head drift, Dub trails and Spring chamber. A selection changes only the Tape sound, keeps its On/Off state and can be undone. Editing a value shows Custom settings.
 
-Fresh sessions select Space Echo with Tape Off. Turn it On, then try Head mode 11 for three rhythmic echoes and a parallel spring, or mode 12 for spring alone. Head 3 time sets the longest delay; the other heads play at one third and two thirds of that time. Moving it bends the recorded echoes' pitch before they settle. This is a researched approximation with a synthetic spring, not a measured hardware clone. [Research and design limits](docs/research/re201-space-echo.md) describe the sources.
+Fresh sessions start paused with Chorus synth, Stillwater and Space Echo with Tape On. Stillwater in Whole piece restores this combination. Foundation's Sound panel also offers 18 starting presets, three per instrument, with one-step Undo and names that follow the actual sound settings. These change Foundation tone and voice levels while retaining your Scene, harmony and shared effects.
+
+Space Echo starts with Gentle echo settings. Try Head mode 11 for three rhythmic echoes and a parallel spring, or mode 12 for spring alone. Head 3 time sets the longest delay; the other heads play at one third and two thirds of that time. Moving it bends the recorded echoes' pitch before they settle. This is a researched approximation with a synthetic spring, not a measured hardware clone. [Research and design limits](docs/research/re201-space-echo.md) describe the sources.
 
 ## Phone, iPad and desktop
 

@@ -32,3 +32,26 @@ test('a project roundtrip retains stereo sample, overrides, voices, visuals, con
   assert.deepEqual([...restored.buffer.getChannelData(0)],[16383/32768,-.5,0]);
   assert.deepEqual([...restored.buffer.getChannelData(1)],[-.25,8191/32768,32767/32768]);
 });
+
+test('Stillwater favorites survive save/load while missing legacy instrument and Tape retain compatibility', async () => {
+  const { selectPiecePreset } = await import('../dist/piece-presets.mjs');
+  const { TAPE_DEFAULTS, SPACE_ECHO_DEFAULTS } = await import('../dist/tape-settings.mjs');
+  const defaults = { ...TAPE_DEFAULTS, ...SPACE_ECHO_DEFAULTS };
+  const selected = selectPiecePreset('still', { defaults, cancelPending() {} });
+  const serialized = serializeProject({ ...selected, buffer: buffer([[0, .1]]), orbitSound: selected.soundState });
+  const options = { decodeAudio: decode, defaults, ranges: { tapeModel: {min:1,max:2,step:1} }, controls: {} };
+  const restored = await decodeProject(serialized, options);
+  assert.equal(restored.ambient.instrument, 'juno');
+  assert.equal(restored.params.tapeOn, true);
+  assert.equal(restored.params.tapeModel, 2);
+  const older = JSON.parse(serialized);
+  older.version = 4;
+  delete older.ambient.instrument;
+  delete older.params.tapeOn;
+  delete older.params.tapeModel;
+  const legacy = await decodeProject(JSON.stringify(older), options);
+  assert.equal(legacy.ambient.instrument, 'current');
+  assert.equal(legacy.ambient.compositionVersion, 1);
+  assert.equal(legacy.params.tapeOn, false);
+  assert.equal(legacy.params.tapeModel, 1);
+});

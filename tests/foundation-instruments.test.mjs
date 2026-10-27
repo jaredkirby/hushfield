@@ -59,7 +59,7 @@ test('Scenes preserve the selected instrument and whole Piece presets select the
  }
  for(const preset of ['still','cloud','shards','worn']){
   const result=selectPiecePreset(preset,{defaults:{},cancelPending(){}});
-  assert.equal(result.ambient.instrument,'current');
+  assert.equal(result.ambient.instrument,preset === 'still' ? 'juno' : 'current');
   assert.equal(result.ambient.compositionVersion,2);
  }
 });
