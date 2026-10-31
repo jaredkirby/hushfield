@@ -77,6 +77,10 @@ Imported audio stays in the browser. Record requests microphone access. The inst
 
 ## Audio troubleshooting
 
+Choose Output beside master volume for Bluetooth and Sonos connection help. Device output follows the output selected by your operating system. Browsers that permit output switching also offer the available speakers. Hushfield does not request microphone access to list speakers. Opening Output or choosing a speaker keeps a stopped Piece stopped.
+
+For Sonos, use AirPlay through Control Center on iPhone/iPad or Sound > Output on Mac, then group other rooms in the Sonos app. AirPlay and Bluetooth support depend on the Sonos model. [Speaker setup and limits](docs/PLAYING.md#external-speakers).
+
 Tap or click to activate audio. If you hear nothing, try Test sound, then Restart audio. Check the blend, Solo, device volume and Bluetooth or AirPlay output. Restart audio rebuilds the audio context and keeps the session. Finish recording or capture first.
 
 Background and locked-screen playback are not guaranteed. Earlier iPhone playback and recovery checks do not establish acceptance of the merged UI and music. Phone and tablet touch, performance and listening checks remain open. [Verification](VERIFICATION.md) records the evidence and its limits.

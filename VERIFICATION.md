@@ -1,5 +1,13 @@
 # Verification
 
+## External speaker output candidate
+
+The isolated `codex/external-speakers` candidate adds Output beside master volume, permitted browser output selection, Bluetooth setup and Sonos AirPlay/grouping guidance. Speaker preferences remain outside Piece saves, recovery and Undo. Test sound, Start and Restart wait for route readiness while audio activation remains inside the direct tap. The existing synthesis/effects/master/stereo-capture graph is preserved, and audio worklet bundles are unchanged.
+
+On 2026-10-31, the build and all 237 Node tests passed on Node 22.22.0. The 41 focused checks cover output routing, UI commands and production lifecycle functions with browser/device boundaries faked. They exercise selection before first activation, overlapping switches, retired contexts, denied/missing devices, picker cancellation, restore fallback, disconnect feedback and modal test outcomes. A consecutive rebuild was byte-identical, local documentation links and whitespace checks passed, and independent review found no remaining source blockers. [Receipt and source hashes](tests/external-speakers-results.json), [implementation plan](Plans/external-speakers.md).
+
+The localhost HTML and Output stylesheet matched the candidate files. Rendered-browser layout, native dialog focus/Escape and mobile/tablet behavior were not checked because local browser access is disabled in Work settings. Physical Bluetooth/Sonos routing, grouping, wireless latency, sustained/background and lock-screen playback remain unverified. This candidate does not implement direct Sonos cloud streaming.
+
 ## Space release verification
 
 The final Space revision passed the build and all 194 Node test results on 2026-10-27. Fresh sessions and Whole piece presets select Plate; saved models, malformed-file fallback and versions 1–6 retain their compatibility behavior. Fresh browser startup showed Plate selected with its controls enabled and no console warnings or errors.

@@ -19,6 +19,8 @@ import { setupPieceBlend } from "./piece-blend.mjs";
 import { setupRecoveryUI } from "./recovery-ui.mjs";
 import { createSampleSelection } from "./sample-selection.mjs";
 import { createOutputCapture } from "./output-capture.mjs";
+import { createOutputRouting } from "./output-routing.mjs";
+import { createOutputUI } from "./output-ui.mjs";
 import { createMicrophoneTake } from "./microphone-take.mjs";
 import { serializeProject, decodeProject } from "./project-file.mjs?v=hushfield-1";
 import { setupAudioVisuals, createVisualRenderer } from "./audio-visuals.mjs?v=hushfield-1";
@@ -73,6 +75,12 @@ function syncTapeVisualSubscription() {
 document.addEventListener("visibilitychange", syncTapeVisualSubscription);
 let ambientState = freshPiece.ambient, ambientUI, ambientPoints, ambientPointsDirty = false, ambientNode, ambientStats = { elapsed: 0, chord: "Cm7", chordNotes: [36, 51, 55, 58], next: 48, notes: 0, section: 1 }, grainLayer, orbitLayer;
 let audioGeneration = 0, restartPending = false, clockSnapshot;
+let outputUI;
+const outputRouting = createOutputRouting({
+  mediaDevices: navigator.mediaDevices,
+  supportsOutputSelection: typeof (window.AudioContext || window.webkitAudioContext)?.prototype?.setSinkId === "function",
+  onChange: (state) => outputUI?.refresh(state)
+});
 let soundState = freshPiece.soundState;
 const orbitState = makeOrbitState();
 const padButtons = [], padFlashes = Array(MAX_PADS).fill(-Infinity);
@@ -340,6 +348,8 @@ function resetAudioGraph() {
   texturePhraseChannel?.port2.close();
   texturePhraseChannel = null;
   processorGuard.clear();
+  // Invalidate pending device switches before retiring their context.
+  outputRouting.bindContext(null);
   releaseAudioGraph({ context: ctx, processors: [engine, tapeNode, ambientNode, recordDestination], orbit: orbitAudio });
   foundationReady = motionReady = textureReady = false;
   foundationLayer = spaceBus = null;
@@ -377,7 +387,12 @@ function ensureOutput() {
     analyser.connect(ctx.destination);
     visuals?.connect(ctx, master);
   }
-  return resumeFromTap(ctx);
+  const context = ctx;
+  // Resume inside this tap before awaiting device access or worklet loading.
+  const activation = resumeFromTap(context);
+  return Promise.all([activation, outputRouting.bindContext(context)]).then(() => {
+    if (ctx !== context) throw new Error("Audio restarted. Tap Start sound.");
+  });
 }
 async function ensureAudio() {
   if (audioReady) {
@@ -906,17 +921,22 @@ async function testSound() {
     });
     if (+$("volume").value === 0) {
       $("audioDetail").textContent = "VOL is 0%. Raise the volume slider.";
-      return;
+      return $("audioDetail").textContent;
     }
+    await activation;
+    if (ctx !== context) return;
     playTestNotes(context, master);
     $("audioDetail").textContent = "Playing two test notes\u2026";
-    await activation;
     await verifyAudioClock(context);
-    if (ctx === context) $("audioDetail").textContent = "Test notes sent \xB7 VOL " + Math.round(+$("volume").value * 100) + "% \xB7 audio clock OK.";
+    if (ctx === context) {
+      $("audioDetail").textContent = "Test notes sent \xB7 VOL " + Math.round(+$("volume").value * 100) + "% \xB7 audio clock OK.";
+      return $("audioDetail").textContent;
+    }
   } catch (e) {
     if (context && context !== ctx) return;
     updateAudioState(e.message);
     toast(e.message);
+    return e.message;
   }
 }
 async function restartAudio() {
@@ -945,6 +965,8 @@ async function restartAudio() {
     const activation = ensureOutput(), context = ctx;
     activation.catch(() => {
     });
+    await activation;
+    if (generation !== audioGeneration || ctx !== context) return;
     playTestNotes(context, master);
     updateTransport();
     $("audioDetail").textContent = "Restarting audio \xB7 playing two test notes\u2026";
@@ -956,6 +978,7 @@ async function restartAudio() {
     updateTransport();
     $("audioDetail").textContent = +$("volume").value === 0 ? "VOL is 0%. Raise the volume slider." : "Audio restarted \xB7 instrument running \xB7 VOL " + Math.round(+$("volume").value * 100) + "%.";
   } catch (e) {
+    if (generation !== audioGeneration) return;
     running = false;
     updateTransport();
     updateAudioState(e.message);
@@ -1652,7 +1675,7 @@ $("randomize").onclick = () => {
 };
 // Waveform gestures are owned by visualEditors: Texture anchor/size and separate trim boundaries.
 document.addEventListener("keydown", (e) => {
-  if (["INPUT", "SELECT", "TEXTAREA", "BUTTON", "A"].includes(e.target.tagName) || $("about").open) return;
+  if (["INPUT", "SELECT", "TEXTAREA", "BUTTON", "A"].includes(e.target.tagName) || document.querySelector("dialog[open]")) return;
   if (e.code === "Space") {
     e.preventDefault();
     togglePlay();
@@ -1715,6 +1738,8 @@ function setupDisplay() {
   $("delayControls").closest(".control-group").remove();
 }
 setupDisplay();
+outputUI = createOutputUI({ routing: outputRouting, onTestSound: testSound });
+document.querySelector(".utility-strip .volume-label").before(outputUI.button);
 let editorBeforeVisual = "ambient";
 $("openVisual").onclick = () => {
   if (activeTab === "visual") showTab(editorBeforeVisual);
@@ -1906,10 +1931,10 @@ recovery = setupRecoveryUI({
   onError: (error) => toast("Recovery: " + error.message)
 });
 document.addEventListener("input", (event) => {
-  if (!["audioFile", "projectFile", "visualProbe"].includes(event.target.id) && !event.target.closest(".direct-value-dialog")) markEdited();
+  if (!["audioFile", "projectFile", "visualProbe"].includes(event.target.id) && !event.target.closest(".direct-value-dialog,[data-output-ui]")) markEdited();
 });
 document.addEventListener("change", (event) => {
-  if (!["audioFile", "projectFile", "visualProbe"].includes(event.target.id) && !event.target.closest(".direct-value-dialog")) markEdited();
+  if (!["audioFile", "projectFile", "visualProbe"].includes(event.target.id) && !event.target.closest(".direct-value-dialog,[data-output-ui]")) markEdited();
 });
 document.addEventListener("click", (event) => {
   if (event.target.closest("#scanToggle,#tapeToggle,#reverseSpin,#stopSpin,#addPoint,#removePoint")) markEdited();

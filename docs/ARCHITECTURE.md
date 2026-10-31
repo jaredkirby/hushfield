@@ -55,6 +55,10 @@ Vintage Space keeps the original convolver and its fixed response. `vintage-reve
 
 ## Audio module ownership
 
+`output-routing.mjs` manages permitted device discovery and output selection through the existing AudioContext. It never constructs or resumes a context, requests microphone access or acquires a system media session. Selection is held in memory outside Piece files, recovery and Undo. `output-ui.mjs` provides the Output dialog, connection guidance and explicit Test sound action; `output.css` scopes its monochrome layout.
+
+`ensureOutput()` resumes synchronously within the tap, then waits for routing readiness before returning. Test notes and Piece startup wait for that readiness. Restart unbinds the old context before graph disposal and restores an available permitted route on the new context. Output selection uses the context's destination; capture and preview retain their current connections. Device output is an honest default label when the browser cannot identify the OS-selected speaker. Sonos playback uses the operating system's AirPlay/Bluetooth routing; the static app does not implement Sonos cloud control or host a network stream.
+
 | Module | Responsibility |
 | --- | --- |
 | `app.js` | AudioContext, graph assembly, transport, settings, routing and controller integration. |
