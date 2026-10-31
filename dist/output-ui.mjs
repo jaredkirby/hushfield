@@ -1,6 +1,7 @@
 // Output setup never activates audio. Only the explicit Test sound callback
 // belongs to the application's user-gesture audio path.
-export function createOutputUI({ routing, onTestSound, document: doc = globalThis.document } = {}) {
+export function createOutputUI({ routing, onTestSound, document: doc = globalThis.document, navigator: nav = globalThis.navigator } = {}) {
+  const appleMobile = /iPhone|iPad|iPod/.test(nav?.userAgent || '') || nav?.platform === 'MacIntel' && nav?.maxTouchPoints > 1;
   let disposed = false, returnFocus, testing = false, localMessage = '', actionGeneration = 0, routingSignature;
   const listeners = [];
   const make = (tag, text, attributes = {}) => {
@@ -49,12 +50,13 @@ export function createOutputUI({ routing, onTestSound, document: doc = globalThi
   ]) bluetoothSteps.append(make('li', text));
   bluetooth.append(bluetoothSteps, make('p', 'Return here and use Test sound. If your speaker is absent from the list, use the device output setting instead.'));
 
-  const sonos = make('details', undefined, { class: 'output-help' });
+  const sonos = make('details', undefined, { id: 'outputSonosHelp', class: 'output-help' });
+  sonos.open = appleMobile;
   sonos.append(make('summary', 'Sonos through AirPlay'));
   const sonosSteps = make('ul');
   for (const text of [
     'Connect your Apple device and Sonos system to the same Wi-Fi network.',
-    'iPhone or iPad: open Control Center, open the audio card\'s AirPlay menu, then choose a compatible Sonos speaker.',
+    'iPhone or iPad: start sound, open Control Center, open the audio card\'s AirPlay menu, then choose your Sonos room. Leave Hushfield set to Device output.',
     'Mac: open System Settings > Sound > Output and choose the Sonos speaker.',
     'For more rooms, group the receiving speaker with other rooms in the Sonos app.'
   ]) sonosSteps.append(make('li', text));
@@ -105,7 +107,9 @@ export function createOutputUI({ routing, onTestSound, document: doc = globalThi
     testButton.textContent = testing ? 'Sending test sound…' : 'Test sound';
     dialog.setAttribute('aria-busy', String(!!state.busy));
     availability.textContent = !state.supported
-      ? 'Choose your speaker in the device sound settings. This browser does not offer direct output switching.'
+      ? appleMobile
+        ? 'For Sonos, choose your room in Control Center > AirPlay. Device output follows that selection. Sonos One supports AirPlay.'
+        : 'Choose your speaker in the device sound settings. Device output follows that selection.'
       : devices.length < 2
         ? 'Only Device output is available to this page. Pair and select your speaker in the device sound settings. No microphone permission is needed.'
         : 'This list shows outputs your browser has made available. Device output follows your device sound settings.';

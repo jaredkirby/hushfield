@@ -4,7 +4,7 @@ import { createOutputUI } from '../dist/output-ui.mjs';
 
 // DOM boundary fixture. Native dialog focus trapping, Escape and layout are
 // checked in the browser; these tests cover commands and visible route state.
-function fixture(onTestSound) {
+function fixture(onTestSound, navigator) {
   const doc = { activeElement: null };
   class Element extends EventTarget {
     constructor(tag) { super(); this.tagName = tag.toUpperCase(); this.children = []; this.attributes = {}; this.textContent = ''; this.disabled = false; this.hidden = false; this.value = ''; }
@@ -30,7 +30,7 @@ function fixture(onTestSound) {
     choose() { commands.push('choose'); return Promise.resolve(); }
   };
   let tests = 0;
-  const ui = createOutputUI({ routing, document: doc, onTestSound() { tests++; return onTestSound?.(); } });
+  const ui = createOutputUI({ routing, document: doc, navigator, onTestSound() { tests++; return onTestSound?.(); } });
   doc.body.append(ui.button);
   function byId(id, node = doc.body) { return node.getAttribute('id') === id ? node : node.children.map(child => byId(id, child)).find(Boolean); }
   return { doc, ui, routing, commands, byId, tests: () => tests, setState(next) { state = { ...state, ...next }; ui.refresh(state); } };
@@ -200,5 +200,15 @@ test('Test sound feedback survives unchanged final routing notifications but yie
   assert.equal(f.byId('outputMessage').textContent, 'Test notes sent. Check your selected speaker.');
   f.setState({ busy: true, message: 'Refreshing outputs.' });
   assert.equal(f.byId('outputMessage').textContent, 'Refreshing outputs.');
+  f.ui.dispose();
+});
+
+test('iPhone output shows the Sonos AirPlay route with setup already expanded', () => {
+  const f = fixture(undefined, {userAgent: 'iPhone', platform: 'iPhone', maxTouchPoints: 5});
+  f.setState({supported: false, canChoose: false});
+  assert.match(f.byId('outputAvailability').textContent, /Control Center > AirPlay/);
+  assert.match(f.byId('outputAvailability').textContent, /Sonos One supports AirPlay/);
+  assert.equal(f.byId('outputSonosHelp').open, true);
+  assert.equal(f.tests(), 0);
   f.ui.dispose();
 });

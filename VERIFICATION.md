@@ -8,6 +8,8 @@ On 2026-10-31, the build and all 237 Node tests passed on Node 22.22.0. The 41 f
 
 The localhost HTML and Output stylesheet matched the candidate files. Rendered-browser layout, native dialog focus/Escape and mobile/tablet behavior were not checked because local browser access is disabled in Work settings. Physical Bluetooth/Sonos routing, grouping, wireless latency, sustained/background and lock-screen playback remain unverified. This candidate does not implement direct Sonos cloud streaming.
 
+The subsequent iPhone screenshot confirmed phone reachability but showed generic dialog styling. The Output CSS response was valid and matched its source; the precise phone-side failure was not established. The build now embeds the scoped Output styles directly in HTML and uses a fresh app cache version. iPhone/iPad guidance points to Control Center > AirPlay and opens Sonos setup by default. This follow-up passed all 238 Node tests and an identical rebuild. The private HTTPS page contains the exact embedded styles and updated bundle. Corrected phone appearance and actual Sonos audio remain unverified.
+
 ## Space release verification
 
 The final Space revision passed the build and all 194 Node test results on 2026-10-27. Fresh sessions and Whole piece presets select Plate; saved models, malformed-file fallback and versions 1–6 retain their compatibility behavior. Fresh browser startup showed Plate selected with its controls enabled and no console warnings or errors.

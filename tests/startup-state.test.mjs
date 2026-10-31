@@ -17,6 +17,9 @@ x.slow();assert(!x.reload.hidden);assert.match(x.status.textContent,/Still loadi
 x.resolve();await new Promise(resolve=>setImmediate(resolve));assert.equal(x.badge.textContent,'READY');assert.equal(x.root.dataset.appState,'ready');assert(x.reload.hidden);assert(!x.buttons[0].disabled&&x.buttons[1].disabled,'Ready preserves controls that were already disabled');assert(x.regions.every(r=>!('inert'in r.attributes)&&r.attributes['aria-busy']==='false'));assert.match(x.status.textContent,/Ready/);
 const failed=startup();failed.reject(new Error('Network failed'));await new Promise(resolve=>setImmediate(resolve));assert.equal(failed.badge.textContent,'LOAD ERROR');assert(!failed.reload.hidden);assert(failed.regions.every(r=>'inert'in r.attributes));failed.retry();assert(failed.reloaded());
 const html=fs.readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');for(const file of ['phone-shell.js','page-navigation.js','boot.js'])assert(html.includes(fs.readFileSync(new URL('../dist/'+file,import.meta.url),'utf8')),'Inline '+file+' is current');
+const embeddedOutput=html.match(/<style data-component="output">\n([\s\S]*?)<\/style>/);
+assert(embeddedOutput,'Output styling must ship within the page');
+assert.equal(embeddedOutput[1],fs.readFileSync(new URL('../dist/output.css',import.meta.url),'utf8'),'Embedded Output styles must match their source');
 console.log('PASS: visible loading, slow startup, ready, unavailable controls, error recovery and inline startup scripts.');
 
 const manifest=JSON.parse(fs.readFileSync(new URL('../dist/build/manifest.json',import.meta.url),'utf8'));for(const [file,hash]of Object.entries(manifest.inputs))assert.equal(createHash('sha256').update(fs.readFileSync(new URL('../'+file,import.meta.url))).digest('hex'),hash,'Run npm run build after changing '+file);

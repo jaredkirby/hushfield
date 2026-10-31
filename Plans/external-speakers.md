@@ -38,3 +38,7 @@ Local candidate preview: http://127.0.0.1:4891. The server serves this isolated 
 Rendered-browser layout, native Escape/focus and mobile/tablet behavior could not be verified because local browser use is disabled in Work settings. The user was asked to enable it. DOM-boundary tests do not establish rendered-browser acceptance. Physical Bluetooth/Sonos output, measured wireless latency, grouping, 60-minute playback and background/lock-screen acceptance require the actual devices.
 
 GitHub tracker publication initially required additional approval. The user explicitly approved the exact issue payload and destination, and [issue #44](https://github.com/jaredkirby/hushfield/issues/44) is now published with the approved scope, acceptance checks and validation results.
+
+## Phone presentation follow-up
+
+The user reached Output on an iPhone and reported a screenshot showing generic dialog styling. The served CSS was correct, so the precise phone-side cause remains unknown. Embedded Output styles in the shipped page, refreshed the app cache version and expanded iPhone Sonos setup with direct Control Center > AirPlay guidance. All 238 tests pass, including 42 focused output checks, and a consecutive rebuild is identical. The private phone URL serves the exact updated HTML and app. Actual corrected rendering and Sonos playback await user testing.

@@ -31,7 +31,7 @@
     "dist/wave-file.mjs": "99bc68e12292c5e83d99071fba6d4aa22876c6a40501ff707f910a901af2cec4",
     "dist/output-capture.mjs": "0fb89fd1fbe0a9d04169dcb49e9923868986c4d8daccfc4845d701851e07ec4d",
     "dist/output-routing.mjs": "ea2ca24b13736c15c4ac57ffbc1015e96b04769449fcb94a1164def82ed3da8b",
-    "dist/output-ui.mjs": "9563894927c4751da2970442f4a78c5cc69b9dfac029784fd6fdbd9a176be65b",
+    "dist/output-ui.mjs": "bce97baf9de5a4f322fa1d51b9e49e4b184f543d714330a40340f24ecb060888",
     "dist/microphone-take.mjs": "1b139ec301bda1595b13a1c0ac8cd41d4e2fb879aeae79ae5b5de7564a1abda7",
     "dist/visual-analysis.mjs": "becd80cfd5e5cb6e151495bc18e27229881fc73e25f1bb0c7eec4d10cddc3c26",
     "dist/project-file.mjs": "6b7966ac4a92663ec57407ca725c8b969e10efa1fd60c62ab4333c45a1907001",
