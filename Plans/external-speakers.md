@@ -37,4 +37,4 @@ Local candidate preview: http://127.0.0.1:4891. The server serves this isolated 
 
 Rendered-browser layout, native Escape/focus and mobile/tablet behavior could not be verified because local browser use is disabled in Work settings. The user was asked to enable it. DOM-boundary tests do not establish rendered-browser acceptance. Physical Bluetooth/Sonos output, measured wireless latency, grouping, 60-minute playback and background/lock-screen acceptance require the actual devices.
 
-GitHub tracker publication was rejected by automatic approval review as unapproved implementation-detail egress. User approval requested; local work proceeds. No issue was published.
+GitHub tracker publication initially required additional approval. The user explicitly approved the exact issue payload and destination, and [issue #44](https://github.com/jaredkirby/hushfield/issues/44) is now published with the approved scope, acceptance checks and validation results.
