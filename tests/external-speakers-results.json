@@ -1,0 +1,58 @@
+{
+  "verifiedAt": "2026-10-31T16:49:54.240164+00:00",
+  "base": "f9311ef",
+  "branch": "codex/external-speakers",
+  "node": "22.22.0",
+  "scope": "Browser output selection and Bluetooth/Sonos AirPlay setup guidance",
+  "fullSuite": {
+    "tests": 238,
+    "passed": 238,
+    "failed": 0
+  },
+  "focusedSuite": {
+    "routing": 19,
+    "interface": 11,
+    "applicationIntegration": 12,
+    "passed": 42
+  },
+  "build": "passed",
+  "consecutiveBuildsIdentical": true,
+  "whitespace": "passed",
+  "independentReview": "Initial routing/lifecycle reviewed independently; phone styling and guidance follow-up reviewed by lead",
+  "localhostSourceCheck": "Served HTML and Output CSS matched local candidate files",
+  "browserRenderedChecks": {
+    "status": "not_run",
+    "reason": "Local browser use is disabled in Work settings"
+  },
+  "physicalSpeakerChecks": {
+    "status": "not_run",
+    "remaining": [
+      "Bluetooth playback",
+      "Sonos AirPlay and grouping",
+      "wireless latency",
+      "60-minute playback",
+      "background and lock-screen behavior"
+    ]
+  },
+  "sha256": {
+    "dist/app.js": "0078826c4a4354db9d0845c4f150bfe4239e38175fdc26a7293e3aa9b4f96a6f",
+    "dist/output-routing.mjs": "ea2ca24b13736c15c4ac57ffbc1015e96b04769449fcb94a1164def82ed3da8b",
+    "dist/output-ui.mjs": "bce97baf9de5a4f322fa1d51b9e49e4b184f543d714330a40340f24ecb060888",
+    "dist/output.css": "c88b766c0b84f0cc74e7e1335a4a9530f340cefb9a0f10cee00e9d1eb75b9d24",
+    "dist/index.html": "bf8d5017a647b8c29d49da0133c10e5701c13c2e367587520f9edcf9adc5b091",
+    "dist/build/app.js": "3199c1b3bdf12a581af90212be2800f6bf05eb2b73150e91ad9356300027aa83",
+    "dist/build/manifest.json": "0b9a197f9f7960c022baa2fa515d3782ec9b7ff5b88d302d1d3d0db9f65faffc",
+    "tests/output-routing.test.mjs": "aa608559668d9885a5901ed7db1c46275b505f579c8b4e8157fd87329d8d0cd5",
+    "tests/output-ui.test.mjs": "2255e9f32b991940b0a1a06549dc135b4039937cd56dd8a7d16f555373750eff",
+    "tests/output-integration.test.mjs": "35ff3e67c079fe62a9d118a0b66527ad0265e40561d1d7bee86a4dcd54df9758",
+    "dist/boot.js": "1659ec2f81d0ed391d7a32ac90b100e3ab736b7fc75d20908a0aa40982fc29e6",
+    "ops/build-shell.mjs": "c97f7d1f96e4faf909f4fca95e102692d421dda3521906c7b2ee7ddba74783e3",
+    "tests/startup-state.test.mjs": "7d28adc81026958b17876484c209d18b7d4583195ea80e2bbbe2b9c9c5dd3a92"
+  },
+  "phonePresentationFollowup": {
+    "reported": "User screenshot showed phone reachability and generic dialog styling",
+    "change": "Embed scoped Output CSS in shipped HTML; expand iPhone Sonos guidance; refresh app cache version",
+    "verified": "Private HTTPS HTML includes exact source CSS and current app bundle",
+    "remaining": "Corrected phone rendering and actual Sonos audio require user testing"
+  }
+}

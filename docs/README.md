@@ -10,6 +10,7 @@ results and open device/listening acceptance.
 
 - [README and quick start](../README.md)
 - [Playing: controls, parts, sources, harmony, effects, saving and recording](PLAYING.md)
+- [External speakers: Bluetooth, Sonos and output selection](PLAYING.md#external-speakers)
 - [Glossary](../GLOSSARY.md)
 - [Native Surge sources and listening comparisons](SURGE-TEXTURE.md)
 - [RE-201 research, head modes and emulation limits](research/re201-space-echo.md)
