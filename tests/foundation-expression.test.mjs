@@ -147,8 +147,9 @@ test('melodic motifs return with changed endings and audible rests', () => {
 });
 
 test('expressive harmony chooses closer in-scale chord voices without coupling dot gestures', () => {
-  const expressive = make({ change: 20, evolution: 0 }, 1000);
-  const classic = make({ change: 20, evolution: 0, compositionVersion: 1 }, 1000);
+  // Compare voicing over the original chord loop; the developing arrangement has its own tests.
+  const expressive = make({ change: 20, evolution: 0, arrangementVersion: 1 }, 1000);
+  const classic = make({ change: 20, evolution: 0, compositionVersion: 1, arrangementVersion: 1 }, 1000);
   let previous = expressive.status().chordNotes, previousClassic = classic.status().chordNotes;
   let distance = 0, classicDistance = 0;
   for (let chord = 0; chord < 8; chord++) {
@@ -169,8 +170,9 @@ test('expressive harmony chooses closer in-scale chord voices without coupling d
 });
 
 test('loading classic settings replaces expressive inversions even when key and seed match', () => {
-  const expressive = make({ change: 20, evolution: 0 }, 1000);
-  const classic = make({ change: 20, evolution: 0, compositionVersion: 1 }, 1000);
+  // Compare voicing over the original chord loop; the developing arrangement has its own tests.
+  const expressive = make({ change: 20, evolution: 0, arrangementVersion: 1 }, 1000);
+  const classic = make({ change: 20, evolution: 0, compositionVersion: 1, arrangementVersion: 1 }, 1000);
   render(expressive, 20.01);
   render(classic, 20.01);
   assert.notDeepEqual(expressive.status().chordNotes, classic.status().chordNotes);
