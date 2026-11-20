@@ -35,6 +35,8 @@ function harmonicVoice(phase,frequency,rate,color){
  const fundamental=lookup(table,phase)*Math.min(1,(.46-frequency/rate)/.05);
  return (fundamental+color*upper)/Math.sqrt(1+color*color*energy);
 }
+// Texture's level and grain density per arrangement section, relative to its Blend level.
+export const TEXTURE_ROLES={statement:{level:.45,density:.6},develop:{level:.7,density:.85},sparse:{level:1,density:1.15},rest:{level:1.15,density:1.3}};
 export class AmbientEngine {
  constructor(rate){this.instrument='current';this.instrumentGain=1;this.instrumentEffects={};for(const [id,module] of Object.entries(instrumentModules))if(module.createEffect)this.instrumentEffects[id]=module.createEffect(rate);this.rate=rate;this.settings={...AMBIENT_DEFAULTS};this.p={pads:0,melody:0,air:0,evolution:45,color:38,drift:22,bloom:45};this.playing=false;this.level=0;this.clock=0;this.chordClock=0;this.degree=0;this.index=0;this.notes=[];this.pads=[];this.previous=[];this.crossfade=1;this.noiseLow=0;this.noiseSlow=0;this.leftLow=0;this.rightLow=0;this.lastNote=0;this.elapsed=0;this.setSeed(this.settings.seed);this.updateChord();}
  random(){this.randomState=(Math.imul(this.randomState,1664525)+1013904223)>>>0;return this.randomState/4294967296;}
@@ -64,9 +66,13 @@ export class AmbientEngine {
  }
  phrase(){
   const elapsed=this.elapsed,phase=(elapsed%120)/120;
-  if(this.settings.compositionVersion!==2)return {phase,elapsed,foundation:1,texture:1,motion:1,textureDensity:1,motionDensity:1};
-  const tide=(1-Math.cos(phase*Math.PI*2))/2,depth=this.settings.evolution/100;
-  return {phase,elapsed,foundation:1-depth*.06*tide,texture:1-depth*.35*(1-tide),motion:1-depth*.35*tide,textureDensity:1-depth*.6*(1-tide),motionDensity:1-depth*.65*tide};
+  const result=this.settings.compositionVersion!==2?{phase,elapsed,foundation:1,texture:1,motion:1,textureDensity:1,motionDensity:1}:(()=>{
+   const tide=(1-Math.cos(phase*Math.PI*2))/2,depth=this.settings.evolution/100;
+   return {phase,elapsed,foundation:1-depth*.06*tide,texture:1-depth*.35*(1-tide),motion:1-depth*.35*tide,textureDensity:1-depth*.6*(1-tide),motionDensity:1-depth*.65*tide};
+  })();
+  // Developing arrangements give Texture a role: it fills the space the melody leaves.
+  if(this.settings.arrangementVersion===2&&this.arrangement)result.textureRole={section:this.arrangement.section,...TEXTURE_ROLES[this.arrangement.section],harmonic:true};
+  return result;
  }
  status(){return {melodyEvents:this.melodyEvents.map(event=>({...event})),phrase:this.phrase(),elapsed:this.elapsed,chord:this.chordName,chordNotes:this.pads.map(p=>p.midi),next:this.settings.hold?null:Math.max(0,this.settings.change-this.chordClock),notes:this.notes.length,lastNote:this.lastNote,section:this.index+1,degree:this.degree,voicePans:this.pads.map(p=>p.pan),motionTime:this.clock};}
  process(output){const rate=this.rate,p=this.p,settings=this.settings,slew=1-Math.exp(-1/(rate*1.2)),levelSlew=1-Math.exp(-1/(rate*(this.playing?1.2:.12)));const scene=AMBIENT_SCENES[settings.scene],brightness=scene.brightness/100,pitchSlew=1-Math.exp(-1/(rate*.045)),panSlew=1-Math.exp(-1/(rate*.08));
