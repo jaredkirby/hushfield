@@ -15,7 +15,7 @@ export const AMBIENT_FIELDS=[
  {id:'key',label:'Key',group:'compose',min:0,max:11,step:1,format:v=>AMBIENT_KEYS[v]},
  {id:'scale',label:'Scale',group:'compose',min:0,max:2,step:1,format:v=>AMBIENT_SCALES[v]},
  {id:'change',label:'Chord length',group:'compose',min:20,max:180,step:4,format:v=>v+' s'},
- {id:'activity',label:'Activity',group:'compose',min:0,max:100,step:5},
+ {id:'activity',label:'Pace',group:'compose',min:0,max:100,step:5},
  {id:'evolution',label:'Evolution',group:'compose',min:0,max:100,step:5},
  {id:'color',label:'Color',group:'sound',min:0,max:100,step:1},
  {id:'drift',label:'Drift',group:'sound',min:0,max:100,step:1},

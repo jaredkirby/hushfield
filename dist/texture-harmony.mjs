@@ -11,3 +11,8 @@ export function formatTexturePitch(value, harmonic) {
   const snapped = snapHarmonicPitch(value);
   return snapped === value ? signed(value) + ' st' : `${signed(value)} → ${signed(snapped)} st`;
 }
+// The neighbouring harmonic stop in `direction`, for +/− buttons and arrow keys.
+export function nextHarmonicPitch(pitch, direction) {
+  const stops = direction > 0 ? HARMONIC_PITCHES : [...HARMONIC_PITCHES].reverse();
+  return stops.find(value => direction > 0 ? value > pitch : value < pitch) ?? stops[stops.length - 1];
+}

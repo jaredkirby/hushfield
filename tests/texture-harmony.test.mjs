@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 import {AmbientEngine, TEXTURE_ROLES} from '../dist/ambient-dsp.mjs';
-import {snapHarmonicPitch, formatTexturePitch, HARMONIC_PITCHES} from '../dist/texture-harmony.mjs';
+import {snapHarmonicPitch, formatTexturePitch, nextHarmonicPitch, HARMONIC_PITCHES} from '../dist/texture-harmony.mjs';
 
 function grain(params, random = () => .5, rate = 8000) {
   let Processor;
@@ -78,4 +78,32 @@ test('harmonic Texture keeps pitch on octaves and fifths and matches the UI read
   render(g.engine, 2);
   const intervals = new Set(g.engine.grains.map(entry => Math.round(12 * Math.log2(Math.abs(entry.rate)) * 1000) / 1000));
   for (const interval of intervals) assert([0, 7, 12, -12].includes(interval), 'interval ' + interval);
+});
+
+test('Pitch stops step through every harmonic value and stop at the ends', () => {
+  const up = [-24]; while (up.at(-1) !== 24) up.push(nextHarmonicPitch(up.at(-1), 1));
+  assert.deepEqual(up, HARMONIC_PITCHES);
+  const down = [24]; while (down.at(-1) !== -24) down.push(nextHarmonicPitch(down.at(-1), -1));
+  assert.deepEqual(down, [...HARMONIC_PITCHES].reverse());
+  assert.equal(nextHarmonicPitch(24, 1), 24);
+  assert.equal(nextHarmonicPitch(-24, -1), -24);
+  assert.equal(nextHarmonicPitch(3, 1), 7, 'An off-stop value moves to the next stop, not back to the nearest');
+  assert.equal(nextHarmonicPitch(3, -1), 0);
+});
+
+test('Pace keeps developing melody steps between 1 s and 3.6 s and reports the real section', () => {
+  for (const [activity, low, high] of [[100, 1, 1.1], [15, 3.2, 3.3], [5, 3.45, 3.55]]) {
+    const engine = new AmbientEngine(8000); engine.set({arrangementVersion: 2, compositionVersion: 2, activity}); engine.play(true);
+    const out = [new Float32Array(512), new Float32Array(512)];
+    for (let i = 0; i < 8000 * 240 / 512; i++) engine.process(out);
+    const steps = engine.melodyEvents.slice(1).map((event, index) => event.time - engine.melodyEvents[index].time);
+    const longest = Math.max(...engine.arrangement.steps.map(step => step.length));
+    const base = steps.reduce((sum, value) => sum + value, 0) / steps.length;
+    assert(base > low * .7 && base < high * 1.6 * longest, `activity ${activity}: mean step ${base.toFixed(2)} s`);
+    const status = engine.status();
+    assert.equal(status.arrangement.section, engine.arrangement.section);
+    assert(status.arrangement.phrase >= 1 && status.arrangement.phrase <= status.arrangement.phrases);
+  }
+  const classic = new AmbientEngine(8000); classic.set({arrangementVersion: 1});
+  assert.equal(classic.status().arrangement, null, 'Classic arrangements keep the chord-count readout');
 });

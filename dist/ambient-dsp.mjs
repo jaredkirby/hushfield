@@ -57,7 +57,8 @@ export class AmbientEngine {
   this.notes.push({midi,frequency:hz(midi),phase:0,phase2:0,age:0,duration:Math.min(7,beat*.8),pan:this.random()*1.4-.7,bell:AMBIENT_SCENES[settings.scene].bell,velocity:.65+this.random()*.35});this.lastNote=midi;
  }
  spawnArranged(){
-  const settings=this.settings,beat=1.6+(100-settings.activity)*.12,event=this.arrangement.next(settings,this.degree,beat);
+  // Pace: 3.6 s per motif beat at its slowest, 1 s at its fastest, so a phrase stays audible as one shape.
+  const settings=this.settings,beat=3.6-2.6*settings.activity/100,event=this.arrangement.next(settings,this.degree,beat);
   this.melodyEvents.push({step:event.step,cycle:event.cycle,section:event.section,variation:event.variation,degree:event.degree,midi:event.midi,rest:event.rest,time:this.elapsed});if(this.melodyEvents.length>64)this.melodyEvents.shift();this.motifStep++;
   this.nextMotifDuration=event.duration;
   // Rests let ringing notes decay naturally instead of cutting them short.
@@ -74,7 +75,7 @@ export class AmbientEngine {
   if(this.settings.arrangementVersion===2&&this.arrangement)result.textureRole={section:this.arrangement.section,...TEXTURE_ROLES[this.arrangement.section],harmonic:true};
   return result;
  }
- status(){return {melodyEvents:this.melodyEvents.map(event=>({...event})),phrase:this.phrase(),elapsed:this.elapsed,chord:this.chordName,chordNotes:this.pads.map(p=>p.midi),next:this.settings.hold?null:Math.max(0,this.settings.change-this.chordClock),notes:this.notes.length,lastNote:this.lastNote,section:this.index+1,degree:this.degree,voicePans:this.pads.map(p=>p.pan),motionTime:this.clock};}
+ status(){return {melodyEvents:this.melodyEvents.map(event=>({...event})),phrase:this.phrase(),elapsed:this.elapsed,chord:this.chordName,chordNotes:this.pads.map(p=>p.midi),next:this.settings.hold?null:Math.max(0,this.settings.change-this.chordClock),notes:this.notes.length,lastNote:this.lastNote,section:this.index+1,arrangement:this.settings.arrangementVersion===2&&this.arrangement?{section:this.arrangement.section,phrase:this.arrangement.cycleInSection+1,phrases:this.arrangement.sectionCycles}:null,degree:this.degree,voicePans:this.pads.map(p=>p.pan),motionTime:this.clock};}
  process(output){const rate=this.rate,p=this.p,settings=this.settings,slew=1-Math.exp(-1/(rate*1.2)),levelSlew=1-Math.exp(-1/(rate*(this.playing?1.2:.12)));const scene=AMBIENT_SCENES[settings.scene],brightness=scene.brightness/100,pitchSlew=1-Math.exp(-1/(rate*.045)),panSlew=1-Math.exp(-1/(rate*.08));
  for(let i=0;i<output[0].length;i++){
   this.level+=(Number(this.playing)-this.level)*levelSlew;if(!this.playing&&this.level<.000001){output[0][i]=output[1][i]=0;continue;}

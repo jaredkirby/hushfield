@@ -30,7 +30,7 @@ import { AMBIENT_DEFAULTS, AMBIENT_SCENES, AMBIENT_KEYS, AMBIENT_SCALES, ambient
 import { setupAmbientUI, drawAmbient } from "./ambient-ui.mjs?v=hushfield-1";
 import { prepareTextureWave } from "./texture-wave.mjs";
 import { setupTextureAdjustments } from "./texture-adjustments.mjs";
-import { formatTexturePitch } from "./texture-harmony.mjs";
+import { formatTexturePitch, snapHarmonicPitch, nextHarmonicPitch } from "./texture-harmony.mjs";
 import { setupSquareViewport } from "./square-viewport.mjs";
 import { ditherCanvas, drawTape } from "./oled-visuals.mjs?v=hushfield-1";
 import { PAD_COUNT, MAX_PADS, ORBIT_SCALES as scales, crossedPads, padAngle, padGeometry, padSound } from "./orbit-pads.mjs?v=hushfield-1";
@@ -92,6 +92,8 @@ function toast(message) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => $("toast").classList.remove("visible"), 4500);
 }
+// Developing pieces keep Texture pitch on octaves and fifths; the slider moves between those stops.
+const harmonicTexturePitch = (id) => id === "pitch" && ambientState?.arrangementVersion === 2;
 function makeControl(parent, id, label, min, max, step, unit = "", display, choices) {
   const row = document.createElement("div");
   row.className = "control";
@@ -127,9 +129,19 @@ function makeControl(parent, id, label, min, max, step, unit = "", display, choi
     input.style.background = `linear-gradient(to right, #a17956 0%, #a17956 ${(input.value - min) / (max - min) * 100}%, #384548 ${(input.value - min) / (max - min) * 100}%, #384548 100%)`;
     stepper?.render();
   };
-  stepper = attachStepper(row, input, { label, step: phoneStepFor(id, step), format, choices });
+  const increment = id === "pitch" ? (value, direction) => harmonicTexturePitch(id) ? nextHarmonicPitch(value, direction) : Math.max(min, Math.min(max, value + direction * step)) : undefined;
+  stepper = attachStepper(row, input, { label, step: phoneStepFor(id, step), format, choices, increment });
   ranges[id] = { input, render };
+  if (increment) input.addEventListener("keydown", (event) => {
+    const direction = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[event.key];
+    if (!direction || !harmonicTexturePitch(id)) return;
+    event.preventDefault();
+    input.value = increment(+input.value, direction);
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  });
   input.addEventListener("input", () => {
+    if (harmonicTexturePitch(id)) input.value = snapHarmonicPitch(+input.value);
     params[id] = +input.value;
     if (SPACE_FIELDS.some(field => field.id === id)) params.spaceVersion = 2;
     if (id === "trimStart") params.trimStart = Math.min(params.trimStart, params.trimEnd - .1);
@@ -1386,7 +1398,7 @@ function frame(time) {
       ditherCanvas($("waveform"));
     }
   }
-  $("grainCount").textContent = activeTab === "grain" && running && stats.roleSection ? `${stats.count} GRAINS \xB7 ${stats.roleSection.toUpperCase()} \xB7 ${Math.round((stats.roleLevel ?? 1) * 100)}%` : activeTab === "orbit" ? `${balls.length} BALLS \xB7 ${orbitVoices.size} VOICES` : ambientState.enabled ? `${ambientStats.notes} NOTES \xB7 SECTION ${ambientStats.section}` : `${running ? stats.count : 0} ACTIVE GRAINS`;
+  $("grainCount").textContent = activeTab === "grain" && running && stats.roleSection ? `${stats.count} GRAINS \xB7 ${stats.roleSection.toUpperCase()} \xB7 ${Math.round((stats.roleLevel ?? 1) * 100)}%` : activeTab === "orbit" ? `${balls.length} BALLS \xB7 ${orbitVoices.size} VOICES` : ambientState.enabled ? ambientStats.arrangement ? `${ambientStats.arrangement.section.toUpperCase()} \xB7 PHRASE ${ambientStats.arrangement.phrase}/${ambientStats.arrangement.phrases}` : `${ambientStats.notes} NOTES \xB7 SECTION ${ambientStats.section}` : `${running ? stats.count : 0} ACTIVE GRAINS`;
   const outputFit = fitCanvas($("outputScope"));
   if (outputFit) visuals.outputFrame(outputFit, dt, reducedMotion.matches);
   if (analyser) {
