@@ -127,6 +127,14 @@ Preparation needs npm dependencies and a Git checkout containing the original ba
 New save files use schema 7. Vintage Space migration checks retain Original room for versions 1–6 regardless of stray newer fields, preserve its routing after re-export, and round-trip all four reverb choices and controls through project decoding and explicit recovery. Instrument compatibility checks preserve original synthesis for versions 1–5, retain the version-5 expressive mode, and round-trip all six instrument choices. Compatibility tests load versions 1–4 through decode, retain classic sound/depth modes, and preserve those modes after re-export. The [integration browser receipt](../tests/ui-music-integration-results.json) records explicit paused recovery of Color, Foundation room send, Wave smoothing, master volume and native material, with settings history cleared. Classic Foundation checks render frozen pre-change sources and the current classic engine in the same runtime, requiring byte-identical Float32 PCM at 8, 44.1 and 48 kHz. The [fixture README](../tests/fixtures/foundation-classic-v1/README.md) records source provenance; never update those reference sources alongside the current engine. A single Node-22 PCM hash is not a portable Node-24 oracle because JavaScript math implementations can differ. Neutral Motion energy/PCM checks protect its classic behavior. Physical-device performance and human listening preference remain separate acceptance checks.
 
 
+## Developing arrangement and Texture role
+
+```sh
+node --test tests/foundation-arrangement.test.mjs tests/texture-harmony.test.mjs tests/texture-character.test.mjs
+```
+
+`foundation-arrangement.test.mjs` covers versioning and presets, motif variety, sections and variation techniques, voice leading on chord tones across seeds and scales, progressions without immediate repeats or a fixed period, and seed/block-size repeatability. `texture-harmony.test.mjs` covers the Texture role per section, smooth level glides, exact classic output without a role, harmonic pitch stops and their readout, and Pace timing. `texture-character.test.mjs` covers Tone (exact when off), Follow arrangement scaling, the four characters and Scene/Sound preset independence. In the browser, listen across several minutes at the presets' Pace, watch the section readout on Foundation and Texture, and check the Character tab, Pitch stepping and the Piece row at phone and desktop widths.
+
 ## Foundation instruments
 
 Run `node --test tests/foundation-instruments*.test.mjs tests/foundation-instrument-transitions.test.mjs tests/foundation-juno-buchla.test.mjs tests/foundation-sem-moog.test.mjs` for audio output, settings lifecycle, signal transitions and exact classic/expressive compatibility. Reference sources under `tests/fixtures/foundation-expressive-v2/` are immutable copies of commit `4be348a`; compare both engines in the same runtime.

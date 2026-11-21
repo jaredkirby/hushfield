@@ -16,13 +16,17 @@ Solo makes one part audible even if its saved blend level is zero, while tempora
 
 ## Foundation
 
-Compose controls the scene, key, scale, chord length, activity and evolution. Voices adjusts the chord bed, melodic notes and airy noise. The four dots are sustained chord voices: drag vertically for scale steps and horizontally for pan. The pitches glide to their new values. Each dot shows its voice number and note, with pitch/stereo guides during a drag. Reset dots returns all four to their default positions.
+Compose controls the Scene, key, scale, chord length, Pace and Evolution. Choosing a Scene sets the key, scale, chord length, Pace, Evolution and the Scene's own character; it keeps your instrument and voice levels. Pace sets how quickly the melody moves, and Evolution sets how far the music wanders from its theme. Voices adjusts the chord bed, melodic notes and airy noise. The four dots are sustained chord voices: drag vertically for scale steps and horizontally for pan. The pitches glide to their new values. Each dot shows its voice number and note, with pitch/stereo guides during a drag. Reset dots returns all four to their default positions.
 
-Sound adds **Color**, **Drift** and **Bloom**. Color changes harmonic richness, Drift gently moves the voices independently, and Bloom changes their color over time. Fresh sessions and complete presets use recurring motifs with deliberate rests and nearby chord voicings. Evolution also controls a repeating two-minute phrase: Texture grows in level and grain density as Motion becomes quieter and sparser, then the balance returns. Foundation breathes more subtly. The saved Blend stays unchanged; a part at zero stays silent, and Solo still isolates the requested part. Older projects retain their classic Foundation until you edit Sound or choose a complete preset.
+Sound adds **Color**, **Drift** and **Bloom**. Color changes harmonic richness, Drift gently moves the voices independently, and Bloom changes their color over time.
+
+Fresh sessions and complete presets use a developing arrangement. A short seeded motif returns in varied forms: moved up or down, inverted, reversed, stretched or thinned. The melody moves to the nearest notes across chord changes and lands on chord tones. Chords follow weighted progressions instead of a fixed loop, so the sequence does not repeat on a set period. Over several minutes, the music moves between four sections: statement, develop, sparse and rest. The status above the controls shows the current section and which pass through the motif it is on, for example `DEVELOP · PASS 2/3`. Higher Evolution favors bolder variations and freer chord movement, and lets the motif drift slightly after a rest. At the slowest Pace, one pass through the motif takes about 40 seconds; at the fastest, about 11 seconds.
+
+Evolution also controls a repeating two-minute phrase: Texture grows in level and grain density as Motion becomes quieter and sparser, then the balance returns. Foundation breathes more subtly. The saved Blend stays unchanged; a part at zero stays silent, and Solo still isolates the requested part. Older projects retain their classic Foundation until you edit Sound or choose a complete preset. Pieces saved before the developing arrangement keep their original fixed motif and eight-chord loop; choosing a complete preset or starting a fresh session uses the developing arrangement.
 
 Hold chord pauses harmonic changes while the Piece continues, including its slower musical development. New piece changes the seed and restarts its musical progression while keeping sounds, blend settings and the current classic/evolving sound mode.
 
-The Whole piece menu is different from Scene. Stillwater, Slow cloud, Glass shards and Worn memory set Foundation, blend levels, live Texture source, linked Motion, sound patches and finishing controls together. Each complete preset has complementary trigger and ball instruments. The Scene card changes Foundation's scene without replacing the whole Piece. Existing optional source material remains available in Your sound / trim.
+The Piece menu, in its own row beneath the header, is different from Scene. It is available from every editor. Stillwater, Slow cloud, Glass shards and Worn memory set Foundation, blend levels, live Texture source, linked Motion, sound patches and finishing controls together. Each complete preset has complementary trigger and ball instruments. Scene changes Foundation's composition without replacing the whole Piece. New piece sits beside the Piece menu. Existing optional source material remains available in Your sound / trim.
 
 ### Foundation instruments
 
@@ -38,9 +42,9 @@ In **Sound**, choose **Instrument**. Hushfield keeps the existing voice; String 
 
 Instrument changes fade briefly during playback. Scene and New piece keep the selected instrument. The Stillwater Whole piece preset restores Chorus synth and Space Echo with Tape on; the other Whole piece presets retain Hushfield and their own settings. Selecting a new instrument is one Undo/Redo edit and opts classic Pieces into expressive composition. Instrument choice does not change Blend or voice-dot settings. Bass synth uses the lowest voice dot for its chord sound; all four notes still guide linked Motion. Every instrument supplies live Texture through the existing Foundation connection.
 
-The **Starting preset** menu in Sound offers three sounds per instrument. Choosing one selects its instrument and sets Color, Drift, Bloom, Chords, Melody and Air. It keeps the Scene, key, scale, chord timing, activity, evolution, voice dots and Hold chord, along with Blend, Texture, Motion, Space and Tape. Each selection is one Undo step. The name follows the actual settings; changing a sound control shows Custom settings, and Undo, loading or recovery restores a matching name. Scene can also change the voice levels, so it may make the sound Custom.
+The **Sound preset** menu in Sound offers three sounds per instrument. Choosing one selects its instrument and sets Color, Drift, Bloom, Chords, Melody and Air. It keeps the Scene, key, scale, chord timing, Pace, Evolution, voice dots and Hold chord, along with Blend, Texture, Motion, Space and Tape. Each selection is one Undo step. The name follows the actual settings; changing a sound control shows Custom settings, and Undo, loading or recovery restores a matching name. Choosing a Scene keeps the voice levels, so it never turns a Sound preset into Custom settings.
 
-| Instrument | Starting presets |
+| Instrument | Sound presets |
 | --- | --- |
 | Hushfield | Dusk veil, Lantern notes, Moving mist |
 | String ensemble | Velvet strings, Sunroom, Tidal strings |
@@ -49,13 +53,13 @@ The **Starting preset** menu in Sound offers three sounds per instrument. Choosi
 | Morph synth | Hollow reeds, Opal light, Estuary |
 | Bass synth | Cellar hum, Cinder pulse, Slow current |
 
-Stillwater chorus matches the fresh Foundation sound. Selecting this starting preset leaves your Scene and Tape choices in place; selecting Stillwater in Whole piece restores the complete default combination.
+Stillwater chorus matches the fresh Foundation sound. Selecting this Sound preset leaves your Scene and Tape choices in place; selecting Stillwater in Whole piece restores the complete default combination.
 
 Open [the listening comparison](../dist/qa-foundation.html) through the running preview server for dry and Space Echo examples. The page renders silently, then provides Play and Download WAV controls. See [model notes](FOUNDATION-MODELS.md) for approximations.
 
 ## Texture sources
 
-Texture starts with its adjustments visible. Hide adjust hides the Texture fields while keeping the blend and toolbar available; Adjust shows them again. The visual square keeps its size and position. Display contains Wave smoothing: 0 keeps the detailed trace, while higher values make it flow more smoothly; the default is 65%. This changes the picture only, is saved with Visual settings, and supports Undo/Redo. Escape also hides the Texture fields when focus is inside. Texture, Scan and Variation remain available as tabs in the dock.
+Texture starts with its adjustments visible. Hide adjust hides the Texture fields while keeping the blend and toolbar available; Adjust shows them again. The visual square keeps its size and position. Escape also hides the Texture fields when focus is inside. The dock has five tabs: Character, Grains, Scan, Variation and Picture. Picture contains Wave smoothing: 0 keeps the detailed trace, while higher values make it flow more smoothly; the default is 65%. This changes the picture only, is saved with Visual settings, and supports Undo/Redo.
 
 The source status distinguishes three kinds of material:
 
@@ -68,6 +72,25 @@ The source status distinguishes three kinds of material:
 Start the Piece and let it play briefly before choosing Freeze phrase. During the first four seconds, the available phrase may be shorter; at least a quarter-second of material is required. Use live foundation switches back to evolving material without discarding the stored optional source.
 
 Drag POSITION on the waveform to choose the read anchor, and the millisecond handle to resize the grain window. Dragging the waveform itself also moves the read anchor. The shaded scatter area and density/overlap readout show how the settings relate. Texture uses Visual Scope's renderer: stacked left/right traces, a dotted grid and fading trails with the same dither treatment. It displays the full source phrase so the read anchor and grain length line up with the material. Visual Scope itself shows a short window of the post-effects mix. Scanning can continue moving the playback head.
+
+### Character and role
+
+Character is the first Texture tab. Each character sets grain length, density, scatter, Pitch, scan speed and wander, the Variation controls and Tone in one step. Position, scan range and direction stay as set, and the choice is one Undo edit:
+
+| Character | Sound |
+| --- | --- |
+| Halo | An octave above, thinned to a shimmer over Foundation. |
+| Undertow | An octave below, darkened into a slow swell underneath. |
+| Dust | Sparse, short fragments scattered across the material. |
+| Bloom | Long, overlapping grains that hold one moment and let it swell. |
+
+The highlighted character follows the actual settings: editing any control it sets shows Custom. **Tone** gives Texture its own part of the spectrum. Darker values filter out highs so Texture sits under Foundation; airier values filter out lows so it floats above. Full (0) applies no filter.
+
+In a developing arrangement, Texture takes a role in each section. It steps back while the melody states its theme and swells into sparse and rest sections, gliding between levels over a few seconds. The status shows the section and Texture's current level, for example `9 GRAINS · STATEMENT · 47%`. **Follow arrangement** sets how much Texture follows these sections; at Off it stays at its Blend level. Pieces saved before the developing arrangement play Texture as before.
+
+In a developing arrangement, Pitch also moves between octaves and fifths: −24, −17, −12, −5, 0, +7, +12, +19 and +24 semitones. The slider, arrow keys and minus/plus step between these values, and the readout shows any snapping, such as `+3 → +0 st` for a value from an older setting. Pitch variation leaps grains up or down an octave or up a fifth instead of detuning them. These keep Texture consistent with Foundation's chord.
+
+### Grains, Scan and Variation
 
 Grain length and density shape smoothness and thickness. Position scatter spreads grain positions; Pitch transposes them. Scan direction, range, speed, wander and smoothing move through the material. The Variation section adds Repeat position, Jump chance, Skip grain, Reverse chance, Pitch variation and Timing variation. Texture remains editable at zero blend, with an inaudible status; raise its blend, Add texture or Solo to hear it.
 
@@ -159,7 +182,7 @@ Output selection keeps the shared effects, master volume, source preview and ste
 
 ## Save, recover and record
 
-Save project downloads a version-7 `.hushfield.json` file. It contains the retained sample/frozen phrase, Texture source relationship, blend, harmony link, Foundation instrument and voices, patches, controls, volume and Visual settings. Versions 1–6 retain Original room regardless of stray vintage reverb fields, including after re-export. Version 7 stores the selected reverb and its controls. Versions 1–5 select the original Hushfield instrument; version 5 preserves its saved expressive/classic mode. Versions 1–4 load through migration with retained material/blend and classic Foundation/shared-room behavior. Versions 1–3 keep independent Motion tuning. Re-exporting an older Piece retains its sound mode. Choosing a complete preset opts into new sounds and depth defaults; editing Foundation Sound opts into the evolving voice, and editing Depth or explicitly selecting a reverb model opts into independent room sends. The file restores configuration and material, not an exact playback position, waveform history or Solo state. Project input is limited to 30 MiB, including encoded audio. The [saved-sound decision](adr/0001-preserve-saved-sound-models.md) explains the compatibility boundary.
+Save project downloads a version-7 `.hushfield.json` file. It contains the retained sample/frozen phrase, Texture source relationship and character settings, blend, harmony link, Foundation instrument, voices and arrangement version, patches, controls, volume and Visual settings. Versions 1–6 retain Original room regardless of stray vintage reverb fields, including after re-export. Version 7 stores the selected reverb and its controls. Versions 1–5 select the original Hushfield instrument; version 5 preserves its saved expressive/classic mode. Versions 1–4 load through migration with retained material/blend and classic Foundation/shared-room behavior. Versions 1–3 keep independent Motion tuning. Re-exporting an older Piece retains its sound mode. Choosing a complete preset opts into new sounds and depth defaults; editing Foundation Sound opts into the evolving voice, and editing Depth or explicitly selecting a reverb model opts into independent room sends. The file restores configuration and material, not an exact playback position, waveform history or Solo state. Project input is limited to 30 MiB, including encoded audio. The [saved-sound decision](adr/0001-preserve-saved-sound-models.md) explains the compatibility boundary.
 
 Recovery stores one bounded draft per browser origin (scheme, host and port) in IndexedDB. Paths on the same origin share this draft. A previous draft is offered explicitly; edits do not overwrite it until you recover or discard it. Recovery replaces the current session and starts paused. Private browsing, storage clearing/quota, multiple tabs or eviction can affect availability; export a project for a separate copy.
 

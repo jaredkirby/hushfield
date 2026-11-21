@@ -2,7 +2,14 @@
 #textureAdjustmentsToggle{margin-left:2px;flex:none}
 body:not([data-page=grain]) #textureAdjustmentsToggle{display:none}
 body[data-page=grain][data-texture-adjustments=closed] #grainPage{display:none!important}
-#grainPage[data-control-panel="0"] .texture-tools{display:none}
+#grainPage:has(.texture-display-group.phone-selected) .texture-tools{display:none}
+.texture-characters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;grid-column:1/-1}
+.texture-characters button{background:#252d2f;border:1px solid #3e4849;border-radius:4px;color:#c7d0ce;padding:10px 4px;font:11px 'Space Grotesk',sans-serif;letter-spacing:.5px}
+.texture-characters button.active{border-color:var(--orange);color:var(--orange);background:#2d2a24}
+.texture-character-help{grid-column:1/-1;font:10px/1.6 monospace;color:#aaa;margin:9px 0;max-width:36em}
+#textureCharacterControls{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+body.phone-ui .texture-characters{grid-template-columns:repeat(2,minmax(0,1fr))}
+body.phone-ui #textureCharacterControls{grid-template-columns:minmax(0,1fr)}
 .texture-display-fields{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr)}
 body.common-controls .texture-display-fields>.control{width:100%;height:64px!important;max-width:350px}
 .texture-display-help{font:10px/1.6 monospace;color:#aaa;margin:9px 0;max-width:32em}

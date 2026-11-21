@@ -33,21 +33,23 @@ The Foundation, Texture and Motion blend controls set what you hear. Solo isolat
 
 | Editor | Controls |
 | --- | --- |
-| Foundation | Compose sets the scene, key, scale and evolution. Sound selects an Instrument with Color, Drift and Bloom; Voices balances chords, melody and air. The dots set pitch and pan. Foundation also supplies live Texture audio and Motion harmony. |
-| Texture | Drag the grain position and length handles. Adjust density, pitch, scatter and scanning, even at zero blend. Freeze a phrase or use your own material. |
+| Foundation | Compose sets the Scene, key, scale, Pace and Evolution. Sound selects an Instrument with Color, Drift and Bloom; Voices balances chords, melody and air. The dots set pitch and pan. Foundation also supplies live Texture audio and Motion harmony. |
+| Texture | Start from a character (Halo, Undertow, Dust or Bloom), then set Tone and how closely Texture follows the arrangement. Grains, Scan and Variation hold the detailed controls, editable even at zero blend; drag the grain position and length handles. Freeze a phrase or use your own material. |
 | Motion | Turn the orientation handle and set spin speed in either direction. Select individual triggers or a whole bank, then edit their amplitude envelopes and independent brightness controls. |
 | Space | Reverb selects Original room, Plate, Spring or Chamber with shared Amount. The vintage models add Decay, Pre-delay, Tone and Reverb width. Depth sets part sends and return filters; Filter sets cutoff, resonance and overall stereo width. |
 | Tape | Choose Classic or the RE-201-inspired Space Echo. Echo sets head mode, timing, feedback and spring level; Character sets coloration. Drag the echo grid for time and feedback. Off bypasses the whole effect. |
 
 Your sound / trim opens Texture's source editor, with draggable In and Out boundaries and readouts in seconds. Visual opens a scope, spectrum or vectorscope from any editor. Its settings change only the picture. Back to sound returns to the previous editor.
 
-Stillwater, Slow cloud, Glass shards and Worn memory are complete presets. They replace the blend, Foundation scene, sound patches and finishing settings. New piece changes the seed while keeping your sounds and mix.
+Stillwater, Slow cloud, Glass shards and Worn memory are complete presets in the Piece menu, in its own row beneath the header. They replace the blend, Foundation scene, sound patches and finishing settings. New piece changes the seed while keeping your sounds and mix.
+
+Fresh Pieces use a developing arrangement: the melody's motif returns in varied forms, chords follow weighted progressions rather than a fixed loop, and the music moves between statement, develop, sparse and rest sections. Texture steps back for the melody and swells into its rests. Pieces saved earlier keep their original arrangement.
 
 The [playing guide](docs/PLAYING.md) covers Texture sources, harmony, Tape controls and recording.
 
 Tape preset offers Gentle echo, Slapback, Three-head drift, Dub trails and Spring chamber. A selection changes only the Tape sound, keeps its On/Off state and can be undone. Editing a value shows Custom settings.
 
-Fresh sessions start paused with Chorus synth, Stillwater and Space Echo with Tape On. Stillwater in Whole piece restores this combination. Foundation's Sound panel also offers 18 starting presets, three per instrument, with one-step Undo and names that follow the actual sound settings. These change Foundation tone and voice levels while retaining your Scene, harmony and shared effects.
+Fresh sessions start paused with Chorus synth, Stillwater and Space Echo with Tape On. Stillwater in Whole piece restores this combination. Foundation's Sound panel also offers 18 Sound presets, three per instrument, with one-step Undo and names that follow the actual sound settings. These change Foundation tone and voice levels while retaining your Scene, harmony and shared effects. Choosing a Scene, in turn, keeps the voice levels.
 
 Space Echo starts with Gentle echo settings. Try Head mode 11 for three rhythmic echoes and a parallel spring, or mode 12 for spring alone. Head 3 time sets the longest delay; the other heads play at one third and two thirds of that time. Moving it bends the recorded echoes' pitch before they settle. This is a researched approximation with a synthetic spring, not a measured hardware clone. [Research and design limits](docs/research/re201-space-echo.md) describe the sources.
 
@@ -57,7 +59,7 @@ Plate is the default for fresh sessions and Whole piece presets. Saved Pieces re
 
 The visual stays square. Controls sit below it in portrait and beside it in landscape, including iPad Split View. Narrow or short control areas use fewer columns and scroll internally. Rotation and resizing preserve playback and musical edits.
 
-Start and Stop stay in a separate bottom bar with the value controls. Tapping the visual interacts with that editor; it does not toggle playback. Texture opens with its adjustments visible. Hide adjust hides the fields without resizing the square. Its Display, Texture, Scan and Variation tabs include Wave smoothing, a picture-only setting that starts at 65%.
+Start and Stop stay in a separate bottom bar with the value controls. Tapping the visual interacts with that editor; it does not toggle playback. Texture opens with its adjustments visible. Hide adjust hides the fields without resizing the square. Its tabs are Character, Grains, Scan, Variation and Picture; Picture holds Wave smoothing, a picture-only setting that starts at 65%.
 
 The layout accounts for browser toolbars, safe areas and pinch zoom. [Verification](VERIFICATION.md) separates current checks from older screenshots and UI experiments.
 

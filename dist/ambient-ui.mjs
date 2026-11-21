@@ -10,8 +10,8 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
   }, { className: "ambient-panel-tabs", ariaLabel: "Ambient control pages" });
   function refreshHelp() {
     page.querySelector('.ambient-help').textContent = page.dataset.controlPanel === 'sound'
-      ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + INSTRUMENT_HELP[getState().instrument || 'current'] + ' Starting presets change Foundation tone and voices; Scene and Tape stay as set.'
-      : 'Voice dots: pitch ↑↓ · stereo ←→. Scene shapes Foundation; Whole piece replaces all parts and effects.';
+      ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + INSTRUMENT_HELP[getState().instrument || 'current'] + ' Sound presets set instrument, tone and voice levels; Scene keeps the key, harmony and pace.'
+      : page.dataset.controlPanel === 'compose' ? 'Scene sets key, harmony and pace without changing your voices. Pace sets how quickly the melody moves; Evolution sets how far it wanders from its theme.' : 'Voice dots: pitch ↑↓ · stereo ←→. Chords, Melody and Air set each voice\'s level.';
   }
   const instrumentRow=document.createElement('div');
   instrumentRow.className='control direct-control';instrumentRow.dataset.group='sound';instrumentRow.hidden=true;
@@ -23,11 +23,11 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
   instrumentSelect.addEventListener('change',()=>onInstrument(instrumentSelect.value));
   const presetRow=document.createElement('div');
   presetRow.className='control direct-control';presetRow.dataset.group='sound';presetRow.hidden=true;
-  const startingLabel=document.createElement('label');startingLabel.htmlFor='ambient-preset';startingLabel.textContent='Starting preset';
+  const startingLabel=document.createElement('label');startingLabel.htmlFor='ambient-preset';startingLabel.textContent='Sound preset';
   const startingSelect=document.createElement('select');startingSelect.id='ambient-preset';
   for(const preset of FOUNDATION_PRESETS){const option=document.createElement('option');option.value=preset.id;option.textContent=preset.label;startingSelect.append(option);}
   presetRow.append(startingLabel,startingSelect);fields.append(presetRow);
-  const presetStepper=attachStepper(presetRow,startingSelect,{label:'Foundation starting preset',format:()=>{
+  const presetStepper=attachStepper(presetRow,startingSelect,{label:'Foundation sound preset',format:()=>{
     const preset=FOUNDATION_PRESETS.find(preset=>preset.id===startingSelect.value);
     return preset ? preset.label : 'Custom settings';
   }});
@@ -92,7 +92,7 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
     refreshHelp();
   }
   const preset = document.getElementById("piecePreset"), presetLabel = document.createElement('label');
-  presetLabel.className = 'piece-preset-label'; presetLabel.htmlFor = preset.id; presetLabel.textContent = 'Whole piece';
+  presetLabel.className = 'piece-preset-label'; presetLabel.htmlFor = preset.id; presetLabel.textContent = 'Piece';
   preset.before(presetLabel);
   document.getElementById("newAmbient").onclick = onNew;
   refresh();

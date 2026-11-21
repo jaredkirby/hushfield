@@ -1,3 +1,14 @@
+// Harmonic Texture keeps grains on octaves and fifths of the source, so they agree with Foundation's chord.
+const HARMONIC_PITCHES = [-24, -17, -12, -5, 0, 7, 12, 19, 24];
+function snapHarmonicPitch(pitch) {
+  return HARMONIC_PITCHES.reduce((best, value) => Math.abs(value - pitch) < Math.abs(best - pitch) ? value : best, 0);
+}
+function harmonicPitch(pitch, elastic) {
+  // Pitch variation leaps to a neighbouring octave or fifth instead of detuning.
+  let value = snapHarmonicPitch(pitch);
+  if (Math.random() * 100 < elastic) value += [12, -12, 7][Math.floor(Math.random() * 3)];
+  return Math.max(-24, Math.min(31, value));
+}
 class GrainEngine extends AudioWorkletProcessor {
   constructor(options) {
     super();
@@ -21,12 +32,21 @@ class GrainEngine extends AudioWorkletProcessor {
     this.phraseDensity = 1;
     this.phraseDensityTarget = 1;
     this.densitySlew = 1 - Math.exp(-1 / (sampleRate * .25));
+    // Arrangement role (developing arrangements only): section level, slewed over a few seconds.
+    this.role = null;
+    this.roleLevel = 1;
+    this.roleLevelTarget = 1;
+    this.roleSlew = 1 - Math.exp(-1 / (sampleRate * 2.5));
     this.port.onmessage = ({ data: m }) => {
       if (m.type === "phrasePort") {
         this.phrasePort = m.port;
         this.phrasePort.onmessage = ({ data }) => {
-          const value = data?.phrase?.textureDensity;
-          this.phraseDensityTarget = Number.isFinite(value) ? Math.max(.4, Math.min(1.25, value)) : 1;
+          const value = data?.phrase?.textureDensity, role = data?.phrase?.textureRole;
+          const base = Number.isFinite(value) ? Math.max(.4, Math.min(1.25, value)) : 1;
+          this.phraseBase = base;
+          this.role = role && Number.isFinite(role.level) && Number.isFinite(role.density)
+            ? { section: String(role.section), harmonic: Boolean(role.harmonic), level: role.level, density: role.density } : null;
+          this.updateRoleTargets();
         };
       }
       if (m.type === "captureFoundation") this.captureFoundation = Boolean(m.value);
@@ -52,6 +72,8 @@ class GrainEngine extends AudioWorkletProcessor {
       if (m.type === "params") {
         const old = this.p;
         this.p = { ...old, ...m.params };
+        this.updateTone();
+        this.updateRoleTargets();
         if (m.params.position !== void 0 && m.params.position !== old.position) this.scan = m.params.position;
       }
       if (m.type === "play" && Boolean(m.value) !== this.playing) {
@@ -60,7 +82,34 @@ class GrainEngine extends AudioWorkletProcessor {
         this.untilGrain = 0;
       }
     };
+    this.phraseBase = 1;
+    this.tone = 0;
+    this.toneState = [0, 0, 0, 0];
+    this.updateTone();
     this.port.postMessage({ type: "ready" });
+  }
+  // Follow arrangement (0-100%) scales how far the section role moves level and density.
+  updateRoleTargets() {
+    const role = this.role, follow = Math.max(0, Math.min(1, (this.p.textureFollow ?? 100) / 100));
+    this.roleLevelTarget = role ? Math.max(0, Math.min(1.5, 1 + (role.level - 1) * follow)) : 1;
+    this.phraseDensityTarget = role ? Math.max(.3, Math.min(1.5, this.phraseBase * (1 + (role.density - 1) * follow))) : this.phraseBase;
+  }
+  // Tone gives Texture its own band: negative darkens (low-pass), positive thins (high-pass), 0 is off.
+  updateTone() {
+    const tone = Math.max(-100, Math.min(100, Number(this.p.textureTone) || 0));
+    if (tone === this.tone) return;
+    if (!tone) this.toneState = [0, 0, 0, 0];
+    this.tone = tone;
+    const cutoff = tone > 0 ? 80 * 2 ** (tone / 20) : 12e3 * 2 ** (tone / 20);
+    this.toneCoefficient = 1 - Math.exp(-2 * Math.PI * Math.min(cutoff, sampleRate * .45) / sampleRate);
+  }
+  filterTone(value, offset) {
+    const a = this.toneCoefficient, state = this.toneState;
+    state[offset] += a * (value - state[offset]);
+    if (this.tone < 0) return state[offset + 1] += a * (state[offset] - state[offset + 1]);
+    const high = value - state[offset];
+    state[offset + 1] += a * (high - state[offset + 1]);
+    return high - state[offset + 1];
   }
   spawn() {
     const live = this.sourceMode === "foundation", p = this.p, len = live ? this.recentFrames : this.channels[0]?.length;
@@ -78,7 +127,7 @@ class GrainEngine extends AudioWorkletProcessor {
     const chaos = (p.chaos || 0) / 100;
     const duration = Math.max(0.012, (p.size || 200) / 1e3 * (1 + (Math.random() - 0.5) * chaos));
     const rev = Math.random() * 100 < (p.reverse || 0) ? -1 : 1;
-    const pitch = (p.pitch || 0) + (Math.random() - 0.5) * (p.elastic || 0) / 12;
+    const pitch = this.role?.harmonic ? harmonicPitch(p.pitch || 0, p.elastic || 0) : (p.pitch || 0) + (Math.random() - 0.5) * (p.elastic || 0) / 12;
     const rate = 2 ** (pitch / 12) * (live ? 1 : this.sourceRate / sampleRate) * rev;
     const width = (p.width ?? 65) / 100;
     const oldest = live && len === this.recent[0].length ? this.writeIndex : 0;
@@ -102,6 +151,10 @@ class GrainEngine extends AudioWorkletProcessor {
       let l = 0, r = 0;
       if (this.playing && len) {
         this.phraseDensity += (this.phraseDensityTarget - this.phraseDensity) * this.densitySlew;
+        if (this.roleLevel !== this.roleLevelTarget) {
+          this.roleLevel += (this.roleLevelTarget - this.roleLevel) * this.roleSlew;
+          if (Math.abs(this.roleLevel - this.roleLevelTarget) < 1e-5) this.roleLevel = this.roleLevelTarget;
+        }
         if (this.untilGrain <= 0) {
           this.spawn();
           const jitter = 1 + (Math.random() - 0.5) * (p.chaos || 0) / 100;
@@ -141,6 +194,14 @@ class GrainEngine extends AudioWorkletProcessor {
           grain.position += grain.rate;
         }
       }
+      if (this.tone) {
+        l = this.filterTone(l, 0);
+        r = this.filterTone(r, 2);
+      }
+      if (this.roleLevel !== 1) {
+        l *= this.roleLevel;
+        r *= this.roleLevel;
+      }
       out[0][i] = l;
       if (out[1]) out[1][i] = r;
       peak = Math.max(peak, Math.abs(l), Math.abs(r));
@@ -150,7 +211,7 @@ class GrainEngine extends AudioWorkletProcessor {
     if (this.frameCounter >= sampleRate / 15) {
       const sourceWave = channel => live ? Array.from({ length: 160 }, (_, i) => this.recent[channel][((this.recentFrames === this.recent[0].length ? this.writeIndex : 0) + Math.floor(i * this.recentFrames / 160)) % this.recent[0].length]) : null;
       const wave = sourceWave(0), waveRight = sourceWave(1);
-      this.port.postMessage({ sourceMode: this.sourceMode, playing: this.playing, phraseDensity: this.phraseDensity, liveSeconds: this.recentFrames / sampleRate, wave, waveRight, scan: this.scan, count: this.grains.length, peak, grains: this.grains.slice(-45).map((g) => ({ position: (g.position % Math.max(1, len) + len) % Math.max(1, len) / Math.max(1, len), life: g.age / g.duration })) });
+      this.port.postMessage({ sourceMode: this.sourceMode, playing: this.playing, phraseDensity: this.phraseDensity, roleLevel: this.roleLevel, roleSection: this.role?.section ?? null, harmonic: Boolean(this.role?.harmonic), liveSeconds: this.recentFrames / sampleRate, wave, waveRight, scan: this.scan, count: this.grains.length, peak, grains: this.grains.slice(-45).map((g) => ({ position: (g.position % Math.max(1, len) + len) % Math.max(1, len) / Math.max(1, len), life: g.age / g.duration })) });
       this.frameCounter = 0;
     }
     return true;

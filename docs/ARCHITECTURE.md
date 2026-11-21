@@ -14,7 +14,7 @@ Sources intentionally live alongside the page in `dist/`. Generated files live i
 
 `piece-session.mjs` owns blend levels, Texture source and harmony following. `piecePlayback` derives audible gains from transport, bounded phrase factors and temporary Solo; it does not depend on the active editor. Foundation continues generating while the Piece plays, including when its audible blend is zero. Phrase factors multiply only normal audible levels; Solo bypasses those factors without editing Blend.
 
-`piece-presets.mjs` restores a complete configuration, including finishing, patches and live/linked relationships, and cancels pending source operations. Changing Foundation's Scene is narrower; New piece changes its seed while retaining sounds and blend. `piece-blend.mjs` exposes the persistent levels and transient Solo controls through the common value adjuster.
+`piece-presets.mjs` restores a complete configuration, including finishing, patches and live/linked relationships, and cancels pending source operations. Changing Foundation's Scene is narrower: it sets composition and the Scene's character but leaves voice levels to the Sound preset (`foundation-presets.mjs`). New piece changes its seed while retaining sounds and blend. `piece-blend.mjs` exposes the persistent levels and transient Solo controls through the common value adjuster.
 
 ## Normal signal path
 
@@ -64,8 +64,10 @@ Vintage Space keeps the original convolver and its fixed response. `vintage-reve
 | `app.js` | AudioContext, graph assembly, transport, settings, routing and controller integration. |
 | `audio-startup.mjs` | Synchronous tap activation/priming, clock checks and context retirement. |
 | `audio-lifecycle.mjs` | Processor-failure guards and graph disposal shared by failure and Restart. |
-| `ambient-dsp.mjs`, `ambient-worklet.js` | Sample-clock chord voices, melody, air, voice retuning and harmony/status messages. |
-| `grain-worklet.js` | Granular synthesis, bounded live Foundation material, phrase copying and output-capture processor. |
+| `ambient-dsp.mjs`, `ambient-worklet.js` | Sample-clock chord voices, melody, air, voice retuning and harmony/status messages. Phrase messages to Texture carry the arrangement section as a Texture role. |
+| `foundation-arrangement.mjs` | Developing arrangement (`arrangementVersion` 2): seeded motif and variations, sections, voice-led chord-tone melody and weighted chord progression, on its own seeded generator. |
+| `grain-worklet.js` | Granular synthesis, bounded live Foundation material, phrase copying and output-capture processor. Applies the Texture role (level glide, density, Follow arrangement), harmonic pitch and the Tone filter. |
+| `texture-harmony.mjs`, `texture-character.mjs` | Harmonic pitch stops and readout for the Pitch control; the Halo, Undertow, Dust and Bloom characters. `grain-worklet.js` keeps its own copy of the pitch stops because tests evaluate it standalone. |
 | `orbit-dsp.mjs`, `orbit-worklet.js` | Sample-clock simulation, trigger crossings, oscillator/envelope rendering and snapshots. |
 | `orbit-physics.mjs`, `orbit-pads.mjs` | Fixed-step geometry, moving-boundary physics and trigger/note calculations. |
 | `orbit-audio.mjs`, `sound-patches.mjs` | Twelve stereo normal/audition sends, independent bank effects, patch resolution and editing. |

@@ -3,8 +3,8 @@ import {attachStepper, ensureVisibleSelection} from './phone-ui.mjs';
 export function setupTextureAdjustments({getSmoothing, setSmoothing, invalidate}) {
   const page = document.getElementById('grainPage');
   const group = document.createElement('div'); group.className = 'control-group texture-display-group';
-  group.innerHTML = '<div class="group-title"><h3>Display</h3><span>VISUAL ONLY</span></div><div class="texture-display-fields"><div class="control"><div class="control-top"><label for="textureWaveSmoothing">Wave smoothing</label></div><input id="textureWaveSmoothing" type="range" min="0" max="100" step="1" aria-label="Texture wave smoothing"></div><p class="texture-display-help">Round the wave from detailed to flowing. Changes the picture only.</p></div>';
-  page.querySelector('.control-grid').prepend(group);
+  group.innerHTML = '<div class="group-title"><h3>Picture</h3><span>VISUAL ONLY</span></div><div class="texture-display-fields"><div class="control"><div class="control-top"><label for="textureWaveSmoothing">Wave smoothing</label></div><input id="textureWaveSmoothing" type="range" min="0" max="100" step="1" aria-label="Texture wave smoothing"></div><p class="texture-display-help">Round the wave from detailed to flowing. Changes the picture only.</p></div>';
+  page.querySelector('.control-grid').append(group);
   const input = group.querySelector('input'), row = group.querySelector('.control'); input.value = getSmoothing();
   const control = attachStepper(row, input, {label:'Texture wave smoothing',step:5,format:v=>v === 0 ? 'Raw' : Math.round(v)+'%'});
   input.addEventListener('input', () => {setSmoothing(+input.value); invalidate();});

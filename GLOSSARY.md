@@ -44,12 +44,28 @@ The repeating musical arc that changes the activity and relative presence of the
 _Avoid_: Frozen phrase, when referring to the evolving arc rather than captured material
 
 **Scene**:
-A named Foundation configuration, distinct from the settings of the complete Piece.
-_Avoid_: Whole piece preset
+A named Foundation composition (key, scale, chord length, Pace, Evolution and character), distinct from the settings of the complete Piece; choosing one keeps the Sound preset's voice levels.
+_Avoid_: Whole piece preset, Sound preset
+
+**Sound preset**:
+A named Foundation sound: its instrument, Color, Drift, Bloom and voice levels.
+_Avoid_: Scene, Whole piece preset; Starting preset (former name)
+
+**Developing arrangement**:
+Foundation's composition model for fresh Pieces, in which a seeded motif returns in varied forms over weighted chord progressions; Pieces saved earlier keep the original fixed motif and chord loop.
+_Avoid_: Phrase
+
+**Section**:
+One stage of the developing arrangement (statement, develop, sparse or rest), lasting one or more passes through the motif; Texture's level and density follow it.
+_Avoid_: Phrase, Scene
 
 **Whole piece preset**:
-A named starting configuration for all three sound parts, their relationships, patches and shared finishing.
+A named starting configuration for all three sound parts, their relationships, patches and shared finishing, chosen from the Piece menu.
 _Avoid_: Scene, patch
+
+**Texture character**:
+A named starting point for Texture's grain, scan, variation and Tone settings: Halo, Undertow, Dust or Bloom.
+_Avoid_: Whole piece preset, Sound patch
 
 **Sound patch**:
 The voice and effect settings for a Motion trigger or ball, including settings shared by its bank.
