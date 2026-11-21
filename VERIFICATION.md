@@ -1,5 +1,11 @@
 # Verification
 
+## Developing arrangement and Texture role (PR #46)
+
+[PR #46](https://github.com/jaredkirby/hushfield/pull/46) adds the developing Foundation arrangement (`arrangementVersion` 2), Texture's section role and harmonic pitch, Pace, Texture characters with Tone and Follow arrangement, the Piece row beneath the header and the Scene/Sound preset split. Its last four commits were each built and tested in a clean checkout of the branch on 2026-11-20 and 2026-11-21, passing 246, 248, 251 and 252 Node tests as features were added; each rebuild matched the committed sources. Pieces saved without `arrangementVersion: 2` render the original arrangement, and Texture without a role or with Tone off matches classic output exactly.
+
+In a 30-minute simulation, the developing arrangement produced 16 distinct melodic shapes in 17 motif passes (3 of 16 before) and 28 distinct four-chord runs in 35 (8 of 35 before), with a smaller mean melodic interval (2.4 versus 3.7 semitones). At the presets' 15% Pace, one pass through the motif takes about 38 seconds, down from over two minutes. The in-app browser confirmed the section readouts, Character tab, Pitch stepping, Picture tabs and the Piece row at desktop and 375 px widths with no console errors. Listening was limited to brief in-app playback; extended listening, physical phones and tablets, and the rest section's frequency (none occurred in one 30-minute Stillwater sample) remain to be checked.
+
 ## External speaker output candidate
 
 The isolated `codex/external-speakers` candidate adds Output beside master volume, permitted browser output selection, Bluetooth setup and Sonos AirPlay/grouping guidance. Speaker preferences remain outside Piece saves, recovery and Undo. Test sound, Start and Restart wait for route readiness while audio activation remains inside the direct tap. The existing synthesis/effects/master/stereo-capture graph is preserved, and audio worklet bundles are unchanged.

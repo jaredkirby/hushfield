@@ -14,7 +14,7 @@ Color, Drift and Bloom retain their 0–100 ranges but control each model's own 
 
 New files store an instrument identifier in project schema 7. Versions 1–5 restore the original instrument, with their existing composition and room compatibility rules. Versions 1–6 retain Original room, and fresh sessions also keep that reverb. Scene and New piece retain the instrument. Fresh sessions and the Stillwater Whole piece preset select Chorus synth with Space Echo on. The other Whole piece presets retain the original Hushfield voice. New instrument selection opts into expressive composition; merely loading an old Piece does not.
 
-Foundation starting presets replace only the instrument, expressive model, Color, Drift, Bloom and Chords/Melody/Air levels. Names are derived from matching those values rather than stored in the project. Harmony, Scene, voice dots and shared finishing remain independent of the starting sound.
+Foundation Sound presets (formerly Starting presets) replace only the instrument, expressive model, Color, Drift, Bloom and Chords/Melody/Air levels. Names are derived from matching those values rather than stored in the project. Harmony, Scene, voice dots and shared finishing remain independent of the sound, and choosing a Scene no longer changes the voice levels.
 
 ## Sources
 

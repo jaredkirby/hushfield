@@ -6,4 +6,6 @@ Expressive synthesis and independent room sends change how existing configuratio
 
 The modes opt in independently: editing Foundation **Sound** switches its synthesis model to expressive; editing any **Depth** control switches the Piece's room graph to per-part sends and filtered returns. A Depth edit changes the shared room mode for all parts, while Foundation remains classic until Sound is edited. Loading an older project alone promotes neither mode.
 
+The developing Foundation arrangement follows the same rule with its own `arrangementVersion`, independent of the synthesis model. Saved Foundation settings without `arrangementVersion: 2` keep the original fixed motif and eight-chord loop, and Texture receives no section role or harmonic pitch. Fresh sessions and complete presets select the developing arrangement. Editing Sound changes the synthesis model only, not the arrangement.
+
 [Project validation](../../dist/project-file.mjs), [Foundation settings](../../dist/ambient-settings.mjs) and [room settings](../../dist/space-settings.mjs) implement the saved modes. The [classic Foundation fixture](../../tests/fixtures/foundation-classic-v1/README.md) preserves the original source for exact, same-runtime PCM regression checks. See [architecture](../ARCHITECTURE.md) for routing and [testing](../TESTING.md) for validation.

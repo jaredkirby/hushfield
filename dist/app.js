@@ -1412,7 +1412,7 @@ function frame(time) {
       ditherCanvas($("waveform"));
     }
   }
-  $("grainCount").textContent = activeTab === "grain" && running && stats.roleSection ? `${stats.count} GRAINS \xB7 ${stats.roleSection.toUpperCase()} \xB7 ${Math.round((stats.roleLevel ?? 1) * 100)}%` : activeTab === "orbit" ? `${balls.length} BALLS \xB7 ${orbitVoices.size} VOICES` : ambientState.enabled ? ambientStats.arrangement ? `${ambientStats.arrangement.section.toUpperCase()} \xB7 PHRASE ${ambientStats.arrangement.phrase}/${ambientStats.arrangement.phrases}` : `${ambientStats.notes} NOTES \xB7 SECTION ${ambientStats.section}` : `${running ? stats.count : 0} ACTIVE GRAINS`;
+  $("grainCount").textContent = activeTab === "grain" && running && stats.roleSection ? `${stats.count} GRAINS \xB7 ${stats.roleSection.toUpperCase()} \xB7 ${Math.round((stats.roleLevel ?? 1) * 100)}%` : activeTab === "orbit" ? `${balls.length} BALLS \xB7 ${orbitVoices.size} VOICES` : ambientState.enabled ? ambientStats.arrangement ? `${ambientStats.arrangement.section.toUpperCase()} \xB7 PASS ${ambientStats.arrangement.phrase}/${ambientStats.arrangement.phrases}` : `${ambientStats.notes} NOTES \xB7 SECTION ${ambientStats.section}` : `${running ? stats.count : 0} ACTIVE GRAINS`;
   const outputFit = fitCanvas($("outputScope"));
   if (outputFit) visuals.outputFrame(outputFit, dt, reducedMotion.matches);
   if (analyser) {
