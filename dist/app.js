@@ -31,6 +31,7 @@ import { setupAmbientUI, drawAmbient } from "./ambient-ui.mjs?v=hushfield-1";
 import { prepareTextureWave } from "./texture-wave.mjs";
 import { setupTextureAdjustments } from "./texture-adjustments.mjs";
 import { formatTexturePitch, snapHarmonicPitch, nextHarmonicPitch } from "./texture-harmony.mjs";
+import { TEXTURE_CHARACTERS, setupTextureCharacter } from "./texture-character.mjs";
 import { setupSquareViewport } from "./square-viewport.mjs";
 import { ditherCanvas, drawTape } from "./oled-visuals.mjs?v=hushfield-1";
 import { PAD_COUNT, MAX_PADS, ORBIT_SCALES as scales, crossedPads, padAngle, padGeometry, padSound } from "./orbit-pads.mjs?v=hushfield-1";
@@ -42,7 +43,7 @@ import { requestPlaybackSession, resumeFromTap, verifyAudioClock, playTestNotes 
 import { boundary, containBalls, makeOrbitState, shapePoints } from "./orbit-physics.mjs?v=hushfield-1";
 const $ = (id) => document.getElementById(id);
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
-const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, ...SPACE_ECHO_DEFAULTS, ...TAPE_PHYSICS_DEFAULTS, ...SPACE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
+const initial = { sampleLevel: 100, orbitLevel: 100, position: 50, size: 320, density: 18, spray: 24, pitch: 0, scanOn: true, scanMode: "forward", range: 100, wander: 10, speed: 0.22, smooth: 0, static: 0, jump: 0, hold: 0, reverse: 15, elastic: 0, chaos: 0, textureTone: 0, textureFollow: 100, freeze: false, cutoff: 14e3, resonance: 0.6, ...TAPE_DEFAULTS, ...SPACE_ECHO_DEFAULTS, ...TAPE_PHYSICS_DEFAULTS, ...SPACE_DEFAULTS, reverb: 30, width: 75, trimStart: 0, trimEnd: 100, denoise: 0, orbitTriggers: 8, orbitBalls: 5, orbitGravity: 35, orbitBounce: 84, orbitSpin: 12, orbitRotation: 0, orbitOctave: 0, orbitAttack: 0.01, orbitRelease: 1.5, orbitReverb: 70, orbitVolume: 35 };
 const freshPiece = selectPiecePreset("still", { defaults: initial, cancelPending() {} });
 let recovery, restoringSession = false, sampleDecoder;
 let visualEditors, motionControls, controlHistory, textureAdjustments, spaceControlsUI, spacePlateUI, spaceAnalyser;
@@ -118,7 +119,7 @@ function makeControl(parent, id, label, min, max, step, unit = "", display, choi
   $(parent).append(row);
   const format = (v) => display ? display(v) : `${Number(v).toFixed(step < 1 ? step < 0.1 ? 2 : 1 : 0)}${unit}`;
   let stepper;
-  const descriptions = { position: "Choose where Texture reads within the phrase.", size: "Long grains make a smooth cloud; short grains make fragments.", density: "More grains overlap into a thicker texture.", spray: "Spread grains across more of the source phrase.", pitch: "Shift Texture higher or lower. Developing pieces keep it on octaves and fifths.", cutoff: "Darken or brighten the whole piece.", width: "Move the whole piece from mono to stereo." };
+  const descriptions = { position: "Choose where Texture reads within the phrase.", size: "Long grains make a smooth cloud; short grains make fragments.", density: "More grains overlap into a thicker texture.", spray: "Spread grains across more of the source phrase.", pitch: "Shift Texture higher or lower. Developing pieces keep it on octaves and fifths.", textureTone: "Give Texture its own band: darker sits under Foundation, airier floats above it.", textureFollow: "How much Texture steps back for the melody and swells into its rests.", cutoff: "Darken or brighten the whole piece.", width: "Move the whole piece from mono to stereo." };
   if (descriptions[id]) row.addEventListener("click", () => {
     $("pieceHint").textContent = descriptions[id];
   });
@@ -143,6 +144,7 @@ function makeControl(parent, id, label, min, max, step, unit = "", display, choi
   input.addEventListener("input", () => {
     if (harmonicTexturePitch(id)) input.value = snapHarmonicPitch(+input.value);
     params[id] = +input.value;
+    textureCharacter?.refresh(params);
     if (SPACE_FIELDS.some(field => field.id === id)) params.spaceVersion = 2;
     if (id === "trimStart") params.trimStart = Math.min(params.trimStart, params.trimEnd - .1);
     if (id === "trimEnd") params.trimEnd = Math.max(params.trimEnd, params.trimStart + .1);
@@ -165,6 +167,17 @@ function makeControl(parent, id, label, min, max, step, unit = "", display, choi
   });
   render();
 }
+const textureCharacter = setupTextureCharacter({ onSelect(key) {
+  controlHistory?.begin("Texture character");
+  try {
+    markEdited();
+    Object.assign(params, TEXTURE_CHARACTERS[key].params);
+    refreshControls();
+  } finally { controlHistory?.end(); }
+  toast(TEXTURE_CHARACTERS[key].label + " \xB7 " + TEXTURE_CHARACTERS[key].description);
+} });
+makeControl("textureCharacterControls", "textureTone", "Tone", -100, 100, 5, "", (v) => v === 0 ? "Full" : v < 0 ? `Darker ${-v}%` : `Airier ${v}%`);
+makeControl("textureCharacterControls", "textureFollow", "Follow arrangement", 0, 100, 5, "%", (v) => v === 0 ? "Off" : v + "%");
 makeControl("grainControls", "position", "Position", 0, 100, 0.1, "%", (v) => v.toFixed(1) + "%");
 makeControl("grainControls", "size", "Grain length", 15, 1500, 1, " ms");
 makeControl("grainControls", "density", "Density", 1, 80, 0.1, " /s");
@@ -309,6 +322,7 @@ function refreshControls() {
   updatePadLabels();
   volumeStepper?.render();
   textureAdjustments?.refresh();
+  textureCharacter.refresh(params);
   updateTransport();
 }
 function syncEngine() {
