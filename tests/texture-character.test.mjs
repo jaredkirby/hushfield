@@ -61,3 +61,16 @@ test('characters are recognisable, distinct and inside every control range', () 
   assert.equal(signatures.size, 4);
   assert.equal(matchingTextureCharacter({...TEXTURE_CHARACTERS.halo.params, size: 701}), null, 'Any edit becomes Custom');
 });
+
+test('Scenes set composition and character but keep the Sound preset voice levels', async () => {
+  const {AMBIENT_DEFAULTS, AMBIENT_SCENES, applyAmbientScene, SCENE_VOICE_FIELDS} = await import('../dist/ambient-settings.mjs');
+  const {applyFoundationPreset, matchingFoundationPreset, FOUNDATION_PRESETS} = await import('../dist/foundation-presets.mjs');
+  for (const preset of FOUNDATION_PRESETS) {
+    for (let scene = 0; scene < AMBIENT_SCENES.length; scene++) {
+      const state = applyAmbientScene(applyFoundationPreset({...AMBIENT_DEFAULTS}, preset.id), scene);
+      assert.equal(matchingFoundationPreset(state)?.id, preset.id, `${AMBIENT_SCENES[scene].name} keeps ${preset.label}`);
+      for (const key of ['key', 'scale', 'change', 'activity', 'evolution', 'bell']) assert.equal(state[key], AMBIENT_SCENES[scene][key]);
+      for (const key of SCENE_VOICE_FIELDS) assert.equal(state[key], preset.settings[key]);
+    }
+  }
+});

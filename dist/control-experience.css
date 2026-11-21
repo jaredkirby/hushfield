@@ -65,3 +65,11 @@ body[data-texture-enabled=false] #grainPage .control-grid{opacity:1}
 #tapePresetControl>.parameter-editor{height:28px!important}
 #tapePresetControl>label{font:10px monospace;color:#aaa}
 #tapePresetDescription{grid-column:1/-1;margin:0;font:10px/1.4 monospace}
+/* Whole piece choices get their own row under the head bar: they replace every part, not just Foundation. */
+.instrument-head{flex-wrap:wrap;height:auto!important;min-height:44px;row-gap:0}
+.piece-actions{order:3;flex:1 1 100%;display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid #333}
+.piece-actions .piece-preset-label{font:9px monospace;letter-spacing:1px;color:#aaa;text-transform:uppercase}
+.piece-actions #ambientSeed{margin-left:auto;font:8px monospace;color:#777;white-space:nowrap}
+.ambient-mode-row:not(:has(button)){display:none}
+.phone-ui .piece-actions{gap:4px;padding:4px 0}
+.phone-ui .piece-actions #piecePreset{max-width:none;flex:1}
