@@ -11,7 +11,7 @@ function setupAmbientUI({ getState, onChange, onNew, onInstrument, onPreset }) {
   function refreshHelp() {
     page.querySelector('.ambient-help').textContent = page.dataset.controlPanel === 'sound'
       ? (getState().compositionVersion === 1 ? 'Classic voice. Adjust Sound to use the evolving voice. ' : '') + INSTRUMENT_HELP[getState().instrument || 'current'] + ' Starting presets change Foundation tone and voices; Scene and Tape stay as set.'
-      : 'Voice dots: pitch ↑↓ · stereo ←→. Scene shapes Foundation; Whole piece replaces all parts and effects.';
+      : page.dataset.controlPanel === 'compose' ? 'Pace sets how quickly the melody moves; Evolution sets how far it wanders from its theme. Scene shapes Foundation; Whole piece replaces all parts and effects.' : 'Voice dots: pitch ↑↓ · stereo ←→. Chords, Melody and Air set each voice\'s level.';
   }
   const instrumentRow=document.createElement('div');
   instrumentRow.className='control direct-control';instrumentRow.dataset.group='sound';instrumentRow.hidden=true;

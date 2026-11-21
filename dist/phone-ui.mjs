@@ -81,7 +81,7 @@ function showExactEntry(r){
   preview.textContent=r.format(+r.input.value);dialog.showModal();number.focus();number.select();
 }
 /** choices accepts index-backed labels or explicit {value, label} entries. */
-export function attachStepper(parent,input,{label,step=1,format=v=>String(v),choices}){
+export function attachStepper(parent,input,{label,step=1,format=v=>String(v),choices,increment}){
   const nativeSelect=input.tagName==='SELECT';
   const options=nativeSelect?[...input.options].map(option=>({value:option.value,label:option.textContent})):choices?.map((choice,index)=>typeof choice==='object'?choice:{value:index,label:choice});
   const editor=document.createElement('div');editor.className='parameter-editor';
@@ -99,7 +99,7 @@ export function attachStepper(parent,input,{label,step=1,format=v=>String(v),cho
   }else{
     input.hidden=false;input.classList.add('parameter-range');editor.append(input,button);
   }
-  const record={parent,input,label,step,format,button,element:options?direct:button,direct,choices:options};records.push(record);
+  const record={parent,input,label,step,format,button,element:options?direct:button,direct,choices:options,increment};records.push(record);
   const render=()=>{
     const text=mixed(record)?'Mixed':format(+input.value),name=labelOf(record);
     value.textContent=text;button.setAttribute('aria-label',`Enter exact ${name}: ${text}`);button.title='Enter an exact value';
@@ -136,7 +136,7 @@ function changeSelected(direction){
   if(!selected||blocked(selected))return;
   const r=selected;
   if(r.choices){const index=r.choices.findIndex(choice=>String(choice.value)===r.input.value);r.input.value=r.choices[Math.max(0,Math.min(r.choices.length-1,index+direction))].value;}
-  else r.input.value=incrementValue(r.input.value,direction,r.step,r.input.min,r.input.max);
+  else r.input.value=r.increment?r.increment(+r.input.value,direction):incrementValue(r.input.value,direction,r.step,r.input.min,r.input.max);
   dispatchValue(r);refreshRail();
 }
 export function setupSharedAdjuster(){
